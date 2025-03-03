@@ -3,6 +3,8 @@
 
 # kpt Functions Catalog
 
+This repo is a catalog of kpt functions that are available for use in the mutation pipelines of kpt packages.
+
 [Documentation]
 
 [Contributor Guide]
