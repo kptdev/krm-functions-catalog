@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: the-deployment-selector-labels-false
+  labels:
+    app: the-deployment
+spec:
+  selector:
+    matchLabels:
+      app: the-deployment
+  template:
+    metadata:
+      labels:
+        app: the-deployment
+    spec:
+      containers:
+      - name: the-container
+        image: the-image
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: the-deployment-selector-labels-true
+  labels:
+    app: the-deployment
+spec:
+  selector:
+    matchLabels:
+      app: the-deployment
+  template:
+    metadata:
+      labels:
+        app: the-deployment
+    spec:
+      containers:
+      - name: the-container
+        image: the-image
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: the-deployment-selector-labels-undefined
+  labels:
+    app: the-deployment
+spec:
+  selector:
+    matchLabels:
+      app: the-deployment
+  template:
+    metadata:
+      labels:
+        app: the-deployment
+    spec:
+      containers:
+      - name: the-container
+        image: the-image

@@ -1,0 +1,78 @@
+diff --git a/Kptfile b/Kptfile
+index ad493d3..917ae02 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -17,4 +17,4 @@ pipeline:
+     - image: gcr.io/kpt-fn/set-labels:unstable
+       configPath: fn-config-selector-labels-undefined.yaml
+       selectors:
+-        - name: the-deployment-selector-labels-undefined
+\ No newline at end of file
++        - name: the-deployment-selector-labels-undefined
+diff --git a/deployment.yaml b/deployment.yaml
+index 11be507..b03ae0a 100644
+--- a/deployment.yaml
++++ b/deployment.yaml
+@@ -4,6 +4,8 @@ metadata:
+   name: the-deployment-selector-labels-false
+   labels:
+     app: the-deployment
++    color: orange
++    fruit: apple
+ spec:
+   selector:
+     matchLabels:
+@@ -12,6 +14,8 @@ spec:
+     metadata:
+       labels:
+         app: the-deployment
++        color: orange
++        fruit: apple
+     spec:
+       containers:
+       - name: the-container
+@@ -23,14 +27,20 @@ metadata:
+   name: the-deployment-selector-labels-true
+   labels:
+     app: the-deployment
++    color: orange
++    fruit: apple
+ spec:
+   selector:
+     matchLabels:
+       app: the-deployment
++      color: orange
++      fruit: apple
+   template:
+     metadata:
+       labels:
+         app: the-deployment
++        color: orange
++        fruit: apple
+     spec:
+       containers:
+       - name: the-container
+@@ -42,15 +52,21 @@ metadata:
+   name: the-deployment-selector-labels-undefined
+   labels:
+     app: the-deployment
++    color: orange
++    fruit: apple
+ spec:
+   selector:
+     matchLabels:
+       app: the-deployment
++      color: orange
++      fruit: apple
+   template:
+     metadata:
+       labels:
+         app: the-deployment
++        color: orange
++        fruit: apple
+     spec:
+       containers:
+       - name: the-container
+-        image: the-image
+\ No newline at end of file
++        image: the-image
