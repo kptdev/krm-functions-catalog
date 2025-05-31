@@ -6,5 +6,8 @@ data:
   env: |-
     - prod
     - dev
+  nested-env: |-
+    - key: some-other-key
+      value: some-other-value
   nginx-replicas: "3"
   tag: 1.16.2
