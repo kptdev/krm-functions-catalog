@@ -1,0 +1,51 @@
+diff --git a/app1_ghost/resources.yaml b/app1_ghost/resources.yaml
+index 2e6dcbd..935a47b 100644
+--- a/app1_ghost/resources.yaml
++++ b/app1_ghost/resources.yaml
+@@ -2,6 +2,8 @@ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: ghost
++  labels:
++    app.kubernetes.io/name: root-app
+ spec:
+   replicas: 2
+   template:
+@@ -14,4 +16,10 @@ spec:
+             - containerPort: 2368
+           env:
+             - name: url
+-              value: http://my-blog.com
+\ No newline at end of file
++              value: http://my-blog.com
++    metadata:
++      labels:
++        app.kubernetes.io/name: root-app
++  selector:
++    matchLabels:
++      app.kubernetes.io/name: root-app
+diff --git a/app2_mysql/resources.yaml b/app2_mysql/resources.yaml
+index 88d0df7..be45a8d 100644
+--- a/app2_mysql/resources.yaml
++++ b/app2_mysql/resources.yaml
+@@ -2,6 +2,8 @@ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: mysql
++  labels:
++    app.kubernetes.io/name: root-app
+ spec:
+   template:
+     spec:
+@@ -11,5 +13,11 @@ spec:
+           ports:
+             - name: mysql
+               containerPort: 3306
++    metadata:
++      labels:
++        app.kubernetes.io/name: root-app
+   strategy:
+     type: Recreate
++  selector:
++    matchLabels:
++      app.kubernetes.io/name: root-app

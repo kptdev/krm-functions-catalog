@@ -37,6 +37,7 @@ FUNCTIONS := \
 	set-enforcement-action \
 	set-image \
 	set-labels \
+	set-default-labels \
 	set-namespace \
 	set-project-id \
 	source-gcloud-config \
