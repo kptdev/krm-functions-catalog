@@ -180,6 +180,9 @@ func (p *HelmChartInflationGeneratorPlugin) createNewMergedValuesFiles(path stri
 				if err != nil {
 					return "", err
 				}
+				if resp.StatusCode != http.StatusOK {
+					return "", fmt.Errorf("non-ok http status: %d returned", resp.StatusCode)
+				}
 				defer resp.Body.Close()
 				pValues, err = io.ReadAll(resp.Body)
 				if err != nil {
