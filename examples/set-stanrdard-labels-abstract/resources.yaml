@@ -1,0 +1,14 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: base-app
+  namespace: example
+spec:
+  selector:
+    matchLabels:
+      test: abstract-base-app
+  template:
+    metadata:
+      labels:
+        test: abstract-base-app

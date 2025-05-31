@@ -1,0 +1,1 @@
+This test is a blueprint package. It expects the label "app.kubernetes.io/name" is added using the package name "base-app"

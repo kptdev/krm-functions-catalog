@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: base-app
+  namespace: example
+  labels:
+    test: abstract-base-app
+    app.kubernetes.io/name: base-app
+spec:
+  selector:
+    matchLabels:
+      test: abstract-base-app
+      app.kubernetes.io/name: base-app
+  template:
+    metadata:
+      labels:
+        test: abstract-base-app
+        app.kubernetes.io/name: base-app
