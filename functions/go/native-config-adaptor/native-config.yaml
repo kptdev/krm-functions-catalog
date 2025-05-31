@@ -1,0 +1,11 @@
+apiVersion: fn.kpt.dev/v1alpha1
+kind: NativeConfigAdaptor
+metadata:
+  name: builtin
+spec:
+  operation: writeBackToNativeConfig # default to generate canonical KRM object from Native Config
+  source:
+    - format: IniFile # optional
+      localFile: /etc/my.cnf
+      asConfigMap: true
+      schema: {} # Only support string map now. Should be OpenApi schema to tell the canonical KRM resource format

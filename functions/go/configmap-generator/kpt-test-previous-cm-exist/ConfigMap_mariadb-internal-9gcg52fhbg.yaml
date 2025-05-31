@@ -1,0 +1,30 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mariadb-internal-9gcg52fhbg
+  annotations:
+    config.kubernetes.io/local-config: "true"
+    internal.kpt.dev/generator-builtin-only: fn.kpt.dev|ConfigMapGenerator|example|mariadb
+  namespace: example
+data:
+  cm.client.default-character-set: UTF8
+  cm.client.plugin_dir: /opt/bitnami/mariadb/plugin
+  cm.client.port: "3306"
+  cm.client.socket: /opt/bitnami/mariadb/tmp/mysql.sock
+  cm.manager.pid-file: /opt/bitnami/mariadb/tmp/mysqld.pid
+  cm.manager.port: "3306"
+  cm.manager.socket: /opt/bitnami/mariadb/tmp/mysql.sock
+  cm.mysqld.basedir: /opt/bitnami/mariadb
+  cm.mysqld.bind-address: '*'
+  cm.mysqld.character-set-server: UTF8
+  cm.mysqld.collation-server: utf8_general_ci
+  cm.mysqld.log-error: /opt/bitnami/mariadb/logs/mysqld.log
+  cm.mysqld.long_query_time: "10.0"
+  cm.mysqld.max_allowed_packet: 32M
+  cm.mysqld.pid-file: /opt/bitnami/mariadb/tmp/mysqld.pid
+  cm.mysqld.plugin_dir: /opt/bitnami/mariadb/plugin
+  cm.mysqld.port: "3306"
+  cm.mysqld.slow_query_log: "0"
+  cm.mysqld.slow_query_log_file: /opt/bitnami/mariadb/logs/mysqld.log
+  cm.mysqld.socket: /opt/bitnami/mariadb/tmp/mysql.sock
+  cm.mysqld.tmpdir: /opt/bitnami/mariadb/tmp

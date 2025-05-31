@@ -1,0 +1,111 @@
+apiVersion: fn.kpt.dev/v1alpha1
+kind: ConfigMapGenerator
+metadata: # kpt-merge: example/mariadb
+  name: mariadb
+  namespace: example
+  annotations:
+    config.kubernetes.io/local-config: "true"
+    internal.kpt.dev/upstream-identifier: 'fn.kpt.dev|ConfigMapGenerator|example|mariadb'
+spec:
+  source:
+  - format: IniFile # optional
+    localFileRef: mycnf-ini-file
+    asConfigMap: true
+---
+# Source: ghost/charts/mariadb/templates/primary/svc.yaml
+apiVersion: v1
+kind: Service
+metadata: # kpt-merge: example/mariadb
+  name: mariadb
+  namespace: example
+  labels:
+    app.kubernetes.io/name: mariadb
+  annotations:
+    internal.kpt.dev/upstream-identifier: '|Service|example|mariadb'
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+  - name: mysql
+    port: 3306
+    protocol: TCP
+    targetPort: mysql
+    nodePort: null
+  selector:
+    app.kubernetes.io/name: mariadb
+---
+# Source: ghost/charts/mariadb/templates/primary/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: # kpt-merge: example/mariadb
+  name: mariadb
+  namespace: example
+  labels:
+    app.kubernetes.io/name: mariadb
+  annotations:
+    internal.kpt.dev/upstream-identifier: 'apps|StatefulSet|example|mariadb'
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  serviceName: mariadb
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    spec:
+      securityContext:
+        fsGroup: 1001
+      containers:
+      - name: mariadb
+        image: docker.io/bitnami/mariadb:10.6.7-debian-10-r62
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+        env:
+        - name: BITNAMI_DEBUG
+          value: "true"
+        - name: MARIADB_USER
+          value: bn_ghost
+        - name: MARIADB_DATABASE
+          value: bitnami_ghost
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "true"
+        ports:
+        - name: mysql
+          containerPort: 3306
+        resources:
+          limits: {}
+          requests: {}
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/mariadb
+        - name: config
+          mountPath: /opt/bitnami/mariadb/conf/my.ini
+          subPath: my.ini
+      volumes:
+      - name: config
+        configMap:
+          name: mariadb-btg654b96m
+    metadata:
+      labels:
+        app.kubernetes.io/name: mariadb
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+      labels:
+        app.kubernetes.io/name: mariadb
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 8Gi
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mariadb
+---
+apiVersion: fn.kpt.dev/v1alpha1
+kind: BuiltInNonKrm
+spec: {content: "[mysqld]\nskip-name-resolve\nexplicit_defaults_for_timestamp\nbasedir=/opt/bitnami/mariadb\nplugin_dir=/opt/bitnami/mariadb/plugin\nport=3306\nsocket=/opt/bitnami/mariadb/tmp/mysql.sock\ntmpdir=/opt/bitnami/mariadb/tmp\nmax_allowed_packet=32M\nbind-address=*\npid-file=/opt/bitnami/mariadb/tmp/mysqld.pid\nlog-error=/opt/bitnami/mariadb/logs/mysqld.log\ncharacter-set-server=UTF8\ncollation-server=utf8_general_ci\nslow_query_log=0\nslow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log\nlong_query_time=10.0\n\n[client]\nport=3306\nsocket=/opt/bitnami/mariadb/tmp/mysql.sock\ndefault-character-set=UTF8\nplugin_dir=/opt/bitnami/mariadb/plugin\n\n[manager]\nport=3306\nsocket=/opt/bitnami/mariadb/tmp/mysql.sock\npid-file=/opt/bitnami/mariadb/tmp/mysqld.pid", filename: my.cnf}
+metadata:
+  name: mycnf-ini-file

@@ -1,0 +1,235 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: # kpt-merge: example/mariadb
+  name: mariadb
+  namespace: example
+  labels:
+    app.kubernetes.io/name: mariadb
+  annotations:
+    internal.kpt.dev/upstream-identifier: 'apps|StatefulSet|example|mariadb'
+    config.kubernetes.io/path: 'statefulset-mariadb.yaml'
+    internal.config.kubernetes.io/path: 'statefulset-mariadb.yaml'
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  serviceName: mariadb
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    spec:
+      securityContext:
+        fsGroup: 1001
+      containers:
+      - name: mariadb
+        image: docker.io/bitnami/mariadb:10.6.7-debian-10-r62
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+        env:
+        - name: BITNAMI_DEBUG
+          value: "true"
+        - name: MARIADB_USER
+          value: bn_ghost
+        - name: MARIADB_DATABASE
+          value: bitnami_ghost
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "true"
+        ports:
+        - name: mysql
+          containerPort: 3306
+        resources:
+          limits: {}
+          requests: {}
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/mariadb
+        - name: config
+          mountPath: /opt/bitnami/mariadb/conf/my.ini
+          subPath: my.ini
+      volumes:
+      - name: config
+        configMap:
+          name: mariadb-92256k9879
+    metadata:
+      labels:
+        app.kubernetes.io/name: mariadb
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+      labels:
+        app.kubernetes.io/name: mariadb
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 8Gi
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mariadb
+---
+apiVersion: fn.kpt.dev/v1alpha1
+kind: BuiltInNonKrm
+spec: {content: "[mysqld]\nskip-name-resolve\nexplicit_defaults_for_timestamp\nbasedir=/opt/bitnami/mariadb\nplugin_dir=/opt/bitnami/mariadb/plugin\nport=3308 # a different change from upstream\nsocket=/opt/bitnami/mariadb/tmp/mysql.sock\ntmpdir=/opt/bitnami/mariadb/tmp\nmax_allowed_packet=16M\nbind-address=*\npid-file=/opt/bitnami/mariadb/tmp/mysqld.pid\nlog-error=/opt/bitnami/mariadb/logs/mysqld.log\ncharacter-set-server=UTF8\ncollation-server=utf8_general_ci\nslow_query_log=0\nslow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log\nlong_query_time=10.0\nupstream_field=yuwen-bbbbbbbbbb\n\n[client]\nport=3306\nsocket=/opt/bitnami/mariadb/tmp/mysql.sock\ndefault-character-set=UTF8\nplugin_dir=/opt/bitnami/mariadb/plugin\n\n[manager]\nport=3306\nsocket=/opt/bitnami/mariadb/tmp/mysql.sock\npid-file=/opt/bitnami/mariadb/tmp/mysqld.pid", filename: my.cnf}
+metadata:
+  name: mycnf-ini-file
+  annotations:
+    internal.config.kubernetes.io/path: generated/builtinnonkrm_mycnf-ini-file.yaml
+    config.kubernetes.io/path: generated/builtinnonkrm_mycnf-ini-file.yaml
+    config.kubernetes.io/index: ""
+---
+apiVersion: fn.kpt.dev/v1alpha1
+kind: ConfigMapGenerator
+metadata: # kpt-merge: example/mariadb
+  name: mariadb
+  namespace: example
+  annotations:
+    config.kubernetes.io/local-config: "true"
+    internal.kpt.dev/upstream-identifier: 'fn.kpt.dev|ConfigMapGenerator|example|mariadb'
+    config.kubernetes.io/path: 'configmap-generator.yaml'
+    internal.config.kubernetes.io/path: 'configmap-generator.yaml'
+spec:
+  source:
+  - format: IniFile # optional
+    localFileRef: mycnf-ini-file
+    asConfigMap: true
+---
+apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: mariadb-user2
+  labels:
+    app.kubernetes.io/name: mariadb
+  annotations:
+    config.kubernetes.io/local-config: "true"
+    config.kubernetes.io/path: 'Kptfile'
+    internal.config.kubernetes.io/path: 'Kptfile'
+upstream:
+  type: git
+  git:
+    repo: http://github.com/yuwenma/kpt-samples
+    directory: /ghost/mariadb
+    ref: poc-e2e-user1
+  updateStrategy: resource-merge
+upstreamLock:
+  type: git
+  git:
+    repo: http://github.com/yuwenma/kpt-samples
+    directory: /ghost/mariadb
+    ref: poc-e2e-user1
+    commit: 39702b84d39b23140a48f0e8adafe80ff630da72
+info:
+  description: The MariaDB which provides the storage for Ghost.
+pipeline:
+  mutators:
+  - image: gcr.io/kpt-fn/set-namespace:v0.3.4
+    configPath: package-context.yaml
+pkgAutoRun:
+  inclNonKrmFiles:
+  - name: mycnf-ini-file
+    path: my.cnf
+  pipeline:
+  - image: gcr.io/kpt-fn-demo/configmap-generator:yuwen-v0.1
+    configPath: configmap-generator.yaml
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mariadb-6bttht6hbm
+  annotations:
+    internal.kpt.dev/generator: fn.kpt.dev|ConfigMapGenerator|example|mariadb
+    internal.config.kubernetes.io/path: generated/configmap_mariadb-6bttht6hbm.yaml
+    config.kubernetes.io/path: generated/configmap_mariadb-6bttht6hbm.yaml
+    config.kubernetes.io/index: ""
+data:
+  my.cnf: |-
+    [mysqld]
+    skip-name-resolve
+    explicit_defaults_for_timestamp
+    basedir=/opt/bitnami/mariadb
+    plugin_dir=/opt/bitnami/mariadb/plugin
+    port=3308 # a different change from upstream
+    socket=/opt/bitnami/mariadb/tmp/mysql.sock
+    tmpdir=/opt/bitnami/mariadb/tmp
+    max_allowed_packet=16M
+    bind-address=*
+    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+    log-error=/opt/bitnami/mariadb/logs/mysqld.log
+    character-set-server=UTF8
+    collation-server=utf8_general_ci
+    slow_query_log=0
+    slow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log
+    long_query_time=10.0
+    upstream_field=yuwen-bbbbbbbbbb
+
+    [client]
+    port=3306
+    socket=/opt/bitnami/mariadb/tmp/mysql.sock
+    default-character-set=UTF8
+    plugin_dir=/opt/bitnami/mariadb/plugin
+
+    [manager]
+    port=3306
+    socket=/opt/bitnami/mariadb/tmp/mysql.sock
+    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+immutable: true
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mariadb-internal-9b77bh28t5
+  namespace: example
+  annotations:
+    internal.config.kubernetes.io/index: "0"
+    internal.config.kubernetes.io/path: generated/ConfigMap_mariadb-internal-9b77bh28t5.yaml
+    internal.kpt.dev/generator-builtin-only: fn.kpt.dev|ConfigMapGenerator|example|mariadb
+    config.kubernetes.io/path: generated/ConfigMap_mariadb-internal-9b77bh28t5.yaml
+    config.kubernetes.io/index: "0"
+    internal.kpt.dev/generated-builtin-merged: "true"
+data:
+  cm.client.default-character-set: UTF8
+  cm.client.plugin_dir: /opt/bitnami/mariadb/plugin
+  cm.client.port: "3306"
+  cm.client.socket: /opt/bitnami/mariadb/tmp/mysql.sock
+  cm.manager.pid-file: /opt/bitnami/mariadb/tmp/mysqld.pid
+  cm.manager.port: "3306"
+  cm.manager.socket: /opt/bitnami/mariadb/tmp/mysql.sock
+  cm.mysqld.basedir: /opt/bitnami/mariadb
+  cm.mysqld.bind-address: '*'
+  cm.mysqld.character-set-server: UTF8
+  cm.mysqld.collation-server: utf8_general_ci
+  cm.mysqld.log-error: /opt/bitnami/mariadb/logs/mysqld.log
+  cm.mysqld.long_query_time: "10.0"
+  cm.mysqld.max_allowed_packet: 16M
+  cm.mysqld.pid-file: /opt/bitnami/mariadb/tmp/mysqld.pid
+  cm.mysqld.plugin_dir: /opt/bitnami/mariadb/plugin
+  cm.mysqld.port: "3308"
+  cm.mysqld.slow_query_log: "0"
+  cm.mysqld.slow_query_log_file: /opt/bitnami/mariadb/logs/mysqld.log
+  cm.mysqld.socket: /opt/bitnami/mariadb/tmp/mysql.sock
+  cm.mysqld.tmpdir: /opt/bitnami/mariadb/tmp
+  cm.mysqld.upstream_field: yuwen-bbbbbbbbbb
+---
+# Source: ghost/charts/mariadb/templates/primary/svc.yaml
+apiVersion: v1
+kind: Service
+metadata: # kpt-merge: example/mariadb
+  name: mariadb
+  namespace: example
+  labels:
+    app.kubernetes.io/name: mariadb
+  annotations:
+    internal.kpt.dev/upstream-identifier: '|Service|example|mariadb'
+    config.kubernetes.io/path: 'service-mariadb.yaml'
+    internal.config.kubernetes.io/path: 'service-mariadb.yaml'
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+  - name: mysql
+    port: 3306
+    protocol: TCP
+    targetPort: mysql
+  selector:
+    app.kubernetes.io/name: mariadb[RUNNING] "gcr.io/kpt-fn-demo/configmap-generator:yuwen-v0.1"

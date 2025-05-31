@@ -1,0 +1,8 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mariadb-internal-b279d662d8
+  namespace: example
+  annotations:
+    internal.kpt.dev/generator-builtin-only: fn.kpt.dev|ConfigMapGenerator|example|mariadb
+data: {}

@@ -1,0 +1,12 @@
+spec:
+  source:
+  - asConfigMap: true
+    format: IniFile
+    localFile: my.cnf
+    localFileRef: mycnf-ini-file
+    operation: writeBackToNativeConfig
+kind: NativeConfigAdaptor
+apiVersion: fn.kpt.dev/v1alpha1
+metadata:
+  name: mariadb
+  namespace: example

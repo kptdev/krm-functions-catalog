@@ -1,0 +1,72 @@
+apiVersion: fn.kpt.dev/v1alpha1
+kind: ConfigMapGenerator
+metadata: # kpt-merge: example/mariadb
+  name: mariadb
+  namespace: example
+  annotations:
+    config.kubernetes.io/local-config: "true"
+    internal.kpt.dev/upstream-identifier: 'fn.kpt.dev|ConfigMapGenerator|example|mariadb'
+spec:
+  source:
+  - format: IniFile # optional
+    localFileRef: mycnf-ini-file
+    asConfigMap: true
+    operation: writeBackToNativeConfig
+    localFile: my.cnf
+---
+apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: mariadb-user2
+  labels:
+    app.kubernetes.io/name: mariadb
+  annotations:
+    config.kubernetes.io/local-config: "true"
+upstream:
+  type: git
+  git:
+    repo: http://github.com/yuwenma/kpt-samples
+    directory: /ghost/mariadb
+    ref: poc-e2e-user1
+  updateStrategy: resource-merge
+upstreamLock:
+  type: git
+  git:
+    repo: http://github.com/yuwenma/kpt-samples
+    directory: /ghost/mariadb
+    ref: poc-e2e-user1
+    commit: 39702b84d39b23140a48f0e8adafe80ff630da72
+info:
+  description: The MariaDB which provides the storage for Ghost.
+pipeline:
+  mutators:
+  - image: gcr.io/kpt-fn/set-namespace:v0.3.4
+    configPath: package-context.yaml
+pkgAutoRun:
+  inclNonKrmFiles:
+  - name: mycnf-ini-file
+    path: my.cnf
+  pipeline:
+  - image: gcr.io/kpt-fn-demo/configmap-generator:yuwen-v0.1
+    configPath: configmap-generator.yaml
+---
+# Source: ghost/charts/mariadb/templates/primary/svc.yaml
+apiVersion: v1
+kind: Service
+metadata: # kpt-merge: example/mariadb
+  name: mariadb
+  namespace: example
+  labels:
+    app.kubernetes.io/name: mariadb
+  annotations:
+    internal.kpt.dev/upstream-identifier: '|Service|example|mariadb'
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+  - name: mysql
+    port: 3306
+    protocol: TCP
+    targetPort: mysql
+  selector:
+    app.kubernetes.io/name: mariadb

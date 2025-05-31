@@ -1,0 +1,21 @@
+apiVersion: config.kubernetes.io/v1
+kind: ResourceList
+items:
+- apiVersion: fn.kpt.dev/v1alpha1
+  kind: BuiltInNonKrm
+  spec:
+    filename: my.cnf
+    content: "[mysqld]\nskip-name-resolve\nexplicit_defaults_for_timestamp\nbasedir=/opt/bitnami/mariadb\nplugin_dir=/opt/bitnami/mariadb/plugin\nport=3306\nsocket=/opt/bitnami/mariadb/tmp/mysql.sock\ntmpdir=/opt/bitnami/mariadb/tmp\nmax_allowed_packet=16M\nbind-address=*\npid-file=/opt/bitnami/mariadb/tmp/mysqld.pid\nlog-error=/opt/bitnami/mariadb/logs/mysqld.log\ncharacter-set-server=UTF8\ncollation-server=utf8_general_ci\nslow_query_log=0\nslow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log\nlong_query_time=10.0\n\n[client]\nport=3306\nsocket=/opt/bitnami/mariadb/tmp/mysql.sock\ndefault-character-set=UTF8\nplugin_dir=/opt/bitnami/mariadb/plugin\n\n[manager]\nport=3306\nsocket=/opt/bitnami/mariadb/tmp/mysql.sock\npid-file=/opt/bitnami/mariadb/tmp/mysqld.pid"
+  metadata:
+    name: mycnf-ini-file
+functionConfig:
+  apiVersion: fn.kpt.dev/v1alpha1
+  kind: NativeConfigAdaptor
+  metadata:
+    name: mariadb
+    namespace: example
+  spec:
+    source:
+    - format: IniFile # optional
+      localFileRef: mycnf-ini-file
+      asConfigMap: true

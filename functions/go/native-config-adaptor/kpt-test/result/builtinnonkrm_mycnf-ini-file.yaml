@@ -1,0 +1,5 @@
+apiVersion: fn.kpt.dev/v1alpha1
+kind: BuiltInNonKrm
+spec: {filename: my.cnf, content: "[mysqld]\nlog-error            = /opt/bitnami/mariadb/logs/mysqld.log\nlong_query_time      = 10.0\nplugin_dir           = /opt/bitnami/mariadb/plugin\nslow_query_log       = 0\nsocket               = /opt/bitnami/mariadb/tmp/mysql.sock\ntmpdir               = /opt/bitnami/mariadb/tmp\nbasedir              = /opt/bitnami/mariadb\nmax_allowed_packet   = 16M\npid-file             = /opt/bitnami/mariadb/tmp/mysqld.pid\nport                 = 3308\nslow_query_log_file  = /opt/bitnami/mariadb/logs/mysqld.log\nbind-address         = *\ncharacter-set-server = UTF8\ncollation-server     = utf8_general_ci\n\n[manager]\npid-file = /opt/bitnami/mariadb/tmp/mysqld.pid\nsocket   = /opt/bitnami/mariadb/tmp/mysql.sock\nport     = 3306\n\n[client]\ndefault-character-set = UTF8\nplugin_dir            = /opt/bitnami/mariadb/plugin\nport                  = 3306\nsocket                = /opt/bitnami/mariadb/tmp/mysql.sock\n"}
+metadata:
+  name: mycnf-ini-file
