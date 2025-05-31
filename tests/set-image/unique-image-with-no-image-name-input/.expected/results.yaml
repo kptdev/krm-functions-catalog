@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1
+kind: FunctionResultList
+metadata:
+  name: fnresults
+exitCode: 0
+items:
+  - image: gcr.io/kpt-fn/set-image:unstable
+    exitCode: 0
+    results:
+      - message: 'summary: updated a total of 2 image(s)'
+        severity: info

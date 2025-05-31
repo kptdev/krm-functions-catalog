@@ -1,0 +1,14 @@
+diff --git a/resources.yaml b/resources.yaml
+index f674e0b..ae7d829 100644
+--- a/resources.yaml
++++ b/resources.yaml
+@@ -5,6 +5,6 @@ metadata:
+ spec:
+   containers:
+     - name: server
+-      image: nginx:1.20.2
++      image: bar:v1.0
+     - name: store
+-      image: nginx:14.1
+\ No newline at end of file
++      image: bar:v1.0

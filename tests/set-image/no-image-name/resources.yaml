@@ -1,7 +1,0 @@
-apiVersion: config.kubernetes.io/v1
-kind: ResourceList
-metadata:
-  name: my-resource
-items:
-- apiVersion: v1
-  kind: ConfigMap

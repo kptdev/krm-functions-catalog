@@ -31,7 +31,7 @@ func SetAdditionalFieldSpec(img *fn.SubObject, objects fn.KubeObjects, addImgFie
 		if err != nil {
 			ctx.ResultErr(err.Error(), obj)
 		}
-		objects[i] = newObj
+		*objects[i] = *newObj
 	}
 }
 

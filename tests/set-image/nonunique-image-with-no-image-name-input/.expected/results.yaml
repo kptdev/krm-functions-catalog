@@ -1,0 +1,14 @@
+apiVersion: kpt.dev/v1
+kind: FunctionResultList
+metadata:
+  name: fnresults
+exitCode: 1
+items:
+  - image: gcr.io/kpt-fn/set-image:unstable
+    stderr: 'failed to evaluate function: function is terminated: must specify `imageName`, resources contain non-unique image names'
+    exitCode: 1
+    results:
+      - message: must specify `imageName`, resources contain non-unique image names
+        severity: error
+      - message: 'function is terminated: must specify `imageName`, resources contain non-unique image names'
+        severity: error
