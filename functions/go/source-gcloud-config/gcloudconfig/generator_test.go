@@ -6,7 +6,7 @@ package gcloudconfig
 import (
 	"testing"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/source-gcloud-generator/exec"
+	"github.com/kptdev/krm-functions-catalog/functions/go/source-gcloud-generator/exec"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 	yaml2 "sigs.k8s.io/yaml"
 )

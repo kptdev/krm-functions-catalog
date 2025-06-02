@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/create-setters/createsetters"
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/create-setters/generated"
+	"github.com/kptdev/krm-functions-catalog/functions/go/create-setters/createsetters"
+	"github.com/kptdev/krm-functions-catalog/functions/go/create-setters/generated"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
 	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
-//nolint
+// nolint
 func main() {
 	csp := CreateSettersProcessor{}
 	cmd := command.Build(&csp, command.StandaloneEnabled, false)

@@ -1,5 +1,5 @@
 diff --git a/Kptfile b/Kptfile
-index 1cc6b93..a0041c1 100644
+index 1f6b6ca..8b78754 100644
 --- a/Kptfile
 +++ b/Kptfile
 @@ -1,22 +1,26 @@
@@ -16,7 +16,7 @@ index 1cc6b93..a0041c1 100644
    type: git
    git:
 -    commit: 4d2aa98b45ddee4b5fa45fbca16f2ff887de9efb
-     repo: https://github.com/GoogleContainerTools/kpt
+     repo: https://github.com/kptdev/kpt
      directory: package-examples/nginx
      ref: v0.2
 -openAPI:
@@ -30,7 +30,7 @@ index 1cc6b93..a0041c1 100644
 +upstreamLock:
 +  type: git
 +  git:
-+    repo: https://github.com/GoogleContainerTools/kpt
++    repo: https://github.com/kptdev/kpt
 +    directory: package-examples/nginx
 +    ref: v0.2
 +    commit: 4d2aa98b45ddee4b5fa45fbca16f2ff887de9efb

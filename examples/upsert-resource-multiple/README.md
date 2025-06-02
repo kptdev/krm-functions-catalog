@@ -8,7 +8,7 @@ function.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/upsert-resource-multiple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/upsert-resource-multiple
 ```
 
 kpt CLI accepts only one resource as fn-config. Hence, `upsert-resource` function 

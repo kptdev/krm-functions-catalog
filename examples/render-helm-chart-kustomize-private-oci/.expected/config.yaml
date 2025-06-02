@@ -1,6 +1,0 @@
-# This example doesn't work as-is because the credentials aren't stored in this repo.
-
-exitCode: 1
-
-stdErr: |
-  failed to run generator: unable to run: 'helm registry' with env=[]; "exit status 1": "WARNING: Using --password via the CLI is insecure. Use --password-stdin.\nError: Get \"https://us-west2-docker.pkg.dev/v2/\": unauthorized: authentication failed

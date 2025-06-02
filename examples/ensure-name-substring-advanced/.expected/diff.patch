@@ -1,7 +1,10 @@
-diff --git a/fn-config.yaml b/fn-config.yaml
-index d0a96a3..c191e3d 100644
+diff --git a/fn-config.yaml b/ensurenamesubstring_prod-my-config.yaml
+similarity index 91%
+rename from fn-config.yaml
+rename to ensurenamesubstring_prod-my-config.yaml
+index 83138a9..e0b441f 100644
 --- a/fn-config.yaml
-+++ b/fn-config.yaml
++++ b/ensurenamesubstring_prod-my-config.yaml
 @@ -1,7 +1,7 @@
  apiVersion: fn.kpt.dev/v1alpha1
  kind: EnsureNameSubstring
@@ -11,51 +14,147 @@ index d0a96a3..c191e3d 100644
    annotations:
      config.kubernetes.io/local-config: "true"
  additionalNameFields:
+diff --git a/Kptfile b/kptfile_example.yaml
+similarity index 100%
+rename from Kptfile
+rename to kptfile_example.yaml
+diff --git a/namespace_old-name.yaml b/namespace_old-name.yaml
+new file mode 100644
+index 0000000..3bc097f
+--- /dev/null
++++ b/namespace_old-name.yaml
+@@ -0,0 +1,4 @@
++apiVersion: v1
++kind: Namespace
++metadata:
++  name: old-name
 diff --git a/resources.yaml b/resources.yaml
-index 8e037c3..ffd583b 100644
+deleted file mode 100644
+index 8e037c3..0000000
 --- a/resources.yaml
-+++ b/resources.yaml
-@@ -1,7 +1,7 @@
- apiVersion: v1
- kind: ConfigMap
- metadata:
++++ /dev/null
+@@ -1,54 +0,0 @@
+-apiVersion: v1
+-kind: ConfigMap
+-metadata:
 -  name: the-map
-+  name: prod-the-map
-   namespace: the-namespace
- data:
-   some-key: some-value
-@@ -9,7 +9,7 @@ data:
- apiVersion: v1
- kind: Pod
- metadata:
+-  namespace: the-namespace
+-data:
+-  some-key: some-value
+----
+-apiVersion: v1
+-kind: Pod
+-metadata:
 -  name: the-pod
-+  name: prod-the-pod
-   namespace: the-namespace
- spec:
-   containers:
-@@ -23,13 +23,13 @@ spec:
-         - name: SOME_KEY
-           valueFrom:
-             configMapKeyRef:
+-  namespace: the-namespace
+-spec:
+-  containers:
+-    - name: test-container
+-      image: k8s.gcr.io/busybox
+-      command:
+-        - /bin/sh
+-        - -c
+-        - env
+-      env:
+-        - name: SOME_KEY
+-          valueFrom:
+-            configMapKeyRef:
 -              name: the-map
-+              name: prod-the-map
-               key: some-key
- ---
- apiVersion: v1
- kind: Service
- metadata:
+-              key: some-key
+----
+-apiVersion: v1
+-kind: Service
+-metadata:
 -  name: the-service
-+  name: prod-the-service
-   namespace: the-namespace
- spec:
-   ports:
-@@ -48,7 +48,7 @@ metadata:
- apiVersion: dev.example.com/v1
- kind: MyResource
- metadata:
+-  namespace: the-namespace
+-spec:
+-  ports:
+-    - name: etcd-server-ssl
+-      port: 2380
+-    - name: etcd-client-ssl
+-      port: 2379
+-  clusterIP: None
+-  publishNotReadyAddresses: true
+----
+-apiVersion: v1
+-kind: Namespace
+-metadata:
+-  name: old-name
+----
+-apiVersion: dev.example.com/v1
+-kind: MyResource
+-metadata:
 -  name: the-cr
-+  name: prod-the-cr
-   namespace: the-namespace
- spec:
+-  namespace: the-namespace
+-spec:
 -  name: foo
-+  name: prod-foo
+diff --git a/the-namespace/configmap_prod-the-map.yaml b/the-namespace/configmap_prod-the-map.yaml
+new file mode 100644
+index 0000000..36dcc15
+--- /dev/null
++++ b/the-namespace/configmap_prod-the-map.yaml
+@@ -0,0 +1,7 @@
++apiVersion: v1
++kind: ConfigMap
++metadata:
++  name: prod-the-map
++  namespace: the-namespace
++data:
++  some-key: some-value
+diff --git a/the-namespace/myresource_prod-the-cr.yaml b/the-namespace/myresource_prod-the-cr.yaml
+new file mode 100644
+index 0000000..48fd57c
+--- /dev/null
++++ b/the-namespace/myresource_prod-the-cr.yaml
+@@ -0,0 +1,7 @@
++apiVersion: dev.example.com/v1
++kind: MyResource
++metadata:
++  name: prod-the-cr
++  namespace: the-namespace
++spec:
++  name: foo
+diff --git a/the-namespace/pod_prod-the-pod.yaml b/the-namespace/pod_prod-the-pod.yaml
+new file mode 100644
+index 0000000..bd5ba41
+--- /dev/null
++++ b/the-namespace/pod_prod-the-pod.yaml
+@@ -0,0 +1,19 @@
++apiVersion: v1
++kind: Pod
++metadata:
++  name: prod-the-pod
++  namespace: the-namespace
++spec:
++  containers:
++  - name: test-container
++    image: k8s.gcr.io/busybox
++    command:
++    - /bin/sh
++    - -c
++    - env
++    env:
++    - name: SOME_KEY
++      valueFrom:
++        configMapKeyRef:
++          name: prod-the-map
++          key: some-key
+diff --git a/the-namespace/service_prod-the-service.yaml b/the-namespace/service_prod-the-service.yaml
+new file mode 100644
+index 0000000..c689f2e
+--- /dev/null
++++ b/the-namespace/service_prod-the-service.yaml
+@@ -0,0 +1,13 @@
++apiVersion: v1
++kind: Service
++metadata:
++  name: prod-the-service
++  namespace: the-namespace
++spec:
++  ports:
++  - name: etcd-server-ssl
++    port: 2380
++  - name: etcd-client-ssl
++    port: 2379
++  clusterIP: None
++  publishNotReadyAddresses: true

@@ -1,56 +1,130 @@
-diff --git a/resources.yaml b/resources.yaml
-index 28bdcf3..63e0ad6 100644
---- a/resources.yaml
-+++ b/resources.yaml
-@@ -2,10 +2,10 @@ apiVersion: v1
- kind: Deployment
- metadata:
-   annotations:
--    config.kubernetes.io/depends-on: /namespaces/default/StatefulSet/wordpress-mysql
-+    config.kubernetes.io/depends-on: /namespaces/default/StatefulSet/prod-wordpress-mysql
-   labels:
-     app: wordpress
--  name: wordpress
-+  name: prod-wordpress
-   namespace: default
- ---
- apiVersion: v1
-@@ -13,7 +13,7 @@ kind: StatefulSet
- metadata:
-   labels:
-     app: wordpress
--  name: wordpress-mysql
-+  name: prod-wordpress-mysql
-   namespace: default
- ---
- apiVersion: v1
-@@ -23,19 +23,19 @@ metadata:
-     config.kubernetes.io/depends-on: /namespaces/default/StatefulSet/outside-resource
-   labels:
-     app: bar
--  name: bar
-+  name: prod-bar
-   namespace: default
- ---
- apiVersion: rbac.authorization.k8s.io/v1
- kind: ClusterRoleBinding
- metadata:
-   annotations:
--    config.kubernetes.io/depends-on: rbac.authorization.k8s.io/ClusterRole/secret-reader
--  name: read-secrets-global
+diff --git a/clusterrole_prod-secret-reader.yaml b/clusterrole_prod-secret-reader.yaml
+new file mode 100644
+index 0000000..17dfdd4
+--- /dev/null
++++ b/clusterrole_prod-secret-reader.yaml
+@@ -0,0 +1,4 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRole
++metadata:
++  name: prod-secret-reader
+diff --git a/clusterrolebinding_prod-read-secrets-global.yaml b/clusterrolebinding_prod-read-secrets-global.yaml
+new file mode 100644
+index 0000000..20ac075
+--- /dev/null
++++ b/clusterrolebinding_prod-read-secrets-global.yaml
+@@ -0,0 +1,14 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRoleBinding
++metadata:
++  annotations:
 +    config.kubernetes.io/depends-on: rbac.authorization.k8s.io/ClusterRole/prod-secret-reader
 +  name: prod-read-secrets-global
- roleRef:
-   apiGroup: rbac.authorization.k8s.io
-   kind: ClusterRole
--  name: secret-reader
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: ClusterRole
 +  name: prod-secret-reader
- subjects:
- - apiGroup: rbac.authorization.k8s.io
-   kind: Group
-@@ -44,4 +44,4 @@ subjects:
- apiVersion: rbac.authorization.k8s.io/v1
- kind: ClusterRole
- metadata:
++subjects:
++- apiGroup: rbac.authorization.k8s.io
++  kind: Group
++  name: admin
+diff --git a/default/deployment_prod-bar.yaml b/default/deployment_prod-bar.yaml
+new file mode 100644
+index 0000000..238ca01
+--- /dev/null
++++ b/default/deployment_prod-bar.yaml
+@@ -0,0 +1,9 @@
++apiVersion: v1
++kind: Deployment
++metadata:
++  annotations:
++    config.kubernetes.io/depends-on: /namespaces/default/StatefulSet/outside-resource
++  labels:
++    app: bar
++  name: prod-bar
++  namespace: default
+diff --git a/default/deployment_prod-wordpress.yaml b/default/deployment_prod-wordpress.yaml
+new file mode 100644
+index 0000000..3615061
+--- /dev/null
++++ b/default/deployment_prod-wordpress.yaml
+@@ -0,0 +1,9 @@
++apiVersion: v1
++kind: Deployment
++metadata:
++  annotations:
++    config.kubernetes.io/depends-on: /namespaces/default/StatefulSet/prod-wordpress-mysql
++  labels:
++    app: wordpress
++  name: prod-wordpress
++  namespace: default
+diff --git a/default/statefulset_prod-wordpress-mysql.yaml b/default/statefulset_prod-wordpress-mysql.yaml
+new file mode 100644
+index 0000000..184db64
+--- /dev/null
++++ b/default/statefulset_prod-wordpress-mysql.yaml
+@@ -0,0 +1,7 @@
++apiVersion: v1
++kind: StatefulSet
++metadata:
++  labels:
++    app: wordpress
++  name: prod-wordpress-mysql
++  namespace: default
+diff --git a/Kptfile b/kptfile_example.yaml
+similarity index 100%
+rename from Kptfile
+rename to kptfile_example.yaml
+diff --git a/resources.yaml b/resources.yaml
+deleted file mode 100644
+index 28bdcf3..0000000
+--- a/resources.yaml
++++ /dev/null
+@@ -1,47 +0,0 @@
+-apiVersion: v1
+-kind: Deployment
+-metadata:
+-  annotations:
+-    config.kubernetes.io/depends-on: /namespaces/default/StatefulSet/wordpress-mysql
+-  labels:
+-    app: wordpress
+-  name: wordpress
+-  namespace: default
+----
+-apiVersion: v1
+-kind: StatefulSet
+-metadata:
+-  labels:
+-    app: wordpress
+-  name: wordpress-mysql
+-  namespace: default
+----
+-apiVersion: v1
+-kind: Deployment
+-metadata:
+-  annotations:
+-    config.kubernetes.io/depends-on: /namespaces/default/StatefulSet/outside-resource
+-  labels:
+-    app: bar
+-  name: bar
+-  namespace: default
+----
+-apiVersion: rbac.authorization.k8s.io/v1
+-kind: ClusterRoleBinding
+-metadata:
+-  annotations:
+-    config.kubernetes.io/depends-on: rbac.authorization.k8s.io/ClusterRole/secret-reader
+-  name: read-secrets-global
+-roleRef:
+-  apiGroup: rbac.authorization.k8s.io
+-  kind: ClusterRole
 -  name: secret-reader
-+  name: prod-secret-reader
+-subjects:
+-- apiGroup: rbac.authorization.k8s.io
+-  kind: Group
+-  name: admin
+----
+-apiVersion: rbac.authorization.k8s.io/v1
+-kind: ClusterRole
+-metadata:
+-  name: secret-reader

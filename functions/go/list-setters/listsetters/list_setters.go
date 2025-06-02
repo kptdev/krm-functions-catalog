@@ -148,7 +148,7 @@ func mergeSetters(a, b map[string]string) map[string]string {
 	return merged
 }
 
-//findSetterNode finds setter node from nodes
+// findSetterNode finds setter node from nodes
 func findSetterNode(nodes []*yaml.RNode, path string) (*yaml.RNode, error) {
 	for _, node := range nodes {
 		np := node.GetAnnotations()[kioutil.PathAnnotation]
@@ -188,7 +188,7 @@ func New() ListSetters {
 	return ls
 }
 
-//addKptfileSetters parses setters in fn config to ArraySetters or ScalarSetters
+// addKptfileSetters parses setters in fn config to ArraySetters or ScalarSetters
 func (ls *ListSetters) addKptfileSetters(s map[string]string) {
 	for setterName, setterValue := range s {
 		v, err := getArraySetterValues(setterValue)

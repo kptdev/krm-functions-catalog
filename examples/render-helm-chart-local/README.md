@@ -10,7 +10,7 @@ function to render a helm chart that lives in your local filesystem.
 Run the following command to fetch the example package:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/render-helm-chart-local
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/render-helm-chart-local
 ```
 
 ```shell

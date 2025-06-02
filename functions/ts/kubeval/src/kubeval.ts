@@ -2,7 +2,7 @@ import {
   Configs,
   KubernetesObject,
   kubernetesObjectResult,
-  Result,
+  Result
 } from 'kpt-functions';
 import { ChildProcess, spawn } from 'child_process';
 import { Writable } from 'stream';
@@ -24,6 +24,10 @@ interface FeedbackItem {
   errors: string[];
 }
 
+/**
+ *
+ * @param configs
+ */
 export async function kubeval(configs: Configs): Promise<void> {
   const schemaLocation = configs.getFunctionConfigValue(SCHEMA_LOCATION);
   const additionalSchemaLocationsStr = configs.getFunctionConfigValue(
@@ -56,6 +60,12 @@ export async function kubeval(configs: Configs): Promise<void> {
   configs.addResults(...results);
 }
 
+/**
+ *
+ * @param object
+ * @param results
+ * @param args
+ */
 async function runKubeval(
   object: KubernetesObject,
   results: Result[],
@@ -107,10 +117,15 @@ async function runKubeval(
       }
     }
   } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : String(error);
+
     results.push(
       kubernetesObjectResult(
         'Failed to parse raw kubeval output:\n' +
-          error.message +
+          message +
           '\n\n' +
           rawOutput,
         object
@@ -119,6 +134,14 @@ async function runKubeval(
   }
 }
 
+/**
+ *
+ * @param schemaLocation
+ * @param additionalSchemaLocations
+ * @param ignoreMissingSchemas
+ * @param skipKinds
+ * @param strict
+ */
 function buildKubevalArgs(
   schemaLocation: string | undefined,
   additionalSchemaLocations: string[],
@@ -158,16 +181,25 @@ function buildKubevalArgs(
   return args;
 }
 
+/**
+ *
+ * @param stream
+ * @param data
+ */
 function writeToStream(stream: Writable, data: string): Promise<void> {
   return new Promise((resolve, reject) =>
     stream.write(data, 'utf-8', (err) => (err ? reject(err) : resolve()))
   );
 }
 
+/**
+ *
+ * @param childProcess
+ */
 function readStdoutToString(childProcess: ChildProcess): Promise<string> {
   return new Promise<string>((resolve) => {
     let result = '';
-    childProcess.stdout!!.on('data', (data) => {
+    childProcess.stdout!.on('data', (data) => {
       result += data.toString();
     });
     childProcess.on('close', () => {

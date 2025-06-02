@@ -1,20 +1,10 @@
-diff --git a/fn-config.yaml b/fn-config.yaml
-index d25180f..5842b05 100644
---- a/fn-config.yaml
-+++ b/fn-config.yaml
-@@ -1,7 +1,7 @@
- apiVersion: fn.kpt.dev/v1alpha1
- kind: EnsureNameSubstring
- metadata:
--  name: my-config
-+  name: prod-my-config
-   annotations:
-     config.kubernetes.io/local-config: "true"
- editMode: prepend
-diff --git a/local-config.yaml b/local-config.yaml
+diff --git a/local-config.yaml b/configmap_prod-local-config-map.yaml
+similarity index 81%
+rename from local-config.yaml
+rename to configmap_prod-local-config-map.yaml
 index b8d83d1..304fc07 100644
 --- a/local-config.yaml
-+++ b/local-config.yaml
++++ b/configmap_prod-local-config-map.yaml
 @@ -1,7 +1,7 @@
  apiVersion: v1
  kind: ConfigMap
@@ -24,10 +14,13 @@ index b8d83d1..304fc07 100644
    annotations:
      config.kubernetes.io/local-config: "true"
  data:
-diff --git a/resources.yaml b/resources.yaml
+diff --git a/resources.yaml b/configmap_prod-the-map.yaml
+similarity index 76%
+rename from resources.yaml
+rename to configmap_prod-the-map.yaml
 index 3127bfa..b6bb670 100644
 --- a/resources.yaml
-+++ b/resources.yaml
++++ b/configmap_prod-the-map.yaml
 @@ -1,6 +1,6 @@
  apiVersion: v1
  kind: ConfigMap
@@ -36,3 +29,23 @@ index 3127bfa..b6bb670 100644
 +  name: prod-the-map
  data:
    some-key: some-value
+diff --git a/fn-config.yaml b/ensurenamesubstring_prod-my-config.yaml
+similarity index 87%
+rename from fn-config.yaml
+rename to ensurenamesubstring_prod-my-config.yaml
+index d25180f..5842b05 100644
+--- a/fn-config.yaml
++++ b/ensurenamesubstring_prod-my-config.yaml
+@@ -1,7 +1,7 @@
+ apiVersion: fn.kpt.dev/v1alpha1
+ kind: EnsureNameSubstring
+ metadata:
+-  name: my-config
++  name: prod-my-config
+   annotations:
+     config.kubernetes.io/local-config: "true"
+ editMode: prepend
+diff --git a/Kptfile b/kptfile_example.yaml
+similarity index 100%
+rename from Kptfile
+rename to kptfile_example.yaml

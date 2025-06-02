@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/fix/v1"
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/fix/v1alpha1"
+	v1 "github.com/kptdev/krm-functions-catalog/functions/go/fix/v1"
+	"github.com/kptdev/krm-functions-catalog/functions/go/fix/v1alpha1"
 	"k8s.io/kube-openapi/pkg/validation/spec"
 	"sigs.k8s.io/kustomize/kyaml/errors"
 	"sigs.k8s.io/kustomize/kyaml/fieldmeta"
@@ -608,7 +608,7 @@ func (s *Fix) substituteUtil(ext *setters2.CliExtension, visited sets.String) (s
 	// are not allowed in nested substitutions
 	if visited.Has(ext.Substitution.Name) {
 		return "", errors.Errorf(
-			"cyclic substitution detected with name " + ext.Substitution.Name)
+			"cyclic substitution detected with name %s", ext.Substitution.Name)
 	}
 
 	visited.Insert(ext.Substitution.Name)
@@ -620,7 +620,7 @@ func (s *Fix) substituteUtil(ext *setters2.CliExtension, visited sets.String) (s
 	for _, v := range ext.Substitution.Values {
 		if v.Ref == "" {
 			return "", errors.Errorf(
-				"missing reference on substitution " + ext.Substitution.Name)
+				"missing reference on substitution %s", ext.Substitution.Name)
 		}
 		ref, err := spec.NewRef(v.Ref)
 		if err != nil {

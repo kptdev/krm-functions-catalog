@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/apply-setters/applysetters"
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/apply-setters/generated"
+	"github.com/kptdev/krm-functions-catalog/functions/go/apply-setters/applysetters"
+	"github.com/kptdev/krm-functions-catalog/functions/go/apply-setters/generated"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
 	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"

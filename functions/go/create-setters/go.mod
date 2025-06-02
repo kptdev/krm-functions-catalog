@@ -1,6 +1,6 @@
-module github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/create-setters
+module github.com/kptdev/krm-functions-catalog/functions/go/create-setters
 
-go 1.19
+go 1.24.3
 
 require (
 	github.com/stretchr/testify v1.6.1

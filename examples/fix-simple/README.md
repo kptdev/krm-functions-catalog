@@ -8,7 +8,7 @@ and make it compatible with kpt 1.0
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/fix-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/fix-simple
 ```
 
 Let's start with the input resources
@@ -35,7 +35,7 @@ upstream:
   type: git
   git:
     commit: 4d2aa98b45ddee4b5fa45fbca16f2ff887de9efb
-    repo: https://github.com/GoogleContainerTools/kpt
+    repo: https://github.com/kptdev/kpt
     directory: package-examples/nginx
     ref: v0.2
 openAPI:
@@ -67,14 +67,14 @@ metadata:
 upstream:
   type: git
   git:
-    repo: https://github.com/GoogleContainerTools/kpt
+    repo: https://github.com/kptdev/kpt
     directory: package-examples/nginx
     ref: v0.2
   updateStrategy: resource-merge
 upstreamLock:
   type: git
   git:
-    repo: https://github.com/GoogleContainerTools/kpt
+    repo: https://github.com/kptdev/kpt
     directory: package-examples/nginx
     ref: v0.2
     commit: 4d2aa98b45ddee4b5fa45fbca16f2ff887de9efb

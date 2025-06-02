@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://www.apache.org/licenses/LICENSE-2.0
+//	https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -324,7 +324,7 @@ func copyExamples(b string, exampleSources []string, versionDest, minorVersion s
 	}
 
 	for _, exampleSource := range exampleSources {
-		// We will split something like "https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/set-namespace/v0.3.2/examples/set-namespace-simple" by something like "v0.3/" or "v0.3.2/"
+		// We will split something like "https://github.com/kptdev/krm-functions-catalog/tree/set-namespace/v0.3.2/examples/set-namespace-simple" by something like "v0.3/" or "v0.3.2/"
 		splitedPaths := regexp.MustCompile(fmt.Sprintf("%v(.[0-9])?/", minorVersion)).Split(exampleSource, 2)
 		if len(splitedPaths) != 2 {
 			return fmt.Errorf("expect 2 substring after spliting %q by %q", exampleSource, minorVersion)

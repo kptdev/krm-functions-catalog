@@ -9,7 +9,7 @@ In this example, we will see how to generate [project services](https://cloud.go
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/enable-gcp-services-advanced
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/enable-gcp-services-advanced
 ```
 
 Explore the package by running:

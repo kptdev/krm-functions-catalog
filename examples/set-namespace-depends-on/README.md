@@ -16,7 +16,7 @@ portion of the annotation.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/set-namespace-depends-on
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-namespace-depends-on
 ```
 
 We use the following `set-namespace-depends-on/Kptfile` to configure the function.

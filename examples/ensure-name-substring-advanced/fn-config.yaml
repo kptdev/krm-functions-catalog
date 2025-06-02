@@ -5,9 +5,9 @@ metadata:
   annotations:
     config.kubernetes.io/local-config: "true"
 additionalNameFields:
-  - kind: MyResource
-    group: dev.example.com
-    path: spec/name
-    version: v1
+- kind: MyResource
+  group: dev.example.com
+  path: spec/name
+  version: v1
 editMode: prepend
 substring: prod-

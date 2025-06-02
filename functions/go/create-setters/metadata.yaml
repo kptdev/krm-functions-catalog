@@ -2,9 +2,9 @@ image: gcr.io/kpt-fn/create-setters
 description: Parameterize the field values by adding setter comments.
 tags:
   - mutator
-sourceURL: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/functions/go/create-setters
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/create-setters
 examplePackageURLs:
-  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/create-setters-simple
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/create-setters-simple
 emails:
   - kpt-team@google.com
 license: Apache-2.0

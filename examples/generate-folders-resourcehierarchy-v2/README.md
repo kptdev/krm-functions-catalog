@@ -14,7 +14,7 @@ apiVersion `blueprints.cloud.google.com/v1alpha3`
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/generate-folders-resourcehierarchy-v2
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/generate-folders-resourcehierarchy-v2
 ```
 
 ### Function invocation

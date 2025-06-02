@@ -154,7 +154,7 @@ $ kpt pkg tree
 
 [helm]: https://helm.sh/
 [charts]: https://helm.sh/docs/topics/charts/
-[local]: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/render-helm-chart-local
-[remote]: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/render-helm-chart-remote
-[kustomize inline values]: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/render-helm-chart-kustomize-inline-values
+[local]: https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-local
+[remote]: https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-remote
+[kustomize inline values]: https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-kustomize-inline-values
 [helm template command]: https://helm.sh/docs/helm/helm_template/

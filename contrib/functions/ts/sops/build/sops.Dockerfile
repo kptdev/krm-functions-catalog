@@ -7,7 +7,7 @@ FROM --platform=$BUILDPLATFORM $BUILDER_IMAGE as builder
 RUN apk add bash curl git && apk update
 
 ARG TARGETOS TARGETARCH
-ARG SOPS_VERSION="v3.7.3"
+ARG SOPS_VERSION="v3.10.2"
 RUN curl -fsSL -o /usr/local/bin/sops https://github.com/mozilla/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.${TARGETOS}.${TARGETARCH} && \
     chmod +x /usr/local/bin/sops
 

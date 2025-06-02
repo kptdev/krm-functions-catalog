@@ -40,4 +40,4 @@ linked from the catalog site.
 
 Otherwise, provide inline examples in this section.
 
-[kpt doc style guide]: https://github.com/GoogleContainerTools/kpt/blob/main/docs/style-guides/docs.md
+[kpt doc style guide]: https://github.com/kptdev/kpt/blob/main/docs/style-guides/docs.md

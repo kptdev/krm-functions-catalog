@@ -44,7 +44,7 @@ type AnnotationResultKey struct {
 // AnnotationValues represents annotation key/value pairs
 type AnnotationValues map[string]string
 
-//noinspection GoUnusedGlobalVariable
+// noinspection GoUnusedGlobalVariable
 var KustomizePlugin plugin
 
 func (p *plugin) Config(

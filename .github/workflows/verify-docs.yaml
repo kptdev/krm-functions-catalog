@@ -13,16 +13,16 @@ jobs:
       GOPATH: /home/runner/work/kpt-functions-catalog/functions/go
       GO111MODULE: on
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up python 3
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
     - name: Install libs
       run: |
         pip install pyyaml
-    - name: Set up Go 1.19
-      uses: actions/setup-go@v3
+    - name: Set up Go 1.24.3
+      uses: actions/setup-go@v5
       with:
-        go-version: 1.19
+        go-version: '1.24.3'
     - name: Install mdrip
       run: |
         go install github.com/monopole/mdrip@v1.0.2

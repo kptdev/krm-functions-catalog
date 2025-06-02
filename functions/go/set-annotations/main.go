@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/set-annotations/generated"
+	"github.com/kptdev/krm-functions-catalog/functions/go/set-annotations/generated"
 	"sigs.k8s.io/kustomize/api/hasher"
 	"sigs.k8s.io/kustomize/api/konfig/builtinpluginconsts"
 	"sigs.k8s.io/kustomize/api/resmap"
@@ -149,7 +149,7 @@ func newResMapFactory() *resmap.Factory {
 	return resmap.NewFactory(resourceFactory)
 }
 
-//nolint
+// nolint
 func main() {
 	asp := SetAnnotationsProcessor{}
 	cmd := command.Build(&asp, command.StandaloneEnabled, false)

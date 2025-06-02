@@ -25,10 +25,10 @@ jobs:
     permissions:
       packages: write
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-go@v3
+    - uses: actions/checkout@v4
+    - uses: actions/setup-go@v5
       with:
-        go-version: '1.19.3'
+        go-version: '1.24.3'
     - run: go version
     - name: dev/cd/after-tag-push
       run: GIT_REF=${GITHUB_REF} IMAGE_REPO=ghcr.io/${{ github.repository }} dev/cd/after-tag-with-version

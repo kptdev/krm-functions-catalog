@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/bind/pkg/rename"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-catalog/functions/go/bind/pkg/rename"
 )
 
 func main() {

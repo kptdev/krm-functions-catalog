@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/list-setters/generated"
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/list-setters/listsetters"
+	"github.com/kptdev/krm-functions-catalog/functions/go/list-setters/generated"
+	"github.com/kptdev/krm-functions-catalog/functions/go/list-setters/listsetters"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
 )
 
-//nolint
+// nolint
 func main() {
 	lsp := ListSettersProcessor{}
 	cmd := command.Build(&lsp, command.StandaloneEnabled, false)

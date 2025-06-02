@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/list-setters/listsetters"
 	kptfilev1 "github.com/GoogleContainerTools/kpt-functions-sdk/go/pkg/api/kptfile/v1"
+	"github.com/kptdev/krm-functions-catalog/functions/go/list-setters/listsetters"
 	"sigs.k8s.io/kustomize/kyaml/resid"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )

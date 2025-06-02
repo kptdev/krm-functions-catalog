@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/search-replace/generated"
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/search-replace/searchreplace"
+	"github.com/kptdev/krm-functions-catalog/functions/go/search-replace/generated"
+	"github.com/kptdev/krm-functions-catalog/functions/go/search-replace/searchreplace"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
 	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
-//nolint
+// nolint
 func main() {
 	srp := SearchReplaceProcessor{}
 	cmd := command.Build(&srp, command.StandaloneEnabled, false)

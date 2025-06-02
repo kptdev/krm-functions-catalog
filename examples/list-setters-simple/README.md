@@ -9,7 +9,7 @@ In this example, we will see how to list setters in a package.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/list-setters-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/list-setters-simple
 ```
 
 ### Function invocation

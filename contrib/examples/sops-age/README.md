@@ -13,7 +13,7 @@ The `sops` KRM config function encrypts and decrypts resources using the sops to
 
 Get the example package by running the following commands:
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/contrib/examples/sops-age
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/contrib/examples/sops-age
 ```
 
 The package resources, e.g. [deployment.yaml](deployment.yaml) as well as some meta-resources, e.g. [apply-setters.yaml](apply-setters.yaml)

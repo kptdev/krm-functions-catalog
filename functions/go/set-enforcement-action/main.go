@@ -18,7 +18,7 @@ const (
 	dryRunActionValue    = "dryrun"
 )
 
-//nolint
+// nolint
 func main() {
 	fp := SetEnforcementActionProcessor{}
 	cmd := command.Build(&fp, command.StandaloneEnabled, false)

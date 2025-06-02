@@ -4,11 +4,11 @@ tags:
   - mutator
   - GCP
   - generator
-sourceURL: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/functions/ts/generate-folders
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/ts/generate-folders
 examplePackageURLs:
-  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/generate-folders-resourcehierarchy-v3
-  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/generate-folders-resourcehierarchy-v2
-  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/generate-folders-resourcehierarchy-v1
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/generate-folders-resourcehierarchy-v3
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/generate-folders-resourcehierarchy-v2
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/generate-folders-resourcehierarchy-v1
 emails:
   - kpt-team@google.com
 license: Apache-2.0

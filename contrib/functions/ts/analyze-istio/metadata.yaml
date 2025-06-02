@@ -2,9 +2,9 @@ image: gcr.io/kpt-fn-contrib/analyze-istio
 description:
 tags:
   - validator
-sourceURL: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/contrib/functions/ts/analyze-istio
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/contrib/functions/ts/analyze-istio
 examplePackageURLs:
-  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/contrib/examples/analyze-istio-simple
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/contrib/examples/analyze-istio-simple
 emails:
   - kpt-team@google.com
 license: Apache-2.0

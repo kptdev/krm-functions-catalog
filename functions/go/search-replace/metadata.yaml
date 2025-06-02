@@ -2,10 +2,10 @@ image: gcr.io/kpt-fn/search-replace
 description: Search and optionally replace field values.
 tags:
   - mutator
-sourceURL: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/functions/go/search-replace
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/search-replace
 examplePackageURLs:
-  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/search-replace-simple
-  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/search-replace-create-setters
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/search-replace-simple
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/search-replace-create-setters
 emails:
   - kpt-team@google.com
 license: Apache-2.0

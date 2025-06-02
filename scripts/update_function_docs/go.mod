@@ -1,6 +1,6 @@
-module github.com/GoogleContainerTools/kpt-functions-catalog/scripts/update_function_docs
+module github.com/kptdev/krm-functions-catalog/scripts/update_function_docs
 
-go 1.17
+go 1.24.3
 
 require (
 	github.com/GoogleContainerTools/kpt-functions-catalog/scripts/patch_reader v0.0.0

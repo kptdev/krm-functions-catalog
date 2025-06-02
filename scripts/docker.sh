@@ -30,6 +30,7 @@ function docker_build {
   lang=$3 # function language, e.g. go, ts
   name=$4 # function name, e.g. apply-setters
   tag=$5 # function tag, e.g. v1.2.3
+  extra_args=${6:-}
 
   build_args=()
 
@@ -63,11 +64,13 @@ function docker_build {
 
   case "${action}" in
     load)
+      IFS=' ' read -r -a extra_args_array <<< "${EXTRA_BUILD_ARGS:-}"
       # Use + conditional parameter expansion to protect from unbound array variable
       docker buildx build --load \
         -t "${GCR_REGISTRY}/${name}:${tag}" \
         -f "${dockerfile}" \
         "${build_args[@]+"${build_args[@]}"}" \
+        "${extra_args_array[@]}" \
         "${function_dir}"    
       ;;
     push)

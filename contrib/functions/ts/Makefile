@@ -78,7 +78,7 @@ $(FUNCTION_CHECKLICENSES):
 # Recipes for individual function
 .PHONY: func-test func-check-licenses func-build func-push func-npm-ci
 func-npm-ci:
-	cd $(CURRENT_FUNCTION) && npm ci
+	cd $(CURRENT_FUNCTION) && npm ci --ignore-scripts
 
 func-test: func-npm-ci func-check-licenses
 	cd $(CURRENT_FUNCTION) && npm test

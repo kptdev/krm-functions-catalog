@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/upsert-resource/generated"
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/upsert-resource/upsertresource"
+	"github.com/kptdev/krm-functions-catalog/functions/go/upsert-resource/generated"
+	"github.com/kptdev/krm-functions-catalog/functions/go/upsert-resource/upsertresource"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
 )
 
-//nolint
+// nolint
 func main() {
 	asp := UpsertResourceProcessor{}
 	cmd := command.Build(&asp, command.StandaloneEnabled, false)

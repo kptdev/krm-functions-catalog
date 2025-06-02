@@ -1,14 +1,16 @@
-module github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/generate-kpt-pkg-docs
+module github.com/kptdev/krm-functions-catalog/functions/go/generate-kpt-pkg-docs
 
-go 1.19
+go 1.24.3
 
 require (
-	github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/list-setters v0.1.0
 	github.com/GoogleContainerTools/kpt-functions-sdk/go v0.0.0-20211015223526-2e6d9522928b
+	github.com/kptdev/krm-functions-catalog/functions/go/list-setters v0.0.0-00010101000000-000000000000
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/stretchr/testify v1.7.0
 	sigs.k8s.io/kustomize/kyaml v0.13.0
 )
+
+replace github.com/kptdev/krm-functions-catalog/functions/go/list-setters => ../list-setters
 
 require (
 	github.com/PuerkitoBio/purell v1.1.1 // indirect

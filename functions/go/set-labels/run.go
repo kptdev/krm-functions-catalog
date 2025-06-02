@@ -19,8 +19,8 @@ package main
 import (
 	"context"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/set-labels/setlabels"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-catalog/functions/go/set-labels/setlabels"
 )
 
 func NewTransformer() fn.ResourceListProcessor {

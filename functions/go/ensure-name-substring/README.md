@@ -121,7 +121,7 @@ additionalNameFields:
 
 [names]: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/
 
-[issue]: https://github.com/GoogleContainerTools/kpt/issues/new/choose
+[issue]: https://github.com/kptdev/kpt/issues/new/choose
 
 [namereference]: https://github.com/kubernetes-sigs/kustomize/blob/master/api/konfig/builtinpluginconsts/namereference.go#L7
 

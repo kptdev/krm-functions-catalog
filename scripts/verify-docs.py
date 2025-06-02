@@ -43,7 +43,7 @@ kpt_team_email = 'kpt-team@google.com'
 disallowed_kpt_commands = ['kpt fn run', 'kpt cfg', 'kpt pkg cat']
 gcr_prefix = 'gcr.io/kpt-fn/'
 gcr_contrib_prefix = 'gcr.io/kpt-fn-contrib/'
-git_url_prefix = 'https://github.com/GoogleContainerTools/kpt-functions-catalog.git'
+git_url_prefix = 'https://github.com/kptdev/krm-functions-catalog.git'
 test_config_filename = 'config.yaml'
 exec_script_filename = 'exec.sh'
 
@@ -295,16 +295,16 @@ def validate_metadata(metadata, branch, path, fn, examples_list, contrib):
         raise Exception(f'{fn}: image name should be "{desired_image_name}"')
     if metadata['tags'] is None or len(metadata['tags']) == 0:
         raise Exception(f'{fn}: "tags" must contain at least one tag')
-    desired_source_url = f'https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/{branch}/{path}'
+    desired_source_url = f'https://github.com/kptdev/krm-functions-catalog/tree/{branch}/{path}'
     if metadata['sourceURL'] != desired_source_url:
         raise Exception(f'{fn}: "sourceURL" should be "{desired_source_url}"')
     if len(examples_list) == 0:
         raise Exception(f'{fn}: there must be at least one example listed in metadata.yaml file')
     for example in examples_list:
         if contrib:
-            desired_example_pkg_url = f'https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/{branch}/contrib/examples/{example}'
+            desired_example_pkg_url = f'https://github.com/kptdev/krm-functions-catalog/tree/{branch}/contrib/examples/{example}'
         else:
-            desired_example_pkg_url = f'https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/{branch}/examples/{example}'
+            desired_example_pkg_url = f'https://github.com/kptdev/krm-functions-catalog/tree/{branch}/examples/{example}'
         if desired_example_pkg_url not in metadata['examplePackageURLs']:
             raise Exception(f'"{desired_example_pkg_url}" is not listed in examplePackageURLs')
     if metadata['emails'] is None or kpt_team_email not in metadata['emails']:

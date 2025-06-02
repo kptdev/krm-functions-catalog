@@ -11,7 +11,7 @@ configured to be warnings instead of errors.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/gatekeeper-warning-only
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/gatekeeper-warning-only
 ```
 
 Here's an example `Kptfile` to run the function:

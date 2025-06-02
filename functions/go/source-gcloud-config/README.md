@@ -12,7 +12,7 @@ This `source-gcloud-config` function adds a ConfigMap resource which contains th
 
 ## Usage
 
-This function can be used as [variant constructor](https://github.com/GoogleContainerTools/kpt/issues/2590)
+This function can be used as [variant constructor](https://github.com/kptdev/kpt/issues/2590)
 which works with `kpt pkg get` hook to add gcloud configurations for deployable package instance.
 
 This function follows a convention to map gcloud configs to KRM resource configurations and store them in a ConfigMap 

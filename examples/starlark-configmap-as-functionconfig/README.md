@@ -12,7 +12,7 @@ line arguments.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/starlark-configmap-as-functionconfig
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/starlark-configmap-as-functionconfig
 ```
 
 We are going to use the following starlark script:

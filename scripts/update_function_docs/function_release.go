@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     https://www.apache.org/licenses/LICENSE-2.0
+//	https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -266,13 +266,13 @@ func (fr *functionRelease) exampleSubPath() string {
 }
 
 // replace kpt package names for all examples, e.g.
-// https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/apply-setters-simple ->
-// https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/apply-setters-simple@apply-setters/v1.0.1
+// https://github.com/kptdev/krm-functions-catalog.git/examples/apply-setters-simple ->
+// https://github.com/kptdev/krm-functions-catalog.git/examples/apply-setters-simple@apply-setters/v1.0.1
 func (fr *functionRelease) replaceKptPackages(contents []byte) []byte {
 	exampleGroup := strings.Join(fr.Examples.exampleNames(), "|")
 	exampleSubPath := fr.exampleSubPath()
 	kptPkgPattern := regexp.MustCompile(
-		fmt.Sprintf(`(https://github\.com/GoogleContainerTools/kpt-functions-catalog\.git/%s/)(%s)(\s+)`,
+		fmt.Sprintf(`(https://github\.com/kptdev/krm-functions-catalog\.git/%s/)(%s)(\s+)`,
 			exampleSubPath, exampleGroup))
 	contents = kptPkgPattern.ReplaceAll(contents,
 		[]byte(fmt.Sprintf(`${1}${2}@%s/%s${3}`, fr.FunctionName, fr.LatestPatchVersion)))
@@ -280,8 +280,8 @@ func (fr *functionRelease) replaceKptPackages(contents []byte) []byte {
 }
 
 // replace branch name with release branch for all GitHub URLs, e.g.
-// https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/set-namespace-simple ->
-// https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/set-namespace/v0.2/examples/set-namespace-simple
+// https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-namespace-simple ->
+// https://github.com/kptdev/krm-functions-catalog/tree/set-namespace/v0.2/examples/set-namespace-simple
 func (fr *functionRelease) replaceGithubURLs(contents []byte) []byte {
 	exampleSubPath := fr.exampleSubPath()
 	sourceUrlSuffix := fmt.Sprintf(`/functions/%s/%s`, fr.Language, fr.FunctionName)
@@ -297,7 +297,7 @@ func (fr *functionRelease) replaceGithubURLs(contents []byte) []byte {
 	suffixGroup := strings.Join(suffixes, "|")
 	refGroup := fmt.Sprintf(`master|%[1]s/v\d*\.\d*\.\d*|%[1]s/v\d*\.\d*`, fr.FunctionName)
 	githubURLPattern := regexp.MustCompile(
-		fmt.Sprintf(`(https://github\.com/GoogleContainerTools/kpt-functions-catalog/tree/)(%s)(%s)`,
+		fmt.Sprintf(`(https://github\.com/kptdev/krm-functions-catalog/tree/)(%s)(%s)`,
 			refGroup, suffixGroup))
 	contents = githubURLPattern.ReplaceAll(contents,
 		[]byte(fmt.Sprintf(`${1}%s/%s${3}`, fr.FunctionName, fr.MinorVersion)))

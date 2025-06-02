@@ -202,23 +202,23 @@ Do you need a review or release of functions? We’d love to hear from you!
 
 [catalog website]: https://catalog.kpt.dev/
 
-[e2e test harness doc]: https://github.com/GoogleContainerTools/kpt/blob/main/pkg/test/runner/README.md
+[e2e test harness doc]: https://github.com/kptdev/kpt/blob/main/pkg/test/runner/README.md
 
-[golang-template]: https://raw.githubusercontent.com/GoogleContainerTools/kpt-functions-catalog/master/functions/go/_template/README.md
+[golang-template]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/master/functions/go/_template/README.md
 
-[ts-template]: https://raw.githubusercontent.com/GoogleContainerTools/kpt-functions-catalog/master/functions/ts/_template/README.md
+[ts-template]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/master/functions/ts/_template/README.md
 
-[docker-common]: https://raw.githubusercontent.com/GoogleContainerTools/kpt-functions-catalog/master/build/docker
+[docker-common]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/master/build/docker
 
-[example-template]: https://raw.githubusercontent.com/GoogleContainerTools/kpt-functions-catalog/master/examples/_template/README.md
+[example-template]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/master/examples/_template/README.md
 
 [Slack channel]: https://kubernetes.slack.com/channels/kpt/
 
 [email list]: https://groups.google.com/forum/?oldui=1#!forum/kpt-users
 
-[error message style guide]: https://github.com/GoogleContainerTools/kpt/blob/main/docs/style-guides/errors.md
+[error message style guide]: https://github.com/kptdev/kpt/blob/main/docs/style-guides/errors.md
 
-[documentation style guide]: https://github.com/GoogleContainerTools/kpt/blob/main/docs/style-guides/docs.md
+[documentation style guide]: https://github.com/kptdev/kpt/blob/main/docs/style-guides/docs.md
 
 [GitHub Help]: https://help.github.com/articles/about-pull-requests/
 

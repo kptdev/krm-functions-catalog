@@ -11,7 +11,7 @@ resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/set-image-digest
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-image-digest
 ```
 
 We use the following `Kptfile` to configure the function.

@@ -17,8 +17,8 @@ package main
 import (
 	"os"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/export-terraform/terraformgenerator"
 	sdk "github.com/GoogleContainerTools/kpt-functions-catalog/thirdparty/kyaml/fnsdk"
+	"github.com/kptdev/krm-functions-catalog/functions/go/export-terraform/terraformgenerator"
 )
 
 func main() {

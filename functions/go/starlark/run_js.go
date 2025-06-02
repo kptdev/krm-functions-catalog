@@ -19,8 +19,8 @@ package main
 import (
 	"syscall/js"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/starlark/starlark"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-catalog/functions/go/starlark/starlark"
 )
 
 func run() error {
@@ -31,7 +31,6 @@ func run() error {
 	// Provide a second function that serves purely to also return the resourceList,
 	// in case of the above function failing.
 	js.Global().Set("processResourceListErrors", resourceListProcessorErrors(&resourceList))
-
 
 	// We need to ensure that the Go program is running when JavaScript calls it.
 	// Otherwise, it will complain the Go program has already exited.
@@ -73,8 +72,8 @@ func resourceListProcessorErrors(resourceList *[]byte) js.Func {
 			return ""
 		}
 		errorMessages := ""
-		for _, r := range(rl.Results) {
-			if (r.Severity == "error") {
+		for _, r := range rl.Results {
+			if r.Severity == "error" {
 				errorMessages += r.Message
 			}
 		}

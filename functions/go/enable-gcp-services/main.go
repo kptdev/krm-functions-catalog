@@ -5,13 +5,13 @@ import (
 	"os"
 	"sort"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/project-services/gcpservices"
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/project-services/generated"
+	"github.com/kptdev/krm-functions-catalog/functions/go/project-services/gcpservices"
+	"github.com/kptdev/krm-functions-catalog/functions/go/project-services/generated"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
 )
 
-//nolint
+// nolint
 func main() {
 	psf := ProjectServiceSetFunction{}
 	cmd := command.Build(&psf, command.StandaloneEnabled, false)
@@ -51,7 +51,7 @@ func getErrorItem(errMsg string) []*framework.Result {
 	}
 }
 
-// from https://github.com/GoogleContainerTools/kpt/issues/2195
+// from https://github.com/kptdev/kpt/issues/2195
 // refactor once upstreamed
 func sortResultItems(items []*framework.Result) {
 	sort.SliceStable(items, func(i, j int) bool {

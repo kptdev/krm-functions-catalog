@@ -17,8 +17,8 @@
 package main
 
 import (
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/apply-replacements/replacements"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-catalog/functions/go/apply-replacements/replacements"
 )
 
 func run() error {

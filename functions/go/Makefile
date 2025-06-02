@@ -157,6 +157,8 @@ func-check-licenses: install-go-licenses
 
 func-build: func-verify
 	@echo Building image for $(CURRENT_FUNCTION)...
+	EXTRA_BUILD_ARGS="$(if $(filter $(CURRENT_FUNCTION),generate-kpt-pkg-docs),--build-context list-setters=./list-setters)" \
+	CURRENT_FUNCTION=$(CURRENT_FUNCTION) TAG=$(TAG) \
 	../../scripts/go-function-release.sh build curated
 
 func-push:

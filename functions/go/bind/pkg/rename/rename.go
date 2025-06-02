@@ -16,8 +16,8 @@ package rename
 import (
 	"fmt"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/bind/pkg/meta"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-catalog/functions/go/bind/pkg/meta"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 

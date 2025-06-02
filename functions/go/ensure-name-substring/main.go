@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/ensure-name-substring/generated"
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/ensure-name-substring/nameref"
+	"github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring/generated"
+	"github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring/nameref"
 	"sigs.k8s.io/kustomize/api/hasher"
 	"sigs.k8s.io/kustomize/api/konfig/builtinpluginconsts"
 	"sigs.k8s.io/kustomize/api/resmap"

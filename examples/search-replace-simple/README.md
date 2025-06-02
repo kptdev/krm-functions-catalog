@@ -12,7 +12,7 @@ This is a simple example depicting search and replace operation on KRM resource 
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/search-replace-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/search-replace-simple
 ```
 
 Let's start with the input resource
