@@ -11,7 +11,6 @@ examplePackageURLs:
   - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-kustomize-inline-values
   - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-kustomize-values-files
   - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-kustomize-private-git
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-kustomize-private-oci
 emails:
   - kpt-team@google.com
 license: Apache-2.0
