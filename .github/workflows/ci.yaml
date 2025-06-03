@@ -99,6 +99,11 @@ jobs:
       - name: Install kpt
         run: |
           go install github.com/GoogleContainerTools/kpt@main
+      - name: Install kustomize
+        uses: syntaqx/setup-kustomize@v1
+        with:
+          kustomize-version: 4.2.0
+      - run: kustomize version
       - name: Build node and Go docker images
         if: matrix.platform == 'ubuntu-latest'
         run: |
