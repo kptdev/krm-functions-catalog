@@ -14,3 +14,4 @@ __pycache__
 *.bak
 
 scripts/patch_reader/patch_reader
+shell_files.out

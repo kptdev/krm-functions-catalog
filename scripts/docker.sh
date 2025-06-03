@@ -30,7 +30,6 @@ function docker_build {
   lang=$3 # function language, e.g. go, ts
   name=$4 # function name, e.g. apply-setters
   tag=$5 # function tag, e.g. v1.2.3
-  extra_args=${6:-}
 
   build_args=()
 
