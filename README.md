@@ -1,5 +1,6 @@
 [![CI Status](https://github.com/GoogleContainerTools/kpt-functions-catalog/workflows/CI/badge.svg?branch=master&event=push)](https://github.com/GoogleContainerTools/kpt-functions-catalog/actions?query=workflow%3ACI+event%3Apush+branch%3Amaster)
 [![Docs Deployment Status](https://github.com/GoogleContainerTools/kpt-functions-catalog/actions/workflows/firebase-hosting-merge.yml/badge.svg?event=push)](https://github.com/GoogleContainerTools/kpt-functions-catalog/actions/workflows/firebase-hosting-merge.yml)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkptdev%2Fkrm-functions-catalog.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkptdev%2Fkrm-functions-catalog?ref=badge_shield)
 
 # kpt Functions Catalog
 
@@ -23,6 +24,10 @@ Discussions are [here](https://github.com/kptdev/kpt/discussions).
 
 Code is under the [Apache License 2.0](LICENSE), documentation is [CC BY 4.0](LICENSE-documentation).
 
+### License scanning status
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkptdev%2Fkrm-functions-catalog.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkptdev%2Fkrm-functions-catalog?ref=badge_large)
+
 ## Governance
 
 The governance of the kpt project and KRM Functiona Catalog are described in the
@@ -37,4 +42,3 @@ More information and links about the CNCF Code of Conduct are [here](code-of-con
 ## CNCF
 
 The kpt project including the KRM Functions Catalog is a [CNCF Sandbox](https://www.cncf.io/sandbox-projects/) project.
-
