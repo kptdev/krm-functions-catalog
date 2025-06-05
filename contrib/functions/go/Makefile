@@ -98,7 +98,7 @@ GO_LICENSES=$(shell which go-licenses)
 endif
 
 install-mdtogo:
-	go install github.com/GoogleContainerTools/kpt/mdtogo@main
+	go install github.com/kptdev/kpt/mdtogo@main
 
 # Recipes for individual function
 .PHONY: func-fix func-vet func-fmt func-test func-lint \
