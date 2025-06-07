@@ -9,7 +9,7 @@ This example demonstrates how to run [`set-namespace`] function with kpt variant
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get --for-deployment https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/set-namespace-kpt-package-context
+$ kpt pkg get --for-deployment https://github.com/kptdev/krm-functions-catalog.git/examples/set-namespace-kpt-package-context
 ```
 
 Since we use flag `--for-deployment`, kpt generates a local file `package-context.yaml` as below

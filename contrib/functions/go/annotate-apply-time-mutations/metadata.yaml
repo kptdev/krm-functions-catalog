@@ -2,10 +2,10 @@ image: gcr.io/kpt-fn-contrib/annotate-apply-time-mutations
 description: Read mutation markup comments and add the equivalent annotation.
 tags:
   - mutator
-sourceURL: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/contrib/functions/go/annotate-apply-time-mutations
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/contrib/functions/go/annotate-apply-time-mutations
 examplePackageURLs:
-  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/contrib/examples/annotate-apply-time-mutations-custom-resource
-  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/contrib/examples/annotate-apply-time-mutations-inline-comment
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/contrib/examples/annotate-apply-time-mutations-custom-resource
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/contrib/examples/annotate-apply-time-mutations-inline-comment
 emails:
   - kpt-team@google.com
 license: Apache-2.0

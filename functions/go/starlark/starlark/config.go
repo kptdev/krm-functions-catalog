@@ -3,8 +3,8 @@ package starlark
 import (
 	"fmt"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/starlark/third_party/sigs.k8s.io/kustomize/kyaml/fn/runtime/starlark"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-catalog/functions/go/starlark/third_party/sigs.k8s.io/kustomize/kyaml/fn/runtime/starlark"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
@@ -36,7 +36,7 @@ func (sr *StarlarkRun) Config(fnCfg *fn.KubeObject) error {
 	switch {
 	case fnCfg.IsEmpty():
 		return fmt.Errorf("FunctionConfig is missing. Expect `ConfigMap` or `StarlarkRun`")
-	case fnCfg.IsGVK(configMapApiVersion, configMapKind):
+	case fnCfg.IsGroupKind(schema.GroupKind{Group: "", Kind: configMapKind}):
 		cm := &corev1.ConfigMap{}
 		if err := fnCfg.As(cm); err != nil {
 			return err
@@ -51,7 +51,7 @@ func (sr *StarlarkRun) Config(fnCfg *fn.KubeObject) error {
 			}
 			sr.Params[k] = v
 		}
-	case fnCfg.IsGVK(starlarkRunAPIVersion, starlarkRunKind):
+	case fnCfg.IsGroupKind(schema.GroupKind{Group: starlarkRunGroup, Kind: starlarkRunKind}):
 		if err := fnCfg.As(sr); err != nil {
 			return err
 		}

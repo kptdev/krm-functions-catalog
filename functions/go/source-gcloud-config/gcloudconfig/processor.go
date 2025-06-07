@@ -1,10 +1,11 @@
 // Copyright 2022 Google LLC
+// Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//      http://www.apache.org/licenses/LICENSE-2.0
+//	http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +18,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/source-gcloud-generator/exec"
+	"github.com/kptdev/krm-functions-catalog/functions/go/source-gcloud-generator/exec"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/kio/filters"
 )

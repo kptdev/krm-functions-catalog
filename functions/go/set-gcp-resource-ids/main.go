@@ -6,16 +6,16 @@ import (
 	"os"
 	"strings"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/set-gcp-resource-ids/pkg/kpt"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-catalog/functions/go/set-gcp-resource-ids/pkg/kpt"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 var (
-	Folder = schema.GroupVersionKind{Group: "resourcemanager.cnrm.cloud.google.com", Version: "v1beta1", Kind: "Folder"}
-	GCPProject = schema.GroupVersionKind{Group: "resourcemanager.cnrm.cloud.google.com", Version: "v1beta1", Kind: "Project"}
+	Folder                  = schema.GroupVersionKind{Group: "resourcemanager.cnrm.cloud.google.com", Version: "v1beta1", Kind: "Folder"}
+	GCPProject              = schema.GroupVersionKind{Group: "resourcemanager.cnrm.cloud.google.com", Version: "v1beta1", Kind: "Project"}
 	ConfigControllerContext = schema.GroupVersionKind{Group: "core.cnrm.cloud.google.com", Version: "v1beta1", Kind: "ConfigConnectorContext"}
-	)
+)
 
 func main() {
 	// TODO: fn.AsMain should support an "easy mode" where it runs against a directory
@@ -29,7 +29,7 @@ var _ fn.Runner = &SetGCPProject{}
 
 type SetGCPProject struct {
 	ProjectID string `json:"projectID,omitempty"`
-	Ctx fn.Context
+	Ctx       fn.Context
 }
 
 func (p *SetGCPProject) GenerateProjectID(objects fn.KubeObjects) (string, error) {
@@ -54,7 +54,6 @@ func (p *SetGCPProject) GenerateProjectID(objects fn.KubeObjects) (string, error
 	}
 	return projectID, nil
 }
-
 
 func (p *SetGCPProject) Run(ctx *fn.Context, _ *fn.KubeObject, objects fn.KubeObjects, results *fn.Results) bool {
 	projectID := p.ProjectID
@@ -123,12 +122,11 @@ func (p *SetGCPProject) Run(ctx *fn.Context, _ *fn.KubeObject, objects fn.KubeOb
 		}
 
 		if object.GetAnnotation("cnrm.cloud.google.com/project-id") != "" {
-			if err = object.SetAnnotation( "cnrm.cloud.google.com/project-id", projectID); err != nil {
+			if err = object.SetAnnotation("cnrm.cloud.google.com/project-id", projectID); err != nil {
 				results.ErrorE(err)
 				return false
 			}
 		}
-
 
 		if object.IsGroupVersionKind(ConfigControllerContext) {
 			// TODO: ConfigConnectorContext should accept a serviceAccountRef
@@ -146,7 +144,7 @@ func (p *SetGCPProject) Run(ctx *fn.Context, _ *fn.KubeObject, objects fn.KubeOb
 					return false
 				}
 				googleServiceAccount = strings.Join(tokens, "@")
-				if err = object.SetNestedString(googleServiceAccount, "spec", "googleServiceAccount"); err!= nil {
+				if err = object.SetNestedString(googleServiceAccount, "spec", "googleServiceAccount"); err != nil {
 					results.ErrorE(err)
 					return false
 				}

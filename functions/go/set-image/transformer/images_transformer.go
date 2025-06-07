@@ -3,10 +3,10 @@ package transformer
 import (
 	"fmt"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/set-image/custom"
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/set-image/third_party/sigs.k8s.io/kustomize/api/image"
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/set-image/third_party/sigs.k8s.io/kustomize/api/types"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-catalog/functions/go/set-image/custom"
+	"github.com/kptdev/krm-functions-catalog/functions/go/set-image/third_party/sigs.k8s.io/kustomize/api/image"
+	"github.com/kptdev/krm-functions-catalog/functions/go/set-image/third_party/sigs.k8s.io/kustomize/api/types"
 )
 
 // Image contains an image name, a new name, a new tag or digest, which will replace the original name and tag.

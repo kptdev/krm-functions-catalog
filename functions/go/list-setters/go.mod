@@ -1,6 +1,6 @@
-module github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/list-setters
+module github.com/kptdev/krm-functions-catalog/functions/go/list-setters
 
-go 1.19
+go 1.24.3
 
 require (
 	github.com/GoogleContainerTools/kpt-functions-sdk/go v0.0.0-20210810181223-632b30549de6

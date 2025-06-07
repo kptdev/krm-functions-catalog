@@ -1,4 +1,5 @@
 # Copyright 2020 Google LLC
+# Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -97,7 +98,7 @@ GO_LICENSES=$(shell which go-licenses)
 endif
 
 install-mdtogo:
-	go install github.com/GoogleContainerTools/kpt/mdtogo@main
+	go install github.com/kptdev/kpt/mdtogo@main
 
 # Recipes for individual function
 .PHONY: func-fix func-vet func-fmt func-test func-lint \

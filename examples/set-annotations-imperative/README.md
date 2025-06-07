@@ -10,7 +10,7 @@ on all resources by running [`set-annotations`] function imperatively.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/set-annotations-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-annotations-imperative
 ```
 
 ### Function invocation

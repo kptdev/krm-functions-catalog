@@ -6,6 +6,6 @@ metadata:
     config.kubernetes.io/local-config: "true"
 pipeline:
   mutators:
-    - image: gcr.io/kpt-fn/ensure-name-substring:unstable
-      configMap:
-        prepend: prod-
+  - image: gcr.io/kpt-fn/ensure-name-substring:unstable
+    configMap:
+      prepend: prod-

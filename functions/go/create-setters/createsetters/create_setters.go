@@ -99,7 +99,8 @@ func (cs *CreateSetters) Filter(nodes []*yaml.RNode) ([]*yaml.RNode, error) {
 	return nodes, nil
 }
 
-/**
+/*
+*
 preProcessScalarSetters simplifies the process of setting comments for
 scalar values by creating a *strings.Replacer
 e.g., For Scalar Setters [[name: image, value: nginx], [name: env, value: dev]].,
@@ -116,7 +117,8 @@ func (cs *CreateSetters) preProcessScalarSetters() {
 	cs.replacer = strings.NewReplacer(replacerArgs...)
 }
 
-/**
+/*
+*
 visitMapping takes the mapping node and performs following steps,
 checks if it is a sequence node
 checks if all the values in the node match any of the ArraySetters
@@ -217,7 +219,8 @@ func (cs *CreateSetters) visitMapping(object *yaml.RNode, path string) error {
 	})
 }
 
-/**
+/*
+*
 visitScalar accepts the input scalar node and performs following steps,
 checks if it is a scalar node
 adds the linecomment if it's value matches with any of the setter
@@ -226,16 +229,18 @@ e.g.for input of scalar node 'nginx:1.7.1' in the yaml node
 
 apiVersion: v1
 ...
-  env: dev
-  image: nginx:1.7.1
+
+	env: dev
+	image: nginx:1.7.1
 
 and for input CreateSetters [[name: image, value: nginx], [name: env, value: dev], [name: tag, value: 1.7.1]]
 The yaml node is transformed to
 
 apiVersion: v1
 ...
-  env: dev # kpt-set: ${env}
-  image: nginx:1.7.1 # kpt-set: ${image}:${tag}
+
+	env: dev # kpt-set: ${env}
+	image: nginx:1.7.1 # kpt-set: ${image}:${tag}
 */
 func (cs *CreateSetters) visitScalar(object *yaml.RNode, path string) error {
 	if object.YNode().Kind != yaml.ScalarNode {
@@ -312,7 +317,8 @@ func hasMatchValue(nodeValues []string, setters []ScalarSetter) bool {
 	return false
 }
 
-/**
+/*
+*
 getLineComment checks if any of the setters value matches with the node value
 replaces that part of the node value with the ${setterName}
 e.g.for input of scalar node 'nginx:1.7.1' in the yaml node
@@ -339,22 +345,27 @@ func getLineComment(nodeValue string, replacer *strings.Replacer) (string, bool)
 	return output, valueMatch
 }
 
-/**
+/*
+*
 Decode decodes the input yaml node into CreatSetters struct
 places the setter either in ScalarSetters or ArraySetters
 sorts the ScalarSetters using CompareSetters
 
 e.g.for input ScalarSetters
-    [[name: image, value: nginx], [name: ubuntu, value: nginx-abc]]
+
+	[[name: image, value: nginx], [name: ubuntu, value: nginx-abc]]
 
 for scalar node:
-    spec: nginx-development
+
+	spec: nginx-development
 
 Sorts the ScalarSetters to avoid following case of substrings
-    spec: nginx-abc-development # kpt-set: ${image}-abc-development
+
+	spec: nginx-abc-development # kpt-set: ${image}-abc-development
 
 ScalarSetters array is transformed to
-    [[name: ubuntu, value: nginx-abc], [name: image, value: nginx]]
+
+	[[name: ubuntu, value: nginx-abc], [name: image, value: nginx]]
 */
 func Decode(rn *yaml.RNode, fcd *CreateSetters) error {
 	if len(rn.GetDataMap()) == 0 {

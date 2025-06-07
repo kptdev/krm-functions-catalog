@@ -13,7 +13,7 @@ const (
 	annotationDelimeter   = ","
 )
 
-//nolint
+// nolint
 func main() {
 	if err := fn.AsMain(fn.ResourceListProcessorFunc(deleteAnnotations)); err != nil {
 		os.Exit(1)

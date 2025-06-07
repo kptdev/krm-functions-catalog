@@ -47,11 +47,12 @@ source "${scripts_dir}"/docker.sh
 versions=$(get_versions "${TAG}")
 
 FUNCTION_TYPE="$2"
+EXTRA_BUILD_ARGS="${EXTRA_BUILD_ARGS:-}"
 
 case "$1" in
   build)
     for version in ${versions}; do
-      docker_build "load" "${FUNCTION_TYPE}" "go" "${CURRENT_FUNCTION}" "${version}"
+      docker_build "load" "${FUNCTION_TYPE}" "go" "${CURRENT_FUNCTION}" "${version}" "${EXTRA_BUILD_ARGS}"
     done
     ;;
   push)

@@ -1,4 +1,5 @@
 # Copyright 2021 Google LLC
+# Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,10 +19,10 @@ tags:
   - mutator
   - GCP
   - Terraform
-sourceURL: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/functions/go/export-terraform
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/export-terraform
 examplePackageURLs:
-  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/export-terraform-imperative
-  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/export-terraform-advanced
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/export-terraform-imperative
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/export-terraform-advanced
 emails:
   - kpt-team@google.com
 license: Apache-2.0

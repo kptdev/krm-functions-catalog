@@ -40,7 +40,6 @@ type nameReferenceConfig struct {
 //
 // If the Deployment's name changes, e.g. a prefix is added,
 // then the HPA's reference to the Deployment must be fixed.
-//
 func FixNameBackReference(m resmap.ResMap) error {
 	c, err := getDefaultConfig()
 	if err != nil {

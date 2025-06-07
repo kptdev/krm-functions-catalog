@@ -1,4 +1,5 @@
 // Copyright 2022 Google LLC
+// Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,8 +20,8 @@ package main
 import (
 	"context"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/set-labels/setlabels"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-catalog/functions/go/set-labels/setlabels"
 )
 
 func NewTransformer() fn.ResourceListProcessor {

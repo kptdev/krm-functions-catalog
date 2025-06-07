@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/gatekeeper/generated"
+	"github.com/kptdev/krm-functions-catalog/functions/go/gatekeeper/generated"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"

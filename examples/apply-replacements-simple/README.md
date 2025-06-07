@@ -10,7 +10,7 @@ with a simple example
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/apply-replacements-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/apply-replacements-simple
 ```
 
 We use a `ApplyReplacements` object to configure the `apply-replacements` function. 

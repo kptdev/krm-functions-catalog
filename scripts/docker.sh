@@ -1,6 +1,7 @@
 #! /bin/bash
 #
 # Copyright 2021 Google LLC
+# Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -63,11 +64,13 @@ function docker_build {
 
   case "${action}" in
     load)
+      IFS=' ' read -r -a extra_args_array <<< "${EXTRA_BUILD_ARGS:-}"
       # Use + conditional parameter expansion to protect from unbound array variable
       docker buildx build --load \
         -t "${GCR_REGISTRY}/${name}:${tag}" \
         -f "${dockerfile}" \
         "${build_args[@]+"${build_args[@]}"}" \
+        "${extra_args_array[@]}" \
         "${function_dir}"    
       ;;
     push)

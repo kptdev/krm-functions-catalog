@@ -2,9 +2,9 @@ image: gcr.io/kpt-fn/source-gcloud-config # TODO
 description: Add a ConfigMap resource to contain gcloud configurations.
 tags:
   - generator
-sourceURL: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/functions/go/source-gcloud-config
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/source-gcloud-config
 examplePackageURLs:
-  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/source-gcloud-config-simple
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/source-gcloud-config-simple
 emails:
   - kpt-team@google.com
 license: Apache-2.0

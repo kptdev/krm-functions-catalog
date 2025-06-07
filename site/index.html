@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="https://kpt.dev/static/css/site.css" />
     <link
       rel="icon"
-      href="https://raw.githubusercontent.com/GoogleContainerTools/kpt/next/site/static/images/logo.png"
+      href="https://raw.githubusercontent.com/kptdev/kpt/next/site/static/images/logo.png"
       type="image/x-icon"
     />
   </head>
@@ -32,7 +32,7 @@
     <div id="app"></div>
     <script>
       window.$docsify = {
-        name: `<img src="https://raw.githubusercontent.com/GoogleContainerTools/kpt/next/site/static/images/logo.png" alt="kpt" />`,
+        name: `<img src="https://raw.githubusercontent.com/kptdev/kpt/next/site/static/images/logo.png" alt="kpt" />`,
         nameLink: "https://kpt.dev/?id=overview",
         search: {
           maxAge: 43200000,
@@ -47,7 +47,7 @@
         auto2top: true,
         repo: "true",
         corner: {
-          url: "https://github.com/GoogleContainerTools/kpt-functions-catalog",
+          url: "https://github.com/kptdev/krm-functions-catalog",
           icon: "github",
         },
         routerMode: "history",
@@ -84,9 +84,9 @@
               editPage.appendChild(editIcon);
 
               // Fallback links for generated pages.
-              createIssue.href = `https://github.com/GoogleContainerTools/kpt/issues/new?labels=documentation&title=Docs: Functions Catalog`;
+              createIssue.href = `https://github.com/kptdev/kpt/issues/new?labels=documentation&title=Docs: Functions Catalog`;
               editPage.href =
-                "https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/site";
+                "https://github.com/kptdev/krm-functions-catalog/tree/master/site";
 
               const container = document.createElement("div");
               container.classList.add("github-widget");
@@ -270,7 +270,7 @@
                 // Update buttons.
                 document.getElementById(
                   "create-issue"
-                ).href = `https://github.com/GoogleContainerTools/kpt/issues/new?labels=documentation&title=Docs: Function Catalog - ${document.title}`;
+                ).href = `https://github.com/kptdev/kpt/issues/new?labels=documentation&title=Docs: Function Catalog - ${document.title}`;
                 document.getElementById("edit-page").href =
                   ghElement.href
                     .replace(

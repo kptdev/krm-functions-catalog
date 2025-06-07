@@ -11,6 +11,7 @@
     "noImplicitReturns": true,
     "moduleResolution": "node",
     "sourceMap": true,
+    "skipLibCheck": true,
     "outDir": "dist",
     "lib": ["es2015"],
     "rootDir": "src/"

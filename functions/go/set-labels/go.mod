@@ -1,8 +1,8 @@
-module github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/set-labels
+module github.com/kptdev/krm-functions-catalog/functions/go/set-labels
 
-go 1.19
+go 1.24.3
 
-require github.com/GoogleContainerTools/kpt-functions-sdk/go/fn v0.0.0-20221014182208-8e78fe927b37
+require github.com/GoogleContainerTools/kpt-functions-sdk/go/fn v0.0.0-20250527140842-1126697ce2d1
 
 require (
 	github.com/GoogleContainerTools/kpt-functions-sdk/go/api v0.0.0-20221014182208-8e78fe927b37 // indirect

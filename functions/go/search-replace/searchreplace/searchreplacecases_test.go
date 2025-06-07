@@ -432,8 +432,8 @@ metadata:
 spec:
   replicas: 3
   foo:
-    - a
-    - b
+  - a
+  - b
 ---
 apiVersion: apps/v1
 kind: Service
@@ -455,8 +455,8 @@ metadata:
 spec:
   replicas: 3
   foo:
-    - a
-    - b
+  - a
+  - b
 ---
 apiVersion: apps/v1
 kind: Service
@@ -481,8 +481,8 @@ metadata:
 spec:
   replicas: 3
   foo:
-    - a
-    - b
+  - a
+  - b
 ---
 apiVersion: apps/v1
 kind: Service
@@ -505,8 +505,8 @@ metadata:
 spec:
   replicas: 3
   foo:
-    - a
-    - b
+  - a
+  - b
  `,
 		out: `${filePath}
 fieldPath: spec.foo[1]
@@ -522,8 +522,8 @@ metadata:
 spec:
   replicas: 3
   foo:
-    - a
-    - c
+  - a
+  - c
  `,
 	},
 	{
@@ -541,8 +541,8 @@ metadata:
 spec:
   replicas: 3
   foo:
-    - a
-    - b
+  - a
+  - b
  `,
 		out: `Mutated 0 field(s)
 `,
@@ -554,8 +554,8 @@ metadata:
 spec:
   replicas: 3
   foo:
-    - a
-    - b
+  - a
+  - b
  `,
 	},
 	{
@@ -573,9 +573,9 @@ metadata:
 spec:
   replicas: 3
   foo:
-    - c: thing0
-    - c: thing1
-    - c: thing2
+  - c: thing0
+  - c: thing1
+  - c: thing2
  `,
 		out: `${filePath}
 fieldPath: spec.foo[1].c
@@ -591,9 +591,9 @@ metadata:
 spec:
   replicas: 3
   foo:
-    - c: thing0
-    - c: thing-new
-    - c: thing2
+  - c: thing0
+  - c: thing-new
+  - c: thing2
  `,
 	},
 	{

@@ -2,9 +2,9 @@ image: gcr.io/kpt-fn/fix
 description: Migrate resources to make them compatible with 1.0+ versions of kpt.
 tags:
   - mutator
-sourceURL: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/functions/go/fix
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/fix
 examplePackageURLs:
-  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/fix-simple
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/fix-simple
 emails:
   - kpt-team@google.com
 license: Apache-2.0

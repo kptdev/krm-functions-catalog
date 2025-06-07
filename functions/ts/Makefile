@@ -1,4 +1,5 @@
 # Copyright 2020 Google LLC
+# Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 SHELL=/bin/bash
 TAG ?= unstable
 GCR = gcr.io/kpt-fn
@@ -78,7 +80,7 @@ $(FUNCTION_CHECKLICENSES):
 # Recipes for individual function
 .PHONY: func-test func-check-licenses func-build func-push func-npm-ci
 func-npm-ci:
-	cd $(CURRENT_FUNCTION) && npm ci
+	cd $(CURRENT_FUNCTION) && npm ci --ignore-scripts
 
 func-test: func-npm-ci func-check-licenses
 	cd $(CURRENT_FUNCTION) && npm test

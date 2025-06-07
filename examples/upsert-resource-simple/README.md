@@ -9,7 +9,7 @@ package with the input resource.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/upsert-resource-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/upsert-resource-simple
 ```
 
 Let's start with the list of resources in a package:

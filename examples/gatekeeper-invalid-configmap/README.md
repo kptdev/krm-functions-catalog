@@ -10,7 +10,7 @@ function to validate resources using gatekeeper constraints.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/gatekeeper-invalid-configmap
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/gatekeeper-invalid-configmap
 ```
 
 There are 3 resources: a `ConstraintTemplate`, a `K8sBannedConfigMapKeysV1` and

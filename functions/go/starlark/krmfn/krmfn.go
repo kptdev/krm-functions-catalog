@@ -4,6 +4,7 @@ import (
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	"go.starlark.net/starlark"
 	"go.starlark.net/starlarkstruct"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 const ModuleName = "krmfn.star"
@@ -28,7 +29,7 @@ func matchGVK(_ *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple, kwar
 	if err != nil {
 		return nil, err
 	}
-	return starlark.Bool(obj.IsGVK(apiVersion, kind)), nil
+	return starlark.Bool(obj.IsGroupVersionKind(schema.GroupVersionKind{Group: "", Version: apiVersion, Kind: kind})), nil
 }
 
 func matchName(_ *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error) {

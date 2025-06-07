@@ -1,4 +1,5 @@
 // Copyright 2022 Google LLC
+// Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,8 +17,8 @@ package rename
 import (
 	"fmt"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/bind/pkg/meta"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-catalog/functions/go/bind/pkg/meta"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 

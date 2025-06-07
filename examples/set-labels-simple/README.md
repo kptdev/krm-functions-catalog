@@ -10,7 +10,7 @@ to upsert labels to the `.metadata.labels` field on all resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/set-labels-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-labels-simple
 ```
 
 We use the following `Kptfile` to configure the function.

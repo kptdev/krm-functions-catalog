@@ -13,7 +13,7 @@ with [`kubeval`] function to validate KRM resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/kubeval-mount-schema
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/kubeval-mount-schema
 ```
 
 We have a `ReplicationController` in `replicationcontroller.yaml` that has a

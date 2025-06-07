@@ -10,7 +10,7 @@ to upsert all common labels to different built-in resources and CustomResourceDe
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/set-labels-full-coverage
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-labels-full-coverage
 ```
 
 We use the following `Kptfile` and `fn-config.yaml` to configure the function.

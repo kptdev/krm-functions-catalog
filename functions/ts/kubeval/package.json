@@ -8,9 +8,9 @@
     "prepare": "npm run build",
     "build": "tsc",
     "watch": "tsc --watch",
-    "clean": "rm -Rf node_modules/ dist/",
-    "lint": "tslint -p package.json && prettier \"src/**\" \"*.json\" --check",
-    "check-licenses": "license-checker --onlyAllow 'Apache-2.0;MIT;BSD;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;Unlicense'",
+    "clean": "rimraf node_modules dist",
+    "lint": "eslint -c .eslintrc.js --fix --ext .ts \"src/**\"",
+    "check-licenses": "license-checker --onlyAllow 'Apache-2.0;MIT;BSD;BSD-2-Clause;BSD-3-Clause;Python-2.0;BlueOak-1.0.0;ISC;CC-BY-3.0;CC0-1.0;Unlicense'",
     "format": "prettier \"src/**\" \"**/*.json\" --write",
     "pretest": "npm run build",
     "test": "jasmine --config=jasmine.json",
@@ -22,19 +22,28 @@
     "kpt:type-create": "kpt type-create"
   },
   "dependencies": {
+    "@types/tar": "6.1.1",
     "kpt-functions": "^0.16.1"
   },
   "devDependencies": {
-    "@types/jasmine": "^3.10.4",
-    "@types/node": "^14.18.2",
-    "create-kpt-functions": "^0.18.0",
-    "jasmine": "^3.99.0",
-    "license-checker": "^25.0.1",
-    "prettier": "2.7.1",
-    "tslint": "^6.1.3",
-    "tslint-config-prettier": "1.18.0",
-    "tslint-consistent-codestyle": "^1.16.0",
-    "typescript": "~4.3.5"
+    "@types/jasmine": "^5.1.8",
+    "@types/node": "^22.15.24",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "create-kpt-functions": "^0.19.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsdoc": "^50.6.17",
+    "eslint-plugin-no-null": "^1.0.2",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "eslint-plugin-react": "^7.37.5",
+    "jasmine": "^5.7.1",
+    "js-yaml": "^4.1.0",
+    "license-checker": "25.0.1",
+    "prettier": "3.5.3",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.3"
   },
   "kpt": {
     "docker_repo_base": "gcr.io/kpt-fn"

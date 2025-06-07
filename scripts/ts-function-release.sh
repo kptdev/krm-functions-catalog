@@ -1,6 +1,7 @@
 #! /bin/bash
 #
 # Copyright 2021 Google LLC
+# Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -47,7 +48,7 @@ source "${scripts_dir}"/docker.sh
 versions=$(get_versions "${TAG}")
 FUNCTION_TYPE="$2"
 
-# https://github.com/GoogleContainerTools/kpt/issues/1394
+# https://github.com/kptdev/kpt/issues/1394
 # This make it work for npm 7.0.0+
 export npm_package_kpt_docker_repo_base="${GCR_REGISTRY}"
 

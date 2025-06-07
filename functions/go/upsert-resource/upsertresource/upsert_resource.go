@@ -133,7 +133,7 @@ func AddResource(nodes []*yaml.RNode, inputResource *yaml.RNode) ([]*yaml.RNode,
 
 // IsSameResource returns true if metadata of two resources
 // have same Group, Kind, Name, Namespace
-// TODO: phanimarupaka move this to common util https://github.com/GoogleContainerTools/kpt/issues/2043
+// TODO: phanimarupaka move this to common util https://github.com/kptdev/kpt/issues/2043
 func IsSameResource(inputResourceMeta, targetResourceMeta yaml.ResourceMeta) bool {
 	g1, _ := ParseGroupVersion(inputResourceMeta.APIVersion)
 	g2, _ := ParseGroupVersion(targetResourceMeta.APIVersion)

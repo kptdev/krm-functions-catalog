@@ -10,7 +10,7 @@ function with a remote values file.
 Run the following command to fetch the example package:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/render-helm-chart-remote-values-file
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/render-helm-chart-remote-values-file
 ```
 
 Run the following commands to render the helm chart in your local
@@ -22,7 +22,7 @@ $ kpt fn eval render-helm-chart-remote-values-file --image gcr.io/kpt-fn/render-
 --mount type=bind,src="$(pwd)"/render-helm-chart-remote-values-file,dst=/tmp/charts -- \
 name=helloworld-chart \
 releaseName=test \
-valuesFile=https://raw.githubusercontent.com/GoogleContainerTools/kpt-functions-catalog/42021718ecffe068c44e774746d75ee4870c96c6/examples/inflate-helm-chart-local/helloworld-values/values.yaml
+valuesFile=https://raw.githubusercontent.com/kptdev/krm-functions-catalog/42021718ecffe068c44e774746d75ee4870c96c6/examples/inflate-helm-chart-local/helloworld-values/values.yaml
 ```
 
 ### Expected result

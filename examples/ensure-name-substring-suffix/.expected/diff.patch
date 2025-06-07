@@ -1,31 +1,123 @@
+diff --git a/Kptfile b/kptfile_example.yaml
+similarity index 100%
+rename from Kptfile
+rename to kptfile_example.yaml
+diff --git a/namespace_the-namespace.yaml b/namespace_the-namespace.yaml
+new file mode 100644
+index 0000000..19102b3
+--- /dev/null
++++ b/namespace_the-namespace.yaml
+@@ -0,0 +1,4 @@
++apiVersion: v1
++kind: Namespace
++metadata:
++  name: the-namespace
 diff --git a/resources.yaml b/resources.yaml
-index 675f126..3d09911 100644
+deleted file mode 100644
+index 675f126..0000000
 --- a/resources.yaml
-+++ b/resources.yaml
-@@ -1,7 +1,7 @@
- apiVersion: v1
- kind: ConfigMap
- metadata:
++++ /dev/null
+@@ -1,46 +0,0 @@
+-apiVersion: v1
+-kind: ConfigMap
+-metadata:
 -  name: the-map
-+  name: the-map-prod
-   namespace: the-namespace
- data:
-   some-key: some-value
-@@ -9,7 +9,7 @@ data:
- apiVersion: v1
- kind: Pod
- metadata:
+-  namespace: the-namespace
+-data:
+-  some-key: some-value
+----
+-apiVersion: v1
+-kind: Pod
+-metadata:
 -  name: the-pod
-+  name: the-pod-prod
-   namespace: the-namespace
- spec:
-   containers:
-@@ -23,7 +23,7 @@ spec:
-         - name: SOME_KEY
-           valueFrom:
-             configMapKeyRef:
+-  namespace: the-namespace
+-spec:
+-  containers:
+-    - name: test-container
+-      image: k8s.gcr.io/busybox
+-      command:
+-        - /bin/sh
+-        - -c
+-        - env
+-      env:
+-        - name: SOME_KEY
+-          valueFrom:
+-            configMapKeyRef:
 -              name: the-map
-+              name: the-map-prod
-               key: some-key
- ---
- apiVersion: v1
+-              key: some-key
+----
+-apiVersion: v1
+-kind: Service
+-metadata:
+-  name: the-service-prod
+-  namespace: the-namespace
+-spec:
+-  ports:
+-    - name: etcd-server-ssl
+-      port: 2380
+-    - name: etcd-client-ssl
+-      port: 2379
+-  clusterIP: None
+-  publishNotReadyAddresses: true
+----
+-apiVersion: v1
+-kind: Namespace
+-metadata:
+-  name: the-namespace
+diff --git a/the-namespace/configmap_the-map-prod.yaml b/the-namespace/configmap_the-map-prod.yaml
+new file mode 100644
+index 0000000..4023c97
+--- /dev/null
++++ b/the-namespace/configmap_the-map-prod.yaml
+@@ -0,0 +1,7 @@
++apiVersion: v1
++kind: ConfigMap
++metadata:
++  name: the-map-prod
++  namespace: the-namespace
++data:
++  some-key: some-value
+diff --git a/the-namespace/pod_the-pod-prod.yaml b/the-namespace/pod_the-pod-prod.yaml
+new file mode 100644
+index 0000000..1a24ac8
+--- /dev/null
++++ b/the-namespace/pod_the-pod-prod.yaml
+@@ -0,0 +1,19 @@
++apiVersion: v1
++kind: Pod
++metadata:
++  name: the-pod-prod
++  namespace: the-namespace
++spec:
++  containers:
++  - name: test-container
++    image: k8s.gcr.io/busybox
++    command:
++    - /bin/sh
++    - -c
++    - env
++    env:
++    - name: SOME_KEY
++      valueFrom:
++        configMapKeyRef:
++          name: the-map-prod
++          key: some-key
+diff --git a/the-namespace/service_the-service-prod.yaml b/the-namespace/service_the-service-prod.yaml
+new file mode 100644
+index 0000000..e26b3ec
+--- /dev/null
++++ b/the-namespace/service_the-service-prod.yaml
+@@ -0,0 +1,13 @@
++apiVersion: v1
++kind: Service
++metadata:
++  name: the-service-prod
++  namespace: the-namespace
++spec:
++  ports:
++  - name: etcd-server-ssl
++    port: 2380
++  - name: etcd-client-ssl
++    port: 2379
++  clusterIP: None
++  publishNotReadyAddresses: true

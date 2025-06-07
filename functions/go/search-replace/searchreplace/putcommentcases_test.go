@@ -75,8 +75,8 @@ metadata:
   name: nginx-deployment
 spec:
   images: 
-    - nginx
-    - ubuntu
+  - nginx
+  - ubuntu
  `,
 		out: `${filePath}
 fieldPath: spec.images # kpt-set: ${image}
@@ -91,8 +91,8 @@ metadata:
   name: nginx-deployment
 spec:
   images: # kpt-set: ${image}
-    - nginx
-    - ubuntu
+  - nginx
+  - ubuntu
  `,
 	},
 	{
@@ -124,8 +124,8 @@ metadata:
   name: nginx-deployment
 spec:
   images: # kpt-set: ${image}
-    - nginx
-    - ubuntu
+  - nginx
+  - ubuntu
   non-matching-list: [foo, bar]
  `,
 	},

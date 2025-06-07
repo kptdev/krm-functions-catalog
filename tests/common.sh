@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
 # Copyright 2020 Google LLC
+# Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@ set -eo pipefail
 
 TAG=${TAG:-unstable}
 SDK_REPO=https://github.com/GoogleContainerTools/kpt-functions-sdk
-export CATALOG_REPO=https://github.com/GoogleContainerTools/kpt-functions-catalog
+export CATALOG_REPO=https://github.com/kptdev/krm-functions-catalog
 export CHARTS_SRC="charts/bitnami"
 
 ############################

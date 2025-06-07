@@ -1,5 +1,5 @@
 # Copyright 2020 Google LLC
-#
+# Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -35,6 +35,15 @@ e2e-test: ## Run all e2e tests
 	cd tests && $(MAKE) TAG=$(TAG) test
 
 test: unit-test e2e-test ## Run all unit tests and e2e tests
+
+# find all subdirectories with a go.mod file in them
+GO_MOD_DIRS = $(shell find . -name 'go.mod' -exec sh -c 'echo \"$$(dirname "{}")\" ' \; )
+# NOTE: the above line is complicated for Mac and busybox compatibilty reasons.
+# It is meant to be equivalent with this:  find . -name 'go.mod' -printf "'%h' " 
+
+.PHONY: tidy
+tidy:
+	@for f in $(GO_MOD_DIRS); do (cd $$f; echo "Tidying $$f"; go mod tidy) || exit 1; done
 
 check-licenses:
 	cd functions/ts && $(MAKE) check-licenses

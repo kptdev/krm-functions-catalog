@@ -1,6 +1,6 @@
-module github.com/GoogleContainerTools/kpt-functions-catalog/contrib/functions/go/annotate-apply-time-mutations
+module github.com/kptdev/krm-functions-catalog/contrib/functions/go/annotate-apply-time-mutations
 
-go 1.17
+go 1.24.3
 
 require (
 	github.com/stretchr/testify v1.7.0

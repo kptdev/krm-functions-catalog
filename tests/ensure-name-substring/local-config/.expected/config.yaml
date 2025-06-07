@@ -1,0 +1,4 @@
+testType: eval
+image: gcr.io/kpt-fn/ensure-name-substring:unstable
+args:
+  prepend: prod-

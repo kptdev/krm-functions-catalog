@@ -4,7 +4,7 @@ metadata:
   name: nginx
 packageMetadata:
   shortDescription: describe this package
-  url: https://github.com/GoogleContainerTools/kpt
+  url: https://github.com/kptdev/kpt
   email: foo@gmail.com
   license: license text
   version: v0.1
@@ -16,13 +16,13 @@ upstream:
   type: git
   git:
     commit: 4d2aa98b45ddee4b5fa45fbca16f2ff887de9efb
-    repo: https://github.com/GoogleContainerTools/kpt
+    repo: https://github.com/kptdev/kpt
     directory: package-examples/nginx
     ref: v0.2
 dependencies:
   - name: hello-world
     git:
-      repo: https://github.com/GoogleContainerTools/kpt
+      repo: https://github.com/kptdev/kpt
       directory: /package-examples/helloworld-set
       ref: master
     updateStrategy: fast-forward

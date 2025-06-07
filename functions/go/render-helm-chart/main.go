@@ -1,4 +1,5 @@
 // Copyright 2021 Google LLC
+// Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,8 +18,8 @@ package main
 import (
 	"os"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/render-helm-chart/helmfn"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-catalog/functions/go/render-helm-chart/helmfn"
 )
 
 func main() {

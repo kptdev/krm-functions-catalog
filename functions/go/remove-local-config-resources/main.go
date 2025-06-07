@@ -11,7 +11,7 @@ import (
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
-//nolint
+// nolint
 func main() {
 	fp := RemoveLocalConfigResourcesConfigProcessor{}
 	cmd := command.Build(&fp, command.StandaloneEnabled, false)

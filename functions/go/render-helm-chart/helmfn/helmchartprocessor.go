@@ -1,4 +1,5 @@
 // Copyright 2021 Google LLC
+// Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,8 +18,8 @@ package helmfn
 import (
 	"fmt"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/functions/go/render-helm-chart/third_party/sigs.k8s.io/kustomize/api/builtins"
 	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-catalog/functions/go/render-helm-chart/third_party/sigs.k8s.io/kustomize/api/builtins"
 	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
@@ -76,7 +77,7 @@ func (hcp *HelmChartProcessor) run(objs []*fn.KubeObject) ([]*fn.KubeObject, err
 			duplicate := false
 			for _, o := range objs {
 				// check for duplicates for idempotency
-				if gen.IsGVK(o.GetAPIVersion(), o.GetKind()) &&
+				if gen.IsGroupKind(o.GroupKind()) &&
 					gen.GetName() == o.GetName() &&
 					gen.GetNamespace() == o.GetNamespace() {
 					duplicate = true

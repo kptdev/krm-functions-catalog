@@ -18,7 +18,7 @@ import (
 	"os"
 )
 
-//nolint
+// nolint
 func main() {
 	if err := run(); err != nil {
 		os.Exit(1)

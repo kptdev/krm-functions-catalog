@@ -10,7 +10,7 @@ to replace the  `namespace` resource type in a variety of KRM resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/set-namespace-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-namespace-simple
 ```
 
 We use the following `Kptfile` to configure the function.

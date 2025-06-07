@@ -1,4 +1,5 @@
 # Copyright 2020 Google LLC
+# Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -127,7 +128,7 @@ GO_LICENSES=$(shell which go-licenses)
 endif
 
 install-mdtogo:
-	go install github.com/GoogleContainerTools/kpt/mdtogo@main
+	go install github.com/kptdev/kpt/mdtogo@main
 
 # Recipes for individual function
 .PHONY: func-fix func-vet func-fmt func-test func-lint \
@@ -142,7 +143,7 @@ func-fmt:
 
 func-lint:
 	(which $(GOPATH)/bin/golangci-lint || \
-		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v1.49.0/install.sh | sh -s -- -b $(GOPATH)/bin v1.49.0)
+		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v1.64.8/install.sh | sh -s -- -b $(GOPATH)/bin v1.64.8)
 	cd $(CURRENT_FUNCTION) && time $(GOPATH)/bin/golangci-lint run --timeout=10m ./...
 
 func-test:
@@ -157,6 +158,8 @@ func-check-licenses: install-go-licenses
 
 func-build: func-verify
 	@echo Building image for $(CURRENT_FUNCTION)...
+	EXTRA_BUILD_ARGS="$(if $(filter $(CURRENT_FUNCTION),generate-kpt-pkg-docs),--build-context list-setters=./list-setters)" \
+	CURRENT_FUNCTION=$(CURRENT_FUNCTION) TAG=$(TAG) \
 	../../scripts/go-function-release.sh build curated
 
 func-push:

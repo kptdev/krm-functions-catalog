@@ -10,7 +10,7 @@ running [`ensure-name-substring`] function imperatively.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/ensure-name-substring-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/ensure-name-substring-imperative
 ```
 
 ### Function invocation

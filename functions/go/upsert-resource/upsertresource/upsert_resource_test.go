@@ -31,9 +31,9 @@ spec:
   selector:
     app: MyApp
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 9376
+  - protocol: TCP
+    port: 80
+    targetPort: 9376
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -70,14 +70,15 @@ metadata:
   name: myService
   annotations:
     abc: def
-    config.kubernetes.io/path: f1.yaml
+    internal.config.kubernetes.io/path: f1.yaml
+    config.kubernetes.io/path: 'f1.yaml'
 spec:
   selector:
     app: MyApp
   ports:
-    - protocol: UDP
-      port: 8080
-      targetPort: 1234
+  - protocol: UDP
+    port: 8080
+    targetPort: 1234
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -85,15 +86,16 @@ metadata:
   name: myDeployment
   annotations:
     config.kubernetes.io/path: 'f1.yaml'
+    internal.config.kubernetes.io/path: 'f1.yaml'
 spec:
   replicas: 3
   template:
     spec:
       containers:
-        - name: nginx
-          image: nginx:1.14.2
-          ports:
-            - containerPort: 80
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
 `,
 		},
 		{
@@ -133,9 +135,9 @@ spec:
   selector:
     app: MyApp
   ports:
-    - protocol: UDP
-      port: 8080
-      targetPort: 1234
+  - protocol: UDP
+    port: 8080
+    targetPort: 1234
 `,
 			expectedResources: `apiVersion: v1
 kind: Service
@@ -143,13 +145,14 @@ metadata:
   name: myService
   annotations:
     config.kubernetes.io/path: 'f1.yaml'
+    internal.config.kubernetes.io/path: 'f1.yaml'
 spec:
   selector:
     app: MyApp
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 9376
+  - protocol: TCP
+    port: 80
+    targetPort: 9376
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -157,15 +160,16 @@ metadata:
   name: myDeployment
   annotations:
     config.kubernetes.io/path: 'f1.yaml'
+    internal.config.kubernetes.io/path: 'f1.yaml'
 spec:
   replicas: 3
   template:
     spec:
       containers:
-        - name: nginx
-          image: nginx:1.14.2
-          ports:
-            - containerPort: 80
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
@@ -175,9 +179,9 @@ spec:
   selector:
     app: MyApp
   ports:
-    - protocol: UDP
-      port: 8080
-      targetPort: 1234
+  - protocol: UDP
+    port: 8080
+    targetPort: 1234
 `,
 		},
 		{
@@ -220,8 +224,8 @@ items:
     name: myService
     annotations:
       foo: bar
-      config.kubernetes.io/index: '0'
-      config.kubernetes.io/path: 'foo.yaml'
+      internal.config.kubernetes.io/index: '0'
+      internal.config.kubernetes.io/path: 'foo.yaml'
       internal.config.kubernetes.io/seqindent: 'wide'
   spec:
     selector:
@@ -235,8 +239,8 @@ items:
   metadata:
     name: myDeployment
     annotations:
-      config.kubernetes.io/index: '1'
-      config.kubernetes.io/path: 'foo.yaml'
+      internal.config.kubernetes.io/index: '1'
+      internal.config.kubernetes.io/path: 'foo.yaml'
       internal.config.kubernetes.io/seqindent: 'compact'
   spec:
     replicas: 4
@@ -253,9 +257,9 @@ kind: Service
 metadata:
   name: myService
   annotations:
-    config.kubernetes.io/path: f1.yaml
     foo: bar
-    internal.config.kubernetes.io/seqindent: wide
+    internal.config.kubernetes.io/path: f1.yaml
+    config.kubernetes.io/path: 'f1.yaml'
 spec:
   selector:
     app: MyAppNew
@@ -269,17 +273,17 @@ kind: Deployment
 metadata:
   name: myDeployment
   annotations:
-    config.kubernetes.io/path: f1.yaml
-    internal.config.kubernetes.io/seqindent: compact
+    internal.config.kubernetes.io/path: f1.yaml
+    config.kubernetes.io/path: 'f1.yaml'
 spec:
   replicas: 4
   template:
     spec:
       containers:
-        - name: nginx-new
-          image: nginx:1.14.2
-          ports:
-            - containerPort: 80
+      - name: nginx-new
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
 `,
 		},
 		{
@@ -357,13 +361,14 @@ metadata:
   annotations:
     foo: bar
     config.kubernetes.io/path: 'f1.yaml'
+    internal.config.kubernetes.io/path: 'f1.yaml'
 spec:
   selector:
     app: MyApp
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 9376
+  - protocol: TCP
+    port: 80
+    targetPort: 9376
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -371,23 +376,25 @@ metadata:
   name: myDeployment
   annotations:
     config.kubernetes.io/path: 'f1.yaml'
+    internal.config.kubernetes.io/path: 'f1.yaml'
 spec:
   replicas: 3
   template:
     spec:
       containers:
-        - name: nginx
-          image: nginx:1.14.2
-          ports:
-            - containerPort: 80
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: myService2
   annotations:
+    config.kubernetes.io/path: foo.yaml
     foo: bar
-    internal.config.kubernetes.io/seqindent: wide
+    internal.config.kubernetes.io/path: 'foo.yaml'
 spec:
   selector:
     app: MyAppNew
@@ -401,16 +408,17 @@ kind: Deployment
 metadata:
   name: myDeployment2
   annotations:
-    internal.config.kubernetes.io/seqindent: compact
+    config.kubernetes.io/path: foo.yaml
+    internal.config.kubernetes.io/path: 'foo.yaml'
 spec:
   replicas: 4
   template:
     spec:
       containers:
-        - name: nginx-new
-          image: nginx:1.14.2
-          ports:
-            - containerPort: 80
+      - name: nginx-new
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
 `,
 		},
 		{
@@ -453,8 +461,8 @@ items:
     name: myService
     annotations:
       foo: bar
-      config.kubernetes.io/index: '0'
-      config.kubernetes.io/path: 'foo.yaml'
+      internal.config.kubernetes.io/index: '0'
+      internal.config.kubernetes.io/path: 'foo.yaml'
       internal.config.kubernetes.io/seqindent: 'wide'
   spec:
     selector:
@@ -466,11 +474,11 @@ items:
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
-    name: myDeployment
+    name: myNewDeployment
     annotations:
-      config.kubernetes.io/target-path: 'f2.yaml'
-      config.kubernetes.io/index: '1'
-      config.kubernetes.io/path: 'foo.yaml'
+      internal.config.kubernetes.io/target-path: 'f2.yaml'
+      internal.config.kubernetes.io/index: '1'
+      internal.config.kubernetes.io/path: 'foo.yaml'
       internal.config.kubernetes.io/seqindent: 'compact'
   spec:
     replicas: 4
@@ -487,9 +495,9 @@ kind: Service
 metadata:
   name: myService
   annotations:
-    config.kubernetes.io/path: f1.yaml
     foo: bar
-    internal.config.kubernetes.io/seqindent: wide
+    internal.config.kubernetes.io/path: f1.yaml
+    config.kubernetes.io/path: 'f1.yaml'
 spec:
   selector:
     app: MyAppNew
@@ -504,32 +512,32 @@ metadata:
   name: myDeployment
   annotations:
     config.kubernetes.io/path: 'f1.yaml'
+    internal.config.kubernetes.io/path: 'f1.yaml'
 spec:
   replicas: 3
   template:
     spec:
       containers:
-        - name: nginx
-          image: nginx:1.14.2
-          ports:
-            - containerPort: 80
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myDeployment
+  name: myNewDeployment
   annotations:
-    config.kubernetes.io/path: f2.yaml
-    internal.config.kubernetes.io/seqindent: compact
+    internal.config.kubernetes.io/target-path: f2.yaml
 spec:
   replicas: 4
   template:
     spec:
       containers:
-        - name: nginx-new
-          image: nginx:1.14.2
-          ports:
-            - containerPort: 80
+      - name: nginx-new
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
 `,
 		},
 	}
@@ -635,7 +643,7 @@ kind: Deployment
 metadata:
   name: myDeployment
   annotations:
-    config.kubernetes.io/path: 'f1.yaml'
+    internal.config.kubernetes.io/path: 'f1.yaml'
 `,
 			expected: true,
 		},
@@ -758,16 +766,16 @@ func TestCombineInputAndMatchedAnnotations(t *testing.T) {
 				"config.kubernetes.io/local-config": "true",
 			},
 			matchedResourceAnno: map[string]string{
-				"existingFoo":                       "existingBar",
-				"config.kubernetes.io/index":        "0",
-				"config.kubernetes.io/path":         "foo.yaml",
-				"config.kubernetes.io/local-config": "true",
+				"existingFoo":                         "existingBar",
+				"internal.config.kubernetes.io/index": "0",
+				"internal.config.kubernetes.io/path":  "foo.yaml",
+				"config.kubernetes.io/local-config":   "true",
 			},
 			expected: map[string]string{
-				"inputFoo":                          "inputBar",
-				"config.kubernetes.io/index":        "0",
-				"config.kubernetes.io/path":         "foo.yaml",
-				"config.kubernetes.io/local-config": "true",
+				"inputFoo":                            "inputBar",
+				"config.kubernetes.io/local-config":   "true",
+				"internal.config.kubernetes.io/index": "0",
+				"internal.config.kubernetes.io/path":  "foo.yaml",
 			},
 		},
 
@@ -778,15 +786,15 @@ func TestCombineInputAndMatchedAnnotations(t *testing.T) {
 				"config.kubernetes.io/local-config": "true",
 			},
 			matchedResourceAnno: map[string]string{
-				"existingFoo":                "existingBar",
-				"config.kubernetes.io/index": "0",
-				"config.kubernetes.io/path":  "foo.yaml",
+				"existingFoo":                         "existingBar",
+				"internal.config.kubernetes.io/index": "0",
+				"internal.config.kubernetes.io/path":  "foo.yaml",
 			},
 			expected: map[string]string{
-				"inputFoo":                          "inputBar",
-				"config.kubernetes.io/index":        "0",
-				"config.kubernetes.io/path":         "foo.yaml",
-				"config.kubernetes.io/local-config": "true",
+				"inputFoo":                            "inputBar",
+				"internal.config.kubernetes.io/index": "0",
+				"internal.config.kubernetes.io/path":  "foo.yaml",
+				"config.kubernetes.io/local-config":   "true",
 			},
 		},
 
@@ -796,15 +804,15 @@ func TestCombineInputAndMatchedAnnotations(t *testing.T) {
 				"inputFoo": "inputBar",
 			},
 			matchedResourceAnno: map[string]string{
-				"existingFoo":                       "existingBar",
-				"config.kubernetes.io/index":        "0",
-				"config.kubernetes.io/path":         "foo.yaml",
-				"config.kubernetes.io/local-config": "true",
+				"existingFoo":                         "existingBar",
+				"internal.config.kubernetes.io/index": "0",
+				"internal.config.kubernetes.io/path":  "foo.yaml",
+				"config.kubernetes.io/local-config":   "true",
 			},
 			expected: map[string]string{
-				"inputFoo":                   "inputBar",
-				"config.kubernetes.io/index": "0",
-				"config.kubernetes.io/path":  "foo.yaml",
+				"inputFoo":                            "inputBar",
+				"internal.config.kubernetes.io/index": "0",
+				"internal.config.kubernetes.io/path":  "foo.yaml",
 			},
 		},
 	}

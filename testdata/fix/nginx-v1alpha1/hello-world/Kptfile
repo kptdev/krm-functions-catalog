@@ -6,7 +6,7 @@ upstream:
   type: git
   git:
     commit: 9b9a299effacf0f9b0619585916022a7be28544b
-    repo: https://github.com/GoogleContainerTools/kpt
+    repo: https://github.com/kptdev/kpt
     directory: /package-examples/helloworld-set
     ref: master
 packageMetadata:
