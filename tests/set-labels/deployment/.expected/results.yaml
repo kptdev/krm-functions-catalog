@@ -1,0 +1,21 @@
+apiVersion: kpt.dev/v1
+kind: FunctionResultList
+metadata:
+  name: fnresults
+exitCode: 0
+items:
+  - image: gcr.io/kpt-fn/set-labels:unstable
+    exitCode: 0
+    results:
+      - message: set 4 labels in total
+        severity: info
+  - image: gcr.io/kpt-fn/set-labels:unstable
+    exitCode: 0
+    results:
+      - message: set 6 labels in total
+        severity: info
+  - image: gcr.io/kpt-fn/set-labels:unstable
+    exitCode: 0
+    results:
+      - message: set 6 labels in total
+        severity: info

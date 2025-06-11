@@ -25,7 +25,18 @@ import (
 )
 
 func NewTransformer() fn.ResourceListProcessor {
-	return fn.WithContext(fn.Context{Context: context.Background()}, &setlabels.SetLabels{})
+	// Create a new SetLabels struct
+	labels := make(map[string]string)
+	options := map[string]bool{
+		"setSelectorLabels": true,
+	}
+	setLabels := &setlabels.SetLabels{
+		Labels:  labels,
+		Options: options,
+	}
+
+	// Return the SetLabels struct as a fn.ResourceListProcessor
+	return fn.WithContext(fn.Context{Context: context.Background()}, setLabels)
 }
 
 func run() error {
