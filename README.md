@@ -1,7 +1,8 @@
+[![CI](https://github.com/kptdev/krm-functions-catalog/actions/workflows/ci.yaml/badge.svg)](https://github.com/kptdev/krm-functions-catalog/actions/workflows/ci.yaml)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkptdev%2Fkrm-functions-catalog.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkptdev%2Fkrm-functions-catalog?ref=badge_shield)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/10657/badge)](https://www.bestpractices.dev/projects/10657)
 
-# kpt Functions Catalog
+# krm Functions Catalog
 
 ## Documentation
 
