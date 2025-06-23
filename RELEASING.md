@@ -13,7 +13,7 @@ krm-functions-catalog repo.
    the body. 
 1. Click `Publish release` button.
 1. Verify the new functions is released in gcr.io/kpt-fn/{funtion-name}/{semver} or, if using the GitHub based CD flow, check
-   the relevant [github packages section](https://github.com/orgs/kptdev/packages?repo_name=krm-functions-catalog)
+   the relevant [GitHub packages section](https://github.com/orgs/kptdev/packages?repo_name=krm-functions-catalog)
 1. Send an announcement on the [kpt slack channel]
 
 Note: For most functions, you can ignore the GitHub action "Run the CD script after tags that look like versions". It is only for functions that use the KO build and release setup. 
