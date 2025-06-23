@@ -1,7 +1,7 @@
 # Release Process
 
 This doc covers the release process for the functions in the
-kpt-functions-catalog repo.
+krm-functions-catalog repo.
 
 1. Checking the [CI status](https://github.com/kptdev/krm-functions-catalog/actions/workflows/ci.yaml) of the master branch. 
    If the CI is failing on the master, we need to fix it before doing a release.
