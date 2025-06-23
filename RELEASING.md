@@ -12,7 +12,7 @@ krm-functions-catalog repo.
    `{funtion-name} {semver}`. The release notes for this function should be in
    the body. 
 1. Click `Publish release` button.
-1. Verify the new functions is released in gcr.io/kpt-fn/{funtion-name}/{semver} or, if using the github based CD flow, check
+1. Verify the new functions is released in gcr.io/kpt-fn/{funtion-name}/{semver} or, if using the GitHub based CD flow, check
    the relevant [github packages section](https://github.com/orgs/kptdev/packages?repo_name=krm-functions-catalog)
 1. Send an announcement on the [kpt slack channel]
 
