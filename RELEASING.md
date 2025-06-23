@@ -3,8 +3,8 @@
 This doc covers the release process for the functions in the
 kpt-functions-catalog repo.
 
-1. Checking the CI badge status on top of the repo's README page. If the CI is
-   failing on the master, we need to fix it before doing a release.
+1. Checking the [CI status](https://github.com/kptdev/krm-functions-catalog/actions/workflows/ci.yaml) of the master branch. 
+   If the CI is failing on the master, we need to fix it before doing a release.
 1. Go to the [releases pages] in your browser.
 1. Click `Draft a new release` to create a new release for a function. The tag
    version format should be `functions/{language}/{function-name}/{semver}`. e.g.
@@ -12,11 +12,11 @@ kpt-functions-catalog repo.
    `{funtion-name} {semver}`. The release notes for this function should be in
    the body. 
 1. Click `Publish release` button.
-1. Verify the new functions is released in gcr.io/kpt-fn/{funtion-name}/{semver}
-1. Send an announcement email in the [kpt users google group].
+1. Verify the new functions is released in gcr.io/kpt-fn/{funtion-name}/{semver} or, if using the github based CD flow, check
+   the relevant [github packages section](https://github.com/orgs/kptdev/packages?repo_name=krm-functions-catalog)
+1. Send an announcement on the [kpt slack channel]
 
-Note: For most functions, you can ignore the GitHub action "Run the CD script after tags that look like versions". It is only for functions that have 
-KO build and release setup. Currently only three functions uses ko to release: `bind`, `ensure-name-substring`, `set-gcp-resource-ids`.  
+Note: For most functions, you can ignore the GitHub action "Run the CD script after tags that look like versions". It is only for functions that use the KO build and release setup. 
 
 ## Updating function docs
 
@@ -62,5 +62,5 @@ RELEASE_BRANCH=${RELEASE_BRANCH} make update-function-docs
 
 [repo]: https://github.com/kptdev/krm-functions-catalog
 [releases pages]: https://github.com/kptdev/krm-functions-catalog/releases
-[kpt users google group]: https://groups.google.com/g/kpt-users
+[kpt slack channel]: https://kubernetes.slack.com/channels/kpt/
 
