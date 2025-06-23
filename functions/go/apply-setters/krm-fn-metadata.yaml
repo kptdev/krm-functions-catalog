@@ -1,0 +1,10 @@
+image: ghcr.io/kptdev/krm-functions-catalog/apply-setters
+description: Update the field values parameterized by setters.
+tags:
+  - mutator
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/apply-setters
+examplePackageURLs:
+  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/apply-setters-simple
+emails:
+  - kpt-team@google.com
+license: Apache-2.0
