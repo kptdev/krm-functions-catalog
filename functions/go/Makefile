@@ -45,7 +45,8 @@ FUNCTIONS := \
 	upsert-resource
 
 FUNCTION_KO := \
-	set-name-prefix
+	set-name-prefix \
+	apply-setters
 
 # Targets for running all function tests
 FUNCTION_TESTS := $(patsubst %,%-TEST,$(FUNCTIONS))
