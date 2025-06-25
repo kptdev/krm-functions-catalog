@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `kubeval` function wraps the [`kubeval`] binary to validate resources
+The `kubeval` function wraps the `kubeval` binary to validate resources
 against their [json schemas].
 
 This function is often used in the following scenarios:
@@ -65,7 +65,5 @@ Config Connector resources).
 
 If you want to convert OpenAPI to json schema, you can use
 [openapi2jsonschema](https://github.com/instrumenta/openapi2jsonschema).
-
-[`kubeval`]:https://kubeval.com
 
 [json schemas]:https://json-schema.org
