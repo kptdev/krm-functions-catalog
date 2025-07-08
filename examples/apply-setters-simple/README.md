@@ -22,12 +22,15 @@ desired value for the tagged field.
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: apply-setters-fn-config
+  name: setters
 data:
-  replicas: "3"
-  role: |
-    - dev
+  env: |-
     - prod
+    - dev
+  nested-env: |-
+    - key: some-other-key
+      value: some-other-value
+  nginx-replicas: "3"
   tag: 1.16.2
 ```
 
@@ -43,7 +46,13 @@ $ kpt fn render apply-setters-simple
 
 1. Check the value of field `replicas` is set to `3` in `Deployment` resource.
 2. Check the value of field `image` is set to value `nginx:1.16.2` in `Deployment` resource.
-3. Check the value of field `environments` is set to value `[dev, prod]` in `MyKind` resource.
+3. Check the value of field `environments` is set to value `[dev, prod]` in `MyKind` resource with the name of `foo`.
+4. Check the value of field `environments` is set to value:
+```
+- key: some-other-key
+  value: some-other-value
+```
+in `MyKind` resource with the name of `bar`.
 
 #### Note:
 

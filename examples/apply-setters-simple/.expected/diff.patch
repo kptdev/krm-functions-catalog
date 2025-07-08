@@ -1,29 +1,33 @@
 diff --git a/resources.yaml b/resources.yaml
-index b521905..0d10662 100644
+index 3dde2b6..47b7163 100644
 --- a/resources.yaml
 +++ b/resources.yaml
 @@ -3,7 +3,7 @@ kind: Deployment
- metadata:
-   name: my-nginx
- spec:
--  replicas: 4 # kpt-set: ${nginx-replicas}
-+  replicas: 3 # kpt-set: ${nginx-replicas}
-   selector:
-     matchLabels:
-       app: nginx
-@@ -14,7 +14,7 @@ spec:
-     spec:
-       containers:
-         - name: nginx
--          image: "nginx:1.16.1" # kpt-set: nginx:${tag}
-+          image: "nginx:1.16.2" # kpt-set: nginx:${tag}
-           ports:
-             - protocol: TCP
-               containerPort: 80
-@@ -24,5 +24,5 @@ kind: MyKind
- metadata:
-   name: foo
- environments: # kpt-set: ${env}
-+  - prod
-   - dev
--  - stage
+@@ -20,18 +20,20 @@
+            ports:
+              - protocol: TCP
+                containerPort: 80
+-@@ -24,5 +24,5 @@ kind: MyKind
++@@ -24,13 +24,13 @@ kind: MyKind
+  metadata:
+    name: foo
+  environments: # kpt-set: ${env}
+ +  - prod
+    - dev
+ -  - stage
+-@@ -24,5 +24,5 @@ kind: MyKind
++ ---
++ apiVersion: v1
++ kind: MyKind
+  metadata:
+    name: bar
+- environments: # kpt-set: ${env}
+-+  - key: some-other-key
+-     value: some-other-value
++ environments: # kpt-set: ${nested-env}
+ -  - key: some-key
+-     value: some-value
+\ No newline at end of file
++-    value: some-value
+++  - key: some-other-key
+++    value: some-other-value
