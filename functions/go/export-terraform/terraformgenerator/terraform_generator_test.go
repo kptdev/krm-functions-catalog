@@ -22,8 +22,8 @@ import (
 	"strings"
 	"testing"
 
-	sdk "github.com/GoogleContainerTools/kpt-functions-catalog/thirdparty/kyaml/fnsdk"
-	"github.com/GoogleContainerTools/kpt-functions-catalog/thirdparty/kyaml/fnsdk/testutil"
+	sdk "github.com/kptdev/krm-functions-catalog/thirdparty/kyaml/fnsdk"
+	"github.com/kptdev/krm-functions-catalog/thirdparty/kyaml/fnsdk/testutil"
 	"github.com/stretchr/testify/require"
 )
 

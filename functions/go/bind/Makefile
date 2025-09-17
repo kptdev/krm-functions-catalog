@@ -3,7 +3,7 @@ GOBIN := $(shell go env GOPATH)/bin
 
 export GCP_PROJECT_ID ?= \
 	$(if $(shell which gcloud),$(shell gcloud config get-value project), \
-	gcr.io/kpt-fn)
+	ghcr.io/kptdev/krm-functions-catalog)
 export IMAGE_REPO ?= gcr.io/$(GCP_PROJECT_ID)
 export IMAGE_TAG ?= latest
 

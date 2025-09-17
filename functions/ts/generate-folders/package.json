@@ -37,6 +37,6 @@
     "typescript": "^5.8.3"
   },
   "kpt": {
-    "docker_repo_base": "gcr.io/kpt-fn"
+    "docker_repo_base": "ghcr.io/kptdev/krm-functions-catalog"
   }
 }

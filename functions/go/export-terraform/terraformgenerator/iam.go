@@ -15,7 +15,7 @@
 package terraformgenerator
 
 import (
-	sdk "github.com/GoogleContainerTools/kpt-functions-catalog/thirdparty/kyaml/fnsdk"
+	sdk "github.com/kptdev/krm-functions-catalog/thirdparty/kyaml/fnsdk"
 )
 
 type iamMember struct {

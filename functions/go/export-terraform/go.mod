@@ -3,7 +3,7 @@ module github.com/kptdev/krm-functions-catalog/functions/go/export-terraform
 go 1.24.3
 
 require (
-	github.com/GoogleContainerTools/kpt-functions-catalog/thirdparty/kyaml/fnsdk v0.0.0-20220111011035-c598c94c9a02
+	github.com/kptdev/krm-functions-catalog/thirdparty/kyaml/fnsdk v0.0.0-20220111011035-c598c94c9a02
 	github.com/stretchr/testify v1.10.0
 	k8s.io/api v0.32.0
 	k8s.io/apimachinery v0.32.0

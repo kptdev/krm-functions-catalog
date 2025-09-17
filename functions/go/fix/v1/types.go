@@ -251,7 +251,7 @@ type Function struct {
 	//
 	// Optionally, kpt can be configured to use a image
 	// registry host-path that will be used to resolve the image path in case
-	// the image path is missing (Defaults to gcr.io/kpt-fn).
+	// the image path is missing (Defaults to ghcr.io/kptdev/krm-functions-catalog).
 	// e.g. The following resolves to ghcr.io/kptdev/krm-functions-catalog/set-label:
 	//
 	//	image: set-label

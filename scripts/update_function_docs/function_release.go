@@ -22,7 +22,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/GoogleContainerTools/kpt-functions-catalog/scripts/patch_reader/pkg/latestpatch"
+	"github.com/kptdev/krm-functions-catalog/scripts/patch_reader/pkg/latestpatch"
 	"gopkg.in/yaml.v2"
 )
 
