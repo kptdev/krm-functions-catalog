@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	sdk "github.com/GoogleContainerTools/kpt-functions-catalog/thirdparty/kyaml/fnsdk"
+	sdk "github.com/kptdev/krm-functions-catalog/thirdparty/kyaml/fnsdk"
 )
 
 func TestGetParentRef(t *testing.T) {

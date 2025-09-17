@@ -1,7 +1,7 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/GoogleContainerTools/kpt-functions-catalog/thirdparty/kyaml/fnsdk v0.0.0-20220111011035-c598c94c9a02 h1:qnCypBgL2CifaFMNYfYp6LIoQlnup6P2lF5g17KObwI=
-github.com/GoogleContainerTools/kpt-functions-catalog/thirdparty/kyaml/fnsdk v0.0.0-20220111011035-c598c94c9a02/go.mod h1:NPukmEHyOJ1dYujj57bqwX4h2cmno9M/uD31I5mjQig=
+github.com/kptdev/krm-functions-catalog/thirdparty/kyaml/fnsdk v0.0.0-20220111011035-c598c94c9a02 h1:qnCypBgL2CifaFMNYfYp6LIoQlnup6P2lF5g17KObwI=
+github.com/kptdev/krm-functions-catalog/thirdparty/kyaml/fnsdk v0.0.0-20220111011035-c598c94c9a02/go.mod h1:NPukmEHyOJ1dYujj57bqwX4h2cmno9M/uD31I5mjQig=
 github.com/NYTimes/gziphandler v0.0.0-20170623195520-56545f4a5d46/go.mod h1:3wb06e3pkSAbeQ52E9H9iFoQsEEwGN64994WTCIhntQ=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/PuerkitoBio/purell v1.1.1/go.mod h1:c11w/QuzBsJSee3cPx9rAFu61PvFxuPbtSwDGJws/X0=

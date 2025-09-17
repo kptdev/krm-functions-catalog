@@ -18,7 +18,7 @@ import (
 	"embed"
 	"strings"
 
-	sdk "github.com/GoogleContainerTools/kpt-functions-catalog/thirdparty/kyaml/fnsdk"
+	sdk "github.com/kptdev/krm-functions-catalog/thirdparty/kyaml/fnsdk"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
