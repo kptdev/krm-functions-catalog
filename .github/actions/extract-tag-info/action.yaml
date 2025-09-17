@@ -1,0 +1,38 @@
+name: "Extract Semver and Image Name from Tag"
+description: "Extracts semantic version and image name from a Git tag"
+runs:
+  using: "composite"
+  steps:
+    - name: Extract semver and image name
+      id: extract  # <--- must set id to reference outputs
+      shell: bash
+      run: |
+        echo "Extracting tag info from ${GITHUB_REF}"
+        REF="${GITHUB_REF}"
+        TAG="${REF#refs/tags/}"           # remove 'refs/tags/' prefix
+        VERSION="${TAG##*/}"              # get last part after last slash
+
+        # Remove 'functions/' or 'contrib/functions/' prefix
+        PATH_WITHOUT_PREFIX="${TAG#functions/}"
+        PATH_WITHOUT_PREFIX="${PATH_WITHOUT_PREFIX#contrib/functions/}"
+
+        # Remove 'go/' prefix if present
+        IMAGE_NAME="${PATH_WITHOUT_PREFIX#go/}"
+        IMAGE_NAME="${IMAGE_NAME%/*}"     # remove version at end
+
+        # Validate semver with optional pre-release and build metadata
+        if [[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "image_name=$IMAGE_NAME" >> $GITHUB_OUTPUT
+        else
+          echo "Error: Tag '$VERSION' is not a valid semver" >&2
+          exit 1
+        fi
+
+outputs:
+  version:
+    description: "The extracted semantic version from the tag"
+    value: ${{ steps.extract.outputs.version }}  # reference step id
+  image_name:
+    description: "The extracted image name (without functions/, contrib/functions/, or go/ prefixes)"
+    value: ${{ steps.extract.outputs.image_name }}  # reference step id

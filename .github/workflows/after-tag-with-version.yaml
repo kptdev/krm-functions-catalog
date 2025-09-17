@@ -13,25 +13,62 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Run the CD script after tags that look like versions
+name: Build and push tagged image
+
 on:
   push:
     tags:
-    - "**/v[0-9]+.*"
+      - "functions/*/*/v*"
+      - "contrib/functions/*/*/v*"
 
 jobs:
-  build:
-    name: after-tag-with-version
+  build-push-release:
     runs-on: ubuntu-latest
     permissions:
       packages: write
+      contents: read
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-go@v5
-      with:
-        go-version: '1.24.3'
-    - run: go version
-    - name: dev/cd/after-tag-push
-      run: GIT_REF=${GITHUB_REF} IMAGE_REPO=ghcr.io/${{ github.repository }} dev/cd/after-tag-with-version
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.3'
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Extract semver and image name
+        id: extract
+        uses: ./.github/actions/extract-tag-info
+
+      - name: Show outputs
+        run: |
+          echo "Version = ${{ steps.extract.outputs.version }}"
+          echo "Image name = ${{ steps.extract.outputs.image_name }}"
+
+      - name: Determine release type and push image
+        run: |
+          VERSION="${{ steps.extract.outputs.version }}"
+          IMAGE_NAME="${{ steps.extract.outputs.image_name }}"
+
+          if [[ "${GITHUB_REF#refs/tags/}" == functions/* ]]; then
+            echo "Detected curated functions release"
+            cd functions/go
+            make func-push TAG=$VERSION CURRENT_FUNCTION=$IMAGE_NAME DEFAULT_CR=ghcr.io/${GITHUB_REPOSITORY}
+          elif [[ "${GITHUB_REF#refs/tags/}" == contrib/functions/* ]]; then
+            echo "Detected contrib functions release"
+            cd contrib/functions/go
+            make func-push TAG=$VERSION CURRENT_FUNCTION=$IMAGE_NAME DEFAULT_CR=ghcr.io/${GITHUB_REPOSITORY}/krm-fn-contrib
+          else
+            echo "Tag does not match any known type, skipping."
+            exit 0
+          fi

@@ -154,8 +154,14 @@ func-build: func-verify
 	../../scripts/go-function-release.sh build curated
 
 func-push:
-	@echo Pushing image $(CURRENT_FUNCTION)...
-	../../scripts/go-function-release.sh push curated
+	@echo "Checking if $(CURRENT_FUNCTION) is a valid listed function..."
+	@if echo "$(FUNCTIONS)" | grep -qw "$(CURRENT_FUNCTION)"; then \
+		echo "Pushing image $(CURRENT_FUNCTION)..."; \
+		../../scripts/go-function-release.sh push curated; \
+	else \
+		echo "Error: $(CURRENT_FUNCTION) is not a valid listed function!"; \
+		exit 1; \
+	fi
 
 docs-generate:
 	$(GOBIN)/mdtogo $(CURRENT_FUNCTION) $(CURRENT_FUNCTION)/generated --license=none --strategy=cmdDocs
