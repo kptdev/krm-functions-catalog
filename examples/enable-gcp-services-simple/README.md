@@ -23,8 +23,8 @@ $ kpt fn render enable-gcp-services-simple
 ### Expected result
 
 ```shell
-[RUNNING] "ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:unstable"
-[PASS] "ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:unstable"
+[RUNNING] "ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:latest"
+[PASS] "ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:latest"
   Results:
     [INFO] generated service in object "serviceusage.cnrm.cloud.google.com/v1beta1/Service/proj1-service-compute"
     [INFO] generated service in object "serviceusage.cnrm.cloud.google.com/v1beta1/Service/proj1-service-redis"

@@ -19,7 +19,7 @@ should be upserted.
 Invoke the function by running the following commands:
 
 ```shell
-$ kpt fn eval -i upsert-resource:unstable --fn-config .expected/fn-config.yaml
+$ kpt fn eval -i upsert-resource:latest --fn-config .expected/fn-config.yaml
 ```
 
 ### Expected result

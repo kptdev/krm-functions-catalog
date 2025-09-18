@@ -26,7 +26,7 @@ We have a `ConfigMap` in `config-map.yaml` that violates the policy.
 Run the function with `--results-dir` flag:
 
 ```shell
-$ kpt fn eval gatekeeper-imperative --image ghcr.io/kptdev/krm-functions-catalog/gatekeeper:unstable --results-dir /tmp
+$ kpt fn eval gatekeeper-imperative --image ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest --results-dir /tmp
 ```
 
 ### Expected result
@@ -40,7 +40,7 @@ metadata:
   name: fnresults
 exitCode: 1
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest
     stderr: |-
       The following banned keys are being used in the ConfigMap: {"private_key"}
       violatedConstraint: no-secrets-in-configmap

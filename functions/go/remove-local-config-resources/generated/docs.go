@@ -13,12 +13,12 @@ The function will execute as follows:
 
 ` + "`" + `remove-local-config-resources` + "`" + ` function can be executed imperatively as follows:
 
-  $ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:unstable
+  $ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:latest
 
 To execute ` + "`" + `remove-local-config-resources` + "`" + ` declaratively include the function in kpt package pipeline as follows:
   ...
   pipeline:
     mutators:
-      - image: ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:unstable
+      - image: ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:latest
   ...
 `

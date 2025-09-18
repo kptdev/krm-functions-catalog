@@ -25,7 +25,7 @@ metadata:
   name: example
 pipeline:
   validators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest
 ```
 
 ### Function invocation
@@ -47,7 +47,7 @@ metadata:
   name: fnresults
 exitCode: 1
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest
     stderr: |-
       The following banned keys are being used in the ConfigMap: {"private_key"}
       violatedConstraint: no-secrets-in-configmap

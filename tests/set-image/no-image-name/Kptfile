@@ -4,7 +4,7 @@ metadata:
   name: example
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/set-image:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/set-image:latest
       configMap:
         newName: bar
         newTag: v1.0

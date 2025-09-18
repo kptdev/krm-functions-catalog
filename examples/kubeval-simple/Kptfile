@@ -6,7 +6,7 @@ metadata:
     config.kubernetes.io/local-config: "true"
 pipeline:
   validators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/kubeval:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/kubeval:latest
       configMap:
         strict: 'true'
         skip_kinds: MyCustom

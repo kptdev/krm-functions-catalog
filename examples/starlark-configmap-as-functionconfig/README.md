@@ -33,7 +33,7 @@ setReplicas(ctx.resource_list["items"], replicas)
 Invoke the function by running the following commands:
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/starlark:unstable -- source="$(cat set-replicas.star)" replicas=5
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/starlark:latest -- source="$(cat set-replicas.star)" replicas=5
 ```
 
 ### Expected result

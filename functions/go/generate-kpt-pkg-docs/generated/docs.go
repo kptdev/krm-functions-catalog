@@ -9,7 +9,7 @@ var GenerateKptPkgDocsLong = `
 
 The ` + "`" + `generate-kpt-pkg-docs` + "`" + ` function is expected to be executed imperatively like:
 
-  $ kpt fn eval -i generate-kpt-pkg-docs:unstable --include-meta-resources \
+  $ kpt fn eval -i generate-kpt-pkg-docs:latest --include-meta-resources \
   --mount type=bind,src="$(pwd)",dst="/tmp",rw=true
 
 ## FunctionConfig
@@ -83,7 +83,7 @@ and a sample readme with HTML markers.
 
 Invoke the function:
 
-  $ kpt fn eval -i generate-kpt-pkg-docs:unstable --include-meta-resources \
+  $ kpt fn eval -i generate-kpt-pkg-docs:latest --include-meta-resources \
   --mount type=bind,src="$(pwd)",dst="/tmp",rw=true -- readme-path=/tmp/README.md
 
 The following readme will be created:

@@ -3,7 +3,7 @@
 # decrypt
 kpt fn eval --fn-config decrypt.yaml --env SOPS_IMPORT_PGP="$(cat pgp_keys.txt)" \
 	--include-meta-resources \
-	--image-pull-policy never --image gcr.io/krm-fn-contrib/sops:unstable
+	--image-pull-policy never --image ghcr.io/kptdev/krm-functions-catalog/contrib/sops:latest
 
 # make sure that docs don't contain ENC entries
 grep 'ENC\[AES256_GCM' ./*.yaml && exit 1
@@ -13,7 +13,7 @@ grep 'ENC\[AES256_GCM' ./*.yaml && exit 1
 # encrypt
 kpt fn eval --fn-config encrypt.yaml \
 	--include-meta-resources \
-	--image-pull-policy never --image gcr.io/krm-fn-contrib/sops:unstable
+	--image-pull-policy never --image ghcr.io/kptdev/krm-functions-catalog/contrib/sops:latest
 
 # make sure that docs contain ENC entries
 grep 'ENC\[AES256_GCM' ./*.yaml || exit 1
@@ -21,4 +21,4 @@ grep 'ENC\[AES256_GCM' ./*.yaml || exit 1
 # decrypt
 kpt fn eval --fn-config decrypt.yaml --env SOPS_IMPORT_AGE="$(cat age_keys.txt)" \
         --include-meta-resources \
-        --image-pull-policy never --image gcr.io/krm-fn-contrib/sops:unstable
+        --image-pull-policy never --image ghcr.io/kptdev/krm-functions-catalog/contrib/sops:latest

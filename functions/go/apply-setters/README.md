@@ -23,7 +23,7 @@ A setter comment can be derived by replacing all the instances of setter values
 in the field value, with the corresponding setter names along with 'kpt-set:' prefix.
 
 ```shell
-e.g. image: gcr.io/nginx:1.16.1 # kpt-set: gcr.io/${image}:${tag}
+e.g. image: ghcr.io/nginx:1.16.1 # kpt-set: ghcr.io/${image}:${tag}
 ```
 
 <!--mdtogo-->
@@ -100,13 +100,13 @@ data:
 Invoke the function:
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:unstable --fn-config ./apply-setters-fn-config
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:latest --fn-config ./apply-setters-fn-config
 ```
 
 Alternatively, setter values can be passed as key-value pairs in the CLI
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:unstable -- tag=1.16.2 nginx-replicas=3
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:latest -- tag=1.16.2 nginx-replicas=3
 ```
 
 Modified resource looks like the following:
@@ -169,7 +169,7 @@ data:
 Invoke the function using the input config:
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:unstable --fn-config ./apply-setters-fn-config
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:latest --fn-config ./apply-setters-fn-config
 ```
 
 Modified resource looks like the following:

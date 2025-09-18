@@ -18,7 +18,7 @@ $ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/remov
 Invoke the function by running the following command:
 
 ```shell
-$ kpt fn eval remove-local-config-resources-imperative -i ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:unstable
+$ kpt fn eval remove-local-config-resources-imperative -i ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:latest
 ```
 
 ### Expected result

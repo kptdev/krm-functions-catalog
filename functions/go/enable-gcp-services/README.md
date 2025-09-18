@@ -17,7 +17,7 @@ the services necessary in a single resource and have tighter control over which 
 `enable-gcp-services` function can be used both declaratively and imperatively.
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:unstable
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:latest
 ```
 
 The `enable-gcp-services` function does the following:
@@ -84,7 +84,7 @@ spec:
 Invoke the function:
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:unstable
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:latest
 ```
 
 Generated resources looks like the following:

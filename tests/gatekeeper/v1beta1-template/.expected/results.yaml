@@ -4,7 +4,7 @@ metadata:
   name: fnresults
 exitCode: 1
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest
     stderr: |-
       [error] apps/v1/Deployment/nginx-deploy : Containers must not run as root
       violatedConstraint: disallowroot

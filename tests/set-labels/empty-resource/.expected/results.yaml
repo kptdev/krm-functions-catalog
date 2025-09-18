@@ -4,7 +4,7 @@ metadata:
   name: fnresults
 exitCode: 0
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/set-labels:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/set-labels:latest
     exitCode: 0
     results:
       - message: no input resources

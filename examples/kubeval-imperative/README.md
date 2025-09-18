@@ -23,7 +23,7 @@ Try it out by running the following command:
 
 ```shell
 # We set `strict=true` to disallow unknown field and `skip_kinds=MyCustom,MyOtherCustom` to skip 2 kinds that we don't have schemas.
-$ kpt fn eval kubeval-imperative --image ghcr.io/kptdev/krm-functions-catalog/kubeval:unstable --results-dir /tmp -- strict=true skip_kinds=MyCustom,MyOtherCustom
+$ kpt fn eval kubeval-imperative --image ghcr.io/kptdev/krm-functions-catalog/kubeval:latest --results-dir /tmp -- strict=true skip_kinds=MyCustom,MyOtherCustom
 ```
 
 The key-value pair(s) provided after `--` will be converted to `ConfigMap` by
@@ -40,7 +40,7 @@ metadata:
   name: fnresults
 exitCode: 1
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/kubeval:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/kubeval:latest
     exitCode: 1
     results:
       - message: Additional property templates is not allowed

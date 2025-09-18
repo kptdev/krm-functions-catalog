@@ -17,14 +17,14 @@ $ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/list-
 Invoke the function by running the following command:
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/list-setters:unstable
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/list-setters:latest
 ```
 
 ### Expected result
 
 ```shell
-[RUNNING] "ghcr.io/kptdev/krm-functions-catalog/list-setters:unstable"
-[PASS] "ghcr.io/kptdev/krm-functions-catalog/list-setters:unstable"
+[RUNNING] "ghcr.io/kptdev/krm-functions-catalog/list-setters:latest"
+[PASS] "ghcr.io/kptdev/krm-functions-catalog/list-setters:latest"
   Results:
     [INFO] Name: env, Value: [stage, dev], Type: array, Count: 1
     [INFO] Name: nginx-replicas, Value: 3, Type: int, Count: 1

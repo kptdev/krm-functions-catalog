@@ -65,7 +65,7 @@ For `pgp` if you have a file with keys it's possible to run:
 $ kpt fn eval \
         --fn-config <path to decrypt config>.yaml \
         --env SOPS_IMPORT_PGP="$(cat <file with exported key>)" \
-        --image gcr.io/krm-fn-contrib/sops:unstable \
+        --image ghcr.io/kptdev/krm-functions-catalog/contrib/sops:latest \
         <folder>
 ```
 
@@ -75,7 +75,7 @@ or if your keys are already presented in `gpg`-storage, it's possible to run:
 $ kpt fn eval \
         --fn-config <path to decrypt config>.yaml \
         --env SOPS_IMPORT_PGP="$(gpg --armor --export-secret-keys)" \
-        --image gcr.io/krm-fn-contrib/sops:unstable \
+        --image ghcr.io/kptdev/krm-functions-catalog/contrib/sops:latest \
         <folder>
 ```
 
@@ -85,7 +85,7 @@ To make `sops` decrypt `age` it's necessary to keep all keys in the single file 
 $ kpt fn eval \
         --fn-config <path to decrypt config>.yaml \
         --env SOPS_IMPORT_AGE="$(cat ~/.config/sops/age/keys.txt)" \
-        --image gcr.io/krm-fn-contrib/sops:unstable \
+        --image ghcr.io/kptdev/krm-functions-catalog/contrib/sops:latest \
         <folder>
 ```
 

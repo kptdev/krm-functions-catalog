@@ -1,8 +1,8 @@
 # GCP project to use for development
 GOBIN := $(shell go env GOPATH)/bin
 
-export GCP_PROJECT_ID ?= $(shell gcloud config get-value project)
-export IMAGE_REPO ?= gcr.io/$(GCP_PROJECT_ID)
+export GITHUB_PROJECT_ID ?= $(shell gcloud config get-value project)
+export IMAGE_REPO ?= ghcr.io/$(GITHUB_PROJECT_ID)
 export IMAGE_TAG ?= latest
 
 build:

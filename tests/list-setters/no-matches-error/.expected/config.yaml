@@ -1,4 +1,4 @@
 runCount: 2
 exitCode: 0
 testType: eval
-image: ghcr.io/kptdev/krm-functions-catalog/list-setters:unstable
+image: ghcr.io/kptdev/krm-functions-catalog/list-setters:latest

@@ -10,7 +10,7 @@ var SetProjectIdLong = `
 
 set-project-id function is expected to be executed imperatively like:
 
-  kpt fn eval --include-meta-resources --image ghcr.io/kptdev/krm-functions-catalog/set-project-id:unstable -- 'project-id=foo'
+  kpt fn eval --include-meta-resources --image ghcr.io/kptdev/krm-functions-catalog/set-project-id:latest -- 'project-id=foo'
 
 The ` + "`" + `set-project-id` + "`" + ` function does the following:
 
@@ -46,7 +46,7 @@ Let's start with the Kptfile of an example package.
 
 Invoke the function:
 
-  kpt fn eval --include-meta-resources --image ghcr.io/kptdev/krm-functions-catalog/set-project-id:unstable -- 'project-id=foo'
+  kpt fn eval --include-meta-resources --image ghcr.io/kptdev/krm-functions-catalog/set-project-id:latest -- 'project-id=foo'
 
 Kptfile will be updated to the following:
 

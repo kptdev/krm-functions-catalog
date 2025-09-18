@@ -83,7 +83,7 @@ The function executes as follows:
 `export-terraform` function can be executed imperatively as follows:
 
 ```shell
-$ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/export-terraform:unstable
+$ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/export-terraform:latest
 ```
 
 <!--mdtogo-->
@@ -115,7 +115,7 @@ spec:
 Invoke the function in the package directory:
 
 ```shell
-$ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/export-terraform:unstable
+$ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/export-terraform:latest
 ```
 
 The resulting package structure would look like this:

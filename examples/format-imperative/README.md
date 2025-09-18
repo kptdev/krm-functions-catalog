@@ -23,7 +23,7 @@ This example depicts the functionality of `format` function by formatting a
 Invoke the function by running the following commands:
 
 ```shell
-$ kpt fn eval format-imperative --image ghcr.io/kptdev/krm-functions-catalog/format:unstable
+$ kpt fn eval format-imperative --image ghcr.io/kptdev/krm-functions-catalog/format:latest
 ```
 
 ## Expected result

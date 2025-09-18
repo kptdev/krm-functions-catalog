@@ -23,7 +23,7 @@ metadata:
   name: example
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/starlark:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/starlark:latest
       configPath: fn-config.yaml
 ```
 

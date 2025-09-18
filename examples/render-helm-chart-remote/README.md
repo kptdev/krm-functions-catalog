@@ -10,7 +10,7 @@ function to render a helm chart that lives in a remote repo.
 Run the following command to render a minecraft chart.
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:unstable --network -- \
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:latest --network -- \
 name=minecraft \
 repo=https://itzg.github.io/minecraft-server-charts \
 version=3.1.3 \

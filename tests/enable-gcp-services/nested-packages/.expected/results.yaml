@@ -4,7 +4,7 @@ metadata:
   name: fnresults
 exitCode: 0
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:latest
     exitCode: 0
     results:
       - message: generated service
@@ -15,7 +15,7 @@ items:
           name: bar-service-cloudbuild
         file:
           path: service_bar-service-cloudbuild.yaml
-  - image: ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:latest
     exitCode: 0
     results:
       - message: generated service
@@ -42,7 +42,7 @@ items:
           name: foo-service-storage
         file:
           path: service_foo-service-storage.yaml
-  - image: ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:latest
     exitCode: 0
     results:
       - message: recreated service

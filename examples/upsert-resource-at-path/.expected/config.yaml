@@ -1,3 +1,3 @@
 testType: eval
-image: ghcr.io/kptdev/krm-functions-catalog/upsert-resource:unstable
+image: ghcr.io/kptdev/krm-functions-catalog/upsert-resource:latest
 fnConfig: ../fn-config.yaml

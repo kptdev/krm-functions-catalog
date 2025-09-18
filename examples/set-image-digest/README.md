@@ -23,7 +23,7 @@ metadata:
   name: example
 pipeline:
   mutators:
-  - image: ghcr.io/kptdev/krm-functions-catalog/set-image:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/set-image:latest
     configMap:
       name: nginx
       newName: bitnami/nginx

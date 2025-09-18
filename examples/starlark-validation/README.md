@@ -24,7 +24,7 @@ metadata:
   name: example
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/starlark:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/starlark:latest
       configPath: fn-config.yaml
 ```
 
@@ -67,7 +67,7 @@ metadata:
   name: fnresults
 exitCode: 1
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/starlark:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/starlark:latest
     stderr: 'fail: it is prohibited to have private key in a configmap'
     exitCode: 1
     results:

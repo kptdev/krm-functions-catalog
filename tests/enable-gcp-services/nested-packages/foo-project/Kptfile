@@ -6,4 +6,4 @@ metadata:
     config.kubernetes.io/local-config: "true"
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:latest

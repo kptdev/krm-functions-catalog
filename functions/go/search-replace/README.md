@@ -76,13 +76,13 @@ data:
 The function can be invoked using:
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable --fn-config /path/to/fn-config.yaml
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:latest --fn-config /path/to/fn-config.yaml
 ```
 
 Alternatively, data can be passed as key-value pairs in the CLI
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable -- 'by-path=metadata.name' 'put-value=the-deployment'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:latest -- 'by-path=metadata.name' 'put-value=the-deployment'
 ```
 
 ### Field path patterns
@@ -233,38 +233,38 @@ baz.yaml
 
 ```shell
 # Matches fields with value "3":
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable -- by-value=3
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:latest -- by-value=3
 ```
 
 ```shell
 # Matches fields with value prefixed by "nginx-":
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable -- by-value-regex='ngnix-.*'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:latest -- by-value-regex='ngnix-.*'
 ```
 
 ```shell
 # Matches field with path "spec.namespaces" set to "bookstore":
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable -- by-path='metadata.namespace' by-value='bookstore'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:latest -- by-path='metadata.namespace' by-value='bookstore'
 ```
 
 ```shell
 # Matches fields with name "containerPort" arbitrarily deep in "spec" that have value of 80:
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable -- by-path='spec.**.containerPort' by-value=80
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:latest -- by-path='spec.**.containerPort' by-value=80
 ```
 
 ```shell
 # Set namespaces for all resources to "bookstore", even namespace is not set on a resource:
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable -- by-path='metadata.namespace' put-value='bookstore'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:latest -- by-path='metadata.namespace' put-value='bookstore'
 ```
 
 ```shell
 # Update the setter value "project-id" to value "new-project" in all "setters.yaml" files in the current directory tree:
-kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable --include-meta-resources -- \
+kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:latest --include-meta-resources -- \
 by-value=project-id by-file-path='**/setters.yaml' put-value=new-project
 ```
 
 ```shell
 # Search and Set multiple values using regex numbered capture groups
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable -- by-value-regex='something-(.*)' put-value='my-project-id-${1}'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:latest -- by-value-regex='something-(.*)' put-value='my-project-id-${1}'
 metadata:
   name: something-foo
   namespace: something-bar
@@ -278,12 +278,12 @@ metadata:
 
 ```shell
 # Put the setter pattern as a line comment for matching fields.
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable -- by-value='my-project-id-foo' put-comment='kpt-set: ${project-id}-foo'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:latest -- by-value='my-project-id-foo' put-comment='kpt-set: ${project-id}-foo'
 metadata:
   name: my-project-id-foo # kpt-set: ${project-id}-foo
 
 # Setter pattern comments can be added to multiple values matching a regex numbered capture groups
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable -- by-value-regex='my-project-id-(.*)' put-comment='kpt-set: ${project-id}-${1}'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:latest -- by-value-regex='my-project-id-(.*)' put-comment='kpt-set: ${project-id}-${1}'
 metadata:
   name: my-project-id-foo # kpt-set: ${project-id}-foo
   namespace: my-project-id-bar # kpt-set: ${project-id}-bar

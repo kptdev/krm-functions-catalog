@@ -7,7 +7,7 @@ metadata:
     cnrm.cloud.google.com/deletion-policy: abandon
     config.k8s.io/function: |
       container:
-        image: ghcr.io/kptdev/krm-functions-catalog/generate-folders:unstable
+        image: ghcr.io/kptdev/krm-functions-catalog/generate-folders:latest
 spec:
   organization: "test-organization"
   layers:

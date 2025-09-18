@@ -37,7 +37,7 @@ You can target specific values using path expression and regex capture groups,
 and add setter comments as per your intent.
 
 ```shell
-$ kpt fn eval search-replace-create-setters --image ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable -- \
+$ kpt fn eval search-replace-create-setters --image ghcr.io/kptdev/krm-functions-catalog/search-replace:latest -- \
 by-path='data.**' by-value-regex='(.*)nginx.com(.*)' put-comment='kpt-set: ${1}${host}${2}'
 ```
 

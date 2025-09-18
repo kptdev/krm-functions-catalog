@@ -38,7 +38,7 @@ openAPI:
       x-k8s-cli:
         substitution:
           name: image
-          pattern: gcr.io/kpt-dev/helloworld-gke:${image-tag}
+          pattern: ghcr.io/kpt-dev/helloworld-gke:${image-tag}
           values:
           - marker: ${image-tag}
             ref: '#/definitions/io.k8s.cli.setters.image-tag'

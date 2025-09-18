@@ -4,7 +4,7 @@ metadata:
   name: fnresults
 exitCode: 1
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/starlark:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/starlark:latest
     stderr: 'failed to evaluate function: error: function failure'
     exitCode: 1
     results:

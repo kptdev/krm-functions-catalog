@@ -22,7 +22,7 @@ metadata:
   name: example
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/ensure-name-substring:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/ensure-name-substring:latest
       configMap:
         append: -prod
 ```

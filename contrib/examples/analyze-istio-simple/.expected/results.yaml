@@ -4,7 +4,7 @@ metadata:
   name: fnresults
 exitCode: 1
 items:
-  - image: gcr.io/krm-fn-contrib/analyze-istio:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/contrib/analyze-istio:latest
     exitCode: 1
     results:
       - message: 'Istioctl analyze command results in error: function toString() { [native code] }'

@@ -26,7 +26,7 @@ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-pro
 Invoke the function with the following command:
 
 ```shell
-kpt fn eval set-project-id-advanced --image ghcr.io/kptdev/krm-functions-catalog/set-project-id:unstable -- 'project-id=foo'
+kpt fn eval set-project-id-advanced --image ghcr.io/kptdev/krm-functions-catalog/set-project-id:latest -- 'project-id=foo'
 ```
 
 ### Expected result

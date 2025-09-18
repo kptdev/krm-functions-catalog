@@ -4,7 +4,7 @@ metadata:
   name: fnresults
 exitCode: 0
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/starlark:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/starlark:latest
     stderr: |-
       set(["foo", "bar"])
       2

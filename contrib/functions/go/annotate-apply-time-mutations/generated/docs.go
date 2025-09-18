@@ -20,7 +20,7 @@ part of a [kpt workflow](https://kpt.dev/book/02-concepts/02-workflows).
 
 To execute by itself:
 
-  kpt fn eval --image gcr.io/krm-fn-contrib/annotate-apply-time-mutations:unstable
+  kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/contrib/annotate-apply-time-mutations:latest
 
 To execute as part of a kpt workflow, first modify the Kptfile to add the
 function to the pipeline:
@@ -29,7 +29,7 @@ function to the pipeline:
   kind: Kptfile
   pipeline:
     mutators:
-      - image: gcr.io/krm-fn-contrib/annotate-apply-time-mutations:unstable
+      - image: ghcr.io/kptdev/krm-functions-catalog/contrib/annotate-apply-time-mutations:latest
 
 Then execute the pipeline:
 
@@ -176,7 +176,7 @@ Add an ` + "`" + `apply-time-mutation` + "`" + ` comment to the target object:
 
 Invoke the function:
 
-  kpt fn eval --image gcr.io/krm-fn-contrib/annotate-apply-time-mutations:unstable
+  kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/contrib/annotate-apply-time-mutations:latest
 
 The target object will be updated to the following:
 
@@ -254,7 +254,7 @@ Specify the mutation with an ` + "`" + `ApplyTimeMutation` + "`" + ` object:
 
 Invoke the function:
 
-  kpt fn eval --image gcr.io/krm-fn-contrib/annotate-apply-time-mutations:unstable
+  kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/contrib/annotate-apply-time-mutations:latest
 
 The target object will be updated to the following:
 

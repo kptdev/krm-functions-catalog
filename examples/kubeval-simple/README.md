@@ -22,7 +22,7 @@ metadata:
   name: example
 pipeline:
   validators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/kubeval:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/kubeval:latest
       configMap:
         strict: 'true'
 ```
@@ -51,7 +51,7 @@ metadata:
   name: fnresults
 exitCode: 1
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/kubeval:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/kubeval:latest
     exitCode: 1
     results:
       - message: Additional property templates is not allowed

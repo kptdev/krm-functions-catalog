@@ -18,7 +18,7 @@ $ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-i
 Invoke the function by running the following commands:
 
 ```shell
-$ kpt fn eval set-annotations-imperative --image ghcr.io/kptdev/krm-functions-catalog/set-image:unstable -- name=nginx newName=bitnami/nginx newTag=1.21.4
+$ kpt fn eval set-annotations-imperative --image ghcr.io/kptdev/krm-functions-catalog/set-image:latest -- name=nginx newName=bitnami/nginx newTag=1.21.4
 ```
 
 The labels provided in key-value pairs after `--` will be converted to a

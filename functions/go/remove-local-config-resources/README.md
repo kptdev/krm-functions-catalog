@@ -24,7 +24,7 @@ The function will execute as follows:
 `remove-local-config-resources` function can be executed imperatively as follows:
 
 ```shell
-$ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:unstable
+$ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:latest
 ```
 
 To execute `remove-local-config-resources` declaratively include the function in kpt package pipeline as follows:
@@ -32,7 +32,7 @@ To execute `remove-local-config-resources` declaratively include the function in
 ...
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:latest
 ...
 ```
 
@@ -78,7 +78,7 @@ spec:
 Invoke the function in the package directory:
 
 ```shell
-$ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:unstable
+$ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:latest
 ```
 
 The resulting package structure would look like this:

@@ -19,7 +19,7 @@ valid, adheres to the KRM schema, and can be consumed by other tools.
 A setter comment can be derived by replacing all the instances of setter values 
 in the field value, with the corresponding setter names along with 'kpt-set:' prefix.
 
-  e.g. image: gcr.io/nginx:1.16.1 # kpt-set: gcr.io/${image}:${tag}`
+  e.g. image: ghcr.io/nginx:1.16.1 # kpt-set: ghcr.io/${image}:${tag}`
 var ApplySettersLong = `
 We use ConfigMap to configure the ` + "`" + `apply-setters` + "`" + ` function. The desired setter
 values are provided as key-value pairs using ` + "`" + `data` + "`" + ` field where key is the name of the
@@ -77,11 +77,11 @@ Declare the new desired values for setters in the functionConfig file.
 
 Invoke the function:
 
-  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:unstable --fn-config ./apply-setters-fn-config
+  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:latest --fn-config ./apply-setters-fn-config
 
 Alternatively, setter values can be passed as key-value pairs in the CLI
 
-  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:unstable -- tag=1.16.2 nginx-replicas=3
+  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:latest -- tag=1.16.2 nginx-replicas=3
 
 Modified resource looks like the following:
 
@@ -136,7 +136,7 @@ Declare the desired array values, wrapped into string.
 
 Invoke the function using the input config:
 
-  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:unstable --fn-config ./apply-setters-fn-config
+  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:latest --fn-config ./apply-setters-fn-config
 
 Modified resource looks like the following:
 

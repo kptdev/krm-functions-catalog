@@ -106,7 +106,7 @@ functionConfig Field Descriptions and examples:
 var RenderHelmChartExamples = `
 To render a remote minecraft chart, you can run the following command: 
 
-  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:unstable --network -- \
+  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:latest --network -- \
   name=minecraft \
   repo=https://itzg.github.io/minecraft-server-charts \
   releaseName=test

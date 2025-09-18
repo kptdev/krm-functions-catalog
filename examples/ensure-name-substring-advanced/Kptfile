@@ -6,5 +6,5 @@ metadata:
     config.kubernetes.io/local-config: "true"
 pipeline:
   mutators:
-  - image: ghcr.io/kptdev/krm-functions-catalog/ensure-name-substring:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/ensure-name-substring:latest
     configPath: fn-config.yaml

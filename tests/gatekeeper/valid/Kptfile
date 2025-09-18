@@ -4,4 +4,4 @@ metadata:
   name: example
 pipeline:
   validators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest

@@ -4,7 +4,7 @@ metadata:
   name: fnresults
 exitCode: 0
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:latest
     exitCode: 0
     results:
       - message: 'Number of resources pruned: 1'

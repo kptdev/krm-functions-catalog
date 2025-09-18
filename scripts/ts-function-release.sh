@@ -20,7 +20,7 @@
 # TAG can be any valid docker tags. If the TAG is semver e.g. v1.2.3, shorter
 # versions of this semver will be tagged too. e.g. v1.2 and v1.
 # DEFAULT_CR is the desired container registry e.g. ghcr.io/kptdev/krm-functions-catalog. This is
-# optional. If not set, the default value gcr.io/krm-fn-contrib will be used.
+# optional. If not set, the default value ghcr.io/kptdev/krm-functions-catalog/contrib will be used.
 # If CR_REGISTRY is set, it will override DEFAULT_CR.
 # example 1:
 # Invocation: DEFAULT_CR=ghcr.io/kptdev/krm-functions-catalog CURRENT_FUNCTION=kubeval TAG=v1.2.3 ts-function-release.sh build
@@ -30,9 +30,9 @@
 # It pushes the above 3 images.
 # example 2:
 # Invocation: CURRENT_FUNCTION=kubeval TAG=unstable ts-function-release.sh build
-# It builds ghcr.io/kptdev/krm-functions-catalog/kubeval:unstable.
+# It builds ghcr.io/kptdev/krm-functions-catalog/kubeval:latest.
 # Invocation: CURRENT_FUNCTION=kubeval TAG=unstable ts-function-release.sh push
-# It pushes ghcr.io/kptdev/krm-functions-catalog/kubeval:unstable.
+# It pushes ghcr.io/kptdev/krm-functions-catalog/kubeval:latest.
 
 # This script currently is used in functions/ts/Makefile.
 

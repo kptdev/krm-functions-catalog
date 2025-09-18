@@ -4,7 +4,7 @@ metadata:
   name: fnresults
 exitCode: 0
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/set-annotations:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/set-annotations:latest
     exitCode: 0
     results:
       - message: 'set annotations: {"color":"orange","fruit":"apple"}'

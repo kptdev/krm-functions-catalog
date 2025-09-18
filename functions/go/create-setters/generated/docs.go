@@ -66,11 +66,11 @@ Declare the name of the setter with the value which need to be parameterized.
 
 Invoke the function:
 
-  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/create-setters:unstable --fn-config ./create-setters-fn-config.yaml
+  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/create-setters:latest --fn-config ./create-setters-fn-config.yaml
 
 Alternatively, setter values can be passed as key-value pairs in the CLI
 
-  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/create-setters:unstable -- replicas=4 tag=1.1.2
+  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/create-setters:latest -- replicas=4 tag=1.1.2
 
 Modified resource looks like the following:
 
@@ -137,7 +137,7 @@ doesn't matter.
       - stage
       - dev
 
-  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/create-setters:unstable --fn-config ./create-setters-fn-config.yaml
+  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/create-setters:latest --fn-config ./create-setters-fn-config.yaml
 
 Modified resource looks like the following:
 

@@ -34,7 +34,7 @@ index cff6bae..0000000
 -spec:
 -  containers:
 -    - name: test-container
--      image: k8s.gcr.io/busybox
+-      image: k8s.docker.io/busybox
 -      command:
 -        - /bin/sh
 -        - -c
@@ -91,7 +91,7 @@ index 0000000..bd5ba41
 +spec:
 +  containers:
 +  - name: test-container
-+    image: k8s.gcr.io/busybox
++    image: k8s.docker.io/busybox
 +    command:
 +    - /bin/sh
 +    - -c

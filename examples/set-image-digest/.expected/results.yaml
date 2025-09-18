@@ -4,7 +4,7 @@ metadata:
   name: fnresults
 exitCode: 0
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/set-image:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/set-image:latest
     exitCode: 0
     results:
       - message: 'summary: updated a total of 2 image(s)'

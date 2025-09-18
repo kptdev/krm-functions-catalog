@@ -4,7 +4,7 @@ metadata:
   name: example
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/search-replace:latest
       configMap:
         by-value: non-existent-value
         by-file-path: 'resources.yaml'

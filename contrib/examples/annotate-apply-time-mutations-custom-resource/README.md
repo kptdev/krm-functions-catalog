@@ -21,7 +21,7 @@ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/contrib/examples
 Invoke the function with the following command:
 
 ```shell
-kpt fn eval annotate-apply-time-mutations-custom-resource --image ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/annotate-apply-time-mutations:unstable
+kpt fn eval annotate-apply-time-mutations-custom-resource --image ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/annotate-apply-time-mutations:latest
 ```
 
 ### Expected result

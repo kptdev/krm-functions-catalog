@@ -14,7 +14,7 @@ metadata:
 spec:
   containers:
     - name: test-container
-      image: k8s.gcr.io/busybox
+      image: k8s.docker.io/busybox
       command:
         - /bin/sh
         - -c

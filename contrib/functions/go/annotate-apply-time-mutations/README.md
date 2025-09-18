@@ -28,7 +28,7 @@ part of a [kpt workflow](https://kpt.dev/book/02-concepts/02-workflows).
 To execute by itself:
 
 ```shell
-kpt fn eval --image gcr.io/krm-fn-contrib/annotate-apply-time-mutations:unstable
+kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/contrib/annotate-apply-time-mutations:latest
 ```
 
 To execute as part of a kpt workflow, first modify the Kptfile to add the
@@ -39,7 +39,7 @@ apiVersion: kpt.dev/v1
 kind: Kptfile
 pipeline:
   mutators:
-    - image: gcr.io/krm-fn-contrib/annotate-apply-time-mutations:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/contrib/annotate-apply-time-mutations:latest
 ```
 
 Then execute the pipeline:
@@ -205,7 +205,7 @@ spec:
 Invoke the function:
 
 ```shell
-kpt fn eval --image gcr.io/krm-fn-contrib/annotate-apply-time-mutations:unstable
+kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/contrib/annotate-apply-time-mutations:latest
 ```
 
 The target object will be updated to the following:
@@ -293,7 +293,7 @@ spec:
 Invoke the function:
 
 ```shell
-kpt fn eval --image gcr.io/krm-fn-contrib/annotate-apply-time-mutations:unstable
+kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/contrib/annotate-apply-time-mutations:latest
 ```
 
 The target object will be updated to the following:

@@ -1,5 +1,5 @@
 testType: eval
-image: ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:unstable
+image: ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:latest
 network: true
 args:
   name: minecraft

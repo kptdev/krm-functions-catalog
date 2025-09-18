@@ -17,14 +17,14 @@ $ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/expor
 Invoke the function by running the following commands:
 
 ```shell
-$ kpt fn eval export-terraform-advanced --image ghcr.io/kptdev/krm-functions-catalog/export-terraform:unstable
+$ kpt fn eval export-terraform-advanced --image ghcr.io/kptdev/krm-functions-catalog/export-terraform:latest
 ```
 
 ### Expected result
 The function should export successfully
 ```shell
-[RUNNING] "ghcr.io/kptdev/krm-functions-catalog/export-terraform:unstable"
-[PASS] "ghcr.io/kptdev/krm-functions-catalog/export-terraform:unstable" in 1.5s
+[RUNNING] "ghcr.io/kptdev/krm-functions-catalog/export-terraform:latest"
+[PASS] "ghcr.io/kptdev/krm-functions-catalog/export-terraform:latest" in 1.5s
 ```
 
 A `ConfigMap` will be placed in `terraform.yaml` which contains the converted Terraform code.

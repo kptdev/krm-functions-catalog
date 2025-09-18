@@ -29,7 +29,7 @@ Invoke the decryption by running one of the following command:
 $ kpt fn eval \
         --fn-config sops-pgp-and-age/decrypt.yaml \
         --env SOPS_IMPORT_AGE="$(cat sops-pgp-and-age/age_keys.txt)" \
-        --image gcr.io/krm-fn-contrib/sops:unstable \
+        --image ghcr.io/kptdev/krm-functions-catalog/contrib/sops:latest \
         --include-meta-resources \
         sops-pgp-and-age/
 ```
@@ -40,7 +40,7 @@ $ kpt fn eval \
 $ kpt fn eval \
         --fn-config sops-pgp-and-age/decrypt.yaml \
         --env SOPS_IMPORT_PGP="$(cat sops-pgp-and-age/pgp_keys.txt)" \
-        --image gcr.io/krm-fn-contrib/sops:unstable \
+        --image ghcr.io/kptdev/krm-functions-catalog/contrib/sops:latest \
         --include-meta-resources \
         sops-pgp-and-age/
 ```
@@ -65,7 +65,7 @@ Invoke the encryption by running the following command:
 $ kpt fn eval \
         --fn-config sops-pgp-and-age/encrypt.yaml \
         --include-meta-resources \
-        --image gcr.io/krm-fn-contrib/sops:unstable \
+        --image ghcr.io/kptdev/krm-functions-catalog/contrib/sops:latest \
         sops-pgp-and-age/
 ```
 

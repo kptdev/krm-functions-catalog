@@ -4,6 +4,6 @@ metadata:
   name: delete-annotations-simple
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/delete-annotations:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/delete-annotations:latest
       configMap:
         annotationKeys: annotation-to-delete

@@ -355,7 +355,7 @@ metadata:
   annotations:
     config.k8s.io/function: |
       container:
-        image: gcr.io/krm-fn-contrib/sops:unstable
+        image: ghcr.io/kptdev/krm-functions-catalog/contrib/sops:latest
         envs:
         - SOPS_IMPORT_PGP
         - SOPS_PGP_FP
@@ -385,7 +385,7 @@ metadata:
   annotations:
     config.k8s.io/function: |
       container:
-        image: gcr.io/krm-fn-contrib/sops:unstable
+        image: ghcr.io/kptdev/krm-functions-catalog/contrib/sops:latest
         envs:
         - SOPS_IMPORT_PGP
     config.kubernetes.io/local-config: "true"
@@ -455,7 +455,7 @@ metadata:
   annotations:
     config.k8s.io/function: |
       container:
-        image: gcr.io/krm-fn-contrib/sops:unstable
+        image: ghcr.io/kptdev/krm-functions-catalog/contrib/sops:latest
         envs:
 	- SOPS_IMPORT_PGP
     config.kubernetes.io/local-config: "true"

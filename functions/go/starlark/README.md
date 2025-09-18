@@ -119,14 +119,14 @@ There are 2 ways to run the function imperatively.
   starlark script lives in `main.star` file.
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/starlark:unstable -- source="$(cat main.star)" param1=value1 param2=value2
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/starlark:latest -- source="$(cat main.star)" param1=value1 param2=value2
 ```
 
 - Run it using `--fn-config` with either a `ConfigMap` or a `StarlarkRun` that
   lives in `fn-config.yaml`.
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/starlark:unstable --fn-config fn-config.yaml
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/starlark:latest --fn-config fn-config.yaml
 ```
 
 ### Developing Starlark Script

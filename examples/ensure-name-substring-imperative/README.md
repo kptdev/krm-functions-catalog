@@ -18,7 +18,7 @@ $ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/ensur
 Invoke the function by running the following commands:
 
 ```shell
-$ kpt fn eval ensure-name-substring-imperative --image ghcr.io/kptdev/krm-functions-catalog/ensure-name-substring:unstable -- prepend=prod-
+$ kpt fn eval ensure-name-substring-imperative --image ghcr.io/kptdev/krm-functions-catalog/ensure-name-substring:latest -- prepend=prod-
 ```
 
 The key-value pair(s) provided after `--` will be converted to `ConfigMap` by

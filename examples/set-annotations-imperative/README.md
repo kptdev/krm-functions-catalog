@@ -18,7 +18,7 @@ $ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-a
 Invoke the function by running the following commands:
 
 ```shell
-$ kpt fn eval set-annotations-imperative --image ghcr.io/kptdev/krm-functions-catalog/set-annotations:unstable -- color=orange fruit=apple
+$ kpt fn eval set-annotations-imperative --image ghcr.io/kptdev/krm-functions-catalog/set-annotations:latest -- color=orange fruit=apple
 ```
 
 The labels provided in key-value pairs after `--` will be converted to a

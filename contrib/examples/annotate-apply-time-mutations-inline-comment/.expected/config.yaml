@@ -1,2 +1,2 @@
 testType: eval
-image: ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/annotate-apply-time-mutations:unstable
+image: ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/annotate-apply-time-mutations:latest

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: helloworld-gke
-          image: gcr.io/kpt-dev/helloworld-gke:v0.3.0 # kpt-set: gcr.io/kpt-dev/helloworld-gke:${image-tag}
+          image: ghcr.io/kpt-dev/helloworld-gke:v0.3.0 # kpt-set: ghcr.io/kpt-dev/helloworld-gke:${image-tag}
           ports:
             - name: http
               containerPort: 80 # kpt-set: ${http-port}

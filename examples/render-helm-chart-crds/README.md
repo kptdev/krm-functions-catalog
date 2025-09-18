@@ -10,7 +10,7 @@ function to render a helm chart that contains CRDs in the templated output.
 First, let's render a terraform chart without CRDs:
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:unstable --network -- \
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:latest --network -- \
 name=terraform \
 repo=https://helm.releases.hashicorp.com \
 version=1.0.0 \
@@ -35,7 +35,7 @@ $ kpt pkg tree
 Now, let's run the command again, this time including CRDs:
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:unstable --network -- \
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:latest --network -- \
 name=terraform \
 repo=https://helm.releases.hashicorp.com \
 version=1.0.0 \

@@ -528,10 +528,10 @@ var resolvePatternCases = []patternTest{
 	},
 	{
 		name:    "setter values from pattern 3",
-		value:   "gcr.io/my-app/my-app-backend:1.0.0",
+		value:   "ghcr.io/my-app/my-app-backend:1.0.0",
 		pattern: `${registry}/${app~!@#$%^&*()<>?:"|}/${app-image-name}:${app-image-tag}`,
 		expected: map[string]string{
-			"registry":             "gcr.io",
+			"registry":             "ghcr.io",
 			`app~!@#$%^&*()<>?:"|`: "my-app",
 			"app-image-name":       "my-app-backend",
 			"app-image-tag":        "1.0.0",

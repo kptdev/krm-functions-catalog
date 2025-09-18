@@ -13,13 +13,13 @@ The function will execute as follows:
 
 ` + "`" + `set-enforcement-action` + "`" + ` function can be executed imperatively as follows:
 
-  $ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/set-enforcement-action:unstable -- enforcementAction=deny
+  $ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/set-enforcement-action:latest -- enforcementAction=deny
 
 To execute ` + "`" + `set-enforcement-action` + "`" + ` declaratively include the function in kpt package pipeline as follows:
   ...
   pipeline:
     mutators:
-      - image: ghcr.io/kptdev/krm-functions-catalog/set-enforcement-action:unstable
+      - image: ghcr.io/kptdev/krm-functions-catalog/set-enforcement-action:latest
         configMap:
           enforcementAction: deny
   ...

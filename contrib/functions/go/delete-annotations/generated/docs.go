@@ -8,13 +8,13 @@ var DeleteAnnotationsLong = `
 You can delete multiple annotations provided as a comma separated string as part of the function config.
 
 To execute imperatively:
-  $ kpt fn eval -i gcr.io/krm-fn-contrib/delete-annotations:unstable -- annotationKeys=annotation-to-delete,another-annotation-to-delete
+  $ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/contrib/delete-annotations:latest -- annotationKeys=annotation-to-delete,another-annotation-to-delete
 
 To execute ` + "`" + `delete-annotations` + "`" + ` declaratively include the function in kpt package pipeline as follows:
   ...
   pipeline:
     mutators:
-      - image: gcr.io/krm-fn-contrib/delete-annotations:unstable
+      - image: ghcr.io/kptdev/krm-functions-catalog/contrib/delete-annotations:latest
         configMap:
           annotationKeys: annotation-to-delete,another-annotation-to-delete
   ...

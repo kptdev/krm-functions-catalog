@@ -4,7 +4,7 @@ metadata:
   name: fnresults
 exitCode: 0
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/set-enforcement-action:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/set-enforcement-action:latest
     exitCode: 0
     results:
       - message: 'Number of policies set to [dryrun]: 2'

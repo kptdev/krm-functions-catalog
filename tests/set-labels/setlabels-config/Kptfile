@@ -7,7 +7,7 @@ metadata:
     fruit: apple
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/set-labels:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/set-labels:latest
       configPath: fn-config.yaml
       selectors:
         - kind: ConfigMap

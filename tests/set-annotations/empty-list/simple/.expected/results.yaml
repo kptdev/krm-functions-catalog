@@ -4,7 +4,7 @@ metadata:
   name: fnresults
 exitCode: 1
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/set-annotations:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/set-annotations:latest
     stderr: '[error]: failed to configure function: `functionConfig` must be a `ConfigMap` or `SetAnnotations`'
     exitCode: 1
     results:

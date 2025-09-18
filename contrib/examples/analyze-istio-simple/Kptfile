@@ -4,6 +4,6 @@ metadata:
   name: example
 pipeline:
   validators:
-    - image: gcr.io/krm-fn-contrib/analyze-istio:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/contrib/analyze-istio:latest
       configMap:
         '--use-kube': 'false'

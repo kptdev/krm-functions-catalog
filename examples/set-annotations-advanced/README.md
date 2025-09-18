@@ -14,7 +14,7 @@ metadata:
   name: example
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/set-annotations:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/set-annotations:latest
       configPath: fn-config.yaml
 ```
 

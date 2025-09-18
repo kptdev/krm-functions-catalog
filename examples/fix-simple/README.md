@@ -93,7 +93,7 @@ The transformed package is compatible with kpt 1.0 binary.
 Invoke the function by running the following commands:
 
 ```shell
-$ kpt fn eval fix-simple --image ghcr.io/kptdev/krm-functions-catalog/fix:unstable --include-meta-resources
+$ kpt fn eval fix-simple --image ghcr.io/kptdev/krm-functions-catalog/fix:latest --include-meta-resources
 ```
 
 ### Expected result

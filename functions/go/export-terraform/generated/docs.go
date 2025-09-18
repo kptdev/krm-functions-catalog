@@ -13,5 +13,5 @@ The function executes as follows:
 
 ` + "`" + `export-terraform` + "`" + ` function can be executed imperatively as follows:
 
-  $ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/export-terraform:unstable
+  $ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/export-terraform:latest
 `

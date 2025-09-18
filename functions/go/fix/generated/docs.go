@@ -66,7 +66,7 @@ Here is the corresponding v1alpha1 Kptfile in the package
 
 Invoke ` + "`" + `fix` + "`" + ` function on the package:
 
-  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/fix:unstable --include-meta-resources
+  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/fix:latest --include-meta-resources
 
 Here is the transformed resource
 

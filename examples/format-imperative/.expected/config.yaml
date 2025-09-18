@@ -1,4 +1,4 @@
 testType: eval
-image: ghcr.io/kptdev/krm-functions-catalog/format:unstable
+image: ghcr.io/kptdev/krm-functions-catalog/format:latest
 # Skip this until we figure out what we should do
 skip: true

@@ -1,4 +1,4 @@
-image: gcr.io/krm-fn-contrib/sops
+image: ghcr.io/kptdev/krm-functions-catalog/contrib/sops
 description: Use sops to encrypt/decrypt KRM resources.
 tags:
   - mutator

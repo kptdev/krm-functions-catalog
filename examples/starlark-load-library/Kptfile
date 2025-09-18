@@ -6,5 +6,5 @@ metadata:
     config.kubernetes.io/local-config: "true"
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/starlark:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/starlark:latest
       configPath: fn-config.yaml

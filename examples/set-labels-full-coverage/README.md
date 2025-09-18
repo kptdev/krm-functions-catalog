@@ -24,7 +24,7 @@ metadata:
     config.kubernetes.io/local-config: "true"
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/set-labels:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/set-labels:latest
       configPath: fn-config.yaml
 ```
 

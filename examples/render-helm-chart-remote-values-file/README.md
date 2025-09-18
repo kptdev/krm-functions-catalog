@@ -17,7 +17,7 @@ Run the following commands to render the helm chart in your local
 filesystem with the remote values file.
 
 ```shell
-$ kpt fn eval render-helm-chart-remote-values-file --image ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:unstable \
+$ kpt fn eval render-helm-chart-remote-values-file --image ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:latest \
 --network \
 --mount type=bind,src="$(pwd)"/render-helm-chart-remote-values-file,dst=/tmp/charts -- \
 name=helloworld-chart \

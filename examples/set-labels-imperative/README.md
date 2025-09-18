@@ -18,7 +18,7 @@ $ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-l
 Invoke the function by running the following commands:
 
 ```shell
-$ kpt fn eval set-labels-imperative --image ghcr.io/kptdev/krm-functions-catalog/set-labels:unstable -- color=orange fruit=apple
+$ kpt fn eval set-labels-imperative --image ghcr.io/kptdev/krm-functions-catalog/set-labels:latest -- color=orange fruit=apple
 ```
 
 The key-value pair(s) provided after `--` will be converted to `ConfigMap` by

@@ -523,7 +523,7 @@ metadata:
   annotations:
     config.k8s.io/function: |
       container:
-        image: gcr.io/krm-blueprints/generate-folders:dev
+        image: ghcr.io/krm-blueprints/generate-folders:dev
     config.kubernetes.io/local-config: "true"
   name: root-hierarchy
 spec:

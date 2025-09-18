@@ -32,7 +32,7 @@ transformers:
         config.kubernetes.io/function: |
           container:
             network: true
-            image: ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:unstable
+            image: ghcr.io/kptdev/krm-functions-catalog/render-helm-chart:latest
     helmCharts:
       - chartArgs:
           name: mychart

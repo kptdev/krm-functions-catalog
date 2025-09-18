@@ -1,4 +1,4 @@
-image: gcr.io/krm-fn-contrib/analyze-istio
+image: ghcr.io/kptdev/krm-functions-catalog/contrib/analyze-istio
 description:
 tags:
   - validator

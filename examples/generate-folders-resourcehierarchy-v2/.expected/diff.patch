@@ -10,8 +10,8 @@ index d8e547b..dadae4c 100644
 +    config.kubernetes.io/local-config: 'true'
  pipeline:
    mutators:
--    - image: ghcr.io/kptdev/krm-functions-catalog/generate-folders:unstable
-+    - image: 'ghcr.io/kptdev/krm-functions-catalog/generate-folders:unstable'
+-    - image: ghcr.io/kptdev/krm-functions-catalog/generate-folders:latest
++    - image: 'ghcr.io/kptdev/krm-functions-catalog/generate-folders:latest'
 diff --git a/folder_dev.team-2.yaml b/folder_dev.team-2.yaml
 new file mode 100644
 index 0000000..16b9af2

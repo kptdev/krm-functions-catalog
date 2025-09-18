@@ -2,6 +2,8 @@ module github.com/kptdev/krm-functions-catalog/functions/go/export-terraform
 
 go 1.24.3
 
+replace github.com/kptdev/krm-functions-catalog/thirdparty/kyaml/fnsdk => /Users/liam/git/github/kptdev/krm-functions-catalog/thirdparty/kyaml/fnsdk
+
 require (
 	github.com/kptdev/krm-functions-catalog/thirdparty/kyaml/fnsdk v0.0.0-20220111011035-c598c94c9a02
 	github.com/stretchr/testify v1.10.0

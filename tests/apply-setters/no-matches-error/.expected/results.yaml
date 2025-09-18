@@ -4,7 +4,7 @@ metadata:
   name: fnresults
 exitCode: 0
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/apply-setters:unstable
+  - image: ghcr.io/kptdev/krm-functions-catalog/apply-setters:latest
     exitCode: 0
     results:
       - message: no matches for input setter(s)

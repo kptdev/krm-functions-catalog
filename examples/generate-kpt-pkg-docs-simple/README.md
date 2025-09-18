@@ -21,7 +21,7 @@ $ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/gener
 Invoke the function with the following command:
 
 ```shell
-$ kpt fn eval -i generate-kpt-pkg-docs:unstable --include-meta-resources \
+$ kpt fn eval -i generate-kpt-pkg-docs:latest --include-meta-resources \
 --mount type=bind,src="$(pwd)",dst="/tmp",rw=true -- readme-path=/tmp/GENERATED.md
 ```
 

@@ -1,5 +1,5 @@
 testType: eval
-image: ghcr.io/kptdev/krm-functions-catalog/set-image:unstable
+image: ghcr.io/kptdev/krm-functions-catalog/set-image:latest
 args:
   name: nginx
   newName: bitnami/nginx

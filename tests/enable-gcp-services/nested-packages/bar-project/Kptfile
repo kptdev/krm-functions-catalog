@@ -4,4 +4,4 @@ metadata:
   name: enable-gcp-services-main
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:latest

@@ -20,7 +20,7 @@ You can find an example of `List` at `.expected/fn-config.yaml`
 Invoke the function by running the following commands:
 
 ```shell
-$ kpt fn eval -i upsert-resource:unstable --fn-config .expected/fn-config.yaml
+$ kpt fn eval -i upsert-resource:latest --fn-config .expected/fn-config.yaml
 ```
 
 ### Expected result

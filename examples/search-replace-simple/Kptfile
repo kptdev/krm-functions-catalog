@@ -6,7 +6,7 @@ metadata:
     config.kubernetes.io/local-config: "true"
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/search-replace:unstable
+    - image: ghcr.io/kptdev/krm-functions-catalog/search-replace:latest
       configMap:
         by-path: metadata.name
         by-value: the-deployment

@@ -85,7 +85,7 @@ openAPI:
 Invoke `fix` function on the package:
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/fix:unstable --include-meta-resources
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/fix:latest --include-meta-resources
 ```
 
 Here is the transformed resource

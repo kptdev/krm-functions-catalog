@@ -9,7 +9,7 @@ var ListSettersLong = `
 
 ` + "`" + `list-setters` + "`" + ` function is expected to be executed imperatively like
 
-  $ kpt fn eval -i list-setters:unstable
+  $ kpt fn eval -i list-setters:latest
 
 ` + "`" + `list-setters` + "`" + ` function performs the following steps:
 
@@ -45,7 +45,7 @@ Let's start with the input resource in a package
 
 Invoke the function:
 
-  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/list-setters:unstable
+  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/list-setters:latest
 
 Output looks like the following:
 

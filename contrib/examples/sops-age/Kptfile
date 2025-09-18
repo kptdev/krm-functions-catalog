@@ -6,5 +6,5 @@ info:
   description: null
 pipeline:
   mutators:
-    - image: 'ghcr.io/kptdev/krm-functions-catalog/apply-setters:unstable'
+    - image: 'ghcr.io/kptdev/krm-functions-catalog/apply-setters:latest'
       configPath: apply-setters.yaml

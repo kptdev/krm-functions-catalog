@@ -9,7 +9,7 @@ var EnableGcpServicesLong = `
 
 ` + "`" + `enable-gcp-services` + "`" + ` function can be used both declaratively and imperatively.
 
-  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:unstable
+  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:latest
 
 The ` + "`" + `enable-gcp-services` + "`" + ` function does the following:
 
@@ -65,7 +65,7 @@ Let's start with a ` + "`" + `ProjectServiceSet` + "`" + ` CR for enabling two s
 
 Invoke the function:
 
-  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:unstable
+  $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/enable-gcp-services:latest
 
 Generated resources looks like the following:
 
