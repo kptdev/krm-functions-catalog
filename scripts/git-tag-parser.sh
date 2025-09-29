@@ -17,14 +17,14 @@
 VERNUM='0|[1-9][0-9]*'
 SEMVER_REGEX="^[vV]?($VERNUM)\\.($VERNUM)\\.($VERNUM)$"
 
-# get_versions return versions: vX.Y.Z, vX.Y and vX if the input matches
+# get_versions return versions: vX.Y.Z, vX.Y-latest and vX-latest if the input matches
 # SEMVER_REGEX. Otherwise, it returns the input.
 # example 1:
 # Invocation: get_versions v1.2.3
-# Return: v1.2.3 v1.2 v1
+# Return: v1.2.3 v1.2-latest v1-latest
 # example 2:
-# Invocation: get_versions unstable
-# Return: unstable
+# Invocation: get_versions latest
+# Return: latest
 function get_versions {
   local version=$1
   if [[ "${version}" =~ $SEMVER_REGEX ]]; then
@@ -33,8 +33,8 @@ function get_versions {
     local patch=${BASH_REMATCH[3]}
 
     echo v"${major}"."${minor}"."${patch}"
-    echo v"${major}"."${minor}"
-    echo v"${major}"
+    echo v"${major}"."${minor}"-latest
+    echo v"${major}"-latest
   else
     echo "${version}"
   fi
