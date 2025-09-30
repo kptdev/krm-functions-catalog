@@ -14,7 +14,7 @@ index 0000000..19102b3
 +  name: the-namespace
 diff --git a/resources.yaml b/resources.yaml
 deleted file mode 100644
-index 675f126..0000000
+index b1fcb0b..0000000
 --- a/resources.yaml
 +++ /dev/null
 @@ -1,46 +0,0 @@
@@ -79,7 +79,7 @@ index 0000000..4023c97
 +  some-key: some-value
 diff --git a/the-namespace/pod_the-pod-prod.yaml b/the-namespace/pod_the-pod-prod.yaml
 new file mode 100644
-index 0000000..1a24ac8
+index 0000000..1963a4b
 --- /dev/null
 +++ b/the-namespace/pod_the-pod-prod.yaml
 @@ -0,0 +1,19 @@

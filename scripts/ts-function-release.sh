@@ -29,9 +29,9 @@
 # Invocation: DEFAULT_CR=ghcr.io/kptdev/krm-functions-catalog CURRENT_FUNCTION=kubeval TAG=v1.2.3 ts-function-release.sh push
 # It pushes the above 3 images.
 # example 2:
-# Invocation: CURRENT_FUNCTION=kubeval TAG=unstable ts-function-release.sh build
+# Invocation: CURRENT_FUNCTION=kubeval TAG=latest ts-function-release.sh build
 # It builds ghcr.io/kptdev/krm-functions-catalog/kubeval:latest.
-# Invocation: CURRENT_FUNCTION=kubeval TAG=unstable ts-function-release.sh push
+# Invocation: CURRENT_FUNCTION=kubeval TAG=latest ts-function-release.sh push
 # It pushes ghcr.io/kptdev/krm-functions-catalog/kubeval:latest.
 
 # This script currently is used in functions/ts/Makefile.

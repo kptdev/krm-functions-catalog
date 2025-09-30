@@ -29,8 +29,8 @@ import (
 var (
 	// pattern of release branches, e.g. apply-setters/v1.0
 	releaseBranchPattern = regexp.MustCompile(`[-\w]*/(v\d*\.\d*)`)
-	// pattern for version tags, e.g. unstable, v0.1.1, v0.1
-	versionGroup = `unstable|v\d*\.\d*\.\d*|v\d*\.\d*`
+	// pattern for version tags, e.g. latest, v0.1.1, v0.1
+	versionGroup = `latest|v\d*\.\d*\.\d*|v\d*\.\d*`
 )
 
 func dirExists(path string) bool {

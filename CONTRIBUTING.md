@@ -67,7 +67,7 @@ For each function, its files spread in the follow places:
   example here. There must be a README.md file in each example directory, and it
   should follow the [template][example-template].
 - The `tests/` directory contains additional e2e tests.
-- `master` branch should should contain examples with the `unstable` tag for
+- `master` branch should should contain examples with the `latest` tag for
   your function images.  When you release the function version that tag should 
   have the samples and tests that match the function version.
 

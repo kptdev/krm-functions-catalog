@@ -14,7 +14,7 @@
 # limitations under the License.
 SHELL=/bin/bash
 GOPATH := $(shell go env GOPATH)
-TAG ?= unstable
+TAG ?= latest
 DEFAULT_CONTRIB_CR ?= ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib
 GOBIN := $(shell go env GOPATH)/bin
 

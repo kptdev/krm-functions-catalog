@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 SHELL=/bin/bash
-TAG ?= unstable
+TAG ?= latest
 CR = ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib
 GOBIN := $(shell go env GOPATH)/bin
 

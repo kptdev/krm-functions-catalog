@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 SHELL=/bin/bash
-export TAG ?= unstable
+export TAG ?= latest
 export DEFAULT_CR ?= ghcr.io/kptdev/krm-functions-catalog
 export DEFAULT_CONTRIB_CR ?= ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib
 

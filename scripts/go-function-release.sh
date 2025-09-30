@@ -28,9 +28,9 @@
 # Invocation: DEFAULT_CR=ghcr.io/kptdev/krm-functions-catalog CURRENT_FUNCTION=set-namespace TAG=v1.2.3 go-function-release.sh push
 # It pushes the above 3 images.
 # example 2:
-# Invocation: CURRENT_FUNCTION=set-namespace TAG=unstable go-function-release.sh build
+# Invocation: CURRENT_FUNCTION=set-namespace TAG=latest go-function-release.sh build
 # It builds ghcr.io/kptdev/krm-functions-catalog/set-namespace:latest.
-# Invocation: CURRENT_FUNCTION=set-namespace TAG=unstable go-function-release.sh push
+# Invocation: CURRENT_FUNCTION=set-namespace TAG=latest go-function-release.sh push
 # It pushes ghcr.io/kptdev/krm-functions-catalog/set-namespace:latest.
 
 # This script currently is used in functions/go/Makefile.

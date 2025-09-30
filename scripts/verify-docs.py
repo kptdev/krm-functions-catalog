@@ -184,7 +184,7 @@ def validate_example_kptfile(fn_name, dir_name, example_name, branch, contrib):
         desired_ghcr_prefix = ghcr_prefix
     tag = branch
     if branch == 'master':
-        tag = 'unstable'
+        tag = 'latest'
     else:
         splits = branch.split('/')
         if len(splits) != 2:
@@ -250,7 +250,7 @@ def validate_example_md(fn_name, dir_name, example_name, branch):
 
     tag = branch
     if branch == 'master':
-        tag = 'unstable'
+        tag = 'latest'
     else:
         splits = branch.split('/')
         if len(splits) != 2:
