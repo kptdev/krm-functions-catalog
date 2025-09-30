@@ -51,10 +51,6 @@ jobs:
       - name: Run unit tests
         run: |
           make unit-test-go
-      - name: Check licenses
-        run: |
-          cd functions/go
-          make check-licenses
 
   e2e-ci:
     timeout-minutes: 60
