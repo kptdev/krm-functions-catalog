@@ -22,7 +22,7 @@ index a0e4c9b..6635edf 100644
    name: proj1-service-compute
    annotations:
      blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/proj1-service'
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
++    cnrm.cloud.google.com/blueprint: 'kpt-fn'
  spec:
    resourceID: compute.googleapis.com
    projectRef:
@@ -34,7 +34,7 @@ index 2da01b0..888327c 100644
    name: proj1-service-redis
    annotations:
      blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/proj1-service'
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
++    cnrm.cloud.google.com/blueprint: 'kpt-fn'
  spec:
    resourceID: redis.googleapis.com
    projectRef:
@@ -46,7 +46,7 @@ index 6c5cfd8..66ed59c 100644
    name: proj2-service-redis
    annotations:
      blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/proj2-service'
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
++    cnrm.cloud.google.com/blueprint: 'kpt-fn'
  spec:
    resourceID: redis.googleapis.com
    projectRef:

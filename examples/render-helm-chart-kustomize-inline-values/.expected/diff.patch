@@ -3,7 +3,7 @@ new file mode 100644
 index 0000000..b3a1630
 --- /dev/null
 +++ b/resources.yaml
-@@ -0,0 +1,127 @@
+@@ -0,0 +1,137 @@
 +apiVersion: rbac.authorization.k8s.io/v1
 +kind: Role
 +metadata:
@@ -23,7 +23,7 @@ index 0000000..b3a1630
 +kind: RoleBinding
 +metadata:
 +  annotations:
-+    config.kubernetes.io/path: mynamespace/role_moria-ocp-pipeline.yaml
++    config.kubernetes.io/path: mynamespace/rolebinding_moria-ocp-pipeline.yaml
 +  name: moria-ocp-pipeline
 +  namespace: mynamespace
 +roleRef:
@@ -41,7 +41,7 @@ index 0000000..b3a1630
 +kind: Secret
 +metadata:
 +  annotations:
-+    config.kubernetes.io/path: mynamespace/role_moria-ocp-pipeline.yaml
++    config.kubernetes.io/path: secret_moria-config.yaml
 +  labels:
 +    chart: ocp-pipeline-0.1.16
 +    heritage: Helm
@@ -55,7 +55,7 @@ index 0000000..b3a1630
 +kind: Secret
 +metadata:
 +  annotations:
-+    config.kubernetes.io/path: mynamespace/role_moria-ocp-pipeline.yaml
++    config.kubernetes.io/path: secret_moria-git-webhook-secret.yaml
 +  labels:
 +    chart: ocp-pipeline-0.1.16
 +    heritage: Helm
@@ -67,7 +67,7 @@ index 0000000..b3a1630
 +kind: BuildConfig
 +metadata:
 +  annotations:
-+    config.kubernetes.io/path: mynamespace/role_moria-ocp-pipeline.yaml
++    config.kubernetes.io/path: buildconfig_moria-ocp-pipeline-deploy.yaml
 +  labels:
 +    app: ocp-pipeline
 +    chart: ocp-pipeline-0.1.16

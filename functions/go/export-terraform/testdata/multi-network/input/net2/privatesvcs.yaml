@@ -18,7 +18,7 @@ metadata:
   name: prj-network2 # kpt-set: ${project-id}
   namespace: projects
   annotations:
-    cnrm.cloud.google.com/blueprint: 'krm-fn'
+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
 spec:
   name: prj-network2 # kpt-set: ${project-id}
   billingAccountRef:

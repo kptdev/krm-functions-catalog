@@ -24,7 +24,7 @@ index 0000000..f7d0445
 +  name: dev.team-2
 +  annotations:
 +    config.kubernetes.io/depends-on: resourcemanager.cnrm.cloud.google.com/namespaces/hierarchy/Folder/dev
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
++    cnrm.cloud.google.com/blueprint: 'kpt-fn'
 +  namespace: hierarchy
 +spec:
 +  displayName: Team_2
@@ -42,7 +42,7 @@ index 0000000..dc01db4
 +  name: dev.team-one
 +  annotations:
 +    config.kubernetes.io/depends-on: resourcemanager.cnrm.cloud.google.com/namespaces/hierarchy/Folder/dev
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
++    cnrm.cloud.google.com/blueprint: 'kpt-fn'
 +  namespace: hierarchy
 +spec:
 +  displayName: Team "One"
@@ -59,7 +59,7 @@ index 0000000..824137e
 +metadata:
 +  name: dev
 +  annotations:
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
++    cnrm.cloud.google.com/blueprint: 'kpt-fn'
 +  namespace: hierarchy
 +spec:
 +  displayName: Dev
@@ -77,7 +77,7 @@ index 0000000..acb1f59
 +  name: foo.bar
 +  annotations:
 +    config.kubernetes.io/depends-on: resourcemanager.cnrm.cloud.google.com/namespaces/hierarchy/Folder/foo
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
++    cnrm.cloud.google.com/blueprint: 'kpt-fn'
 +  namespace: hierarchy
 +spec:
 +  displayName: bar
@@ -94,7 +94,7 @@ index 0000000..a2c15b6
 +metadata:
 +  name: foo
 +  annotations:
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
++    cnrm.cloud.google.com/blueprint: 'kpt-fn'
 +  namespace: hierarchy
 +spec:
 +  displayName: Foo
@@ -112,7 +112,7 @@ index 0000000..f609d94
 +  name: prod.team-2
 +  annotations:
 +    config.kubernetes.io/depends-on: resourcemanager.cnrm.cloud.google.com/namespaces/hierarchy/Folder/prod
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
++    cnrm.cloud.google.com/blueprint: 'kpt-fn'
 +  namespace: hierarchy
 +spec:
 +  displayName: Team_2
@@ -130,7 +130,7 @@ index 0000000..26a4734
 +  name: prod.team-one
 +  annotations:
 +    config.kubernetes.io/depends-on: resourcemanager.cnrm.cloud.google.com/namespaces/hierarchy/Folder/prod
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
++    cnrm.cloud.google.com/blueprint: 'kpt-fn'
 +  namespace: hierarchy
 +spec:
 +  displayName: Team "One"
@@ -147,7 +147,7 @@ index 0000000..2d98124
 +metadata:
 +  name: prod
 +  annotations:
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
++    cnrm.cloud.google.com/blueprint: 'kpt-fn'
 +  namespace: hierarchy
 +spec:
 +  displayName: Prod
