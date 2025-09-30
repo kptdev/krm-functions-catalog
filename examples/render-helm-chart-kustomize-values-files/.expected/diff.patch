@@ -3,7 +3,8 @@ new file mode 100644
 index 0000000..1c68b91
 --- /dev/null
 +++ b/resources.yaml
-+1,106 @@+apiVersion: v1
+@@ -0,0 +1,106 @@
++apiVersion: v1
 +data:
 +  config: eyJleGFtcGxlIjoidmFsdWUifQ==
 +kind: Secret
