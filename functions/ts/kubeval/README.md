@@ -66,6 +66,6 @@ Config Connector resources).
 If you want to convert OpenAPI to json schema, you can use
 [openapi2jsonschema](https://github.com/instrumenta/openapi2jsonschema).
 
-[`kubeval`]:https://kubeval.com
+[`kubeval`]:https://github.com/instrumenta/kubeval
 
 [json schemas]:https://json-schema.org
