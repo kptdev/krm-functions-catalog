@@ -39,8 +39,8 @@ generators:
       releaseName: moria
       values:
         valuesFiles:
-          - https://raw.githubusercontent.com/natasha41575/kpt-functions-catalog/a9c9cd765a05f7a7fb6923dbde4651b62c9c229c/examples/render-helm-chart-kustomize-values-files/file1.yaml
-          - https://raw.githubusercontent.com/natasha41575/kpt-functions-catalog/a9c9cd765a05f7a7fb6923dbde4651b62c9c229c/examples/render-helm-chart-kustomize-values-files/file2.yaml
+          - https://raw.githubusercontent.com/natasha41575/krm-functions-catalog/a9c9cd765a05f7a7fb6923dbde4651b62c9c229c/examples/render-helm-chart-kustomize-values-files/file1.yaml
+          - https://raw.githubusercontent.com/natasha41575/krm-functions-catalog/a9c9cd765a05f7a7fb6923dbde4651b62c9c229c/examples/render-helm-chart-kustomize-values-files/file2.yaml
 ```
 
 Then, to build the kustomization with kustomize v4:
@@ -56,8 +56,8 @@ If you mount them into some place other than under `/tmp`, you may get some perm
 
 You can download the example remote files to your local directory like so:
 ```shell
-curl https://raw.githubusercontent.com/natasha41575/kpt-functions-catalog/a9c9cd765a05f7a7fb6923dbde4651b62c9c229c/examples/render-helm-chart-kustomize-values-files/file1.yaml > file1.yaml
-curl https://raw.githubusercontent.com/natasha41575/kpt-functions-catalog/a9c9cd765a05f7a7fb6923dbde4651b62c9c229c/examples/render-helm-chart-kustomize-values-files/file2.yaml > file2.yaml
+curl https://raw.githubusercontent.com/natasha41575/krm-functions-catalog/a9c9cd765a05f7a7fb6923dbde4651b62c9c229c/examples/render-helm-chart-kustomize-values-files/file1.yaml > file1.yaml
+curl https://raw.githubusercontent.com/natasha41575/krm-functions-catalog/a9c9cd765a05f7a7fb6923dbde4651b62c9c229c/examples/render-helm-chart-kustomize-values-files/file2.yaml > file2.yaml
 ```
 
 Your kustomization file with the local values files should look like this:

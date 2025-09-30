@@ -10,7 +10,7 @@ jobs:
   verify-ci:
     runs-on: ubuntu-latest
     env:
-      GOPATH: /home/runner/work/kpt-functions-catalog/functions/go
+      GOPATH: /home/runner/work/krm-functions-catalog/functions/go
       GO111MODULE: on
     steps:
     - uses: actions/checkout@v4

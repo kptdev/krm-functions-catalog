@@ -1,4 +1,4 @@
-# Contributing to kpt-functions-catalog
+# Contributing to krm-functions-catalog
 
 We'd love to accept your contributions to this project. There are just a few
 small guidelines you need to follow.

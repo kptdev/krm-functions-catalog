@@ -21,7 +21,7 @@ $ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/sourc
 If you are in Linux, please run the following to build the binary.
 ```shell
 git clone git@github.com:kptdev/krm-functions-catalog.git
-cd kpt-functions-catalog/functions/go/source-gcloud-config
+cd krm-functions-catalog/functions/go/source-gcloud-config
 go build -o ssource-gcloud-config
 ```
 

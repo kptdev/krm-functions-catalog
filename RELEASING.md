@@ -43,7 +43,7 @@ For example `set-namespace/v0.3`, `kubeval/v0.1`, etc.
 > git branch -D ${RELEASE_BRANCH}
 ```
 3. Fetch the upstream repository
-	Your `upstream` repo should point to the official kpt-functions-catalog. Verify your git remote is set as below
+	Your `upstream` repo should point to the official krm-functions-catalog. Verify your git remote is set as below
 ```shell
 > git remote -v | grep upstream
 upstream	git@github.com:kptdev/krm-functions-catalog.git (fetch)

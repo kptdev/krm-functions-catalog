@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "kpt-functions-catalog",
+    "site": "krm-functions-catalog",
     "public": ".",
     "ignore": [
       "firebase.json",

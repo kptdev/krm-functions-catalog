@@ -36,7 +36,7 @@ jobs:
   go-unit-test-ci:
     runs-on: ubuntu-latest
     env:
-      GOPATH: /home/runner/work/kpt-functions-catalog/functions/go
+      GOPATH: /home/runner/work/krm-functions-catalog/functions/go
       GO111MODULE: on
     steps:
       - name: Set up Go 1.24.3
@@ -60,7 +60,7 @@ jobs:
         node-version: [18.x]
     runs-on: ${{ matrix.platform }}
     env:
-      GOPATH: /home/runner/work/kpt-functions-catalog/functions/go
+      GOPATH: /home/runner/work/krm-functions-catalog/functions/go
       GO111MODULE: on
     steps:
       - uses: actions/checkout@v4
