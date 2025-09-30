@@ -18,7 +18,7 @@ metadata: # kpt-merge: networking/network-name
   namespace: config-control # kpt-set: ${namespace}
   annotations:
     cnrm.cloud.google.com/project-id: prj-network1 # kpt-set: ${project-id}
-    cnrm.cloud.google.com/blueprint: 'kpt-fn'
+    cnrm.cloud.google.com/blueprint: 'krm-fn'
 spec:
   autoCreateSubnetworks: false
   deleteDefaultRoutesOnCreate: false

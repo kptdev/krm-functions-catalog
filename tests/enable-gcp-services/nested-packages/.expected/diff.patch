@@ -10,7 +10,7 @@ index 0000000..14cfd13
 +  name: bar-service-cloudbuild
 +  annotations:
 +    blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/bar-service'
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  resourceID: cloudbuild.googleapis.com
 +  projectRef:
@@ -27,7 +27,7 @@ index 0000000..fed5ef5
 +  name: foo-service-compute
 +  annotations:
 +    blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/foo-service'
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  resourceID: compute.googleapis.com
 +  projectRef:
@@ -44,7 +44,7 @@ index 0000000..160a34c
 +  name: foo-service-redis
 +  annotations:
 +    blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/foo-service'
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  resourceID: redis.googleapis.com
 +  projectRef:
@@ -61,7 +61,7 @@ index 0000000..dfcf6e3
 +  name: foo-service-storage
 +  annotations:
 +    blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/foo-service'
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  resourceID: storage.googleapis.com
 +  projectRef:
@@ -78,7 +78,7 @@ index 0000000..6635edf
 +  name: proj1-service-compute
 +  annotations:
 +    blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/proj1-service'
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  resourceID: compute.googleapis.com
 +  projectRef:
@@ -95,7 +95,7 @@ index 0000000..888327c
 +  name: proj1-service-redis
 +  annotations:
 +    blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/proj1-service'
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  resourceID: redis.googleapis.com
 +  projectRef:

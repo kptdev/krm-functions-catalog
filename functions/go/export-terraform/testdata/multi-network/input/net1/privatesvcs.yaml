@@ -4,7 +4,7 @@ metadata:
   name: ga-vpc-shared-dev-dev-vpc-peering-internal # kpt-set: ga-${network-name}-${env}-vpc-peering-internal
   namespace: config-control # kpt-set: ${namespace}
   annotations:
-    cnrm.cloud.google.com/blueprint: 'kpt-fn-live'
+    cnrm.cloud.google.com/blueprint: 'krm-fn-live'
 spec:
   address: 10.16.64.0 # kpt-set: ${private-ip-cidr}
   addressType: INTERNAL
@@ -20,7 +20,7 @@ metadata:
   name: svc-net-vpc-shared-dev-dev # kpt-set: svc-net-${network-name}-${env}
   namespace: config-control # kpt-set: ${namespace}
   annotations:
-    cnrm.cloud.google.com/blueprint: 'kpt-fn-live'
+    cnrm.cloud.google.com/blueprint: 'krm-fn-live'
 spec:
   networkRef:
     name: vpc-shared-dev # kpt-set: ${network-name}

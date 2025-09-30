@@ -20,7 +20,7 @@ setfacl -Rd -m o::rx site/ 2> /dev/null || chmod -R +a "everyone allow read,exec
 # Set read/execute permissions for existing site files.
 chmod -R o+rx site/
 # Terminate running kpt-function-catalog docker containers and rebuild.
-(docker stop kpt-fn-catalog-doc && docker rm kpt-fn-catalog-doc) || docker build site/ -t kpt-function-catalog:latest
+(docker stop krm-fn-catalog-doc && docker rm krm-fn-catalog-doc) || docker build site/ -t kpt-function-catalog:latest
 # Mount the site directory as the default content for the docker container.
-docker run -v "$(pwd)"/site:/usr/share/nginx/html -p 3001:80 -d --name kpt-fn-catalog-doc kpt-function-catalog:latest
-echo "Container kpt-fn-catalog-doc is serving docs at http://127.0.0.1:3001"
+docker run -v "$(pwd)"/site:/usr/share/nginx/html -p 3001:80 -d --name krm-fn-catalog-doc kpt-function-catalog:latest
+echo "Container krm-fn-catalog-doc is serving docs at http://127.0.0.1:3001"

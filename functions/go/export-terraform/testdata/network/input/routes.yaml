@@ -17,7 +17,7 @@ metadata:
   name: rt-vpc-shared-base-1000-all-default-private-api # kpt-set: rt-${network-name}-1000-all-default-private-api
   namespace: config-control # kpt-set: ${namespace}
   annotations:
-    cnrm.cloud.google.com/blueprint: 'kpt-fn-live'
+    cnrm.cloud.google.com/blueprint: 'krm-fn-live'
     cnrm.cloud.google.com/project-id: project-id # kpt-set: ${project-id}
 spec:
   description: "Route through IGW to allow private google api access."
@@ -33,7 +33,7 @@ metadata:
   name: rt-vpc-shared-base-1000-egress-internet-default # kpt-set: rt-${network-name}-1000-egress-internet-default
   namespace: config-control # kpt-set: ${namespace}
   annotations:
-    cnrm.cloud.google.com/blueprint: 'kpt-fn-live'
+    cnrm.cloud.google.com/blueprint: 'krm-fn-live'
     cnrm.cloud.google.com/project-id: project-id # kpt-set: ${project-id}
 spec:
   description: "Tag based route through IGW to access internet"

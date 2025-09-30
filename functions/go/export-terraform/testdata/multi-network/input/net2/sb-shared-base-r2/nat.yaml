@@ -51,7 +51,7 @@ metadata:
   name: ca-vpc-shared-prod-west1-1 # kpt-set: ca-${network-name}-${region}-1
   namespace: config-control # kpt-set: ${namespace}
   annotations:
-    cnrm.cloud.google.com/blueprint: 'kpt-fn-live'
+    cnrm.cloud.google.com/blueprint: 'krm-fn-live'
     cnrm.cloud.google.com/project-id: prj-network2 # kpt-set: ${project-id}
 spec:
   location: us-west1 # kpt-set: ${region}

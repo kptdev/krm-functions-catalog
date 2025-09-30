@@ -24,7 +24,7 @@ index 0000000..16b9af2
 +  name: dev.team-2
 +  annotations:
 +    cnrm.cloud.google.com/folder-ref: dev
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  displayName: Team_2
 diff --git a/folder_dev.team-one.yaml b/folder_dev.team-one.yaml
@@ -39,7 +39,7 @@ index 0000000..d13806c
 +  name: dev.team-one
 +  annotations:
 +    cnrm.cloud.google.com/folder-ref: dev
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  displayName: Team "One"
 diff --git a/folder_dev.yaml b/folder_dev.yaml
@@ -54,7 +54,7 @@ index 0000000..b1d19f5
 +  name: dev
 +  annotations:
 +    cnrm.cloud.google.com/organization-id: test-organization
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  displayName: Dev
 diff --git a/folder_prod.team-2.yaml b/folder_prod.team-2.yaml
@@ -69,7 +69,7 @@ index 0000000..8815462
 +  name: prod.team-2
 +  annotations:
 +    cnrm.cloud.google.com/folder-ref: prod
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  displayName: Team_2
 diff --git a/folder_prod.team-one.yaml b/folder_prod.team-one.yaml
@@ -84,7 +84,7 @@ index 0000000..17887fa
 +  name: prod.team-one
 +  annotations:
 +    cnrm.cloud.google.com/folder-ref: prod
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  displayName: Team "One"
 diff --git a/folder_prod.yaml b/folder_prod.yaml
@@ -99,6 +99,6 @@ index 0000000..c7e3f01
 +  name: prod
 +  annotations:
 +    cnrm.cloud.google.com/organization-id: test-organization
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  displayName: Prod
