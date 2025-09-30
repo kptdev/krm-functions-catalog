@@ -28,8 +28,6 @@ FUNCTION_TESTS := $(patsubst %,%-TEST,$(FUNCTIONS))
 # Targets for generating all functions docs
 FUNCTION_GENERATE_DOCS := $(patsubst %,%-GENERATE,$(FUNCTIONS))
 
-FUNCTION_CHECKLICENSES := $(patsubst %,%-CHECKLICENSES,$(FUNCTIONS))
-# Targets to build functions
 FUNCTION_BUILDS := $(patsubst %,%-BUILD,$(FUNCTIONS))
 # Targets to push images
 FUNCTION_PUSH := $(patsubst %,%-PUSH,$(FUNCTIONS))
@@ -78,32 +76,13 @@ push: $(FUNCTION_PUSH) ## Push images to registry. WARN: This operation should o
 $(FUNCTION_PUSH):
 	$(MAKE) CURRENT_FUNCTION=$(subst -PUSH,,$@) TAG=$(TAG) DEFAULT_CR=$(DEFAULT_CONTRIB_CR) func-push
 
-.PHONY: check-licenses
-check-licenses: install-go-licenses $(FUNCTION_CHECKLICENSES)
-
-add-licenses:
-	@echo Update license in path: contrib/functions/go
-	GOBIN=$(GOBIN) ../../../hack/update-license.sh
-
-.PHONY: $(FUNCTION_CHECKLICENSES)
-$(FUNCTION_CHECKLICENSES):
-	$(MAKE) CURRENT_FUNCTION=$(subst -CHECKLICENSES,,$@) func-check-licenses
-
-install-go-licenses:
-ifeq (, $(shell which go-licenses))
-	../../../scripts/install-go-licenses.sh
-GO_LICENSES=$(GOPATH)/bin/go-licenses
-else
-GO_LICENSES=$(shell which go-licenses)
-endif
-
 install-mdtogo:
 	go install github.com/kptdev/kpt/mdtogo@main
 
 # Recipes for individual function
 .PHONY: func-fix func-vet func-fmt func-test func-lint \
-	func-build func-push func-verify func-check-licenses docs-generate
-func-verify: docs-generate func-fix func-vet func-fmt func-test func-lint func-check-licenses
+	func-build func-push func-verify docs-generate
+func-verify: docs-generate func-fix func-vet func-fmt func-test func-lint
 
 func-fix:
 	cd $(CURRENT_FUNCTION) && go fix ./...
@@ -121,10 +100,6 @@ func-test:
 
 func-vet:
 	cd $(CURRENT_FUNCTION) && go vet ./...
-
-func-check-licenses: install-go-licenses
-	@echo Checking licenses for $(CURRENT_FUNCTION)...
-	cd $(CURRENT_FUNCTION) && $(GO_LICENSES) check .
 
 func-build: func-verify
 	@echo Building image for $(CURRENT_FUNCTION)...

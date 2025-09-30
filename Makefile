@@ -48,14 +48,6 @@ GO_MOD_DIRS = $(shell find . -name 'go.mod' -exec sh -c 'echo \"$$(dirname "{}")
 tidy:
 	@for f in $(GO_MOD_DIRS); do (cd $$f; echo "Tidying $$f"; go mod tidy) || exit 1; done
 
-check-licenses:
-	cd functions/go && $(MAKE) check-licenses
-	cd contrib/functions/go && $(MAKE) check-licenses
-
-add-licenses:
-	cd functions/go && $(MAKE) add-licenses
-	cd contrib/functions/go && $(MAKE) add-licenses
-
 verify-docs:
 	go install github.com/monopole/mdrip@v1.0.2
 	(cd scripts/patch_reader/ && go build -o patch_reader .)
