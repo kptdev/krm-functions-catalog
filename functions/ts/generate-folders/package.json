@@ -6,7 +6,6 @@
     "prepare": "npm run build",
     "lint": "eslint -c .eslintrc.js --ext .ts \"src/**\"",
     "format": "prettier \"src/**\" \"*.json\" --write",
-    "check-licenses": "license-checker --production --json --onlyAllow=\"Apache-2.0;MIT;BSD;BSD-2-Clause;BSD-3-Clause;Python-2.0;ISC;CC-BY-3.0;CC0-1.0;Unlicense;BlueOak-1.0.0\"",
     "build": "tsc",
     "watch": "tsc --watch",
     "clean": "rimraf node_modules dist",

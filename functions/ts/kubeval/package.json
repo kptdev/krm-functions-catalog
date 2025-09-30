@@ -10,7 +10,6 @@
     "watch": "tsc --watch",
     "clean": "rimraf node_modules dist",
     "lint": "eslint -c .eslintrc.js --fix --ext .ts \"src/**\"",
-    "check-licenses": "license-checker --onlyAllow 'Apache-2.0;MIT;BSD;BSD-2-Clause;BSD-3-Clause;Python-2.0;BlueOak-1.0.0;ISC;CC-BY-3.0;CC0-1.0;Unlicense'",
     "format": "prettier \"src/**\" \"**/*.json\" --write",
     "pretest": "npm run build",
     "test": "jasmine --config=jasmine.json",

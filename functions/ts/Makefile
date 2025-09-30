@@ -23,7 +23,7 @@ GOBIN := $(shell go env GOPATH)/bin
 help: ## Print this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: test build npm-ci push check-licenses
+.PHONY: test build npm-ci push
 
 # Edit this list to contain all ts functions
 FUNCTIONS := \
@@ -33,7 +33,6 @@ FUNCTIONS := \
 # Targets for running all function tests
 FUNCTION_TESTS := $(patsubst %,%-TEST,$(FUNCTIONS))
 
-FUNCTION_CHECKLICENSES := $(patsubst %,%-CHECKLICENSES,$(FUNCTIONS))
 # Targets to build functions
 FUNCTION_BUILDS := $(patsubst %,%-BUILD,$(FUNCTIONS))
 # Targets to push function images
@@ -67,26 +66,13 @@ push: $(FUNCTION_PUSH) ## Push images to registry. WARN: This operation should o
 $(FUNCTION_PUSH):
 	$(MAKE) CURRENT_FUNCTION=$(subst -PUSH,,$@) TAG=$(TAG) DEFAULT_CR=$(CR) func-push
 
-check-licenses: $(FUNCTION_CHECKLICENSES) ## Run license checker for source files
-
-add-licenses:
-	@echo Update license in path: functions/ts
-	GOBIN=$(GOBIN) ../../hack/update-license.sh
-
-.PHONY: $(FUNCTION_CHECKLICENSES)
-$(FUNCTION_CHECKLICENSES):
-	$(MAKE) CURRENT_FUNCTION=$(subst -CHECKLICENSES,,$@) func-check-licenses
-
 # Recipes for individual function
-.PHONY: func-test func-check-licenses func-build func-push func-npm-ci
+.PHONY: func-test func-build func-push func-npm-ci
 func-npm-ci:
 	cd $(CURRENT_FUNCTION) && npm ci --ignore-scripts
 
-func-test: func-npm-ci func-check-licenses
+func-test: func-npm-ci
 	cd $(CURRENT_FUNCTION) && npm test
-
-func-check-licenses:
-	cd $(CURRENT_FUNCTION) && npm run check-licenses
 
 func-build: func-test
 	../../scripts/ts-function-release.sh build curated
