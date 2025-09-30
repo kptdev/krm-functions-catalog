@@ -1,0 +1,33 @@
+apiVersion: config.kubernetes.io/v1
+kind: ResourceList
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: base-app
+    namespace: example
+    labels:
+      app.kubernetes.io/name: base-app
+  spec:
+    selector:
+      matchLabels:
+        test: abstract-base-app
+        app.kubernetes.io/name: base-app
+    template:
+      metadata:
+        labels:
+          test: abstract-base-app
+          app.kubernetes.io/name: base-app
+- apiVersion: kpt.dev/v1
+  kind: Kptfile
+  metadata:
+    name: base-app
+    annotations:
+      config.kubernetes.io/local-config: "true"
+  info:
+    description: sample description
+results:
+- message: '`FunctionConfig` is not given'
+  severity: info
+- message: set 3 labels in total
+  severity: info

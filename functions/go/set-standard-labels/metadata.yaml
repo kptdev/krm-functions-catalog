@@ -1,0 +1,13 @@
+image: gcr.io/kpt-fn/set-standard-labels
+description: Add Kubernetes recommended labels to Kpt package resources.
+tags:
+  - mutator
+  - validator
+sourceURL: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/functions/go/set-standard-labels
+examplePackageURLs:
+  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/set-stanrdard-labels-deployment
+  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/set-stanrdard-labels-blueprint
+  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/set-stanrdard-labels-manual-force
+emails:
+  - kpt-team@google.com
+license: Apache-2.0
