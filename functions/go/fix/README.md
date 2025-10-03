@@ -118,11 +118,11 @@ pipeline:
 [validators]: https://kpt.dev/book/04-using-functions/02-declaring-and-running-functions-in-a-package
 [openapi validations]: https://googlecontainertools.github.io/kpt/guides/producer/setters/#openapi-validations
 [required setters]: https://googlecontainertools.github.io/kpt/guides/producer/setters/#required-setters
-[starlark function]: https://catalog.kpt.dev/starlark/v0.1/
+[starlark function]: https://catalog.kpt.dev/starlark/v0.5/
 [starlark runtime]: https://googlecontainertools.github.io/kpt/guides/producer/functions/starlark/
 [auto-setters]: https://googlecontainertools.github.io/kpt/concepts/setters/#auto-setters
 [inventory object]: https://googlecontainertools.github.io/kpt/reference/live/alpha/#what-is-an-inventory-object
 [live migrate]: https://googlecontainertools.github.io/kpt/reference/live/alpha/
-[configpath]: https://kpt.dev/book/04-using-functions/01-declarative-function-execution?id=configpath
-[declared in pipeline]: https://kpt.dev/book/04-using-functions/01-declarative-function-execution?id=_41-declarative-function-execution
-[Configmap]: https://kpt.dev/book/04-using-functions/01-declarative-function-execution?id=configmap
+[configpath]: https://kpt.dev/book/04-using-functions/#configpath
+[declared in pipeline]: https://kpt.dev/book/04-using-functions/#declarative-function-execution
+[Configmap]: https://kpt.dev/book/04-using-functions/#configmap

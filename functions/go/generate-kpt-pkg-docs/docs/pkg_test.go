@@ -1,10 +1,11 @@
 package docs
 
 import (
+	"strings"
 	"testing"
 
-	kptfilev1 "github.com/GoogleContainerTools/kpt-functions-sdk/go/pkg/api/kptfile/v1"
-	kptutil "github.com/GoogleContainerTools/kpt-functions-sdk/go/pkg/api/util"
+	kptfilev1 "github.com/kptdev/kpt/pkg/api/kptfile/v1"
+	"github.com/kptdev/kpt/pkg/kptfile/kptfileutil"
 	"github.com/stretchr/testify/require"
 )
 
@@ -89,7 +90,7 @@ pipeline:
 func getKfFromStr(t *testing.T, k string) *kptfilev1.KptFile {
 	t.Helper()
 	require := require.New(t)
-	kf, err := kptutil.DecodeKptfile(k)
+	kf, err := kptfileutil.DecodeKptfile(strings.NewReader(k))
 	require.NoError(err)
 	return kf
 }

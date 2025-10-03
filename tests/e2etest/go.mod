@@ -2,7 +2,7 @@ module github.com/kptdev/krm-functions-catalog/tests/e2etest
 
 go 1.24.3
 
-require github.com/kptdev/kpt v1.0.0-beta.58
+require github.com/kptdev/kpt v1.0.0-beta.58.0.20251002154110-c319abece00e
 
 replace cloud.google.com/go => cloud.google.com/go v0.27.0
 

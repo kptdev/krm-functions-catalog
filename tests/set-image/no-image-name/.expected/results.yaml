@@ -5,10 +5,10 @@ metadata:
 exitCode: 1
 items:
   - image: ghcr.io/kptdev/krm-functions-catalog/set-image:latest
-    stderr: 'failed to evaluate function: function is terminated: must specify `name`'
+    stderr: 'failed to evaluate function: error: function failure'
     exitCode: 1
     results:
-      - message: must specify `name`
+      - message: 'invalid FunctionConfig: must specify `name`'
         severity: error
-      - message: 'function is terminated: must specify `name`'
-        severity: error
+      - message: 'summary: updated a total of 0 image(s)'
+        severity: info

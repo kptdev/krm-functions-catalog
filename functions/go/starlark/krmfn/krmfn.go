@@ -1,7 +1,7 @@
 package krmfn
 
 import (
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"go.starlark.net/starlark"
 	"go.starlark.net/starlarkstruct"
 	"k8s.io/apimachinery/pkg/runtime/schema"

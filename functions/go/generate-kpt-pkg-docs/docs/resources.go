@@ -25,7 +25,7 @@ func findResourcePath(r *yaml.RNode) (string, error) {
 		return path, nil
 	}
 	res := resid.NewResIdWithNamespace(resid.GvkFromNode(r), r.GetName(), r.GetNamespace())
-	return "", fmt.Errorf("unable find resource path for %s", res.GvknString())
+	return "", fmt.Errorf("unable find resource path for %s", res.Gvk.String())
 }
 
 // getResourceDocsLink returns documentation link for a given GVK

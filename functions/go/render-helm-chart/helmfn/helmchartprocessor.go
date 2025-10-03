@@ -18,8 +18,8 @@ package helmfn
 import (
 	"fmt"
 
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	"github.com/kptdev/krm-functions-catalog/functions/go/render-helm-chart/third_party/sigs.k8s.io/kustomize/api/builtins"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 )
 

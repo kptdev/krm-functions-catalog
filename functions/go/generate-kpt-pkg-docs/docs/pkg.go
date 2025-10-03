@@ -2,9 +2,10 @@ package docs
 
 import (
 	"fmt"
+	"strings"
 
-	kptfilev1 "github.com/GoogleContainerTools/kpt-functions-sdk/go/pkg/api/kptfile/v1"
-	kptutil "github.com/GoogleContainerTools/kpt-functions-sdk/go/pkg/api/util"
+	kptfilev1 "github.com/kptdev/kpt/pkg/api/kptfile/v1"
+	"github.com/kptdev/kpt/pkg/kptfile/kptfileutil"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
@@ -14,12 +15,12 @@ const bpTitleAnnotation = "blueprints.cloud.google.com/title"
 func findPkgs(nodes []*yaml.RNode) (map[string]*kptfilev1.KptFile, error) {
 	kptfiles := map[string]*kptfilev1.KptFile{}
 	for _, node := range nodes {
-		if node.GetKind() == kptfilev1.KptFileKind {
+		if node.GetKind() == kptfilev1.TypeMeta.Kind {
 			s, err := node.String()
 			if err != nil {
 				return nil, err
 			}
-			kf, err := kptutil.DecodeKptfile(s)
+			kf, err := kptfileutil.DecodeKptfile(strings.NewReader(s))
 			if err != nil {
 				return nil, fmt.Errorf("failed to decode Kptfile: %w", err)
 			}

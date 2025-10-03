@@ -68545,7 +68545,7 @@
       },
       "title": "Function specifies a KRM function.",
       "type": "object",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.Git": {
       "properties": {
@@ -68567,7 +68567,7 @@
       },
       "title": "Git is the user-specified locator for a package on Git.",
       "type": "object",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.GitLock": {
       "properties": {
@@ -68594,7 +68594,7 @@
       },
       "title": "GitLock is the resolved locator for a package on Git.",
       "type": "object",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.Inventory": {
       "description": "All of the the parameters are required if any are set.",
@@ -68631,7 +68631,7 @@
       },
       "title": "Inventory encapsulates the parameters for the inventory resource applied to a cluster.",
       "type": "object",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.NameMeta": {
       "properties": {
@@ -68648,7 +68648,7 @@
       },
       "title": "NameMeta contains name information.",
       "type": "object",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.ObjectMeta": {
       "description": "ObjectMeta contains metadata about a Resource",
@@ -68681,12 +68681,12 @@
         }
       },
       "type": "object",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.OriginType": {
       "title": "OriginType defines the type of origin for a package.",
       "type": "string",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.PackageInfo": {
       "description": "These fields are not consumed by any functionality in kpt and are simply passed through.\nNote that like any other KRM resource, humans and automation can also use `metadata.labels` and\n`metadata.annotations` as the extension mechanism.",
@@ -68735,7 +68735,7 @@
       },
       "title": "PackageInfo contains optional information about the package such as license, documentation, etc.",
       "type": "object",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.Pipeline": {
       "properties": {
@@ -68758,7 +68758,7 @@
       },
       "title": "Pipeline declares a pipeline of functions used to mutate or validate resources.",
       "type": "object",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.ResourceMeta": {
       "properties": {
@@ -68778,7 +68778,7 @@
       },
       "title": "ResourceMeta contains the metadata for a both Resource Type and Resource.",
       "type": "object",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.Selector": {
       "description": "Selector specifies the selection criteria\nplease update IsEmpty method if more properties are added",
@@ -68821,7 +68821,7 @@
         }
       },
       "type": "object",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.TypeMeta": {
       "description": "TypeMeta partially copies apimachinery/pkg/apis/meta/v1.TypeMeta\nNo need for a direct dependence; the fields are stable.",
@@ -68838,12 +68838,12 @@
         }
       },
       "type": "object",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.UpdateStrategyType": {
       "title": "UpdateStrategyType defines the strategy for updating a package from upstream.",
       "type": "string",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.Upstream": {
       "properties": {
@@ -68859,7 +68859,7 @@
       },
       "title": "Upstream is a user-specified upstream locator for a package.",
       "type": "object",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.UpstreamLock": {
       "properties": {
@@ -68872,7 +68872,7 @@
       },
       "title": "UpstreamLock is a resolved locator for the last fetch of the package.",
       "type": "object",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     },
     "dev.kpt.v1.kptfile": {
       "properties": {
@@ -68917,7 +68917,7 @@
       "title": "KptFile contains information about a package managed with kpt.",
       "type": "object",
       "x-go-name": "KptFile",
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
     }
   }
 }

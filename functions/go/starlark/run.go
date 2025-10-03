@@ -18,8 +18,8 @@
 package main
 
 import (
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	"github.com/kptdev/krm-functions-catalog/functions/go/starlark/starlark"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
 func run() error {

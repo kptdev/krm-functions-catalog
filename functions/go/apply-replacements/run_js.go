@@ -20,8 +20,8 @@ package main
 import (
 	"syscall/js"
 
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	"github.com/kptdev/krm-functions-catalog/functions/go/apply-replacements/replacements"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
 func run() error {

@@ -18,8 +18,8 @@ package main
 import (
 	"os"
 
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	"github.com/kptdev/krm-functions-catalog/functions/go/render-helm-chart/helmfn"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
 func main() {

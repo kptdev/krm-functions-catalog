@@ -1,7 +1,7 @@
 package custom
 
 import (
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"sigs.k8s.io/kustomize/api/filters/imagetag"
 	"sigs.k8s.io/kustomize/api/types"
 	"sigs.k8s.io/kustomize/kyaml/filtersutil"
@@ -9,14 +9,14 @@ import (
 )
 
 // SetAdditionalFieldSpec updates the image in user given fieldPaths. To be deprecated in around a year, to avoid possible invalid fieldPaths.
-func SetAdditionalFieldSpec(img *fn.SubObject, objects fn.KubeObjects, addImgFields fn.SliceSubObjects, ctx *fn.Context, count *int) {
+func SetAdditionalFieldSpec(img *fn.SubObject, objects fn.KubeObjects, addImgFields fn.SliceSubObjects, res *fn.Results, count *int) {
 	image := NewImageAdaptor(img)
 	additionalImageFields := NewFieldSpecSliceAdaptor(addImgFields)
 
 	for i, obj := range objects {
 		objRN, err := yaml.Parse(obj.String())
 		if err != nil {
-			ctx.ResultErr(err.Error(), obj)
+			res.Errorf(err.Error(), obj)
 		}
 		filter := imagetag.Filter{
 			ImageTag: image,
@@ -25,11 +25,11 @@ func SetAdditionalFieldSpec(img *fn.SubObject, objects fn.KubeObjects, addImgFie
 		filter.WithMutationTracker(logResultCallback(count))
 		err = filtersutil.ApplyToJSON(filter, objRN)
 		if err != nil {
-			ctx.ResultErr(err.Error(), obj)
+			res.Errorf(err.Error(), obj)
 		}
 		newObj, err := fn.ParseKubeObject([]byte(objRN.MustString()))
 		if err != nil {
-			ctx.ResultErr(err.Error(), obj)
+			res.Errorf(err.Error(), obj)
 		}
 		objects[i] = newObj
 	}
@@ -44,7 +44,8 @@ func logResultCallback(count *int) func(key, value, tag string, node *yaml.RNode
 // NewImageAdaptor transforms the image struct inside transformer to the struct inside kustomize
 func NewImageAdaptor(imgObj *fn.SubObject) types.Image {
 	imgPtr := &types.Image{}
-	imgObj.AsOrDie(imgPtr)
+	// nolint
+	imgObj.As(imgPtr)
 	return *imgPtr
 }
 
@@ -53,7 +54,8 @@ func NewFieldSpecSliceAdaptor(addImgFields fn.SliceSubObjects) types.FsSlice {
 	additionalImageFields := types.FsSlice{}
 	for _, v := range addImgFields {
 		fieldPtr := &types.FieldSpec{}
-		v.AsOrDie(fieldPtr)
+		// nolint
+		v.As(fieldPtr)
 		additionalImageFields = append(additionalImageFields, *fieldPtr)
 	}
 	return additionalImageFields

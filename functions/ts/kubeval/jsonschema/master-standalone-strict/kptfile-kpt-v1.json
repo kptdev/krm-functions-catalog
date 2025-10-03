@@ -53,7 +53,7 @@
       },
       "title": "PackageInfo contains optional information about the package such as license, documentation, etc.",
       "type": ["object", "null"],
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
       "additionalProperties": false
     },
     "inventory": {
@@ -91,7 +91,7 @@
       },
       "title": "Inventory encapsulates the parameters for the inventory resource applied to a cluster.",
       "type": ["object", "null"],
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
       "additionalProperties": false
     },
     "kind": {
@@ -131,7 +131,7 @@
         }
       },
       "type": ["object", "null"],
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
       "additionalProperties": false
     },
     "pipeline": {
@@ -196,7 +196,7 @@
                     }
                   },
                   "type": ["object", "null"],
-                  "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+                  "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
                   "additionalProperties": false
                 },
                 "type": ["array", "null"],
@@ -260,7 +260,7 @@
                     }
                   },
                   "type": ["object", "null"],
-                  "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+                  "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
                   "additionalProperties": false
                 },
                 "type": ["array", "null"],
@@ -269,7 +269,7 @@
             },
             "title": "Function specifies a KRM function.",
             "type": ["object", "null"],
-            "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+            "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
             "additionalProperties": false
           },
           "type": ["array", "null"],
@@ -335,7 +335,7 @@
                     }
                   },
                   "type": ["object", "null"],
-                  "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+                  "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
                   "additionalProperties": false
                 },
                 "type": ["array", "null"],
@@ -399,7 +399,7 @@
                     }
                   },
                   "type": ["object", "null"],
-                  "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+                  "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
                   "additionalProperties": false
                 },
                 "type": ["array", "null"],
@@ -408,7 +408,7 @@
             },
             "title": "Function specifies a KRM function.",
             "type": ["object", "null"],
-            "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+            "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
             "additionalProperties": false
           },
           "type": ["array", "null"],
@@ -417,7 +417,7 @@
       },
       "title": "Pipeline declares a pipeline of functions used to mutate or validate resources.",
       "type": ["object", "null"],
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
       "additionalProperties": false
     },
     "upstream": {
@@ -442,23 +442,23 @@
           },
           "title": "Git is the user-specified locator for a package on Git.",
           "type": ["object", "null"],
-          "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+          "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
           "additionalProperties": false
         },
         "type": {
           "title": "OriginType defines the type of origin for a package.",
           "type": ["string", "null"],
-          "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+          "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
         },
         "updateStrategy": {
           "title": "UpdateStrategyType defines the strategy for updating a package from upstream.",
           "type": ["string", "null"],
-          "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+          "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
         }
       },
       "title": "Upstream is a user-specified upstream locator for a package.",
       "type": ["object", "null"],
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
       "additionalProperties": false
     },
     "upstreamLock": {
@@ -488,18 +488,18 @@
           },
           "title": "GitLock is the resolved locator for a package on Git.",
           "type": ["object", "null"],
-          "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+          "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
           "additionalProperties": false
         },
         "type": {
           "title": "OriginType defines the type of origin for a package.",
           "type": ["string", "null"],
-          "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1"
+          "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1"
         }
       },
       "title": "UpstreamLock is a resolved locator for the last fetch of the package.",
       "type": ["object", "null"],
-      "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+      "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
       "additionalProperties": false
     }
   },
@@ -513,7 +513,7 @@
   "title": "KptFile contains information about a package managed with kpt.",
   "type": "object",
   "x-go-name": "KptFile",
-  "x-go-package": "github.com/GoogleContainerTools/kpt-functions-sdk/go/api/kptfile/v1",
+  "x-go-package": "github.com/kptdev/krm-functions-sdk/go/api/kptfile/v1",
   "additionalProperties": false,
   "$schema": "http://json-schema.org/schema#"
 }

@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-gcp-resource-ids/pkg/kpt"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 

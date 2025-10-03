@@ -3,10 +3,10 @@ package transformer
 import (
 	"fmt"
 
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-image/custom"
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-image/third_party/sigs.k8s.io/kustomize/api/image"
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-image/third_party/sigs.k8s.io/kustomize/api/types"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
 // Image contains an image name, a new name, a new tag or digest, which will replace the original name and tag.
@@ -25,6 +25,8 @@ type Image struct {
 	Digest string `json:"digest,omitempty" yaml:"digest,omitempty"`
 }
 
+var _ fn.Runner = &SetImage{}
+
 // SetImage supports the set-image workflow, it uses Config to parse functionConfig, Transform to change the image
 type SetImage struct {
 	// Image is the desired image
@@ -38,35 +40,36 @@ type SetImage struct {
 }
 
 // Run implements the Runner interface that transforms the resource and log the results
-func (t SetImage) Run(ctx *fn.Context, functionConfig *fn.KubeObject, items fn.KubeObjects) {
+func (t *SetImage) Run(_ *fn.Context, fnConfig *fn.KubeObject, items fn.KubeObjects, res *fn.Results) bool {
 	err := t.configDefaultData()
 	if err != nil {
-		ctx.ResultErrAndDie(err.Error(), nil)
+		res.Errorf(err.Error(), nil)
 	}
 	err = t.validateInput()
 	if err != nil {
-		ctx.ResultErrAndDie(err.Error(), nil)
+		res.Errorf("invalid FunctionConfig: %v", err)
 	}
 
 	for _, o := range items {
 		switch o.GetKind() {
 		case "Pod":
 			if err = t.setPodContainers(o); err != nil {
-				ctx.ResultErr(err.Error(), o)
+				res.Errorf(err.Error(), o)
 			}
 		case "Deployment", "StatefulSet", "ReplicaSet", "DaemonSet", "PodTemplate":
 			if err = t.setPodSpecContainers(o); err != nil {
-				ctx.ResultErr(err.Error(), o)
+				res.Errorf(err.Error(), o)
 			}
 		}
 	}
 
 	if t.AdditionalImageFields != nil {
-		custom.SetAdditionalFieldSpec(functionConfig.GetMap("image"), items, functionConfig.GetSlice("additionalImageFields"), ctx, &t.resultCount)
+		custom.SetAdditionalFieldSpec(fnConfig.GetMap("image"), items, fnConfig.GetSlice("additionalImageFields"), res, &t.resultCount)
 	}
 
 	summary := fmt.Sprintf("summary: updated a total of %v image(s)", t.resultCount)
-	ctx.ResultInfo(summary, nil)
+	res.Infof("%s", summary)
+	return res.ExitCode() != 1
 }
 
 // configDefaultData transforms the data from ConfigMap to SetImage struct
@@ -107,7 +110,10 @@ func (t *SetImage) updateContainerImages(pod *fn.SubObject) error {
 	containers = append(containers, pod.GetSlice("containers")...)
 
 	for _, o := range containers {
-		oldValue := o.NestedStringOrDie("image")
+		oldValue, _, err := o.NestedString("image")
+		if err != nil {
+			return err
+		}
 		if !image.IsImageMatched(oldValue, t.Image.Name) {
 			continue
 		}

@@ -11,8 +11,8 @@ import (
 	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 
-	kptfilev1 "github.com/GoogleContainerTools/kpt-functions-sdk/go/pkg/api/kptfile/v1"
-	kptutil "github.com/GoogleContainerTools/kpt-functions-sdk/go/pkg/api/util"
+	kptfilev1 "github.com/kptdev/kpt/pkg/api/kptfile/v1"
+	"github.com/kptdev/kpt/pkg/kptfile/kptfileutil"
 )
 
 var (
@@ -37,12 +37,12 @@ func findSetterNode(nodes []*yaml.RNode, path string) (*yaml.RNode, error) {
 func findKptfiles(nodes []*yaml.RNode) ([]*kptfilev1.KptFile, error) {
 	kptfiles := []*kptfilev1.KptFile{}
 	for _, node := range nodes {
-		if node.GetKind() == kptfilev1.KptFileKind {
+		if node.GetKind() == kptfilev1.TypeMeta.Kind {
 			s, err := node.String()
 			if err != nil {
 				return nil, fmt.Errorf("unable to read Kptfile: %w", err)
 			}
-			kf, err := kptutil.DecodeKptfile(s)
+			kf, err := kptfileutil.DecodeKptfile(strings.NewReader(s))
 			if err != nil {
 				return nil, fmt.Errorf("failed to read Kptfile: %w", err)
 			}

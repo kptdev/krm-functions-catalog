@@ -18,8 +18,8 @@
 package main
 
 import (
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-namespace/transformer"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
 func run() error {

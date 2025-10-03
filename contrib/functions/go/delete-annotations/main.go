@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
 const (
@@ -53,7 +53,7 @@ func processResources(objects []*fn.KubeObject, annotationKeys []string) ([]*fn.
 		}
 
 		for _, annotationKey := range annotationKeys {
-			removed, err := o.Remove("metadata", "annotations", annotationKey)
+			removed, err := o.RemoveNestedField("metadata", "annotations", annotationKey)
 			if err != nil {
 				return nil, err
 			}
@@ -97,10 +97,10 @@ func processResources(objects []*fn.KubeObject, annotationKeys []string) ([]*fn.
 
 // getAnnotationKeys gets the keys to delete from resources from the functionConfig
 func getAnnotationKeys(fc *fn.KubeObject) ([]string, error) {
-	annotationKeysString := fc.GetStringOrDie("data", annotationKeysLiteral)
+	annotationKeysString, found, err := fc.NestedString("data", annotationKeysLiteral)
 
-	if annotationKeysString == "" {
-		return nil, fmt.Errorf("%s was not provided as part of the config or paramters to the function", annotationKeysLiteral)
+	if !found || annotationKeysString == "" {
+		return nil, fmt.Errorf("%s was not provided as part of the config or paramters to the function, %w", annotationKeysLiteral, err)
 	}
 
 	annotationKeys := strings.Split(strings.TrimSpace(annotationKeysString), annotationDelimeter)

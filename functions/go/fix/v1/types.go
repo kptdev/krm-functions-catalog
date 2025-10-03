@@ -9,7 +9,7 @@ import (
 
 // NOTE: Please do NOT import this package in other functions. You can import
 // the one in
-// https://github.com/GoogleContainerTools/kpt-functions-sdk/tree/master/go/pkg/api
+// https://github.com/kptdev/kpt/tree/main/pkg/api/kptfile/v1
 
 const (
 	KptFileName       = "Kptfile"

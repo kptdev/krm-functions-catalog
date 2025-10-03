@@ -20,7 +20,7 @@
 set -eo pipefail
 
 TAG=${TAG:-latest}
-SDK_REPO=https://github.com/GoogleContainerTools/kpt-functions-sdk
+SDK_REPO=https://github.com/kptdev/krm-functions-sdk
 export CATALOG_REPO=https://github.com/kptdev/krm-functions-catalog
 export CHARTS_SRC="charts/bitnami"
 

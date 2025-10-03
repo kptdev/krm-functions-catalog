@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strings"
 
-	kptfilev1 "github.com/GoogleContainerTools/kpt-functions-sdk/go/pkg/api/kptfile/v1"
-	kptutil "github.com/GoogleContainerTools/kpt-functions-sdk/go/pkg/api/util"
+	kptfilev1 "github.com/kptdev/kpt/pkg/api/kptfile/v1"
+	"github.com/kptdev/kpt/pkg/kptfile/kptfileutil"
 	"sigs.k8s.io/kustomize/kyaml/errors"
 	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
@@ -92,7 +92,7 @@ func FindKptfile(nodes []*yaml.RNode) (*kptfilev1.KptFile, error) {
 			if err != nil {
 				return nil, errors.WrapPrefixf(err, "unable to read Kptfile")
 			}
-			kf, err := kptutil.DecodeKptfile(s)
+			kf, err := kptfileutil.DecodeKptfile(strings.NewReader(s))
 			return kf, errors.WrapPrefixf(err, "unable to read Kptfile")
 		}
 	}

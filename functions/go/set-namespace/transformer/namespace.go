@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/GoogleContainerTools/kpt-functions-sdk/go/fn"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 )
@@ -78,7 +78,8 @@ func (p *SetNamespace) Config(o *fn.KubeObject) error {
 			fnConfigKind, fnConfigVersion, fnConfigGroup)
 	case o.IsGVK("", "v1", "ConfigMap"):
 		var cm corev1.ConfigMap
-		o.AsOrDie(&cm)
+		// nolint
+		o.As(&cm)
 		p.NamespaceMatcher = cm.Data["namespaceMatcher"]
 		if cm.Data["namespace"] != "" {
 			p.NewNamespace = cm.Data["namespace"]
@@ -93,7 +94,8 @@ func (p *SetNamespace) Config(o *fn.KubeObject) error {
 		}
 		return fmt.Errorf("`data.namespace` should not be empty")
 	case o.IsGVK(fnConfigGroup, fnConfigVersion, fnConfigKind):
-		o.AsOrDie(&p)
+		// nolint
+		o.As(&p)
 		if p.NewNamespace == "" {
 			return fmt.Errorf("`namespace` should not be empty")
 		}
@@ -160,7 +162,7 @@ func ListAllOrigins(objects fn.KubeObjects) ([]string, fn.Results, error) {
 	originNss := sets.NewString()
 	for _, o := range objects {
 		if o.HasUpstreamOrigin() {
-			origin := o.GetOriginId()
+			origin, _ := o.GetOriginId()
 			if o.IsClusterScoped() {
 				continue
 			}
@@ -233,25 +235,30 @@ func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin str
 		case o.IsGVK("", "v1", "Namespace"):
 			name := o.GetName()
 			nsPtr := &name
-			visitor(o.GetOriginId().Name, nsPtr, o.ShortString())
+			originId, _ := o.GetOriginId()
+			visitor(originId.Name, nsPtr, o.ShortString())
+			// nolint
 			o.SetName(*nsPtr)
 		case o.IsGVK("apiextensions.k8s.io", "v1", "CustomResourceDefinition"):
-			namespace := o.NestedStringOrDie("spec", "conversion", "webhook", "clientConfig", "service", "namespace")
+			namespace, _, _ := o.NestedString("spec", "conversion", "webhook", "clientConfig", "service", "namespace")
 			nsPtr := &namespace
 			visitor("", nsPtr)
-			o.SetNestedStringOrDie(*nsPtr, "spec", "conversion", "webhook", "clientConfig", "service", "namespace")
+			// nolint
+			o.SetNestedString(*nsPtr, "spec", "conversion", "webhook", "clientConfig", "service", "namespace")
 		case o.IsGVK("apiregistration.k8s.io", "v1", "APIService"):
-			namespace := o.NestedStringOrDie("spec", "service", "namespace")
+			namespace, _, _ := o.NestedString("spec", "service", "namespace")
 			nsPtr := &namespace
 			visitor("", nsPtr)
-			o.SetNestedStringOrDie(*nsPtr, "spec", "service", "namespace")
+			// nolint
+			o.SetNestedString(*nsPtr, "spec", "service", "namespace")
 		case o.GetKind() == "ClusterRoleBinding" || o.GetKind() == "RoleBinding":
 			subjects := o.GetSlice("subjects")
 			for _, s := range subjects {
 				if namespace, found, _ := s.NestedString("namespace"); found {
 					nsPtr := &namespace
 					visitor("", nsPtr)
-					s.SetNestedStringOrDie(*nsPtr, "namespace")
+					// nolint
+					s.SetNestedString(*nsPtr, "namespace")
 				}
 			}
 		default:
@@ -268,7 +275,9 @@ func VisitNamespaceResource(objects fn.KubeObjects, visitor func(origin string, 
 	for _, o := range namespaceScoped {
 		namespace := o.GetNamespace()
 		nsPtr := &namespace
-		visitor(o.GetOriginId().Namespace, nsPtr, o.ShortString())
+		originId, _ := o.GetOriginId()
+		visitor(originId.Namespace, nsPtr, o.ShortString())
+		// nolint
 		o.SetNamespace(*nsPtr)
 	}
 }
@@ -318,6 +327,7 @@ func UpdateAnnotation(objects fn.KubeObjects, dependsOnMap map[string]struct{}, 
 				segments[namespaceIdx] = newNs
 				count += 1
 				newAnnotation := strings.Join(segments, "/")
+				// nolint
 				o.SetAnnotation(dependsOnAnnotation, newAnnotation)
 			}
 		}

@@ -203,7 +203,7 @@ spec:
   routingMode: GLOBAL
   project-id: project-id
 `,
-			err: "unable find resource path for compute.cnrm.cloud.google.com_v1beta1_ComputeNetwork|network-name",
+			err: "unable find resource path for ComputeNetwork.v1beta1.compute.cnrm.cloud.google.com",
 		},
 	}
 	for _, tt := range tests {

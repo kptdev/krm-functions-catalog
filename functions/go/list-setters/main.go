@@ -28,19 +28,21 @@ func main() {
 type ListSettersProcessor struct{}
 
 func (lsp *ListSettersProcessor) Process(resourceList *framework.ResourceList) error {
-	resourceList.Result = &framework.Result{
-		Name: "list-setters",
+	resourceList.Results = framework.Results{
+		&framework.Result{
+			Message: "list-setters",
+		},
 	}
-	items, err := run(resourceList)
+	results, err := run(resourceList)
 	if err != nil {
-		resourceList.Result.Items = getErrorItem(fmt.Sprintf("failed to list setters: %s", err.Error()), framework.Error)
+		resourceList.Results = getErrorItem(fmt.Sprintf("failed to list setters: %s", err.Error()), framework.Error)
 		return err
 	}
-	resourceList.Result.Items = items
+	resourceList.Results = results
 	return nil
 }
 
-func run(resourceList *framework.ResourceList) ([]framework.ResultItem, error) {
+func run(resourceList *framework.ResourceList) (framework.Results, error) {
 	ls := listsetters.New()
 	_, err := ls.Filter(resourceList.Items)
 	if err != nil {
@@ -55,24 +57,24 @@ func run(resourceList *framework.ResourceList) ([]framework.ResultItem, error) {
 
 // resultsToItems converts the listsetters results to
 // equivalent items([]framework.Item)
-func resultsToItems(sr listsetters.ListSetters) ([]framework.ResultItem, error) {
-	var items []framework.ResultItem
+func resultsToItems(sr listsetters.ListSetters) (framework.Results, error) {
+	var results framework.Results
 	rs := sr.GetResults()
 	if len(rs) == 0 {
 		return getErrorItem("no setters found", framework.Warning), nil
 	}
 	for _, r := range rs {
-		items = append(items, framework.ResultItem{
+		results = append(results, &framework.Result{
 			Message: r.String(),
 		})
 	}
-	return items, nil
+	return results, nil
 }
 
 // getErrorItem returns the item for an error message
-func getErrorItem(errMsg string, severity framework.Severity) []framework.ResultItem {
-	return []framework.ResultItem{
-		{
+func getErrorItem(errMsg string, severity framework.Severity) framework.Results {
+	return framework.Results{
+		&framework.Result{
 			Message:  errMsg,
 			Severity: severity,
 		},
