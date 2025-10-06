@@ -108,6 +108,7 @@ func setSettersOnKptfile(nodes []*yaml.RNode, kf *kptfilev1.KptFile, projectID s
 	}
 
 	fn := kptfilev1.Function{
+		// (TODO) The Google krm-functions are to be deprecated/removed 
 		Image: "ghcr.io/kptdev/krm-functions-catalog/apply-setters:v0.2",
 		ConfigMap: map[string]string{
 			projectIDSetterName: projectID,

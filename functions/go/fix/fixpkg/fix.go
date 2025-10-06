@@ -101,7 +101,7 @@ func (s *Fix) Filter(nodes []*yaml.RNode) ([]*yaml.RNode, error) {
 		if meta.Labels["cli-utils.sigs.k8s.io/inventory-id"] != "" {
 			s.Results = append(s.Results, &Result{
 				FilePath: meta.Annotations[kioutil.PathAnnotation],
-				Message:  `Please refer to https://googlecontainertools.github.io/kpt/reference/live/alpha/, this package is using "inventory-object"`,
+				Message:  `Please refer to https://kpt.dev/reference/cli/live/migrate/, this package is using "inventory-object"`,
 			})
 			continue
 		}
@@ -395,6 +395,7 @@ func (s *Fix) FixKptfile(node *yaml.RNode, functions []v1.Function) (*yaml.RNode
 
 	if len(setters) > 0 {
 		fn := v1.Function{
+			// (TODO) If the fix fn is to remain, it should use a later version of apply-setters
 			Image:      "ghcr.io/kptdev/krm-functions-catalog/apply-setters:v0.2",
 			ConfigPath: SettersConfigFileName,
 		}

@@ -4,14 +4,13 @@ go 1.24.3
 
 require (
 	github.com/kptdev/kpt v1.0.0-beta.58.0.20251002154110-c319abece00e
-	github.com/kptdev/krm-functions-catalog/functions/go/list-setters v0.0.0-20251001141417-5403afe020f4
+	github.com/kptdev/krm-functions-catalog/functions/go/list-setters v0.0.0-20251006065330-cad54762e815
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/stretchr/testify v1.10.0
 	sigs.k8s.io/kustomize/kyaml v0.20.1
 )
 
 require (
-	github.com/GoogleContainerTools/kpt-functions-sdk/go v0.0.0-20210810181223-632b30549de6 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/go-errors/errors v1.5.1 // indirect
 	github.com/go-openapi/jsonpointer v0.21.1 // indirect
