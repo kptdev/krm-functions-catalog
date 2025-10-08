@@ -1,0 +1,205 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Kptfile schema.",
+    "version": "v1"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Condition": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string", "x-go-name": "Message" },
+          "reason": { "type": "string", "x-go-name": "Reason" },
+          "status": {
+            "type": "string",
+            "enum": ["True", "False", "Unknown"],
+            "x-go-enum-desc": "True ConditionTrue\nFalse ConditionFalse\nUnknown ConditionUnknown",
+            "x-go-name": "Status"
+          },
+          "type": { "type": "string", "x-go-name": "Type" }
+        },
+        "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1"
+      },
+      "Function": {
+        "description": "+kubebuilder:object:generate=true",
+        "type": "object",
+        "title": "Function specifies a KRM function.",
+        "properties": {
+          "configMap": {
+            "description": "`ConfigMap` is a convenient way to specify a function config of kind ConfigMap.",
+            "type": "object",
+            "additionalProperties": { "type": "string" },
+            "x-go-name": "ConfigMap"
+          },
+          "configPath": {
+            "description": "`ConfigPath` specifies a slash-delimited relative path to a file in the current directory containing a KRM resource used as the function config. This resource is excluded when resolving 'sources', and as a result cannot be operated on by the pipeline.",
+            "type": "string",
+            "x-go-name": "ConfigPath"
+          },
+          "exclude": {
+            "description": "`Exclude` are used to specify resources on which the function should NOT be executed. If not specified, all resources selected by `Selectors` are selected.",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Selector" },
+            "x-go-name": "Exclusions"
+          },
+          "exec": {
+            "description": "Exec specifies the function binary executable. The executable can be fully qualified or it must exists in the $PATH e.g:\nexec: set-namespace\nexec: /usr/local/bin/my-custom-fn",
+            "type": "string",
+            "x-go-name": "Exec"
+          },
+          "image": {
+            "description": "`Image` specifies the function container image. It can either be fully qualified, e.g.:\nimage: gcr.io/kpt-fn/set-labels\nOptionally, kpt can be configured to use a image registry host-path that will be used to resolve the image path in case the image path is missing (Defaults to gcr.io/kpt-fn). e.g. The following resolves to gcr.io/kpt-fn/set-labels:\nimage: set-labels",
+            "type": "string",
+            "x-go-name": "Image"
+          },
+          "name": {
+            "description": "`Name` is used to uniquely identify the function declaration this is primarily used for merging function declaration with upstream counterparts",
+            "type": "string",
+            "x-go-name": "Name"
+          },
+          "selectors": {
+            "description": "`Selectors` are used to specify resources on which the function should be executed if not specified, all resources are selected",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Selector" },
+            "x-go-name": "Selectors"
+          }
+        },
+        "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1"
+      },
+      "Git": {
+        "type": "object",
+        "title": "Git is the user-specified locator for a package on Git.",
+        "properties": {
+          "directory": { "type": "string", "description": "Directory is the sub directory of the git repository.\ne.g. 'staging/cockroachdb'", "x-go-name": "Directory" },
+          "ref": { "type": "string", "description": "Ref can be a Git branch, tag, or a commit SHA-1.", "x-go-name": "Ref" },
+          "repo": { "type": "string", "description": "Repo is the git repository the package.\ne.g. 'https://github.com/kubernetes/examples.git'", "x-go-name": "Repo" }
+        },
+        "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1"
+      },
+      "GitLock": {
+        "type": "object",
+        "title": "GitLock is the resolved locator for a package on Git.",
+        "properties": {
+          "commit": { "type": "string", "description": "Commit is the SHA-1 for the last fetch of the package. This is set by kpt for bookkeeping purposes.", "x-go-name": "Commit" },
+          "directory": { "type": "string", "description": "Directory is the sub directory of the git repository that was fetched.\ne.g. 'staging/cockroachdb'", "x-go-name": "Directory" },
+          "ref": { "type": "string", "description": "Ref can be a Git branch, tag, or a commit SHA-1 that was fetched.\ne.g. 'master'", "x-go-name": "Ref" },
+          "repo": { "type": "string", "description": "Repo is the git repository that was fetched.\ne.g. 'https://github.com/kubernetes/examples.git'", "x-go-name": "Repo" }
+        },
+        "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1"
+      },
+      "Inventory": {
+        "description": "All of the parameters are required if any are set.",
+        "type": "object",
+        "title": "Inventory encapsulates the parameters for the inventory resource applied to a cluster.",
+        "properties": {
+          "annotations": { "type": "object", "additionalProperties": { "type": "string" }, "x-go-name": "Annotations" },
+          "inventoryID": { "type": "string", "description": "Unique label to identify inventory resource in cluster.", "x-go-name": "InventoryID" },
+          "labels": { "type": "object", "additionalProperties": { "type": "string" }, "x-go-name": "Labels" },
+          "name": { "type": "string", "description": "Name of the inventory resource.", "x-go-name": "Name" },
+          "namespace": { "type": "string", "description": "Namespace for the inventory resource.", "x-go-name": "Namespace" }
+        },
+        "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1"
+      },
+      "KptFile": {
+        "type": "object",
+        "title": "KptFile contains information about a package managed with kpt.",
+        "properties": {
+          "annotations": { "type": "object", "additionalProperties": { "type": "string" }, "x-go-name": "Annotations" },
+          "apiVersion": { "type": "string", "x-go-name": "APIVersion" },
+          "info": { "$ref": "#/components/schemas/PackageInfo" },
+          "inventory": { "$ref": "#/components/schemas/Inventory" },
+          "kind": { "type": "string", "x-go-name": "Kind" },
+          "labels": { "type": "object", "additionalProperties": { "type": "string" }, "x-go-name": "Labels" },
+          "name": { "type": "string", "x-go-name": "Name" },
+          "namespace": { "type": "string", "x-go-name": "Namespace" },
+          "pipeline": { "$ref": "#/components/schemas/Pipeline" },
+          "status": { "$ref": "#/components/schemas/Status" },
+          "upstream": { "$ref": "#/components/schemas/Upstream" },
+          "upstreamLock": { "$ref": "#/components/schemas/UpstreamLock" }
+        },
+        "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1"
+      },
+      "NameMeta": {
+        "type": "object",
+        "title": "NameMeta contains name information.",
+        "properties": {
+          "name": { "type": "string", "x-go-name": "Name" },
+          "namespace": { "type": "string", "x-go-name": "Namespace" }
+        },
+        "x-go-package": "sigs.k8s.io/kustomize/kyaml/yaml"
+      },
+      "ObjectMeta": {
+        "description": "ObjectMeta contains metadata about a Resource",
+        "type": "object",
+        "properties": {
+          "annotations": { "type": "object", "additionalProperties": { "type": "string" }, "x-go-name": "Annotations" },
+          "labels": { "type": "object", "additionalProperties": { "type": "string" }, "x-go-name": "Labels" },
+          "name": { "type": "string", "x-go-name": "Name" },
+          "namespace": { "type": "string", "x-go-name": "Namespace" }
+        },
+        "x-go-package": "sigs.k8s.io/kustomize/kyaml/yaml"
+      },
+      "OriginType": { "type": "string", "title": "OriginType defines the type of origin for a package.", "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1" },
+      "PackageInfo": {
+        "type": "object",
+        "title": "PackageInfo contains optional information about the package such as license, documentation, etc.",
+        "description": "These fields are not consumed by any functionality in kpt and are simply passed through.\nNote that like any other KRM resource, humans and automation can also use `metadata.labels` and `metadata.annotations` as the extension mechanism.",
+        "properties": {
+          "description": { "type": "string", "x-go-name": "Description" },
+          "emails": { "type": "array", "items": { "type": "string" }, "x-go-name": "Emails" },
+          "keywords": { "type": "array", "items": { "type": "string" }, "x-go-name": "Keywords" },
+          "license": { "type": "string", "x-go-name": "License" },
+          "licenseFile": { "type": "string", "x-go-name": "LicenseFile" },
+          "man": { "type": "string", "x-go-name": "Man" },
+          "readinessGates": { "type": "array", "items": { "$ref": "#/components/schemas/ReadinessGate" }, "x-go-name": "ReadinessGates" },
+          "site": { "type": "string", "x-go-name": "Site" }
+        },
+        "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1"
+      },
+      "Pipeline": {
+        "description": "+kubebuilder:object:generate=true",
+        "type": "object",
+        "title": "Pipeline declares a pipeline of functions used to mutate or validate resources.",
+        "properties": {
+          "mutators": { "type": "array", "items": { "$ref": "#/components/schemas/Function" }, "x-go-name": "Mutators" },
+          "validators": { "type": "array", "items": { "$ref": "#/components/schemas/Function" }, "x-go-name": "Validators" }
+        },
+        "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1"
+      },
+      "ReadinessGate": { "type": "object", "properties": { "conditionType": { "type": "string", "x-go-name": "ConditionType" } }, "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1" },
+      "ResourceMeta": {
+        "type": "object",
+        "title": "ResourceMeta contains the metadata for a both Resource Type and Resource.",
+        "properties": {
+          "annotations": { "type": "object", "additionalProperties": { "type": "string" }, "x-go-name": "Annotations" },
+          "apiVersion": { "type": "string", "x-go-name": "APIVersion" },
+          "kind": { "type": "string", "x-go-name": "Kind" },
+          "labels": { "type": "object", "additionalProperties": { "type": "string" }, "x-go-name": "Labels" },
+          "name": { "type": "string", "x-go-name": "Name" },
+          "namespace": { "type": "string", "x-go-name": "Namespace" }
+        },
+        "x-go-package": "sigs.k8s.io/kustomize/kyaml/yaml"
+      },
+      "Selector": {
+        "description": "Selector specifies the selection criteria\nplease update IsEmpty method if more properties are added\n+kubebuilder:object:generate=true",
+        "type": "object",
+        "properties": {
+          "annotations": { "type": "object", "additionalProperties": { "type": "string" }, "x-go-name": "Annotations" },
+          "apiVersion": { "type": "string", "x-go-name": "APIVersion" },
+          "kind": { "type": "string", "x-go-name": "Kind" },
+          "labels": { "type": "object", "additionalProperties": { "type": "string" }, "x-go-name": "Labels" },
+          "name": { "type": "string", "x-go-name": "Name" },
+          "namespace": { "type": "string", "x-go-name": "Namespace" }
+        },
+        "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1"
+      },
+      "Status": { "type": "object", "properties": { "conditions": { "type": "array", "items": { "$ref": "#/components/schemas/Condition" }, "x-go-name": "Conditions" } }, "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1" },
+      "TypeMeta": { "type": "object", "properties": { "apiVersion": { "type": "string", "x-go-name": "APIVersion" }, "kind": { "type": "string", "x-go-name": "Kind" } }, "x-go-package": "sigs.k8s.io/kustomize/kyaml/yaml" },
+      "UpdateStrategyType": { "type": "string", "title": "UpdateStrategyType defines the strategy for updating a package from upstream.", "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1" },
+      "Upstream": { "type": "object", "title": "Upstream is a user-specified upstream locator for a package.", "properties": { "git": { "$ref": "#/components/schemas/Git" }, "type": { "$ref": "#/components/schemas/OriginType" }, "updateStrategy": { "$ref": "#/components/schemas/UpdateStrategyType" } }, "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1" },
+      "UpstreamLock": { "type": "object", "title": "UpstreamLock is a resolved locator for the last fetch of the package.", "properties": { "git": { "$ref": "#/components/schemas/GitLock" }, "type": { "$ref": "#/components/schemas/OriginType" } }, "x-go-package": "github.com/kptdev/kpt/pkg/api/kptfile/v1" }
+    }
+  }
+}

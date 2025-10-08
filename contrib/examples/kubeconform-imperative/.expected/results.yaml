@@ -1,0 +1,30 @@
+apiVersion: kpt.dev/v1
+kind: FunctionResultList
+metadata:
+  name: fnresults
+exitCode: 1
+items:
+  - image: ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/kubeconform:latest
+    stderr: 'failed to evaluate function: error: function failure'
+    exitCode: 1
+    results:
+      - message: got string, want null or integer
+        severity: error
+        resourceRef:
+          apiVersion: v1
+          kind: ReplicationController
+          name: bob
+        field:
+          path: spec.replicas
+        file:
+          path: app.yaml
+      - message: additional properties 'templates' not allowed
+        severity: error
+        resourceRef:
+          apiVersion: v1
+          kind: ReplicationController
+          name: bob
+        field:
+          path: spec
+        file:
+          path: app.yaml

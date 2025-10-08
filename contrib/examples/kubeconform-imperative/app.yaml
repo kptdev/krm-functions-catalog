@@ -1,0 +1,33 @@
+# From https://github.com/yannh/kubeconform/blob/master/fixtures/invalid.yaml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: bob
+spec:
+  # If replicas is not an integer, kubeval will report error.
+  replicas: asdf # Replace "asdf" with an integer to fix the error.
+  selector:
+    app: nginx
+  templates:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+          - containerPort: 80
+---
+apiVersion: example.com/v1
+kind: MyCustom
+metadata:
+  name: alice
+spec: {}
+---
+apiVersion: example.com/v1
+kind: MyOtherCustom
+metadata:
+  name: charlie
+spec: {}

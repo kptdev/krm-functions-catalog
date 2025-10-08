@@ -1,0 +1,37 @@
+# From https://github.com/instrumenta/kubeval.git/fixtures/invalid.yaml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: bob
+spec:
+  # If replicas is not an integer, kubeval will report error.
+  replicas: asdf # Replace "asdf" with an integer to fix the error.
+  selector:
+    app: nginx
+  templates:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "watch", "list"]
+---
+apiVersion: example.com/v1
+kind: MyCustom
+metadata:
+  name: alice
+spec: {}
