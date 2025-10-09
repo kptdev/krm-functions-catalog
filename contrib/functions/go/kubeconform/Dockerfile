@@ -39,7 +39,6 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 COPY --from=build /usr/local/bin/function /usr/local/bin/function
 COPY --from=build /go/bin/kubeconform /usr/local/bin/kubeconform
 
-# Copy schema tarball using the parsed version
 COPY jsonschema/jsonschema-k8s.tar.gz /tmp/jsonschema.tar.gz
 
 RUN mkdir /jsonschema && \
