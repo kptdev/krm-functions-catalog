@@ -43,9 +43,8 @@ The following is an example function configuration:
 
 If neither ` + "`" + `schema_location` + "`" + ` nor ` + "`" + `additional_schema_locations` + "`" + ` is provided, 
 the default baked-in schema will be used for validaton. The existing baked-in 
-schema was taken from the [kubernetes-json-schema](https://github.com/yannh/kubernetes-json-schema/)
-repository, at [this commit](https://github.com/yannh/kubernetes-json-schema/commit/44df5137d11c91d2ab3311b42745d1ff37fda888), 
-which targets [kubernetes version 1.34.x](https://kubernetes.io/blog/2025/08/27/kubernetes-v1-34-release/).
+schema was taken from the master branch of the [kubernetes-json-schema](https://github.com/yannh/kubernetes-json-schema/)
+repository, at [this commit](https://github.com/yannh/kubernetes-json-schema/commit/44df5137d11c91d2ab3311b42745d1ff37fda888).
 
 Convert OpenAPI to JSON Schema:
 

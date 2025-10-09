@@ -31,9 +31,6 @@ RUN GOOS=$TARGETOS GOARCH=$TARGETARCH go build -ldflags="-s -w" -o /usr/local/bi
 ARG KUBECONFORM_VERSION="v0.7.0"
 RUN go install github.com/yannh/kubeconform/cmd/kubeconform@${KUBECONFORM_VERSION}
 
-# Compress schema directory to reduce final image size
-RUN tar -czf /jsonschema.tar.gz jsonschema-82f085ace46549b0c4fd531525d1e2211052f562
-
 # -------- Final Stage --------
 FROM $BASE_IMAGE
 
@@ -41,11 +38,12 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 COPY --from=build /usr/local/bin/function /usr/local/bin/function
 COPY --from=build /go/bin/kubeconform /usr/local/bin/kubeconform
-COPY --from=build /jsonschema.tar.gz /tmp/jsonschema.tar.gz
 
-# Extract and clean up (strip top-level dir)
+# Copy schema tarball using the parsed version
+COPY jsonschema/jsonschema-k8s.tar.gz /tmp/jsonschema.tar.gz
+
 RUN mkdir /jsonschema && \
-    tar --strip-components=1 -xzf /tmp/jsonschema.tar.gz -C /jsonschema && \
+    tar -xzf /tmp/jsonschema.tar.gz -C /jsonschema && \
     rm /tmp/jsonschema.tar.gz && \
     chmod +x /usr/local/bin/function /usr/local/bin/kubeconform && \
     chmod -R a+r /jsonschema && \

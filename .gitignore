@@ -16,3 +16,4 @@ documentation/resources
 
 scripts/patch_reader/patch_reader
 shell_files.out
+!jsonschema-k8s.tar.gz
