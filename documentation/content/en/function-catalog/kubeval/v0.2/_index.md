@@ -4,7 +4,7 @@ linkTitle: "kubeval"
 tags: "validator"
 weight: 4
 description: |
-   KRM function for kubeval
+   The `kubeval` function wraps the [`kubeval`] binary to validate KRM resources
 menu:
   main:
     parent: "Function Catalog"
