@@ -20,7 +20,6 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
-
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"github.com/stretchr/testify/assert"
 )
