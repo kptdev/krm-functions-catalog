@@ -111,11 +111,9 @@ func runKubeconformForObject(obj *fn.KubeObject, args []string) (fn.Results, err
 
 	err = cmd.Run()
 	if err != nil {
-		//fn.Logf("\nkubeconform exited with: %v (stderr: %s)", err, strings.TrimSpace(stderr.String()))
 		if stdout.Len() == 0 {
 			return nil, fmt.Errorf("failed to run kubeconform: %w", err)
 		}
-		//fn.Logf("kubeconform output: stdout: %s)", strings.TrimSpace(stdout.String()))
 	}
 
 	raw := stdout.Bytes()
