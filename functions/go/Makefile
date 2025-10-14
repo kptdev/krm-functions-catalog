@@ -44,7 +44,8 @@ FUNCTIONS := \
 	starlark \
 	upsert-resource \
 	set-gcp-resource-ids \
-	set-name-prefix
+	set-name-prefix \
+	kubeconform
 
 # Targets for running all function tests
 FUNCTION_TESTS := $(patsubst %,%-TEST,$(FUNCTIONS))
