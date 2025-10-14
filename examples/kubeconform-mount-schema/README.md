@@ -13,7 +13,7 @@ with [`kubeconform`] function to validate KRM resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get  https://github.com/kptdev/krm-functions-catalog.git/contrib/examples/kubeconform-mount-schema
+$ kpt pkg get  https://github.com/kptdev/krm-functions-catalog.git/examples/kubeconform-mount-schema
 ```
 
 We have a `ReplicationController` in `replicationcontroller.yaml` that has a
@@ -39,7 +39,7 @@ $ openapi2jsonschema --stand-alone --expanded --kubernetes -o jsonschema path/to
 We can invoke function with the following command:
 
 ```shell
-$ kpt fn eval kubeconform-mount-schema -i ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/kubeconform:latest --results-dir /tmp \
+$ kpt fn eval kubeconform-mount-schema -i ghcr.io/kptdev/krm-functions-catalog/kubeconform:latest --results-dir /tmp \
   --mount type=bind,src="$(pwd)/kubeval-mount-schema/jsonschema",dst=/schema-dir/master-standalone \
   -- schema_location=file:///schema-dir
 ```
@@ -61,7 +61,7 @@ metadata:
   name: fnresults
 exitCode: 1
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/kubeconform:latest
+  - image: ghcr.io/kptdev/krm-functions-catalog/kubeconform:latest
     stderr: 'failed to evaluate function: error: function failure'
     exitCode: 1
     results:

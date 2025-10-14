@@ -10,7 +10,7 @@ validate KRM resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/contrib/examples/kubeconform-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/kubeconform-imperative
 ```
 
 We have a `ReplicationController` in `app.yaml` that has 2 schema violations:
@@ -23,7 +23,7 @@ Try it out by running the following command:
 
 ```shell
 # We set `strict=true` to disallow unknown field and `skip_kinds=MyCustom,MyOtherCustom` to skip 2 kinds that we don't have schemas.
-$ kpt fn eval kubeconform-imperative --image ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/kubeconform:latest --results-dir /tmp -- strict=true skip_kinds=MyCustom,MyOtherCustom
+$ kpt fn eval kubeconform-imperative --image ghcr.io/kptdev/krm-functions-catalog/kubeconform:latest --results-dir /tmp -- strict=true skip_kinds=MyCustom,MyOtherCustom
 ```
 
 The key-value pair(s) provided after `--` will be converted to `ConfigMap` by
@@ -40,7 +40,7 @@ metadata:
   name: fnresults
 exitCode: 1
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/kubeconform:latest
+  - image: ghcr.io/kptdev/krm-functions-catalog/kubeconform:latest
     stderr: 'failed to evaluate function: error: function failure'
     exitCode: 1
     results:

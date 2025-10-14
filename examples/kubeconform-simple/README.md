@@ -10,7 +10,7 @@ validate KRM resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/contrib/examples/kubeconform-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/kubeconform-simple
 ```
 
 The following is the `Kptfile` in this example: 
@@ -24,7 +24,7 @@ metadata:
     config.kubernetes.io/local-config: "true"
 pipeline:
   validators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/kubeconform:latest
+    - image: ghcr.io/kptdev/krm-functions-catalog/kubeconform:latest
       configMap:
         strict: 'true'
         skip_kinds: MyCustom
@@ -54,7 +54,7 @@ metadata:
   name: fnresults
 exitCode: 1
 items:
-  - image: ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/kubeconform:latest
+  - image: ghcr.io/kptdev/krm-functions-catalog/kubeconform:latest
     stderr: 'failed to evaluate function: error: function failure'
     exitCode: 1
     results:

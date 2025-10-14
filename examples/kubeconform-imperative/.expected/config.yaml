@@ -1,7 +1,7 @@
 exitCode: 1
 skip: false
 testType: eval
-image: ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/kubeconform:latest
+image: ghcr.io/kptdev/krm-functions-catalog/kubeconform:latest
 args:
   strict: 'true'
   skip_kinds: MyCustom,MyOtherCustom
