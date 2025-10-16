@@ -1,0 +1,20 @@
+name: Trigger kpt.dev build
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'documentation/content/en/function-catalog/**'
+      - 'documentation/layouts/shortcodes/**'
+      - 'examples/**'
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Netlify build hook
+        env:
+          BUILD_HOOK: ${{ secrets.NETLIFY_BUILD_HOOK_URL }}
+        run: |
+          curl -s -X POST -H "Content-Type: application/json" \
+            -d '{"trigger_title":"krm-functions-catalog change"}' \
+            "$BUILD_HOOK"
