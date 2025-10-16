@@ -18,9 +18,9 @@ The shorter version of semantic versioning is going to be floating tags:
   released, `v1` now points to `v1.3.0`. After `v1.3.1` is released, `v1` now
   points to `v1.3.1`.
 
-Note: We do NOT support the `latest` tag, since we cannot provide any
+Note: We do NOT officially support the `latest` tag, since we cannot provide any
 compatibility guarantee for it, and the pipeline won’t produce deterministic
-results.
+results. The `latest` tag should only be used for testing and development.
 
 ## User-facing Surfaces
 
@@ -105,7 +105,7 @@ There are 2 ways to specify your desired version:
   are less maintenance toil, since it automatically pick up the security and bug
   fixes.
 
-Don't use `latest` tag if you use your own function images, since
+Avoid using the `latest` tag for your own function images, since
 it’s [not a best practice] for production and also it
 is [not recommended by kubernetes].
 
