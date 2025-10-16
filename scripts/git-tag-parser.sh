@@ -23,8 +23,8 @@ SEMVER_REGEX="^[vV]?($VERNUM)\\.($VERNUM)\\.($VERNUM)$"
 # Invocation: get_versions v1.2.3
 # Return: v1.2.3 v1.2 v1
 # example 2:
-# Invocation: get_versions unstable
-# Return: unstable
+# Invocation: get_versions latest
+# Return: latest
 function get_versions {
   local version=$1
   if [[ "${version}" =~ $SEMVER_REGEX ]]; then
