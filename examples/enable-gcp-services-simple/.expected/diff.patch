@@ -1,6 +1,6 @@
 diff --git a/service_proj1-service-compute.yaml b/service_proj1-service-compute.yaml
 new file mode 100644
-index 0000000..6635edf
+index 0000000..339b364
 --- /dev/null
 +++ b/service_proj1-service-compute.yaml
 @@ -0,0 +1,11 @@
@@ -10,14 +10,14 @@ index 0000000..6635edf
 +  name: proj1-service-compute
 +  annotations:
 +    blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/proj1-service'
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  resourceID: compute.googleapis.com
 +  projectRef:
 +    external: proj1
 diff --git a/service_proj1-service-redis.yaml b/service_proj1-service-redis.yaml
 new file mode 100644
-index 0000000..888327c
+index 0000000..2d4f6ac
 --- /dev/null
 +++ b/service_proj1-service-redis.yaml
 @@ -0,0 +1,11 @@
@@ -27,7 +27,7 @@ index 0000000..888327c
 +  name: proj1-service-redis
 +  annotations:
 +    blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/proj1-service'
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  resourceID: redis.googleapis.com
 +  projectRef:

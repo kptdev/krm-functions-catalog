@@ -15,38 +15,38 @@ index 42300cc..0000000
 -  projectRef:
 -    external: proj1
 diff --git a/service_proj1-service-compute.yaml b/service_proj1-service-compute.yaml
-index a0e4c9b..6635edf 100644
+index a0e4c9b..339b364 100644
 --- a/service_proj1-service-compute.yaml
 +++ b/service_proj1-service-compute.yaml
 @@ -4,6 +4,7 @@ metadata:
    name: proj1-service-compute
    annotations:
      blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/proj1-service'
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
  spec:
    resourceID: compute.googleapis.com
    projectRef:
 diff --git a/service_proj1-service-redis.yaml b/service_proj1-service-redis.yaml
-index 2da01b0..888327c 100644
+index 2da01b0..2d4f6ac 100644
 --- a/service_proj1-service-redis.yaml
 +++ b/service_proj1-service-redis.yaml
 @@ -4,6 +4,7 @@ metadata:
    name: proj1-service-redis
    annotations:
      blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/proj1-service'
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
  spec:
    resourceID: redis.googleapis.com
    projectRef:
 diff --git a/service_proj2-service-redis.yaml b/service_proj2-service-redis.yaml
-index 6c5cfd8..66ed59c 100644
+index 6c5cfd8..cfce9e1 100644
 --- a/service_proj2-service-redis.yaml
 +++ b/service_proj2-service-redis.yaml
 @@ -4,6 +4,7 @@ metadata:
    name: proj2-service-redis
    annotations:
      blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/proj2-service'
-+    cnrm.cloud.google.com/blueprint: 'kpt-fn'
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
  spec:
    resourceID: redis.googleapis.com
    projectRef:

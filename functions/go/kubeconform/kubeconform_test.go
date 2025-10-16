@@ -16,12 +16,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
+	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
 	"reflect"
 	"testing"
-	"github.com/kptdev/krm-functions-sdk/go/fn"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestExtractConfig(t *testing.T) {
