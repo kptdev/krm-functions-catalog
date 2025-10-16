@@ -6,21 +6,16 @@ krm-functions-catalog repo.
 
 1. Checking the [CI status](https://github.com/kptdev/krm-functions-catalog/actions/workflows/ci.yaml) of the master branch. 
    If the CI is failing on the master, we need to fix it before doing a release.
-2. Go to the [releases pages] in your browser.
-3. Click `Draft a new release` to create a new release for a function. The tag
+1. Go to the [releases pages] in your browser.
+1. Click `Draft a new release` to create a new release for a function. The tag
    version format should be `functions/{language}/{function-name}/{semver}`. e.g.
-   `functions/go/set-namespace/v1.2.3` and `functions/ts/kubeval/v2.3.4`. The release name should be
+   `functions/go/set-namespace/v1.2.3`. The release name should be
    `{funtion-name} {semver}`. The release notes for this function should be in
    the body. 
-4. Click `Publish release` button.
-5. Verify the new functions are released in ghcr.io/kptdev/krm-functions-catalog/{funtion-name}/{semver} or, if using the GitHub based CD flow, check
+1. Click `Publish release` button.
+1. Verify the new functions are released in ghcr.io/kptdev/krm-functions-catalog/{funtion-name}/{semver} or, if using the GitHub based CD flow, check
    the relevant [GitHub packages section](https://github.com/orgs/kptdev/packages?repo_name=krm-functions-catalog)
-   The example above will push the following tags to the registry:
-   * v1.2.3
-   * v1.2-latest
-   * v1-latest
-
-6. Send an announcement on the [kpt slack channel]
+1. Send an announcement on the [kpt slack channel]
 
 > ⚠️ **Warning:**  The update docs section is currently being revised. DO NOT USE!!
 ## Updating function docs
