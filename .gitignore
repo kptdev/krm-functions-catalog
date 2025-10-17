@@ -11,6 +11,11 @@ __pycache__
 .docker
 documentation/resources
 
+# Hugo
+.hugo*
+resources/
+public/
+
 # We use sed -i.bak when doing in-line replace, because it works better cross-platform
 *.bak
 

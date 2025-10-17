@@ -1,0 +1,15 @@
+{{ $type := .Get "type" | default "info" }}
+{{ $title := .Get "title" }}
+
+<div class="alert alert-{{ $type }}">
+  {{ if $title }}
+    <strong>{{ $title }}</strong>
+  {{ else }}
+    {{/* Default titles per type with HTML entities */}}
+    {{ if eq $type "info" }}<strong>&#8505; Info:</strong>{{ end }}
+    {{ if eq $type "tip" }}<strong>&#128161; Tip:</strong>{{ end }}
+    {{ if eq $type "warning" }}<strong>&#9888; Warning:</strong>{{ end }}
+    {{ if eq $type "danger" }}<strong>&#10060; Danger:</strong>{{ end }}
+  {{ end }}
+  {{ .Inner | markdownify }}
+</div>
