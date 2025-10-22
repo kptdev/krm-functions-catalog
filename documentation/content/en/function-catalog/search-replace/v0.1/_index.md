@@ -4,14 +4,11 @@ linkTitle: "search-replace"
 tags: "mutator"
 weight: 4
 description: |
-   Search and optionally replace fields across all resources.
+   Search and optionally replace fields across all resources
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# search-replace
-
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -82,13 +79,13 @@ data:
 The function can be invoked using:
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/search-replace:v0.1.1 --fn-config /path/to/fn-config.yaml
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:v0.1 --fn-config /path/to/fn-config.yaml
 ```
 
 Alternatively, data can be passed as key-value pairs in the CLI
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/search-replace:v0.1.1 -- 'by-path=metadata.name' 'put-value=the-deployment'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:v0.1 -- 'by-path=metadata.name' 'put-value=the-deployment'
 ```
 
 Supported Path expressions:
@@ -166,32 +163,32 @@ a:
 
 ```shell
 # Matches fields with value "3":
-$ kpt fn eval --image gcr.io/kpt-fn/search-replace:v0.1.1 -- by-value=3
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:v0.1 -- by-value=3
 ```
 
 ```shell
 # Matches fields with value prefixed by "nginx-":
-$ kpt fn eval --image gcr.io/kpt-fn/search-replace:v0.1.1 -- by-value-regex='ngnix-.*'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:v0.1 -- by-value-regex='ngnix-.*'
 ```
 
 ```shell
 # Matches field with path "spec.namespaces" set to "bookstore":
-$ kpt fn eval --image gcr.io/kpt-fn/search-replace:v0.1.1 -- by-path='metadata.namespace' by-value='bookstore'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:v0.1 -- by-path='metadata.namespace' by-value='bookstore'
 ```
 
 ```shell
 # Matches fields with name "containerPort" arbitrarily deep in "spec" that have value of 80:
-$ kpt fn eval --image gcr.io/kpt-fn/search-replace:v0.1.1 -- by-path='spec.**.containerPort' by-value=80
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:v0.1 -- by-path='spec.**.containerPort' by-value=80
 ```
 
 ```shell
 # Set namespaces for all resources to "bookstore", even namespace is not set on a resource:
-$ kpt fn eval --image gcr.io/kpt-fn/search-replace:v0.1.1 -- by-path='metadata.namespace' put-value='bookstore'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:v0.1 -- by-path='metadata.namespace' put-value='bookstore'
 ```
 
 ```shell
 # Search and Set multiple values using regex numbered capture groups
-$ kpt fn eval --image gcr.io/kpt-fn/search-replace:v0.1.1 -- by-value-regex='something-(.*)' put-value='my-project-id-${1}'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:v0.1 -- by-value-regex='something-(.*)' put-value='my-project-id-${1}'
 metadata:
   name: something-foo
   namespace: something-bar
@@ -205,12 +202,12 @@ metadata:
 
 ```shell
 # Put the setter pattern as a line comment for matching fields.
-$ kpt fn eval --image gcr.io/kpt-fn/search-replace:v0.1.1 -- by-value='my-project-id-foo' put-comment='kpt-set: ${project-id}-foo'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:v0.1 -- by-value='my-project-id-foo' put-comment='kpt-set: ${project-id}-foo'
 metadata:
   name: my-project-id-foo # kpt-set: ${project-id}-foo
 
 # Setter pattern comments can be added to multiple values matching a regex numbered capture groups
-$ kpt fn eval --image gcr.io/kpt-fn/search-replace:v0.1.1 -- by-value-regex='my-project-id-(.*)' put-comment='kpt-set: ${project-id}-${1}'
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/search-replace:v0.1 -- by-value-regex='my-project-id-(.*)' put-comment='kpt-set: ${project-id}-${1}'
 metadata:
   name: my-project-id-foo # kpt-set: ${project-id}-foo
   namespace: my-project-id-bar # kpt-set: ${project-id}-bar
@@ -218,4 +215,4 @@ metadata:
 
 <!--mdtogo-->
 
-[this document]: https://github.com/kubernetes/community/blob/master/contributors/design-proposals/architecture/declarative-application-management.md#declarative-configuration
+[this document]: https://github.com/kubernetes/design-proposals-archive/blob/main/architecture/declarative-application-management.md

@@ -1,3 +1,6 @@
+---
+parent_function: "set-annotations"
+---
 # set-annotations: Simple Example
 
 ### Overview
@@ -10,7 +13,7 @@ to upsert annotations to the `.metadata.annotations` field on all resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-annotations-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-annotations-simple
 ```
 
 We use the following `Kptfile` to configure the function.
@@ -42,4 +45,4 @@ $ kpt fn render set-annotations-simple
 
 Check the 2 annotations have been added.
 
-[`set-annotations`]: https://catalog.kpt.dev/set-annotations/v0.1/
+[`set-annotations`]: {{< relref "function-catalog/set-annotations/v0.1/" >}}

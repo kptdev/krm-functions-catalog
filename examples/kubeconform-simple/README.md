@@ -1,3 +1,6 @@
+---
+parent_function: "kubeconform"
+---
 # kubeconform: Simple Example
 
 ### Overview
@@ -10,7 +13,7 @@ validate KRM resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/kubeconform-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/kubeconform-simple
 ```
 
 The following is the `Kptfile` in this example: 

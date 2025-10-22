@@ -1,8 +1,11 @@
+---
+parent_function: "gatekeeper"
+---
 # gatekeeper: Warning Only
 
 ### Overview
 
-This example demonstrates how to declaratively run the [gatekeeper]
+This example demonstrates how to declaratively run the gatekeeper
 function to validate resources using gatekeeper constraints. The violations are
 configured to be warnings instead of errors.
 
@@ -11,7 +14,7 @@ configured to be warnings instead of errors.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/gatekeeper-warning-only
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/gatekeeper-warning-only
 ```
 
 Here's an example `Kptfile` to run the function:
@@ -86,4 +89,3 @@ To pass validation, let's replace the key `private_key` in the `ConfigMap` in
 `resources.yaml` with something else e.g. `public_key`.
 Rerun the command. It will no longer have the warning.
 
-[gatekeeper]: https://catalog.kpt.dev/gatekeeper/v0.1/

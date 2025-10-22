@@ -1,3 +1,6 @@
+---
+parent_function: "set-image"
+---
 # set-image: Imperative Example
 
 ### Overview
@@ -10,7 +13,7 @@ field on all resources by running [`set-image`] function imperatively.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-image-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-image-imperative
 ```
 
 ### Function invocation
@@ -28,4 +31,4 @@ The labels provided in key-value pairs after `--` will be converted to a
 
 Check the image `nginx` has been replaced with `bitnami/nginx:1.21.4` for all resources.
 
-[`set-image`]: https://catalog.kpt.dev/set-image/v0.1/
+[`set-image`]: {{< relref "function-catalog/set-image/v0.1/" >}}

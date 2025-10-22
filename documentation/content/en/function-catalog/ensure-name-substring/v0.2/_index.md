@@ -4,19 +4,15 @@ linkTitle: "ensure-name-substring"
 tags: "mutator, name prefix, name suffix"
 weight: 4
 description: |
-   KRM function for ensure-name-substring
+   Ensures that a resource name contains the given substring
 menu:
   main:
     parent: "Function Catalog"
 ---
 
-# ensure-name-substring
-
 {{< listversions >}}
 
 {{< listexamples >}}
-
-{{< listversions >}}
 
 ## Overview
 

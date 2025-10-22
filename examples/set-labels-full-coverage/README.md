@@ -1,3 +1,6 @@
+---
+parent_function: "set-labels"
+---
 # set-labels: Full Coverage Example
 
 ### Overview
@@ -10,7 +13,7 @@ to upsert all common labels to different built-in resources and CustomResourceDe
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-labels-full-coverage
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-labels-full-coverage
 ```
 
 We use the following `Kptfile` and `fn-config.yaml` to configure the function.
@@ -58,4 +61,4 @@ $ kpt fn render set-labels-full-coverage
 Check all resources, the following labels should be upserted to the `labels`, `matchingLabels` or `seletors(labelSelector)` fields: 
 `color: orange`, `fruit: apple` and `app: new`.
 
-[`set-labels`]: https://catalog.kpt.dev/set-labels/v0.1/
+[`set-labels`]: {{< relref "function-catalog/set-labels/v0.2/" >}}

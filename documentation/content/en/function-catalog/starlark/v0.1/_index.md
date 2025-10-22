@@ -4,14 +4,11 @@ linkTitle: "starlark"
 tags: "mutator, validator"
 weight: 4
 description: |
-   The `starlark` function contains a Starlark interpreter to run a Starlark script
+   Run a Starlark script to mutate or validate resources
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# starlark
-
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -89,8 +86,6 @@ Here's what you currently cannot do in the Starlark script:
 
 ### Debugging
 
-<!-- TODO: fix https://github.com/GoogleContainerTools/kpt/issues/2200 -->
-
 It is possible to debug the `starlark` functions using [`print`][print].
 
 For example, you can add something like the following in your Starlark script:
@@ -111,13 +106,13 @@ You will find your debugging output in `functionResultList items.stderr`.
 
 [Starlark]: https://docs.bazel.build/versions/master/skylark/language.html
 
-[executable configuration]: https://kpt.dev/book/05-developing-functions/04-executable-configuration
+[executable configuration]: https://kpt.dev/book/05-developing-functions/#authoring-executable-configuration
 
 [spec]: https://github.com/bazelbuild/starlark/blob/master/spec.md
 
 [apiref]: https://docs.bazel.build/versions/master/skylark/lib/skylark-overview.html
 
-[KRM Functions Specification]: https://kpt.dev/book/05-developing-functions/01-functions-specification
+[KRM Functions Specification]: https://kpt.dev/book/05-developing-functions/#functions-specification
 
 [for loop]: https://github.com/bazelbuild/starlark/blob/master/spec.md#for-loops
 

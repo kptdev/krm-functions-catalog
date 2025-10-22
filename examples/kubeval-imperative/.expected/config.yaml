@@ -1,7 +1,0 @@
-exitCode: 1
-skip: true
-testType: eval
-image: ghcr.io/kptdev/krm-functions-catalog/kubeval:latest
-args:
-  strict: 'true'
-  skip_kinds: MyCustom,MyOtherCustom

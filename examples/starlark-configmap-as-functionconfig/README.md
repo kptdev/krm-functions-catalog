@@ -1,3 +1,6 @@
+---
+parent_function: "starlark"
+---
 # starlark: ConfigMap as functionConfig
 
 ### Overview
@@ -12,7 +15,7 @@ line arguments.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/starlark-configmap-as-functionconfig
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-configmap-as-functionconfig
 ```
 
 We are going to use the following starlark script:
@@ -40,4 +43,4 @@ $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/starlark:latest -- so
 
 Check the `spec.replicas` field has been set to `5` in the `Deployment`.
 
-[`starlark`]: https://catalog.kpt.dev/starlark/v0.1/
+[`starlark`]: {{< relref "function-catalog/starlark/v0.5/" >}}

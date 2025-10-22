@@ -4,14 +4,11 @@ linkTitle: "starlark"
 tags: "mutator, validator"
 weight: 4
 description: |
-   KRM function for starlark
+   Run a Starlark script to mutate or validate resources
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# starlark
-
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -137,14 +134,14 @@ There are 2 ways to run the function imperatively.
   starlark script lives in `main.star` file.
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/starlark:v0.2.2 -- source="$(cat main.star)" param1=value1 param2=value2
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/starlark:v0.2.2 -- source="$(cat main.star)" param1=value1 param2=value2
 ```
 
 - Run it using `--fn-config` with either a `ConfigMap` or a `StarlarkRun` that
   lives in `fn-config.yaml`.
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/starlark:v0.2.2 --fn-config fn-config.yaml
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/starlark:v0.2.2 --fn-config fn-config.yaml
 ```
 
 ### Developing Starlark Script
@@ -193,13 +190,13 @@ You will find your debugging output in `functionResultList items.stderr`.
 
 [Starlark]: https://docs.bazel.build/versions/master/skylark/language.html
 
-[executable configuration]: https://kpt.dev/book/05-developing-functions/04-executable-configuration
+[executable configuration]: https://kpt.dev/book/05-developing-functions/#authoring-executable-configuration
 
 [spec]: https://github.com/bazelbuild/starlark/blob/master/spec.md
 
 [apiref]: https://docs.bazel.build/versions/master/skylark/lib/skylark-overview.html
 
-[KRM Functions Specification]: https://kpt.dev/book/05-developing-functions/01-functions-specification
+[KRM Functions Specification]: https://kpt.dev/book/05-developing-functions/#functions-specification
 
 [for loop]: https://github.com/bazelbuild/starlark/blob/master/spec.md#for-loops
 

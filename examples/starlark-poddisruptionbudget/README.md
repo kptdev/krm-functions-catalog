@@ -1,3 +1,6 @@
+---
+parent_function: "starlark"
+---
 # starlark: PodDisruptionBudget
 
 ### Overview
@@ -12,7 +15,7 @@ the `functionConfig` and use it in the script.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/starlark-poddisruptionbudget
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-poddisruptionbudget
 ```
 
 We are going to use the following `Kptfile` and `fn-config.yaml` to configure
@@ -78,4 +81,4 @@ $ kpt fn render starlark-poddisruptionbudget
 A new file should have been created, and it should contain a
 `PodDisruptionBudget` object.
 
-[`starlark`]: https://catalog.kpt.dev/starlark/v0.1/
+[`starlark`]: {{< relref "function-catalog/starlark/v0.5/" >}}

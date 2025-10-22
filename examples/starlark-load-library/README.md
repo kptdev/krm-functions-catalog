@@ -1,3 +1,6 @@
+---
+parent_function: "starlark"
+---
 # starlark: Load Library
 
 ### Overview
@@ -10,7 +13,7 @@ In this example, we are going to demonstrate how to load a library in the
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/starlark-load-library
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-load-library
 ```
 
 We are going to use the following `Kptfile` and `fn-config.yaml` to configure
@@ -59,4 +62,4 @@ $ kpt fn render starlark-load-library
 
 Check the `.spec.replicas` field should have been updated to 4.
 
-[`starlark`]: https://catalog.kpt.dev/starlark/v0.1/
+[`starlark`]: {{< relref "function-catalog/starlark/v0.5/" >}}

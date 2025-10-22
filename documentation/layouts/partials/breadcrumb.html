@@ -1,0 +1,67 @@
+{{/* layouts/partials/breadcrumb.html */}}
+{{ if ne .RelPermalink "/function-catalog/" }}
+<nav aria-label="breadcrumb" class="td-breadcrumbs">
+  <ol class="breadcrumb">
+
+    {{/* Function Catalog root link */}}
+    <li class="breadcrumb-item">
+      <a href="/function-catalog/">Function Catalog</a>
+    </li>
+
+    {{/* Show parent function if available */}}
+    {{ with .Params.parent_function }}
+      {{ $funcName := . }}
+
+      {{/* Determine the versioned directory */}}
+      {{ $funcDir := printf "content/en/function-catalog/%s" $funcName }}
+      {{ $versions := slice }}
+      {{ if fileExists $funcDir }}
+        {{ range readDir $funcDir }}
+          {{ if .IsDir }}
+            {{ $versions = $versions | append .Name }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+
+      {{/* Pick the latest version */}}
+      {{ $sorted := sort $versions }}
+      {{ $latest := "" }}
+      {{ if gt (len $sorted) 0 }}
+        {{ $latest = index $sorted (sub (len $sorted) 1) }}
+      {{ end }}
+
+      {{ if $latest }}
+        <li class="breadcrumb-item">
+          <a href="{{ printf "/function-catalog/%s/%s/" $funcName $latest | relURL }}">
+            {{ $funcName | humanize }}
+          </a>
+        </li>
+      {{ else }}
+        <li class="breadcrumb-item">
+          <a href="{{ printf "/function-catalog/%s/" $funcName | relURL }}">
+            {{ $funcName | humanize }}
+          </a>
+        </li>
+      {{ end }}
+    {{ end }}
+
+    {{/* Current page title */}}
+    <li class="breadcrumb-item active" aria-current="page">
+      {{ .Title }}
+    </li>
+  </ol>
+</nav>
+
+<style>
+.td-breadcrumbs {
+  margin: 1rem 0;
+}
+.td-breadcrumbs .breadcrumb-item a {
+  color: #0366d6;
+  text-decoration: none;
+}
+.td-breadcrumbs .breadcrumb-item a:hover {
+  text-decoration: underline;
+}
+</style>
+{{ end }}

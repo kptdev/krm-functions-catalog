@@ -1,5 +1,5 @@
 image: ghcr.io/kptdev/krm-functions-catalog/set-namespace
-description: Update namespace.
+description: Update KRM resources namespace.
 tags:
   - mutator
 sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/set-namespace

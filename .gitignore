@@ -1,7 +1,11 @@
 .idea
 .vscode
 dist
-node_modules
+
+# Node dependencies
+node_modules/
+package-lock.json
+
 *.iml
 .npmrc
 .DS_Store
@@ -10,6 +14,12 @@ bin/
 __pycache__
 .docker
 documentation/resources
+documentation/content/en/examples
+
+# Hugo
+.hugo*
+resources/
+public/
 
 # We use sed -i.bak when doing in-line replace, because it works better cross-platform
 *.bak

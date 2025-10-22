@@ -1,22 +1,18 @@
-{{/* listexamples.html - Creates dropdown with examples matching parent directory name */}}
+{{/* listexamples.html - Dropdown for main function page*/}}
 
 {{/* Get the current page's directory and parent directory name */}}
 {{ $relativePath := .Page.File.Dir }}
 {{ $pathParts := split (strings.TrimSuffix "/" $relativePath) "/" }}
 {{ $parentDirName := "" }}
-
-{{/* Get the parent directory name (go up one level) */}}
 {{ if gt (len $pathParts) 1 }}
   {{ $parentDirName = index $pathParts (sub (len $pathParts) 2) }}
 {{ end }}
 
 {{/* Read all directories from the examples folder */}}
-{{ $examplesDir := "/content/en/examples" }}
+{{ $examplesDir := "content/en/examples" }}
 {{ $exampleDirs := slice }}
-
 {{ if fileExists $examplesDir }}
-  {{ $files := readDir $examplesDir }}
-  {{ range $files }}
+  {{ range readDir $examplesDir }}
     {{ if .IsDir }}
       {{ $exampleDirs = $exampleDirs | append .Name }}
     {{ end }}
@@ -36,28 +32,53 @@
 {{/* Sort the matching examples alphabetically */}}
 {{ $sortedExamples := sort $matchingExamples }}
 
-{{/* Generate dropdown menu if we have matching examples */}}
 {{ if gt (len $sortedExamples) 0 }}
-<div class="examples-dropdown">
-  <label for="examples-select">Examples:</label>
-  <select id="examples-select" onchange="navigateToExample(this.value)">
-    <option value="">-- Select an Example --</option>
-    {{ range $sortedExamples }}
-      {{ $examplePath := printf "/examples/%s/readme/" . }}
-      <option value="{{ $examplePath | relURL }}">
-        {{ . | humanize }}
-      </option>
-    {{ end }}
-  </select>
-</div>
+  {{/* Dropdown for main page */}}
+  <div class="examples-dropdown">
+    <label for="examples-select">Examples:</label>
+    <select id="examples-select" onchange="navigateToExample(this.value)">
+      <option value="">-- Select an Example --</option>
+      {{ range $sortedExamples }}
+        {{ $examplePath := printf "/examples/%s/readme/" . }}
+        <option value="{{ $examplePath | relURL }}">{{ . | humanize }}</option>
+      {{ end }}
+    </select>
+  </div>
 
-<script>
-function navigateToExample(path) {
-  if (path) {
-    window.open(path, '_blank');
-  }
-}
-</script>
+  <script>
+    function navigateToExample(path) {
+      if (path) window.location.href = path;
+    }
+  </script>
+
+  {{/* Debug information (server only) */}}
+  {{ if hugo.IsServer }}
+    <div class="debug-info" style="font-size: 12px; color: #666; margin-top: 10px;">
+      <details>
+        <summary>Debug Info</summary>
+        <p><strong>Relative Path:</strong> {{ $relativePath }}</p>
+        <p><strong>Parent Directory Name:</strong> {{ $parentDirName }}</p>
+        <p><strong>Total Examples Found:</strong> {{ len $exampleDirs }}</p>
+        <p><strong>Matching Examples:</strong> {{ len $matchingExamples }}</p>
+        {{ if gt (len $matchingExamples) 0 }}
+          <p><strong>Matching List:</strong> {{ delimit $matchingExamples ", " }}</p>
+        {{ end }}
+      </details>
+    </div>
+  {{ end }}
+
+{{ else }}
+  {{/* No matching examples found */}}
+  {{ if ne $parentDirName "" }}
+    <div class="examples-dropdown">
+      <p><em>No examples found matching "{{ $parentDirName }}"</em></p>
+    </div>
+  {{ else }}
+    <div class="examples-dropdown">
+      <p><em>Unable to determine parent directory for example matching</em></p>
+    </div>
+  {{ end }}
+{{ end }}
 
 <style>
 .examples-dropdown {
@@ -95,32 +116,3 @@ function navigateToExample(path) {
   border-color: #a1a8b0;
 }
 </style>
-
-{{/* Debug information (remove in production) */}}
-{{ if hugo.IsServer }}
-<div class="debug-info" style="font-size: 12px; color: #666; margin-top: 10px;">
-  <details>
-    <summary>Debug Info</summary>
-    <p><strong>Relative Path:</strong> {{ $relativePath }}</p>
-    <p><strong>Parent Directory Name:</strong> {{ $parentDirName }}</p>
-    <p><strong>Total Examples Found:</strong> {{ len $exampleDirs }}</p>
-    <p><strong>Matching Examples:</strong> {{ len $matchingExamples }}</p>
-    {{ if gt (len $matchingExamples) 0 }}
-      <p><strong>Matching List:</strong> {{ delimit $matchingExamples ", " }}</p>
-    {{ end }}
-  </details>
-</div>
-{{ end }}
-
-{{ else }}
-{{/* No matching examples found */}}
-{{ if ne $parentDirName "" }}
-<div class="examples-dropdown">
-  <p><em>No examples found matching "{{ $parentDirName }}"</em></p>
-</div>
-{{ else }}
-<div class="examples-dropdown">
-  <p><em>Unable to determine parent directory for example matching</em></p>
-</div>
-{{ end }}
-{{ end }}

@@ -1,3 +1,6 @@
+---
+parent_function: "create-setters"
+---
 # create-setters: Simple Example
 
 ### Overview
@@ -10,7 +13,7 @@ resource fields using `create-setters` function.
 Get the example package by running the following command:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/create-setters-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/create-setters-simple
 ```
 
 We use `ConfigMap` to configure the `create-setters` function.
@@ -45,4 +48,4 @@ $ kpt fn render create-setters-simple
 2. Check the setter comment `kpt-set: nginx:${tag}` is added to `image` field value `nginx:1.16.1` in `Deployment` resource.
 3. Check the setter comment `kpt-set: ${env}` is added to `environment` field in `MyKind` resource.
 
-[setter]: https://catalog.kpt.dev/apply-setters/v0.1/?id=definitions
+[setter]: {{< relref "function-catalog/apply-setters/v0.2/#definitions" >}}

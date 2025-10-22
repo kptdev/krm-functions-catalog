@@ -1,3 +1,6 @@
+---
+parent_function: "set-annotations"
+---
 # set-annotations: Imperative Example
 
 ### Overview
@@ -10,7 +13,7 @@ on all resources by running [`set-annotations`] function imperatively.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-annotations-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-annotations-imperative
 ```
 
 ### Function invocation
@@ -29,4 +32,4 @@ The labels provided in key-value pairs after `--` will be converted to a
 Check the 2 annotations `color: orange` and `fruit: apple` have been added to
 all resources.
 
-[`set-annotations`]: https://catalog.kpt.dev/set-annotations/v0.1/
+[`set-annotations`]: {{< relref "function-catalog/set-annotations/v0.1/" >}}

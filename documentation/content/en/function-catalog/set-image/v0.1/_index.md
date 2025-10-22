@@ -4,14 +4,11 @@ linkTitle: "set-image"
 tags: "mutator"
 weight: 4
 description: |
-   KRM function for set-image
+   Set all images of a given name to a given name:tag or name@digest
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# set-image
-
 {{< listversions >}}
 
 {{< listexamples >}}

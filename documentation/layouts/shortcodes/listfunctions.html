@@ -57,7 +57,13 @@
         {{ $indexPath := printf "function-catalog/%s/%s/_index.md" $functionName $highestVersion }}
         {{ with $.Site.GetPage $indexPath }}
           <tr>
-            <td><a href="{{ printf "%s/%s/" $functionName $highestVersion }}">{{ .Title }}</a></td>
+            <td>
+              {{ if .Params.deprecated }}
+                <a href="{{ printf "%s/%s/" $functionName $highestVersion }}"><s>{{ .Title }}</s></a>
+              {{ else }}
+                <a href="{{ printf "%s/%s/" $functionName $highestVersion }}">{{ .Title }}</a>
+              {{ end }}
+            </td>
             <td>{{ .Params.description | markdownify }}</td>
             <td>
               {{ if .Params.tags }}
@@ -74,7 +80,6 @@
         <td><a href="{{ printf "%s" .Name }}">{{ $title }}</a></td>
         <td>No description available</td>
         <td></td>
-        <td>-</td>
       </tr>
     {{ end }}
 

@@ -1,3 +1,6 @@
+---
+parent_function: "kubeconform"
+---
 # kubeconform: Mount Schema Example
 
 ### Overview
@@ -13,7 +16,7 @@ with [`kubeconform`] function to validate KRM resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get  https://github.com/kptdev/krm-functions-catalog.git/examples/kubeconform-mount-schema
+$ kpt pkg get  https://github.com/kptdev/krm-functions-catalog/tree/master/examples/kubeconform-mount-schema
 ```
 
 We have a `ReplicationController` in `replicationcontroller.yaml` that has a

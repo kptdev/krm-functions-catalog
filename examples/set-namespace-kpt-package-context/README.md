@@ -1,3 +1,6 @@
+---
+parent_function: "set-namespace"
+---
 # set-namespace: KPT Package context Example
 
 ### Overview
@@ -9,7 +12,7 @@ This example demonstrates how to run [`set-namespace`] function with kpt variant
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get --for-deployment https://github.com/kptdev/krm-functions-catalog.git/examples/set-namespace-kpt-package-context
+$ kpt pkg get --for-deployment https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-namespace-kpt-package-context
 ```
 
 Since we use flag `--for-deployment`, kpt generates a local file `package-context.yaml` as below
@@ -48,4 +51,4 @@ $ kpt fn render set-namespace-kpt-package-context
 
 Verify that all namespaces in `resources.yaml` are updated from `old` to `example`.
 
-[`set-namespace`]: https://catalog.kpt.dev/set-namespace/v0.3/
+[`set-namespace`]: {{< relref "function-catalog/set-namespace/v0.4/" >}}

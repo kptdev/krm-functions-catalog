@@ -1,3 +1,6 @@
+---
+parent_function: "set-project-id"
+---
 # set-project-id: Advanced Example
 
 ### Overview
@@ -18,7 +21,7 @@ Running `set-project-id` function on the example packed will:
 Get the example package by running the following commands:
 
 ```shell
-kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-project-id-advanced
+kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-project-id-advanced
 ```
 
 ### Function invocation

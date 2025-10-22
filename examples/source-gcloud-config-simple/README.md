@@ -1,3 +1,6 @@
+---
+parent_function: "source-gcloud-config"
+---
 # source-gcloud-config: Simple Example
 
 ### Overview
@@ -15,7 +18,7 @@ to add a ConfigMap resource containing the gcloud configurations.
 
 This package contains the `source-gcloud-config` executable (MacOS).
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/source-gcloud-config-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/source-gcloud-config-simple
 ```
 
 If you are in Linux, please run the following to build the binary.

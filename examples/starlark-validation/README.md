@@ -1,3 +1,6 @@
+---
+parent_function: "starlark"
+---
 # starlark: Validation
 
 ### Overview
@@ -11,7 +14,7 @@ to validate a `ConfigMap`.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/starlark-validation
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-validation
 ```
 
 We are going to use the following `Kptfile` and `fn-config.yaml` to configure
@@ -79,4 +82,4 @@ To pass validation, let's replace the key `private-key` in the `ConfigMap` with
 something else e.g. `public_key`.
 Rerun the command. It will succeed.
 
-[`starlark`]: https://catalog.kpt.dev/starlark/v0.1/
+[`starlark`]: {{< relref "function-catalog/starlark/v0.5/" >}}

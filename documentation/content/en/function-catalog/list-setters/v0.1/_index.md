@@ -4,14 +4,11 @@ linkTitle: "list-setters"
 tags: "viewer"
 weight: 4
 description: |
-   KRM function for list-setters
+   List setters on resource fields
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# list-setters
-
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -78,7 +75,7 @@ spec:
 Invoke the function:
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/list-setters:v0.1.0
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/list-setters:v0.1
 ```
 
 Output looks like the following:
@@ -91,5 +88,5 @@ Output looks like the following:
 
 <!--mdtogo-->
 
-[setter]: https://catalog.kpt.dev/apply-setters/v0.1/?id=definitions
-[create-setters]: https://catalog.kpt.dev/create-setters/v0.1/
+[setter]: {{< relref "function-catalog/apply-setters/v0.2/#definitions" >}}
+[create-setters]: {{< relref "function-catalog/create-setters/v0.1/" >}}

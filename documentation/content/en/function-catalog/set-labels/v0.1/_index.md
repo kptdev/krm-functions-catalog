@@ -4,14 +4,11 @@ linkTitle: "set-labels"
 tags: "mutator"
 weight: 4
 description: |
-   The `set-labels` function adds a list of labels to all resources. It's a common
+   Add a list of labels to all resources
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# set-labels
-
 {{< listversions >}}
 
 {{< listexamples >}}

@@ -1,3 +1,6 @@
+---
+parent_function: "generate-kpt-pkg-docs"
+---
 # generate-kpt-pkg-docs: Simple Example
 
 ### Overview
@@ -13,7 +16,7 @@ Running `generate-kpt-pkg-docs` function on the example package will:
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/generate-kpt-pkg-docs-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/generate-kpt-pkg-docs-simple
 ```
 
 ### Function invocation

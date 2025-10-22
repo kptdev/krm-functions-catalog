@@ -1,0 +1,54 @@
+{{/* relatedexamples.html */}}
+
+{{ $parentFunc := .Page.Params.parent_function }}
+{{ $currentPath := .Page.RelPermalink }}
+
+{{ if $parentFunc }}
+  {{/* Get all pages under /examples */}}
+  {{ $allExamples := where site.RegularPages "Section" "examples" }}
+
+  {{/* Filter by parent_function frontmatter and exclude current page */}}
+  {{ $related := where $allExamples "Params.parent_function" $parentFunc }}
+  {{ $related := where $related "RelPermalink" "ne" $currentPath }}
+
+  {{ if gt (len $related) 0 }}
+    <div class="related-examples">
+      <strong>Related Examples:</strong>
+      <ul>
+        {{ range $related }}
+          <li><a href="{{ .RelPermalink }}">{{ .File.Dir | humanize }}</a></li>
+        {{ end }}
+      </ul>
+    </div>
+  {{ end }}
+{{ end }}
+
+
+<style>
+.related-examples {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-left: 4px solid #0366d6;
+  border-radius: 4px;
+}
+.related-examples strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #24292e;
+}
+.related-examples ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.related-examples li {
+  margin: 0.25rem 0;
+}
+.related-examples a {
+  color: #0366d6;
+  text-decoration: none;
+}
+.related-examples a:hover {
+  text-decoration: underline;
+}
+</style>

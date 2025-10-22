@@ -1,3 +1,6 @@
+---
+parent_function: "render-helm-chart"
+---
 # render-helm-chart: Kustomize Private Github-hosted Chart
 
 ### Overview

@@ -4,7 +4,7 @@ linkTitle: "set-namespace"
 tags: "mutator"
 weight: 4
 description: |
-   The `set-namespace` function update or add namespace to all namespaced
+  Upsert `namespace` for KRM resources 
 menu:
   main:
     parent: "Function Catalog"

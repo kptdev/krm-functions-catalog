@@ -1,3 +1,6 @@
+---
+parent_function: "upsert-resource"
+---
 # upsert-resource: Upsert Resource Multiple Example
 
 In this example, we will see how to upsert multiple resources using `upsert-resource`
@@ -8,7 +11,7 @@ function.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/upsert-resource-multiple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/upsert-resource-multiple
 ```
 
 kpt CLI accepts only one resource as fn-config. Hence, `upsert-resource` function 

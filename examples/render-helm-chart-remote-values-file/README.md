@@ -1,3 +1,6 @@
+---
+parent_function: "render-helm-chart"
+---
 # render-helm-chart: Remote Values File
 
 ### Overview
@@ -10,7 +13,7 @@ function with a remote values file.
 Run the following command to fetch the example package:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/render-helm-chart-remote-values-file
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-remote-values-file
 ```
 
 Run the following commands to render the helm chart in your local

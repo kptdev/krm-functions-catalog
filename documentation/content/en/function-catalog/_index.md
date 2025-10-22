@@ -1,7 +1,5 @@
 ---
-title: Function Catalog
 linkTitle: Function Catalog
-description: Function Catalog
 toc_hide: false
 menu:
   main:
@@ -9,6 +7,5 @@ menu:
 ---
 
 ## Curated Functions Catalog
-
 
 {{< listfunctions >}}

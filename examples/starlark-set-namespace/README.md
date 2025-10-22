@@ -1,3 +1,6 @@
+---
+parent_function: "starlark"
+---
 # starlark: Set Namespace
 
 ### Overview
@@ -11,7 +14,7 @@ to set namespaces to KRM resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/starlark-set-namespace
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-set-namespace
 ```
 
 We are going to use the following `Kptfile` and `fn-config.yaml` to configure
@@ -61,4 +64,4 @@ $ kpt fn render starlark-set-namespace
 
 Check the `.metadata.namespace` field has been set to `prod` for every resource.
 
-[`starlark`]: https://catalog.kpt.dev/starlark/v0.1/
+[`starlark`]: {{< relref "function-catalog/starlark/v0.5/" >}}

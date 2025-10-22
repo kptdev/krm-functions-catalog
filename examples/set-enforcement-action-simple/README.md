@@ -1,3 +1,6 @@
+---
+parent_function: "set-enforcement-action"
+---
 # set-enforcement-action: Simple Example
 
 ### Overview
@@ -10,7 +13,7 @@ dryrun for auditing purposes.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-enforcement-action-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-enforcement-action-simple
 ```
 
 ### Function invocation

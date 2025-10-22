@@ -4,14 +4,11 @@ linkTitle: "remove-local-config-resources"
 tags: "config sync, mutator"
 weight: 4
 description: |
-   KRM function for remove-local-config-resources
+   Removes `local-config` annotated resources
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# remove-local-config-resources
-
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -40,7 +37,7 @@ The function will execute as follows:
 `remove-local-config-resources` function can be executed imperatively as follows:
 
 ```shell
-$ kpt fn eval -i gcr.io/kpt-fn/remove-local-config-resources:v0.1.0
+$ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:v0.1
 ```
 
 To execute `remove-local-config-resources` declaratively include the function in kpt package pipeline as follows:
@@ -48,7 +45,7 @@ To execute `remove-local-config-resources` declaratively include the function in
 ...
 pipeline:
   mutators:
-    - image: gcr.io/kpt-fn/remove-local-config-resources:v0.1.0
+    - image: ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:v0.1
 ...
 ```
 
@@ -94,7 +91,7 @@ spec:
 Invoke the function in the package directory:
 
 ```shell
-$ kpt fn eval -i gcr.io/kpt-fn/remove-local-config-resources:v0.1.0
+$ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources:v0.1
 ```
 
 The resulting package structure would look like this:

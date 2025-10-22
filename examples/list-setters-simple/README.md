@@ -1,3 +1,6 @@
+---
+parent_function: "list-setters"
+---
 # list-setters: Simple Example
 
 ### Overview
@@ -9,7 +12,7 @@ In this example, we will see how to list setters in a package.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/list-setters-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/list-setters-simple
 ```
 
 ### Function invocation
@@ -35,4 +38,4 @@ $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/list-setters:latest
 
 Refer to the [apply-setters] function documentation for information about updating the field values parameterized by setters.
 
-[apply-setters]: https://catalog.kpt.dev/apply-setters/v0.1/
+[apply-setters]: {{< relref "function-catalog/apply-setters/v0.1/" >}}

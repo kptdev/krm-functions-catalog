@@ -4,13 +4,11 @@ linkTitle: "set-annotations"
 tags: "mutator"
 weight: 4
 description: |
-   The `set-annotations` function adds a list of annotations to all resources.
+   Add a list of annotations to all resources
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# set-annotations
 
 {{< listversions >}}
 

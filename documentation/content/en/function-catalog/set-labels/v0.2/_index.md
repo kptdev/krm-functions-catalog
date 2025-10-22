@@ -4,14 +4,11 @@ linkTitle: "set-labels"
 tags: "mutator"
 weight: 4
 description: |
-   KRM function for set-labels
+   Add a list of labels to all resources
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# set-labels
-
 {{< listversions >}}
 
 {{< listexamples >}}

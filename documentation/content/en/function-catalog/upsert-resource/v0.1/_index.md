@@ -4,13 +4,11 @@ linkTitle: "upsert-resource"
 tags: "mutator"
 weight: 4
 description: |
-   Insert a resource, or if the resource already exists, update the existing resource.
+   Upsert an existing KRM resource
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# upsert-resource
 
 {{< listversions >}}
 

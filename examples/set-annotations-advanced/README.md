@@ -1,3 +1,6 @@
+---
+parent_function: "set-annotations"
+---
 # set-annotations: Advanced Example
 
 ### Overview
@@ -45,7 +48,7 @@ specify it in field `additionalAnnotationFields`.
 Invoke the function by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-annotations-advanced
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-annotations-advanced
 $ kpt fn render set-annotations-advanced
 ```
 
@@ -55,4 +58,4 @@ Check all resources have 2 annotations: `color: orange` and `fruit: apple`. And
 the resource of kind `MyResource` also has these 2 annotations in
 `spec.selector.annotations`.
 
-[`set-annotations`]: https://catalog.kpt.dev/set-annotations/v0.1/
+[`set-annotations`]: {{< relref "function-catalog/set-annotations/v0.1/" >}}

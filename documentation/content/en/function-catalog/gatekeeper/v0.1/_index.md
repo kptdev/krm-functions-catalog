@@ -4,13 +4,11 @@ linkTitle: "gatekeeper"
 tags: "validator"
 weight: 4
 description: |
-   KRM function for gatekeeper
+   Validate the KRM resources using Gatekeeper policies
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# gatekeeper
 
 {{< listversions >}}
 

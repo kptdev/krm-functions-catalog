@@ -1,3 +1,6 @@
+---
+parent_function: "set-namespace"
+---
 # set-namespace: Depends on example
 
 ### Overview
@@ -16,7 +19,7 @@ portion of the annotation.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-namespace-depends-on
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-namespace-depends-on
 ```
 
 We use the following `set-namespace-depends-on/Kptfile` to configure the function.
@@ -56,5 +59,5 @@ the package.
 annotation updated, since it references a namespaced resource which was not
 included in the package.
 
-[`set-namespace`]: https://catalog.kpt.dev/set-namespace/v0.3/
+[`set-namespace`]: {{< relref "function-catalog/set-namespace/v0.4/" >}}
 [`depends-on`]: https://kpt.dev/reference/annotations/depends-on/

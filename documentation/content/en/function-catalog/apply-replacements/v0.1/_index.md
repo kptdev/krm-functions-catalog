@@ -4,14 +4,11 @@ linkTitle: "apply-replacements"
 tags: "mutator"
 weight: 4
 description: |
-   Use the [kustomize replacements] feature as a KRM function. 
+   Use the kustomize replacements feature as a KRM function
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-
-# apply-replacements
 
 {{< listversions >}}
 

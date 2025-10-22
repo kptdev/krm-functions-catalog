@@ -1,3 +1,6 @@
+---
+parent_function: "set-labels"
+---
 # set-labels: Imperative Example
 
 ### Overview
@@ -10,7 +13,7 @@ all resources by running [`set-labels`] function imperatively.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-labels-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-labels-imperative
 ```
 
 ### Function invocation
@@ -28,4 +31,4 @@ kpt and used as the function configuration.
 
 Check all resources have 2 labels `color: orange` and `fruit: apple`.
 
-[`set-labels`]: https://catalog.kpt.dev/set-labels/v0.1/
+[`set-labels`]: {{< relref "function-catalog/set-labels/v0.2/" >}}

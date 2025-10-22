@@ -1,4 +1,9 @@
+---
+parent_function: "search-replace"
+---
 # search-replace: Create Setters Example
+
+### Overview
 
 The `search-replace` function can also be used to search for fields using available matchers
 and add [setter comments] to the resource fields. Please refer to [create-setters] 
@@ -12,7 +17,7 @@ This is an advanced example depicting [setter] creation process using `search-re
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/search-replace-create-setters
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/search-replace-create-setters
 ```
 
 Let's start with the input resource
@@ -59,8 +64,10 @@ data:
 
 Please refer to [apply-setters] documentation for information about applying desired setter values.
 
-[setter]: https://catalog.kpt.dev/apply-setters/v0.1/
-[setters]: https://catalog.kpt.dev/apply-setters/v0.1/
-[apply-setters]: https://catalog.kpt.dev/apply-setters/v0.1/
-[create-setters]: https://catalog.kpt.dev/create-setters/v0.1/
-[setter comments]: https://catalog.kpt.dev/apply-setters/v0.1/?id=definitions
+[setter]: {{< relref "function-catalog/apply-setters/v0.2/" >}}
+[setters]: {{< relref "function-catalog/apply-setters/v0.2/" >}}
+[apply-setters]: {{< relref "function-catalog/apply-setters/v0.2/" >}}
+[create-setters]: {{< relref "function-catalog/create-setters/v0.1/" >}}
+[setter comments]: {{< relref "function-catalog/apply-setters/v0.2/#definitions" >}}
+
+[setter]: {{< relref "function-catalog/apply-setters/v0.2/#definitions" >}}

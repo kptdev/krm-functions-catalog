@@ -4,14 +4,11 @@ linkTitle: "render-helm-chart"
 tags: "mutator"
 weight: 4
 description: |
-   KRM function for render-helm-chart
+   Renders a local or remote helm chart
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# render-helm-chart
-
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -140,7 +137,7 @@ The only required field is `name`.
 To render a remote minecraft chart, you can run the following command: 
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/render-helm-chart:v0.1.0 --network -- \
+$ kpt fn eval --image gcr.io/kpt-fn/render-helm-chart:v0.1 --network -- \
 name=minecraft \
 repo=https://itzg.github.io/minecraft-server-charts \
 releaseName=test
@@ -159,6 +156,6 @@ $ kpt pkg tree
 
 [helm]: https://helm.sh/
 [charts]: https://helm.sh/docs/topics/charts/
-[local]: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/render-helm-chart-local
-[remote]: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/render-helm-chart-remote
+[local]: {{< relref "/examples/render-helm-chart-local/readme/" >}}
+[remote]: {{< relref "/examples/render-helm-chart-remote/readme/" >}}
 [helm template command]: https://helm.sh/docs/helm/helm_template/

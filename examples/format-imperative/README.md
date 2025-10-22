@@ -1,3 +1,6 @@
+---
+parent_function: "format"
+---
 # format: Imperative Example
 
 >? This example only works with 1.0.0-beta.1 or lower versions of kpt. Starting
@@ -11,7 +14,7 @@ format KRM resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/format-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/format-imperative
 ```
 
 The `format` function formats the field ordering in YAML configuration files.

@@ -1,3 +1,6 @@
+---
+parent_function: "set-image"
+---
 # set-image: Simple Example
 
 ### Overview
@@ -11,7 +14,7 @@ resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-image-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-image-simple
 ```
 
 We use the following `Kptfile` to configure the function.
@@ -45,4 +48,4 @@ $ kpt fn render set-image-simple
 
 Check the 2 images have been set to the specified tag.
 
-[`set-image`]: https://catalog.kpt.dev/set-image/v0.1/
+[`set-image`]: {{< relref "function-catalog/set-image/v0.1/" >}}

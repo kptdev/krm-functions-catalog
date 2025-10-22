@@ -4,14 +4,11 @@ linkTitle: "starlark"
 tags: "mutator, validator"
 weight: 4
 description: |
-   KRM function for starlark
+   Run a Starlark script to mutate or validate resources
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# starlark
-
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -135,14 +132,14 @@ There are 2 ways to run the function imperatively.
   starlark script lives in `main.star` file.
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/starlark:v0.5.0 -- source="$(cat main.star)" param1=value1 param2=value2
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/starlark:v0.5 -- source="$(cat main.star)" param1=value1 param2=value2
 ```
 
 - Run it using `--fn-config` with either a `ConfigMap` or a `StarlarkRun` that
   lives in `fn-config.yaml`.
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/starlark:v0.5.0 --fn-config fn-config.yaml
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/starlark:v0.5 --fn-config fn-config.yaml
 ```
 
 ### Developing Starlark Script
@@ -184,7 +181,7 @@ We support the following [Starlib libraries]:
 
 | Name               | How to load                            | Example |
 |--------------------|----------------------------------------|---------|
-| [bsoup]            | load('bsoup.star', 'bsoup')            | [example](https://github.com/qri-io/starlib/blob/master/bsoup/testdata/test.star)           |
+| [bsoup]            | load('bsoup.star', 'bsoup')            | [example](https://github.com/qri-io/starlib/tree/master/bsoup)                              |
 | [encoding/base64]  | load('encoding/base64.star', 'base64') | [example](https://github.com/qri-io/starlib/blob/master/encoding/base64/testdata/test.star) |
 | [encoding/csv]     | load('encoding/csv.star', 'csv')       | [example](https://github.com/qri-io/starlib/blob/master/encoding/csv/testdata/test.star)    |
 | [encoding/json]    | load('encoding/json.star', 'json')     | [example](https://github.com/google/starlark-go/blob/master/starlark/testdata/json.star)    |
@@ -221,13 +218,13 @@ You will find your debugging output in `functionResultList items.stderr`.
 
 [Starlark]: https://docs.bazel.build/versions/master/skylark/language.html
 
-[executable configuration]: https://kpt.dev/book/05-developing-functions/04-executable-configuration
+[executable configuration]: https://kpt.dev/book/05-developing-functions/#authoring-executable-configuration
 
 [spec]: https://github.com/bazelbuild/starlark/blob/master/spec.md
 
 [apiref]: https://docs.bazel.build/versions/master/skylark/lib/skylark-overview.html
 
-[KRM Functions Specification]: https://kpt.dev/book/05-developing-functions/01-functions-specification
+[KRM Functions Specification]: https://kpt.dev/book/05-developing-functions/#functions-specification
 
 [for loop]: https://github.com/bazelbuild/starlark/blob/master/spec.md#for-loops
 

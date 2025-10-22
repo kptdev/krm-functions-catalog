@@ -1,3 +1,6 @@
+---
+parent_function: "remove-local-config-resources"
+---
 # remove-local-config-resources: Imperative Example
 
 ### Overview
@@ -10,7 +13,7 @@ supplied resource list.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/remove-local-config-resources-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/remove-local-config-resources-imperative
 ```
 
 ### Function invocation

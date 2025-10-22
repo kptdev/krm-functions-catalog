@@ -1,3 +1,6 @@
+---
+parent_function: "upsert-resource"
+---
 # upsert-resource: Simple Example
 
 In this example, we will see how `upsert-resource` function replaces the
@@ -9,7 +12,7 @@ package with the input resource.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/upsert-resource-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/upsert-resource-simple
 ```
 
 Let's start with the list of resources in a package:

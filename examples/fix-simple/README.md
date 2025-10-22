@@ -1,3 +1,6 @@
+---
+parent_function: "fix"
+---
 # fix: Simple Example
 
 In this example, we will fix a simple package which is compatible with v0.X version of kpt,
@@ -8,7 +11,7 @@ and make it compatible with kpt 1.0
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/fix-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/fix-simple
 ```
 
 Let's start with the input resources

@@ -1,3 +1,6 @@
+---
+parent_function: "set-image"
+---
 # set-image: Advanced Example
 
 ### Overview
@@ -47,7 +50,7 @@ field `additionalImageFields`.
 Invoke the function by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/set-image-advanced
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-image-advanced
 $ kpt fn render set-image-advanced
 ```
 
@@ -58,4 +61,4 @@ standard `.spec.containers[].image` field of the resource of kind `Pod`. And the
 image `nginx` has been set to `bitnami/nginx:1.21.4` in the custom
 `.spec.manifest.images[].image` location of the resource of kind `MyKind`
 
-[`set-image`]: https://catalog.kpt.dev/set-image/v0.1/
+[`set-image`]: {{< relref "function-catalog/set-image/v0.1/" >}}

@@ -1,3 +1,6 @@
+---
+parent_function: "gatekeeper"
+---
 # gatekeeper: Imperative Example
 
 ### Overview
@@ -10,7 +13,7 @@ running [`gatekeeper`] function imperatively.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/gatekeeper-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/gatekeeper-imperative
 ```
 
 To ensure ConfigMaps do not contain fields with name `private_key`, we express

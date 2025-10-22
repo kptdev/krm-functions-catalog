@@ -1,3 +1,6 @@
+---
+parent_function: "ensure-name-substring"
+---
 # ensure-name-substring: Advanced Example
 
 ### Overview
@@ -10,7 +13,7 @@ function to prepend prefix in the resource names.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/ensure-name-substring-advanced
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/ensure-name-substring-advanced
 ```
 
 We use the following `Kptfile` and `fn-config.yaml` to run the function.

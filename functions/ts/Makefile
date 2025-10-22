@@ -27,8 +27,7 @@ help: ## Print this help
 
 # Edit this list to contain all ts functions
 FUNCTIONS := \
-	generate-folders \
-	kubeval
+	generate-folders
 
 # Targets for running all function tests
 FUNCTION_TESTS := $(patsubst %,%-TEST,$(FUNCTIONS))

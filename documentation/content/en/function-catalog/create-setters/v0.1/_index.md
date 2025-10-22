@@ -4,13 +4,11 @@ linkTitle: "create-setters"
 tags: "mutator"
 weight: 4
 description: |
-   Parameterize the field values by adding [setter] comments.
+   Parameterize the field values by adding `setter` comments.
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# create-setters
 
 {{< listversions >}}
 
@@ -50,13 +48,10 @@ data:
    - For an array node, checks if all values match with any of the array setters.
 4. Adds comments to the fields matching the setter values using setter names as parameters.
 
->? If this function adds setter comments to the fields for which you didn't intend to parameterize,
+> If this function adds setter comments to the fields for which you didn't intend to parameterize,
 you can simply review and delete/modify those comments manually.
 
 <!--mdtogo-->
-
-?> If this function adds setter comments to fields for which you didn't intend 
-to parameterize, you can simply review and delete/modify those comments manually.
 
 ### Examples
 
@@ -106,13 +101,13 @@ data:
 Invoke the function:
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/create-setters:v0.1.0 --fn-config ./create-setters-fn-config.yaml
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/create-setters:v0.1 --fn-config ./create-setters-fn-config.yaml
 ```
 
 Alternatively, setter values can be passed as key-value pairs in the CLI
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/create-setters:v0.1.0 -- replicas=4 tag=1.1.2
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/create-setters:v0.1 -- replicas=4 tag=1.1.2
 ```
 
 Modified resource looks like the following:
@@ -141,7 +136,7 @@ spec:
              containerPort: 80
 ```
 
->? This function doesn't add comments to scalar nodes with multi-line values.
+> This function doesn't add comments to scalar nodes with multi-line values.
 
 Explanation for the changes:
 
@@ -187,7 +182,7 @@ data:
 ```
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/create-setters:v0.1.0 --fn-config ./create-setters-fn-config.yaml
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/create-setters:v0.1 --fn-config ./create-setters-fn-config.yaml
 ```
 
 Modified resource looks like the following:
@@ -208,4 +203,4 @@ Explanation for the changes:
 Here, the comment is added to the `environments` field as it is an array node, and the intent is to paremeterize entire array.
 <!--mdtogo-->
 
-[setter]: https://catalog.kpt.dev/apply-setters/v0.1/?id=definitions
+[setter]: {{< relref "function-catalog/apply-setters/v0.2/#definitions" >}}

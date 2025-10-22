@@ -1,3 +1,6 @@
+---
+parent_function: "some-image-foo"
+---
 # some-image-foo: Example Title
 
 ### Overview

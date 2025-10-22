@@ -1,3 +1,6 @@
+---
+parent_function: "starlark"
+---
 # starlark: Inject Sidecar
 
 ### Overview
@@ -11,7 +14,7 @@ to inject sidecar container to `Deployment`.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/starlark-inject-sidecar
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-inject-sidecar
 ```
 
 We are going to use the following `Kptfile` and `fn-config.yaml` to configure
@@ -68,4 +71,4 @@ $ kpt fn render starlark-inject-sidecar
 
 The logging agent container should have been injected. 
 
-[`starlark`]: https://catalog.kpt.dev/starlark/v0.1/
+[`starlark`]: {{< relref "function-catalog/starlark/v0.5/" >}}

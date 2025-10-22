@@ -3,16 +3,11 @@ title: "apply-setters"
 linkTitle: "apply-setters"
 tags: "mutator"
 weight: 4
-description: |
-   Update the field values parameterized by setters.
+description: Update the field values parameterized by setters
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-
-# apply-setters
-
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -40,7 +35,7 @@ A setter comment can be derived by replacing all the instances of setter values
 in the field value, with the corresponding setter names along with 'kpt-set:' prefix.
 
 ```shell
-e.g. image: gcr.io/nginx:1.16.1 # kpt-set: gcr.io/${image}:${tag}
+e.g. image: ghcr.io/nginx:1.16.1 # kpt-set: ghcr.io/${image}:${tag}
 ```
 
 <!--mdtogo-->
@@ -117,13 +112,13 @@ data:
 Invoke the function:
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/apply-setters:v0.2.0 --fn-config ./apply-setters-fn-config
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:v0.2 --fn-config ./apply-setters-fn-config
 ```
 
 Alternatively, setter values can be passed as key-value pairs in the CLI
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/apply-setters:v0.2.0 -- image=ubuntu replicas=3
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:v0.2 -- image=ubuntu replicas=3
 ```
 
 Modified resource looks like the following:
@@ -186,7 +181,7 @@ data:
 Invoke the function using the input config:
 
 ```shell
-$ kpt fn eval --image gcr.io/kpt-fn/apply-setters:v0.2.0 --fn-config ./apply-setters-fn-config
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:v0.2 --fn-config ./apply-setters-fn-config
 ```
 
 Modified resource looks like the following:
@@ -205,4 +200,4 @@ environments: # kpt-set: ${env}
 
 #### Note:
 
-Refer to the `create-setters` function documentation for information about creating setters.
+Refer to the [`create-setters`]({{< relref "function-catalog/create-setters/v0.1/" >}}) function documentation for information about creating setters.

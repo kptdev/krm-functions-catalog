@@ -4,13 +4,11 @@ linkTitle: "set-namespace"
 tags: "mutator"
 weight: 4
 description: |
-   KRM function for set-namespace
+  Upsert `namespace` for KRM resources  
 menu:
   main:
     parent: "Function Catalog"
 ---
-
-# set-namespace
 
 {{< listversions >}}
 

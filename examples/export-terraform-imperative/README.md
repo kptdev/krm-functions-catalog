@@ -1,3 +1,6 @@
+---
+parent_function: "export-terraform"
+---
 # export-terraform: Imperative Example
 
 ### Overview
@@ -9,7 +12,7 @@ In this example, we will see how to export Terraform configuration from KCC reso
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog.git/examples/export-terraform-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/export-terraform-imperative
 ```
 
 ### Function invocation
