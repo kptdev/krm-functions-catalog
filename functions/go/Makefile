@@ -23,9 +23,7 @@ FUNCTIONS := \
 	apply-replacements \
 	apply-setters \
 	create-setters \
-	enable-gcp-services \
 	ensure-name-substring \
-	export-terraform \
 	fix \
 	format \
 	gatekeeper \
@@ -39,7 +37,6 @@ FUNCTIONS := \
 	set-image \
 	set-labels \
 	set-namespace \
-	set-project-id \
 	source-gcloud-config \
 	starlark \
 	upsert-resource \

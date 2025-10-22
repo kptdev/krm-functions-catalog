@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: setters
-data:
-  namespace: config-control
-  storage-class: standard
