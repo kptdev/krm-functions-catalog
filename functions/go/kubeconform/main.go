@@ -21,21 +21,16 @@ import (
 	"os"
 )
 
-// nolint
 func main() {
-
 	cmd := &cobra.Command{
 		Short: generated.KubeconformShort,
 		Long:  generated.KubeconformLong,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return fn.AsMain(fn.ResourceListProcessorFunc(Run))
 		},
-		SilenceUsage:  true, // don't print usage on error
-		SilenceErrors: true, // suppress default error printing to stderr
+		SilenceUsage:  true,
+		SilenceErrors: true,
 	}
-
-	// Optionally add flags here if you want CLI users to override FunctionConfig
-	//cmd.Flags().BoolP("help", "h", false, "Show help")
 
 	if err := cmd.Execute(); err != nil {
 		os.Exit(1)

@@ -78,23 +78,20 @@ func Run(rl *fn.ResourceList) (bool, error) {
 	)
 
 	var results fn.Results
-	var exit error
+	hasValidationErrors := false
 	for _, obj := range rl.Items {
 		objResults, err := runKubeconformForObject(obj, args)
 		if err != nil {
-			if exit == nil {
-				exit = fmt.Errorf("KRM validation failed")
-			}
-			results = append(results, objResults...)
-			continue
+			return false, err
 		}
+		if len(objResults) > 0 {
+			hasValidationErrors = true
+		}
+		results = append(results, objResults...)
 	}
 
 	rl.Results = append(rl.Results, results...)
-	if exit != nil {
-		return false, nil
-	}
-	return true, nil
+	return !hasValidationErrors, nil
 }
 
 func runKubeconformForObject(obj *fn.KubeObject, args []string) (fn.Results, error) {
@@ -138,21 +135,15 @@ func runKubeconformForObject(obj *fn.KubeObject, args []string) (fn.Results, err
 	}
 
 	var results fn.Results
-	var hasError bool
 	for _, res := range kubeConf.Resources {
 		if res.Status != "statusValid" {
-			hasError = true
 			for _, e := range res.ValidationErrors {
 				results = append(results, ConfigObjectResult(e.Msg, e.Path, obj, fn.Error))
 			}
 		}
 	}
-	var validationError error
-	if hasError {
-		validationError = fmt.Errorf("validation failed for one or more resources")
-	}
 
-	return results, validationError
+	return results, nil
 }
 
 func ConfigObjectResult(msg string, path string, obj *fn.KubeObject, severity fn.Severity) *fn.Result {
