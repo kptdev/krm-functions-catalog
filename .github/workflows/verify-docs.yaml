@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up python 3
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
     - name: Install libs
       run: |
         pip install pyyaml
