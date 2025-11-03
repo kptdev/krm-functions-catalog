@@ -29,7 +29,7 @@ unit-test: ## Run unit tests for Go functions
 	cd contrib/functions/go && $(MAKE) test
 
 e2e-test: ## Run all e2e tests
-	cd tests && $(MAKE) TAG=$(TAG) test
+	cd tests/e2etest && go test -v -run TestE2E ./...
 
 test: unit-test e2e-test ## Run all unit tests and e2e tests
 
