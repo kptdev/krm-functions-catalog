@@ -1,0 +1,38 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-organization-adminsorgpolicy-policyAdmin
+  namespace: config-control
+spec:
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Organization
+    external: "11111111111"
+  role: roles/orgpolicy.policyAdmin
+  member: group:gcp-organization-admins@example.com
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-organization-adminsorgpolicy-editor
+  namespace: config-control
+spec:
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Organization
+    external: "11111111111"
+  role: roles/editor
+  member: group:gcp-organization-admins@example.com
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-devs-editor
+  namespace: config-control
+spec:
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Organization
+    external: "11111111111"
+  role: roles/editor
+  member: group:gcp-developers@example.com

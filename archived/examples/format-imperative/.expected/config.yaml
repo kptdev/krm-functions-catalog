@@ -1,0 +1,4 @@
+testType: eval
+image: ghcr.io/kptdev/krm-functions-catalog/archived/format:latest
+# Skip this until we figure out what we should do
+skip: true

@@ -6,7 +6,6 @@ require (
 	github.com/kptdev/krm-functions-sdk/go/fn v0.0.0-20250930144919-f55a12ae70b7
 	github.com/spf13/cobra v1.9.1
 	github.com/stretchr/testify v1.10.0
-	sigs.k8s.io/yaml v1.6.0
 )
 
 require (
@@ -36,4 +35,5 @@ require (
 	k8s.io/kube-openapi v0.0.0-20250318190949-c8a335a9a2ff // indirect
 	sigs.k8s.io/kustomize/api v0.20.1 // indirect
 	sigs.k8s.io/kustomize/kyaml v0.20.1 // indirect
+	sigs.k8s.io/yaml v1.6.0 // indirect
 )

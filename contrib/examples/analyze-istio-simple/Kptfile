@@ -1,9 +1,0 @@
-apiVersion: kpt.dev/v1
-kind: Kptfile
-metadata:
-  name: example
-pipeline:
-  validators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/contrib/analyze-istio:latest
-      configMap:
-        '--use-kube': 'false'

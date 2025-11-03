@@ -1,0 +1,80 @@
+diff --git a/terraform.yaml b/terraform.yaml
+new file mode 100644
+index 0000000..c79a7cd
+--- /dev/null
++++ b/terraform.yaml
+@@ -0,0 +1,74 @@
++apiVersion: v1
++kind: ConfigMap
++metadata:
++  name: terraform
++  annotations:
++    blueprints.cloud.google.com/flavor: terraform
++    blueprints.cloud.google.com/syntax: hcl
++    config.kubernetes.io/local-config: "true"
++data:
++  README.md: |
++    # Google Cloud Foundation Blueprint
++
++    This directory contains Terraform configuration for a foundational environment on Google Cloud.
++
++    It includes a subset of resources configured via the [setup checklist](https://cloud.google.com/docs/enterprise/setup-checklist)
++    and is based on the [security foundations blueprint](https://cloud.google.com/architecture/security-foundations).
++
++    ## Prerequisites
++
++    To run the commands described in this document, you need the following:
++
++    1. Install the [Google Cloud SDK](https://cloud.google.com/sdk/install) version 319.0.0 or later
++    1. Install [Terraform](https://www.terraform.io/downloads.html) version 0.13.7 or later.
++    1. Set up a Google Cloud
++       [organization](https://cloud.google.com/resource-manager/docs/creating-managing-organization).
++    1. Set up a Google Cloud
++       [billing account](https://cloud.google.com/billing/docs/how-to/manage-billing-account).
++    1. For the user who will run the Terraform install, grant the
++       following roles:
++       -  The `roles/billing.admin` role on the billing account.
++       -  The `roles/resourcemanager.organizationAdmin` role on the Google
++          Cloud organization.
++       -  The `roles/resourcemanager.folderCreator` role on the Google
++          Cloud organization.
++       -  The `roles/resourcemanager.projectCreator` role on the Google
++          Cloud organization.
++
++    ## Deploying
++
++    1. Run `terraform init`.
++    1. Run `terraform plan` and review the output.
++    1. Run `terraform apply`.
++
++    ## Next steps
++
++    Once you have the basic foundation deployed, you should explore:
++    1. Building an [advanced foundation](https://github.com/terraform-google-modules/terraform-example-foundation) using the security blueprint
++    2. Automatically deploying Terraform with [Cloud Build](https://cloud.google.com/architecture/managing-infrastructure-as-code)
++  folders.tf: |
++    resource "google_folder" "test" {
++      display_name = "Test Display"
++      parent       = "organizations/${var.org_id}"
++    }
++  iam.tf: "module \"organization-iam\" {\n  source  = \"terraform-google-modules/iam/google//modules/organizations_iam\"\n  version = \"~> 7.4\"\n\n  organizations = [\"11111111111\"]\n\n  bindings = {\n    \n    \"roles/editor\" = [\n      \"group:gcp-organization-admins@example.com\",\n      \"group:gcp-developers@example.com\",\n    ]\n    \n    \"roles/orgpolicy.policyAdmin\" = [\n      \"group:gcp-organization-admins@example.com\",\n    ]\n    \n  }\n}\n\n\nmodule \"folder-1-iam\" {\n  source  = \"terraform-google-modules/iam/google//modules/folders_iam\"\n  version = \"~> 7.4\"\n\n  folders = [\"folders/335620346181\"]\n\n  bindings = {\n    \n    \"roles/viewer\" = [\n      \"group:gcp-developers@example.com\",\n    ]\n    \n  }\n}\n\n\nmodule \"test-iam\" {\n  source  = \"terraform-google-modules/iam/google//modules/folders_iam\"\n  version = \"~> 7.4\"\n\n  folders = [google_folder.test.name]\n\n  bindings = {\n    \n    \"roles/viewer\" = [\n      \"group:gcp-developers@example.com\",\n    ]\n    \n  }\n}\n"
++  variables.tf: |
++    variable "org_id" {
++      description = "The organization id for the associated resources"
++      type        = string
++      default     = "11111111111"
++    }
++  versions.tf: |
++    terraform {
++      required_version = ">=0.13"
++
++      required_providers {
++        google = {
++          source  = "hashicorp/google"
++          version = ">= 4.0.0"
++        }
++      }
++      provider_meta "google" {
++        module_name = "blueprints/terraform/exported-krm/v0.1.0"
++      }
++    }

@@ -67,12 +67,12 @@ EXTRA_BUILD_ARGS="${EXTRA_BUILD_ARGS:-}"
 case "$1" in
   build)
     for version in "${version_array[@]}"; do
-      docker_build "load" "${FUNCTION_TYPE}" "go" "${CURRENT_FUNCTION}" "${version}" "${EXTRA_BUILD_ARGS}"
+      docker_build "load" "${FUNCTION_TYPE}" "${CURRENT_FUNCTION}" "${version}" "${EXTRA_BUILD_ARGS}"
     done
     ;;
   push)
     for version in "${version_array[@]}"; do
-      docker_build "push" "${FUNCTION_TYPE}" "go" "${CURRENT_FUNCTION}" "${version}" "${EXTRA_BUILD_ARGS}"
+      docker_build "push" "${FUNCTION_TYPE}" "${CURRENT_FUNCTION}" "${version}" "${EXTRA_BUILD_ARGS}"
     done
     ;;
   *)

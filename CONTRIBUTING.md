@@ -25,26 +25,19 @@ Contributions are required to follow these style guides:
 │     ├── curated_function_bar_example
 │     └── curated_function_foo_example
 ├── functions
-│     ├── go: Home for all golang-based curated function source code
-│     │     ├── Makefile
-│     │     ├── curated_go_function_bar
-│     │     └── curated_go_function_foo
-│     └── ts: Home for all typescript-based curated function source code
+│     └── go: Home for all golang-based curated function source code
 │         ├── Makefile
-│         ├── curated_ts_function_bar
-│         └── curated_ts_function_foo
+│         ├── curated_go_function_bar
+│         └── curated_go_function_foo
 ├── contrib
 │     ├── functions
-│     │     ├── go: Home for all golang-based contrib function source code
-│     │     └── ts: Home for all typescript-based contrib function source code
+│     │     └── go: Home for all golang-based contrib function source code
 │     └── examples: Home for all contrib function examples.
 ├── scripts
 ├── tests: Home for e2e tests
 └── build
       └── docker
-          ├── go: Home for default golang Dockerfile
-          │    └── Dockerfile
-          └── ts: Home for default typescript Dockerfile
+          └── go: Home for default golang Dockerfile
                └── Dockerfile
 ```
 
@@ -55,9 +48,7 @@ For each function, its files spread in the follow places:
   following:
     - Source code (and unit tests).
     - A README.md file serving as the usage doc and will be shown in
-      the [catalog website].
-        - golang-based functions should follow [this template][golang-template].
-        - typescript-based functions should follow [this template][ts-template].
+      the [catalog website]. Functions should follow [this template][golang-template].
     - A metadata.yaml file that follows the function metadata schema.
     - (Optional) A Dockerfile to build the docker container. If a Dockerfile is
       not defined, the [default Dockerfile for the language][docker-common] will
@@ -187,10 +178,9 @@ If you fix a bug, you must add (unit or e2e) tests to cover that.
 
 You must follow the layout convention when you contribute new functions.
 
-You need to add new function name to the respective language Makefiles.
+You need to add new function name to the respective Makefile.
 
 - `functions/go/Makefile` for golang.
-- `functions/ts/Makefile` for typescript.
 
 ## Contact Us
 
@@ -205,8 +195,6 @@ Do you need a review or release of functions? We’d love to hear from you!
 [e2e test harness doc]: https://github.com/kptdev/kpt/blob/main/pkg/test/runner/README.md
 
 [golang-template]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/master/functions/go/_template/README.md
-
-[ts-template]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/master/functions/ts/_template/README.md
 
 [docker-common]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/master/build/docker
 

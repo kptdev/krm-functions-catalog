@@ -1,0 +1,9 @@
+apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: enable-gcp-services-simple
+  annotations:
+    config.kubernetes.io/local-config: "true"
+pipeline:
+  mutators:
+    - image: ghcr.io/kptdev/krm-functions-catalog/archived/enable-gcp-services:latest

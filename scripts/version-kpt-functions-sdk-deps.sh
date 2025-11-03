@@ -23,7 +23,7 @@ set -euo pipefail
 TAG_VERSION=${1};
 
 pushd .
-cd "functions/ts"
+cd "archived/functions/ts"
 npm install "kpt-functions@${TAG_VERSION}"
 git add package.json package-lock.json
 popd

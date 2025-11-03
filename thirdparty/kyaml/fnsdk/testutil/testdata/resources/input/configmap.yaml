@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: game-demo
-data:
-  player_initial_lives: "3"

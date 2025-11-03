@@ -1,0 +1,24 @@
+apiVersion: kpt.dev/v1
+kind: FunctionResultList
+metadata:
+  name: fnresults
+exitCode: 1
+items:
+  - image: ghcr.io/kptdev/krm-functions-catalog/archived/analyze-istio:latest
+    exitCode: 1
+    results:
+      - message: 'Istioctl analyze command results in error: function toString() { [native code] }'
+        severity: error
+        file: {}
+      - message: 'Schema validation error: gateway must have at least one server'
+        severity: error
+        resourceRef:
+          apiVersion: networking.istio.io/v1alpha3
+          kind: Gateway
+          name: httpbin-gateway
+        file:
+          path: istio-config.yaml
+        tags:
+          code: IST0106
+          documentation_url: https://istio.io/docs/reference/config/analysis/IST0106?ref=istioctl-analyze
+          origin: Gateway httpbin-gateway.default

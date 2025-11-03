@@ -1,0 +1,142 @@
+diff --git a/Kptfile b/Kptfile
+index c648571..b7e9c39 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -3,7 +3,7 @@ kind: Kptfile
+ metadata:
+   name: example
+   annotations:
+-    config.kubernetes.io/local-config: "true"
++    config.kubernetes.io/local-config: 'true'
+ pipeline:
+   mutators:
+-    - image: ghcr.io/kptdev/krm-functions-catalog/archived/generate-folders:latest
++    - image: 'ghcr.io/kptdev/krm-functions-catalog/archived/generate-folders:latest'
+diff --git a/folder_dev.team-2.yaml b/folder_dev.team-2.yaml
+new file mode 100644
+index 0000000..9afc422
+--- /dev/null
++++ b/folder_dev.team-2.yaml
+@@ -0,0 +1,10 @@
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: dev.team-2
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
++spec:
++  displayName: Team_2
++  folderRef:
++    name: dev
+diff --git a/folder_dev.team-one.yaml b/folder_dev.team-one.yaml
+new file mode 100644
+index 0000000..8ad4fc6
+--- /dev/null
++++ b/folder_dev.team-one.yaml
+@@ -0,0 +1,10 @@
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: dev.team-one
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
++spec:
++  displayName: Team "One"
++  folderRef:
++    name: dev
+diff --git a/folder_dev.yaml b/folder_dev.yaml
+new file mode 100644
+index 0000000..cc4982a
+--- /dev/null
++++ b/folder_dev.yaml
+@@ -0,0 +1,10 @@
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: dev
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
++spec:
++  displayName: Dev
++  organizationRef:
++    external: test-organization
+diff --git a/folder_foo.bar.yaml b/folder_foo.bar.yaml
+new file mode 100644
+index 0000000..b8bf67d
+--- /dev/null
++++ b/folder_foo.bar.yaml
+@@ -0,0 +1,10 @@
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: foo.bar
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
++spec:
++  displayName: bar
++  folderRef:
++    name: foo
+diff --git a/folder_foo.yaml b/folder_foo.yaml
+new file mode 100644
+index 0000000..8eda4e3
+--- /dev/null
++++ b/folder_foo.yaml
+@@ -0,0 +1,10 @@
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: foo
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
++spec:
++  displayName: Foo
++  organizationRef:
++    external: test-organization
+diff --git a/folder_prod.team-2.yaml b/folder_prod.team-2.yaml
+new file mode 100644
+index 0000000..da2db9e
+--- /dev/null
++++ b/folder_prod.team-2.yaml
+@@ -0,0 +1,10 @@
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: prod.team-2
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
++spec:
++  displayName: Team_2
++  folderRef:
++    name: prod
+diff --git a/folder_prod.team-one.yaml b/folder_prod.team-one.yaml
+new file mode 100644
+index 0000000..e39b84d
+--- /dev/null
++++ b/folder_prod.team-one.yaml
+@@ -0,0 +1,10 @@
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: prod.team-one
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
++spec:
++  displayName: Team "One"
++  folderRef:
++    name: prod
+diff --git a/folder_prod.yaml b/folder_prod.yaml
+new file mode 100644
+index 0000000..8139257
+--- /dev/null
++++ b/folder_prod.yaml
+@@ -0,0 +1,10 @@
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: prod
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
++spec:
++  displayName: Prod
++  organizationRef:
++    external: test-organization

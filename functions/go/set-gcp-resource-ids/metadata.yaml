@@ -1,6 +1,0 @@
-description: Set resourceIDs and other identifiers for GCP resources.
-tags:
-  - mutator
-emails:
-  - kpt-team@google.com
-license: Apache-2.0

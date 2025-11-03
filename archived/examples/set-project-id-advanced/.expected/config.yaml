@@ -1,0 +1,4 @@
+testType: eval
+image: ghcr.io/kptdev/krm-functions-catalog/archived/set-project-id:latest
+args:
+  project-id: foo

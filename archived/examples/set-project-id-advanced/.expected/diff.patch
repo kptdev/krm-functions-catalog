@@ -1,0 +1,46 @@
+diff --git a/resources.yaml b/resources.yaml
+index 9e4fea2..ff21ea3 100644
+--- a/resources.yaml
++++ b/resources.yaml
+@@ -19,6 +19,7 @@ metadata:
+   namespace: config-control # kpt-set: ${namespace}
+   annotations:
+     cnrm.cloud.google.com/force-destroy: "false"
++    cnrm.cloud.google.com/project-id: foo
+ spec:
+   storageClass: standard # kpt-set: ${storage-class}
+   uniformBucketLevelAccess: true
+diff --git a/setters.yaml b/setters.yaml
+index 1702bac..06515a7 100644
+--- a/setters.yaml
++++ b/setters.yaml
+@@ -5,3 +5,4 @@ metadata:
+ data:
+   namespace: config-control
+   storage-class: standard
++  project-id: foo
+diff --git a/subpkg/Kptfile b/subpkg/Kptfile
+index c96b2cd..94245a6 100644
+--- a/subpkg/Kptfile
++++ b/subpkg/Kptfile
+@@ -2,3 +2,8 @@ apiVersion: kpt.dev/v1
+ kind: Kptfile
+ metadata:
+   name: subpkg
++pipeline:
++  mutators:
++  - image: ghcr.io/kptdev/krm-functions-catalog/apply-setters:v0.2
++    configMap:
++      project-id: foo
+diff --git a/subpkg/resources.yaml b/subpkg/resources.yaml
+index 84a6d6a..d568a8f 100644
+--- a/subpkg/resources.yaml
++++ b/subpkg/resources.yaml
+@@ -3,5 +3,7 @@ kind: IAMServiceAccount
+ metadata:
+   name: iamserviceaccount-sample
+   namespace: config-control # kpt-set: ${namespace}
++  annotations:
++    cnrm.cloud.google.com/project-id: foo
+ spec:
+   displayName: Example Service Account

@@ -1,0 +1,10 @@
+apiVersion: serviceusage.cnrm.cloud.google.com/v1beta1
+kind: Service
+metadata:
+  name: proj2-service-redis
+  annotations:
+    blueprints.cloud.google.com/ownerReference: 'blueprints.cloud.google.com/ProjectServiceSet/proj2-service'
+spec:
+  resourceID: redis.googleapis.com
+  projectRef:
+    external: proj2

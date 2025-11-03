@@ -27,34 +27,26 @@ function err {
 function docker_build {
   action=$1 # docker buildx operation, it should be either load or push.
   type=$2 # function type, e.g. contrib, curated
-  lang=$3 # function language, e.g. go, ts
-  name=$4 # function name, e.g. apply-setters
-  tag=$5 # function tag, e.g. v1.2.3
+  name=$3 # function name, e.g. apply-setters
+  tag=$4 # function tag, e.g. v1.2.3
 
   build_args=()
 
   case "${type}" in
-    contrib) function_dir="${repo_base}/contrib/functions/${lang}/${name}" ;;
-    curated) function_dir="${repo_base}/functions/${lang}/${name}" ;;
+    contrib) function_dir="${repo_base}/contrib/functions/go/${name}" ;;
+    curated) function_dir="${repo_base}/functions/go/${name}" ;;
     *) err "unknown function type: ${type}" ;;
   esac
 
-  case "${lang}" in
-    ts)
-      translated_name=$(echo "${name}" | tr - _)
-      build_args+=(--build-arg "FILENAME=${translated_name}_run.js")
-      override_dockerfile="${function_dir}/build/${translated_name}.Dockerfile"
-      ;;
-    *) override_dockerfile="${function_dir}"/Dockerfile ;;
-  esac
+  override_dockerfile="${function_dir}"/Dockerfile
 
-  dockerfile="${repo_base}/build/docker/${lang}/Dockerfile"
+  dockerfile="${repo_base}/build/docker/go/Dockerfile"
   [[ -f "${override_dockerfile}" ]] && dockerfile="${override_dockerfile}"
   [[ -f "${dockerfile}" ]] || err "Dockerfile does not exist: ${dockerfile}"
 
   echo "Using Dockerfile ${dockerfile}" 
 
-  defaults="${repo_base}/build/docker/${lang}/defaults.env"
+  defaults="${repo_base}/build/docker/go/defaults.env"
   [[ -f "${defaults}" ]] || err "defaults file does not exist: ${defaults}"
   # shellcheck source=/dev/null
   source "${defaults}"
@@ -62,7 +54,10 @@ function docker_build {
   build_args+=(--build-arg "BASE_IMAGE=${BASE_IMAGE}")
 
   if [[ ! -f "${function_dir}/go.mod" ]]; then
-    function_dir="${repo_base}/functions/${lang}/"
+    case "${type}" in
+      contrib) function_dir="${repo_base}/contrib/functions/go/" ;;
+      curated) function_dir="${repo_base}/functions/go/" ;;
+    esac
     echo "Setting build context to ${function_dir}"
   fi
 

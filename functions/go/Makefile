@@ -24,25 +24,20 @@ FUNCTIONS := \
 	apply-setters \
 	create-setters \
 	ensure-name-substring \
-	fix \
-	format \
 	gatekeeper \
 	generate-kpt-pkg-docs \
+	kubeconform \
+	list-setters \
 	remove-local-config-resources \
 	render-helm-chart \
-	list-setters \
 	search-replace \
 	set-annotations \
 	set-enforcement-action \
 	set-image \
 	set-labels \
 	set-namespace \
-	source-gcloud-config \
 	starlark \
-	upsert-resource \
-	set-gcp-resource-ids \
-	set-name-prefix \
-	kubeconform
+	upsert-resource
 
 # Targets for running all function tests
 FUNCTION_TESTS := $(patsubst %,%-TEST,$(FUNCTIONS))

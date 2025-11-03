@@ -1,0 +1,44 @@
+{
+  "name": "ts-functions",
+  "version": "0.1.2",
+  "description": "kpt typescript sdk functions",
+  "author": "kpt Authors",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rm -Rf node_modules/ dist/",
+    "lint": "prettier \"src/**\" \"*.json\" --check",
+    "check-licenses": "license-checker --onlyAllow 'Apache-2.0;MIT;BSD;BSD-2-Clause;BSD-3-Clause;ISC;CC-BY-3.0;CC0-1.0;Unlicense'",
+    "format": "prettier \"src/**\" \"*.json\" --write",
+    "pretest": "npm run build",
+    "test": "jasmine --config=jasmine.json",
+    "posttest": "npm run lint",
+    "kpt:docker-create": "kpt docker-create",
+    "kpt:docker-build": "kpt docker-build",
+    "kpt:docker-push": "kpt docker-push",
+    "kpt:function-create": "kpt function-create",
+    "kpt:type-create": "kpt type-create"
+  },
+  "dependencies": {
+    "kpt-functions": "^0.15.0"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^4.3.6",
+    "@types/node": "^18.19.0",
+    "create-kpt-functions": "^0.18.0",
+    "jasmine": "^4.6.0",
+    "license-checker": "^25.0.1",
+    "prettier": "^2.8.8",
+    "typescript": "~4.9.5"
+  },
+  "resolutions": {
+    "@types/tar": "^4.0.5"
+  },
+  "kpt": {
+    "docker_repo_base": "gcr.io/krm-fn-contrib"
+  },
+  "repository": {
+    "type": "git"
+  }
+}

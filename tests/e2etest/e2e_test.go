@@ -1,6 +1,7 @@
 package e2etest
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/kptdev/kpt/pkg/test/runner"
@@ -41,10 +42,10 @@ func TestE2E(t *testing.T) {
 	runTests(t, "../..")
 }
 
-// runTests will scan test cases in 'path', run the command
-// on all of the packages in path, and test that
-// the diff between the results and the original package is as
-// expected
+func TestArchivedE2E(t *testing.T) {
+	runTests(t, "../../archived/examples")
+}
+
 func runTests(t *testing.T, path string) {
 	cases, err := runner.ScanTestCases(path)
 	if err != nil {
@@ -53,6 +54,10 @@ func runTests(t *testing.T, path string) {
 	setImagePullPolicyToIfNotPresent(*cases)
 	for _, c := range *cases {
 		c := c // capture range variable
+		// Skip archived/examples when running from root
+		if path == "../.." && strings.Contains(c.Path, "archived/examples") {
+			continue
+		}
 		t.Run(c.Path, func(t *testing.T) {
 			t.Parallel()
 			r, err := runner.NewRunner(t, c, c.Config.TestType)

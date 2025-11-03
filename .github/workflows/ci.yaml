@@ -54,24 +54,16 @@ jobs:
           path: go/src/github.com/${{ github.repository }}
       - name: Run unit tests
         run: |
-          make unit-test-go
+          make unit-test
 
   e2e-ci:
     timeout-minutes: 60
-    strategy:
-      matrix:
-        platform: [ubuntu-latest]
-        node-version: [18.x]
-    runs-on: ${{ matrix.platform }}
+    runs-on: ubuntu-latest
     env:
       GOPATH: /home/runner/work/krm-functions-catalog/functions/go
       GO111MODULE: on
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
       - name: Set up Go 1.24.3
         uses: actions/setup-go@v5
         with:
@@ -84,11 +76,9 @@ jobs:
         with:
           kustomize-version: 4.2.0
       - run: kustomize version
-      - name: Build node and Go docker images
-        if: matrix.platform == 'ubuntu-latest'
+      - name: Build docker images
         run: |
           make build
       - name: Run all tests
-        if: matrix.platform == 'ubuntu-latest'
         run: |
           make e2e-test
