@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/apply-replacements
 
-go 1.24.3
+go 1.24.10
 
 require (
 	github.com/kptdev/krm-functions-sdk/go/fn v0.0.0-20250930144919-f55a12ae70b7

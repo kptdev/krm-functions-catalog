@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/gatekeeper
 
-go 1.24.3
+go 1.24.10
 
 require (
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20220121182312-5d06dedcafb4

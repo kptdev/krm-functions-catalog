@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/contrib/functions/go/annotate-apply-time-mutations
 
-go 1.24.3
+go 1.24.10
 
 require (
 	github.com/stretchr/testify v1.7.0

@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/archived/functions/go/set-project-id
 
-go 1.24.3
+go 1.24.10
 
 require (
 	github.com/kptdev/kpt v1.0.0-beta.58.0.20251002154110-c319abece00e

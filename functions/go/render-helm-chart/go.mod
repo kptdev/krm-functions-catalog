@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/render-helm-chart
 
-go 1.24.3
+go 1.24.10
 
 require (
 	github.com/imdario/mergo v0.3.16

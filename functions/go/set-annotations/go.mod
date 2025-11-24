@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/set-annotations
 
-go 1.24.3
+go 1.24.10
 
 require (
 	sigs.k8s.io/kustomize/api v0.10.2-0.20211202184144-fe551be87b8d
