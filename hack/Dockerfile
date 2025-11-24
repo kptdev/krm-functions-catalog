@@ -25,7 +25,7 @@ RUN apk add --no-cache build-base bash make curl
 COPY --from=docker/buildx-bin:latest /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
 # Install golang
-COPY --from=golang:1.24.3-alpine /usr/local/go/ /usr/local/go/
+COPY --from=golang:1.24.10-alpine /usr/local/go/ /usr/local/go/
 ENV PATH="/usr/local/go/bin:${PATH}"
 
 # Install node and npm

@@ -31,7 +31,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: actions/setup-go@v5
       with:
-        go-version: '1.24.3'
+        go-version: '1.24.10'
     - uses: docker/setup-qemu-action@v3
     - uses: docker/setup-buildx-action@v3
     - name: Log in to GHCR
@@ -50,7 +50,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: actions/setup-go@v5
       with:
-        go-version: '1.24.3'
+        go-version: '1.24.10'
     - uses: docker/setup-qemu-action@v3
     - uses: docker/setup-buildx-action@v3
     - name: Log in to GHCR

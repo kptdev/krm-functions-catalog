@@ -2,7 +2,7 @@
 # (https://gohugo.io/hosting-and-deployment/hosting-on-netlify/#configure-hugo-version-in-netlify)
 
 [build.environment]
-  GO_VERSION = "1.24.3"
+  GO_VERSION = "1.24.10"
   HUGO_VERSION = "v0.148.2"
 
 
