@@ -43,7 +43,7 @@ jobs:
       GOPATH: /home/runner/work/krm-functions-catalog/functions/go
       GO111MODULE: on
     steps:
-      - name: Set up Go 1.24.3
+      - name: Set up Go 1.24.10
         uses: actions/setup-go@v5
         with:
           go-version: '1.24.10'
@@ -64,7 +64,7 @@ jobs:
       GO111MODULE: on
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Go 1.24.3
+      - name: Set up Go 1.24.10
         uses: actions/setup-go@v5
         with:
           go-version: '1.24.10'
