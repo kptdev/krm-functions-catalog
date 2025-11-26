@@ -44,7 +44,7 @@ jobs:
       GO111MODULE: on
     steps:
       - name: Set up Go 1.24.10
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: '1.24.10'
         id: go
@@ -65,7 +65,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Go 1.24.10
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: '1.24.10'
       - name: Install kpt
