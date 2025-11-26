@@ -31,7 +31,7 @@ jobs:
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Lint shell scripts, ignoring third-party files
         run: |
           find . -name "*.sh" > shell_files.out
@@ -49,7 +49,7 @@ jobs:
           go-version: '1.24.10'
         id: go
       - name: Check out code into GOPATH
-        uses: actions/checkout@v1
+        uses: actions/checkout@v6
         with:
           path: go/src/github.com/${{ github.repository }}
       - name: Run unit tests
@@ -63,7 +63,7 @@ jobs:
       GOPATH: /home/runner/work/krm-functions-catalog/functions/go
       GO111MODULE: on
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Go 1.24.10
         uses: actions/setup-go@v5
         with:
