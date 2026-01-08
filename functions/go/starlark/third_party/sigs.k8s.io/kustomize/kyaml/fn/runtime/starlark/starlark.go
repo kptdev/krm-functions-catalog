@@ -74,7 +74,6 @@ func (sf *Filter) setup() error {
 			if err != nil {
 				return err
 			}
-			//nolint:errcheck
 			defer resp.Body.Close()
 			b, err := io.ReadAll(resp.Body)
 			if err != nil {
@@ -111,11 +110,8 @@ func (sf *Filter) Run(reader io.Reader, writer io.Writer) error {
 func runStarlark(name, starlarkProgram string, resourceList starlark.Value) error {
 	// Enabled some non-standard starlark features (https://pkg.go.dev/go.starlark.net/resolve#pkg-variables).
 	// LoadBindsGlobally is not enabled, since it has been deprecated.
-	//nolint:staticcheck
 	resolve.AllowSet = true
-	//nolint:staticcheck
 	resolve.AllowGlobalReassign = true
-	//nolint:staticcheck
 	resolve.AllowRecursion = true
 
 	// run the starlark as program as transformation function
@@ -126,7 +122,6 @@ func runStarlark(name, starlarkProgram string, resourceList starlark.Value) erro
 	if err != nil {
 		return errors.Wrap(err)
 	}
-	//nolint:staticcheck
 	_, err = starlark.ExecFile(thread, name, starlarkProgram, pd)
 	if err != nil {
 		return errors.Wrap(err)

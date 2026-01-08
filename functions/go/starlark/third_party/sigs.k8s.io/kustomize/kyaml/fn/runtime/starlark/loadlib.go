@@ -1,7 +1,8 @@
 package starlark
 
 import (
-	"github.com/kptdev/krm-functions-catalog/functions/go/starlark/krmfn"
+	"github.com/nephio-project/porch/third_party/kptdev/krm-functions-catalog/functions/go/starlark/krmfn"
+
 	"github.com/qri-io/starlib/bsoup"
 	"github.com/qri-io/starlib/encoding/base64"
 	"github.com/qri-io/starlib/encoding/csv"

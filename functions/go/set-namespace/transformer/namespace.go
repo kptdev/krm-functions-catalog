@@ -1,5 +1,4 @@
 // Copyright 2022 Google LLC
-// Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package transformer
+package set_namespace
 
 import (
 	"fmt"
@@ -78,8 +77,9 @@ func (p *SetNamespace) Config(o *fn.KubeObject) error {
 			fnConfigKind, fnConfigVersion, fnConfigGroup)
 	case o.IsGVK("", "v1", "ConfigMap"):
 		var cm corev1.ConfigMap
-		// nolint
-		o.As(&cm)
+		if o.As(&cm) != nil {
+			return fmt.Errorf("failed to parse FunctionConfig as ConfigMap")
+		}
 		p.NamespaceMatcher = cm.Data["namespaceMatcher"]
 		if cm.Data["namespace"] != "" {
 			p.NewNamespace = cm.Data["namespace"]
@@ -94,8 +94,9 @@ func (p *SetNamespace) Config(o *fn.KubeObject) error {
 		}
 		return fmt.Errorf("`data.namespace` should not be empty")
 	case o.IsGVK(fnConfigGroup, fnConfigVersion, fnConfigKind):
-		// nolint
-		o.As(&p)
+		if o.As(&p) != nil {
+			return fmt.Errorf("failed to parse FunctionConfig as %s.%s.%s", fnConfigGroup, fnConfigVersion, fnConfigKind)
+		}
 		if p.NewNamespace == "" {
 			return fmt.Errorf("`namespace` should not be empty")
 		}
@@ -119,26 +120,12 @@ func (p *SetNamespace) Transform(objects fn.KubeObjects) fn.Results {
 	// resources depends on has its namespace changes.
 	dependsOnMap := MapGKNNBeforeChange(objects)
 
-	origins, warnResults, err := ListAllOrigins(objects)
-	if err != nil {
-		return []*fn.Result{fn.ErrorResult(err)}
-	}
-	if warnResults != nil {
-		results = append(results, warnResults...)
-	}
-
 	// Only replace matching namespace. This allows the resourcelist.items to have more than one origin namespace value.
 	if p.NamespaceMatcher != "" {
 		return append(results, ReplaceNamespace(objects, p.NewNamespace, dependsOnMap, p.NamespaceMatcher)...)
 	}
 
 	// Replace all namespaces. This requires the resource origin namespace to be the same.
-	if len(origins) > 1 {
-		return []*fn.Result{fn.ErrorResult(fmt.Errorf(
-			"unable to use origin `namespace` to match. expect a single upstream namespace, found %v. please switch to use `namespaceMatcher`"+
-				"to specify the namespace value you want to change",
-			origins))}
-	}
 	results = append(results, ReplaceNamespace(objects, p.NewNamespace, dependsOnMap)...)
 	return results
 }
@@ -162,13 +149,16 @@ func ListAllOrigins(objects fn.KubeObjects) ([]string, fn.Results, error) {
 	originNss := sets.NewString()
 	for _, o := range objects {
 		if o.HasUpstreamOrigin() {
-			origin, _ := o.GetOriginId()
+			origin, err := o.GetOriginID()
+			if err != nil {
+				continue
+			}
 			if o.IsClusterScoped() {
 				continue
 			}
 			if origin.Namespace == fn.UnknownNamespace {
 				// This should rarely happen.
-				return nil, nil, fmt.Errorf("%v is namespace-scoped, but has cluster-scoped or unknown scoepd origin %v",
+				return nil, nil, fmt.Errorf("%v is namespace-scoped, but has cluster-scoped or unknown scoped origin %v",
 					o.ShortString(), origin.String())
 			}
 			originNss.Insert(origin.Namespace)
@@ -235,30 +225,29 @@ func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin str
 		case o.IsGVK("", "v1", "Namespace"):
 			name := o.GetName()
 			nsPtr := &name
-			originId, _ := o.GetOriginId()
-			visitor(originId.Name, nsPtr, o.ShortString())
-			// nolint
+			origin, err := o.GetOriginID()
+			if err != nil {
+				origin.Name = ""
+			}
+			visitor(origin.Name, nsPtr, o.ShortString())
 			o.SetName(*nsPtr)
 		case o.IsGVK("apiextensions.k8s.io", "v1", "CustomResourceDefinition"):
-			namespace, _, _ := o.NestedString("spec", "conversion", "webhook", "clientConfig", "service", "namespace")
+			namespace := NestedStringOrDie(o, "spec", "conversion", "webhook", "clientConfig", "service", "namespace")
 			nsPtr := &namespace
 			visitor("", nsPtr)
-			// nolint
-			o.SetNestedString(*nsPtr, "spec", "conversion", "webhook", "clientConfig", "service", "namespace")
+			SetNestedStringOrDie(&o.SubObject, *nsPtr, "spec", "conversion", "webhook", "clientConfig", "service", "namespace")
 		case o.IsGVK("apiregistration.k8s.io", "v1", "APIService"):
-			namespace, _, _ := o.NestedString("spec", "service", "namespace")
+			namespace := NestedStringOrDie(o, "spec", "service", "namespace")
 			nsPtr := &namespace
 			visitor("", nsPtr)
-			// nolint
-			o.SetNestedString(*nsPtr, "spec", "service", "namespace")
+			SetNestedStringOrDie(&o.SubObject, *nsPtr, "spec", "service", "namespace")
 		case o.GetKind() == "ClusterRoleBinding" || o.GetKind() == "RoleBinding":
 			subjects := o.GetSlice("subjects")
 			for _, s := range subjects {
 				if namespace, found, _ := s.NestedString("namespace"); found {
 					nsPtr := &namespace
 					visitor("", nsPtr)
-					// nolint
-					s.SetNestedString(*nsPtr, "namespace")
+					SetNestedStringOrDie(s, *nsPtr, "namespace")
 				}
 			}
 		default:
@@ -275,9 +264,11 @@ func VisitNamespaceResource(objects fn.KubeObjects, visitor func(origin string, 
 	for _, o := range namespaceScoped {
 		namespace := o.GetNamespace()
 		nsPtr := &namespace
-		originId, _ := o.GetOriginId()
-		visitor(originId.Namespace, nsPtr, o.ShortString())
-		// nolint
+		origin, err := o.GetOriginID()
+		if err != nil {
+			origin.Namespace = fn.UnknownNamespace
+		}
+		visitor(origin.Namespace, nsPtr, o.ShortString())
 		o.SetNamespace(*nsPtr)
 	}
 }
@@ -287,7 +278,7 @@ func VisitNamespaceResource(objects fn.KubeObjects, visitor func(origin string, 
 func MapGKNNBeforeChange(objects fn.KubeObjects) map[string]struct{} {
 	dependsOnMap := map[string]struct{}{}
 	for _, o := range objects {
-		id := o.GetId()
+		id := o.GetID()
 		if id.Namespace == fn.UnknownNamespace {
 			continue
 		}
@@ -327,7 +318,6 @@ func UpdateAnnotation(objects fn.KubeObjects, dependsOnMap map[string]struct{}, 
 				segments[namespaceIdx] = newNs
 				count += 1
 				newAnnotation := strings.Join(segments, "/")
-				// nolint
 				o.SetAnnotation(dependsOnAnnotation, newAnnotation)
 			}
 		}
