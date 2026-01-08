@@ -230,7 +230,7 @@ func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin str
 				origin.Name = ""
 			}
 			visitor(origin.Name, nsPtr, o.ShortString())
-			o.SetName(*nsPtr)
+			_ = o.SetName(*nsPtr)
 		case o.IsGVK("apiextensions.k8s.io", "v1", "CustomResourceDefinition"):
 			namespace := NestedStringOrDie(o, "spec", "conversion", "webhook", "clientConfig", "service", "namespace")
 			nsPtr := &namespace
@@ -269,7 +269,7 @@ func VisitNamespaceResource(objects fn.KubeObjects, visitor func(origin string, 
 			origin.Namespace = fn.UnknownNamespace
 		}
 		visitor(origin.Namespace, nsPtr, o.ShortString())
-		o.SetNamespace(*nsPtr)
+		_ = o.SetNamespace(*nsPtr)
 	}
 }
 
@@ -318,7 +318,7 @@ func UpdateAnnotation(objects fn.KubeObjects, dependsOnMap map[string]struct{}, 
 				segments[namespaceIdx] = newNs
 				count += 1
 				newAnnotation := strings.Join(segments, "/")
-				o.SetAnnotation(dependsOnAnnotation, newAnnotation)
+				_ = o.SetAnnotation(dependsOnAnnotation, newAnnotation)
 			}
 		}
 	}

@@ -18,7 +18,7 @@
 package main
 
 import (
-	"github.com/kptdev/krm-functions-catalog/functions/go/set-namespace/transformer"
+	transformer "github.com/kptdev/krm-functions-catalog/functions/go/set-namespace/transformer"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 

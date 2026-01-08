@@ -1,16 +1,14 @@
 diff --git a/resources.yaml b/resources.yaml
 new file mode 100644
-index 0000000..1c68b91
+index 0000000..bb3bfb4
 --- /dev/null
 +++ b/resources.yaml
-@@ -0,0 +1,106 @@
+@@ -0,0 +1,100 @@
 +apiVersion: v1
 +data:
 +  config: eyJleGFtcGxlIjoidmFsdWUifQ==
 +kind: Secret
 +metadata:
-+  annotations:
-+    config.kubernetes.io/path: secret_moria-config.yaml
 +  labels:
 +    chart: ocp-pipeline-0.1.16
 +    heritage: Helm
@@ -23,8 +21,6 @@ index 0000000..1c68b91
 +  WebHookSecretKey: MTIzNDU2Nzg=
 +kind: Secret
 +metadata:
-+  annotations:
-+    config.kubernetes.io/path: secret_moria-git-webhook-secret.yaml
 +  labels:
 +    chart: ocp-pipeline-0.1.16
 +    heritage: Helm
@@ -35,8 +31,6 @@ index 0000000..1c68b91
 +apiVersion: build.openshift.io/v1
 +kind: BuildConfig
 +metadata:
-+  annotations:
-+    config.kubernetes.io/path: buildconfig_moria-ocp-pipeline-deploy.yaml
 +  labels:
 +    app: ocp-pipeline
 +    chart: ocp-pipeline-0.1.16
