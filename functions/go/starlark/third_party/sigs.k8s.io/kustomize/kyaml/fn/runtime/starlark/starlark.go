@@ -11,8 +11,8 @@ import (
 	"os"
 
 	"github.com/qri-io/starlib/util"
+	"go.starlark.net/resolve"
 	"go.starlark.net/starlark"
-	"go.starlark.net/syntax"
 	"sigs.k8s.io/kustomize/kyaml/errors"
 	"sigs.k8s.io/kustomize/kyaml/fn/runtime/runtimeutil"
 	"sigs.k8s.io/kustomize/kyaml/kio"
@@ -74,6 +74,7 @@ func (sf *Filter) setup() error {
 			if err != nil {
 				return err
 			}
+
 			defer func() {
 				_ = resp.Body.Close()
 			}()
@@ -113,11 +114,12 @@ func (sf *Filter) Run(reader io.Reader, writer io.Writer) error {
 func runStarlark(name, starlarkProgram string, resourceList starlark.Value) error {
 	// Enabled some non-standard starlark features (https://pkg.go.dev/go.starlark.net/resolve#pkg-variables).
 	// LoadBindsGlobally is not enabled, since it has been deprecated.
-	fileOptions := &syntax.FileOptions{
-		Set:            true,
-		GlobalReassign: true,
-		Recursion:      true,
-	}
+	//nolint:staticcheck
+	resolve.AllowSet = true
+	//nolint:staticcheck
+	resolve.AllowGlobalReassign = true
+	//nolint:staticcheck
+	resolve.AllowRecursion = true
 
 	// run the starlark as program as transformation function
 	thread := &starlark.Thread{Name: name, Load: load}
@@ -127,8 +129,8 @@ func runStarlark(name, starlarkProgram string, resourceList starlark.Value) erro
 	if err != nil {
 		return errors.Wrap(err)
 	}
-
-	_, err = starlark.ExecFileOptions(fileOptions, thread, name, starlarkProgram, pd)
+	//nolint:staticcheck
+	_, err = starlark.ExecFile(thread, name, starlarkProgram, pd)
 	if err != nil {
 		return errors.Wrap(err)
 	}
