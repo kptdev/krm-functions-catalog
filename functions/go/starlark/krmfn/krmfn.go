@@ -25,11 +25,15 @@ func matchGVK(_ *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple, kwar
 		&resourceList, &apiVersion, &kind); err != nil {
 		return nil, err
 	}
+	gv, err := schema.ParseGroupVersion(apiVersion)
+	if err != nil {
+		return nil, err
+	}
 	obj, err := fn.ParseKubeObject([]byte(resourceList.String()))
 	if err != nil {
 		return nil, err
 	}
-	return starlark.Bool(obj.IsGroupVersionKind(schema.GroupVersionKind{Group: "", Version: apiVersion, Kind: kind})), nil
+	return starlark.Bool(obj.IsGVK(gv.Group, gv.Version, kind)), nil
 }
 
 func matchName(_ *starlark.Thread, _ *starlark.Builtin, args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error) {
