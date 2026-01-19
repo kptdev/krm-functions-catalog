@@ -49,12 +49,12 @@ test_config_filename = 'config.yaml'
 exec_script_filename = 'exec.sh'
 
 
-def validate_master_branch(contrib=False):
-    fn_name_to_examples = validate_functions_dir_for_master_branch(contrib)
-    validate_examples_dir_for_master_branch(fn_name_to_examples, contrib)
+def validate_main_branch(contrib=False):
+    fn_name_to_examples = validate_functions_dir_for_main_branch(contrib)
+    validate_examples_dir_for_main_branch(fn_name_to_examples, contrib)
 
 
-def validate_examples_dir_for_master_branch(fn_name_to_examples, contrib):
+def validate_examples_dir_for_main_branch(fn_name_to_examples, contrib):
     curr_examples_dir = examples_directory
     if contrib:
         curr_examples_dir = os.path.join('contrib', examples_directory)
@@ -66,9 +66,9 @@ def validate_examples_dir_for_master_branch(fn_name_to_examples, contrib):
                 raise Exception(f'example name {example_name} must start with the function name {fn_name}')
             if example_name in examples_directories_to_skip:
                 continue
-            validate_example_md(fn_name, curr_examples_dir, example_name, 'master')
+            validate_example_md(fn_name, curr_examples_dir, example_name, 'main')
             if not eval_or_exec_script(os.path.join(curr_examples_dir, example_name)):
-                validate_example_kptfile(fn_name, curr_examples_dir, example_name, 'master', contrib)
+                validate_example_kptfile(fn_name, curr_examples_dir, example_name, 'main', contrib)
 
     for dir in os.listdir(curr_examples_dir):
         dir_name = os.path.join(curr_examples_dir, dir)
@@ -79,7 +79,7 @@ def validate_examples_dir_for_master_branch(fn_name_to_examples, contrib):
                 raise Exception(f'directory {dir} is NOT in the metadata.yaml file of any functions')
 
 
-def validate_functions_dir_for_master_branch(contrib):
+def validate_functions_dir_for_main_branch(contrib):
     fn_name_to_examples = {}
     curr_fns_dir = functions_directory
     if contrib:
@@ -99,7 +99,7 @@ def validate_functions_dir_for_master_branch(contrib):
                 meta = yaml.load(open(os.path.join(path_name, metadata_filename)), Loader=yaml.Loader)
                 example_list = [eg.split('/')[-1] for eg in meta['examplePackageURLs']]
                 fn_name_to_examples[fn_name] = example_list
-                validate_metadata(meta, 'master', path_name, fn_name, example_list, contrib)
+                validate_metadata(meta, 'main', path_name, fn_name, example_list, contrib)
     return fn_name_to_examples
 
 
@@ -183,7 +183,7 @@ def validate_example_kptfile(fn_name, dir_name, example_name, branch, contrib):
     else:
         desired_ghcr_prefix = ghcr_prefix
     tag = branch
-    if branch == 'master':
+    if branch == 'main':
         tag = 'latest'
     else:
         splits = branch.split('/')
@@ -249,7 +249,7 @@ def validate_example_md(fn_name, dir_name, example_name, branch):
         print(f'stderr of mdrip: {str(stderr2)}')
 
     tag = branch
-    if branch == 'master':
+    if branch == 'main':
         tag = 'latest'
     else:
         splits = branch.split('/')
@@ -273,7 +273,7 @@ def validate_example_md(fn_name, dir_name, example_name, branch):
         for item in line.split():
             if item.startswith(git_url_prefix):
                 desired_pkg_url = f'{git_url_prefix}/{example_path}'
-                if branch != 'master':
+                if branch != 'main':
                     desired_pkg_url = desired_pkg_url + f'@{branch}'
                 if not item.startswith(desired_pkg_url):
                     raise Exception(f'the desired package url in {md_file_path} is {desired_pkg_url}, but found {item}')
@@ -315,13 +315,13 @@ def validate_metadata(metadata, branch, path, fn, examples_list, contrib):
 def main():
     branch_name = os.getenv('GITHUB_BASE_REF')
     if branch_name is None or len(branch_name) == 0:
-        branch_name = 'master'
+        branch_name = 'main'
 
-    if branch_name == 'master':
+    if branch_name == 'main':
         print("verifying curated functions catalog...")
-        validate_master_branch()
+        validate_main_branch()
         print("verifying contrib functions catalog...")
-        validate_master_branch(contrib=True)
+        validate_main_branch(contrib=True)
     else:
         validate_release_branch(branch_name)
     print("Docs verification succeeded!")

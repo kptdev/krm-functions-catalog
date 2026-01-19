@@ -2,12 +2,12 @@ image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper
 description: Validate the KRM resources using Gatekeeper policies.
 tags:
   - validator
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/gatekeeper
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/gatekeeper
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/gatekeeper-disallow-root-user
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/gatekeeper-invalid-configmap
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/gatekeeper-warning-only
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/gatekeeper-imperative
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/gatekeeper-disallow-root-user
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/gatekeeper-invalid-configmap
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/gatekeeper-warning-only
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/gatekeeper-imperative
 emails:
   - kpt-team@google.com
 license: Apache-2.0

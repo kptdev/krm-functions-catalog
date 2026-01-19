@@ -4,8 +4,8 @@
 This doc covers the release process for the functions in the
 krm-functions-catalog repo.
 
-1. Checking the [CI status](https://github.com/kptdev/krm-functions-catalog/actions/workflows/ci.yaml) of the master branch. 
-   If the CI is failing on the master, we need to fix it before doing a release.
+1. Checking the [CI status](https://github.com/kptdev/krm-functions-catalog/actions/workflows/ci.yaml) of the main branch. 
+   If the CI is failing on the main, we need to fix it before doing a release.
 1. Go to the [releases pages] in your browser.
 1. Click `Draft a new release` to create a new release for a function. The tag
    version format should be `functions/{language}/{function-name}/{semver}`. e.g.
@@ -48,7 +48,7 @@ upstream	git@github.com:kptdev/krm-functions-catalog.git (push)
 ```
 4. Run the doc updating script.
 ```shell
-git checkout remotes/upstream/master
+git checkout remotes/upstream/main
 RELEASE_BRANCH=${RELEASE_BRANCH} make update-function-docs
 ```
 5. Send out a Pull Request. 

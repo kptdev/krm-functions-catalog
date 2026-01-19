@@ -2,15 +2,15 @@ image: ghcr.io/kptdev/krm-functions-catalog/render-helm-chart
 description: Renders a local or remote helm chart.
 tags:
   - mutator
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/render-helm-chart
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/render-helm-chart
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-local
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-remote
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-crds
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-remote-values-file
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-kustomize-inline-values
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-kustomize-values-files
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-kustomize-private-git
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/render-helm-chart-local
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/render-helm-chart-remote
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/render-helm-chart-crds
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/render-helm-chart-remote-values-file
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/render-helm-chart-kustomize-inline-values
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/render-helm-chart-kustomize-values-files
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/render-helm-chart-kustomize-private-git
 emails:
   - kpt-team@google.com
 license: Apache-2.0

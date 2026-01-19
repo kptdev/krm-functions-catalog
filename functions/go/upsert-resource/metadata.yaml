@@ -2,11 +2,11 @@ image: ghcr.io/kptdev/krm-functions-catalog/upsert-resource
 description: Insert a resource, or if the resource already exists, update the existing resource.
 tags:
   - mutator
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/upsert-resource
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/upsert-resource
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/upsert-resource-simple
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/upsert-resource-multiple
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/upsert-resource-at-path
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/upsert-resource-simple
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/upsert-resource-multiple
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/upsert-resource-at-path
 emails:
   - kpt-team@google.com
 license: Apache-2.0

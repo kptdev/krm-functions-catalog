@@ -2,9 +2,9 @@ image: ghcr.io/kptdev/krm-functions-catalog/kubeconform
 description: Use kubeconform to validate KRM resources against their json schemas.
 tags:
   - validator
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/kubeconform
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/kubeconform
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/kubeconform-simple
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/kubeconform-mount-schema
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/kubeconform-imperative
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/kubeconform-simple
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/kubeconform-mount-schema
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/kubeconform-imperative
 license: Apache-2.0

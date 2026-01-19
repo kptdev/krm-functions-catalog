@@ -3,9 +3,9 @@ description: Generate opinionated blueprint documentation.
 tags:
   - generator
   - blueprints
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/generate-kpt-pkg-docs
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/generate-kpt-pkg-docs
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/generate-kpt-pkg-docs-simple
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/generate-kpt-pkg-docs-simple
 emails:
   - kpt-team@google.com
 license: Apache-2.0

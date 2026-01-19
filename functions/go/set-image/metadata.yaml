@@ -2,12 +2,12 @@ image: ghcr.io/kptdev/krm-functions-catalog/set-image
 description: Set all images of a given name to a given name:tag or name@digest.
 tags:
   - mutator
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/set-image
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/set-image
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-image-simple
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-image-digest
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-image-advanced
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-image-imperative
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-image-simple
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-image-digest
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-image-advanced
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-image-imperative
 emails:
   - kpt-team@google.com
 license: Apache-2.0

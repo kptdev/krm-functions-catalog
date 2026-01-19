@@ -2,9 +2,9 @@ image: ghcr.io/kptdev/krm-functions-catalog/list-setters
 description: List setters on resource fields.
 tags:
   - viewer
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/list-setters
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/list-setters
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/list-setters-simple
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/list-setters-simple
 emails:
   - kpt-team@google.com
 license: Apache-2.0

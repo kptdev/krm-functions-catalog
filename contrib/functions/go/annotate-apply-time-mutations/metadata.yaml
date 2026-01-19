@@ -2,10 +2,10 @@ image: ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/annotate-apply-time-m
 description: Read mutation markup comments and add the equivalent annotation.
 tags:
   - mutator
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/contrib/functions/go/annotate-apply-time-mutations
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/contrib/functions/go/annotate-apply-time-mutations
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/contrib/examples/annotate-apply-time-mutations-custom-resource
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/contrib/examples/annotate-apply-time-mutations-inline-comment
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/contrib/examples/annotate-apply-time-mutations-custom-resource
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/contrib/examples/annotate-apply-time-mutations-inline-comment
 emails:
   - kpt-team@google.com
 license: Apache-2.0

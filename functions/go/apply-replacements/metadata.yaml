@@ -2,9 +2,9 @@ image: ghcr.io/kptdev/krm-functions-catalog/apply-replacements
 description: Invoke the kustomize replacements feature as a KRM function.
 tags:
   - mutator
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/apply-replacements
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/apply-replacements
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/apply-replacements-simple
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/apply-replacements-simple
 emails:
   - kpt-team@google.com
 license: Apache-2.0

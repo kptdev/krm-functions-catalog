@@ -2,11 +2,11 @@ image: ghcr.io/kptdev/krm-functions-catalog/set-annotations
 description: Add a list of annotations to all resources.
 tags:
   - mutator
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/set-annotations
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/set-annotations
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-annotations-simple
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-annotations-advanced
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-annotations-imperative
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-annotations-simple
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-annotations-advanced
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-annotations-imperative
 emails:
   - kpt-team@google.com
 license: Apache-2.0

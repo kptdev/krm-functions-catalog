@@ -27,7 +27,7 @@ git remote add origin "$REPO_URL"
 git config core.sparseCheckout true
 echo "${K8S_VERSION}-standalone/" >> .git/info/sparse-checkout
 echo "${K8S_VERSION}-standalone-strict/" >> .git/info/sparse-checkout
-git pull --depth 1 origin master
+git pull --depth 1 origin main
 
 cd ..
 

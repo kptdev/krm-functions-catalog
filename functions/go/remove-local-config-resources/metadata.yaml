@@ -4,9 +4,9 @@ tags:
   - mutator
   - GCP
   - Config Sync
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/remove-local-config-resources
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/remove-local-config-resources
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/remove-local-config-resources-imperative
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/remove-local-config-resources-imperative
 emails:
   - kpt-team@google.com
 license: Apache-2.0

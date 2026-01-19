@@ -281,7 +281,7 @@ func (fr *functionRelease) replaceKptPackages(contents []byte) []byte {
 }
 
 // replace branch name with release branch for all GitHub URLs, e.g.
-// https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-namespace-simple ->
+// https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-namespace-simple ->
 // https://github.com/kptdev/krm-functions-catalog/tree/set-namespace/v0.2/examples/set-namespace-simple
 func (fr *functionRelease) replaceGithubURLs(contents []byte) []byte {
 	exampleSubPath := fr.exampleSubPath()
@@ -296,7 +296,7 @@ func (fr *functionRelease) replaceGithubURLs(contents []byte) []byte {
 		suffixes = append(suffixes, fmt.Sprintf(`/%s/%s`, exampleSubPath, ex))
 	}
 	suffixGroup := strings.Join(suffixes, "|")
-	refGroup := fmt.Sprintf(`master|%[1]s/v\d*\.\d*\.\d*|%[1]s/v\d*\.\d*`, fr.FunctionName)
+	refGroup := fmt.Sprintf(`main|%[1]s/v\d*\.\d*\.\d*|%[1]s/v\d*\.\d*`, fr.FunctionName)
 	githubURLPattern := regexp.MustCompile(
 		fmt.Sprintf(`(https://github\.com/kptdev/krm-functions-catalog/tree/)(%s)(%s)`,
 			refGroup, suffixGroup))

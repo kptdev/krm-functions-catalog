@@ -3,14 +3,14 @@ description: Run a Starlark script to mutate or validate resources.
 tags:
   - mutator
   - validator
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/starlark
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/starlark
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-set-namespace
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-inject-sidecar
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-poddisruptionbudget
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-validation
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-configmap-as-functionconfig
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-load-library
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-set-namespace
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-inject-sidecar
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-poddisruptionbudget
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-validation
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-configmap-as-functionconfig
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-load-library
 emails:
   - kpt-team@google.com
 license: Apache-2.0

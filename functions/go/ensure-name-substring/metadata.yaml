@@ -4,13 +4,13 @@ tags:
   - mutator
   - name prefix
   - name suffix
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/ensure-name-substring
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/ensure-name-substring
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/ensure-name-substring-prefix
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/ensure-name-substring-suffix
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/ensure-name-substring-advanced
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/ensure-name-substring-imperative
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/ensure-name-substring-depends-on
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/ensure-name-substring-prefix
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/ensure-name-substring-suffix
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/ensure-name-substring-advanced
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/ensure-name-substring-imperative
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/ensure-name-substring-depends-on
 emails:
   - kpt-team@google.com
 license: Apache-2.0

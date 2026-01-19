@@ -3,9 +3,9 @@ description: Sets the enforcement action for policy constraints to deny or dryru
 tags:
   - mutator
   - Config Sync
-sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/master/functions/go/set-enforcement-action
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/set-enforcement-action
 examplePackageURLs:
-  - https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-enforcement-action-simple
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-enforcement-action-simple
 emails:
   - kpt-team@google.com
 license: Apache-2.0
