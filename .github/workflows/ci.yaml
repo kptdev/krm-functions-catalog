@@ -43,16 +43,16 @@ jobs:
       GOPATH: /home/runner/work/krm-functions-catalog/functions/go
       GO111MODULE: on
     steps:
-      - name: Set up Go
-        uses: actions/setup-go@v6
-        with:
-          go-version-file: documentation/go.mod
-          cache: true
-        id: go
       - name: Check out code into GOPATH
         uses: actions/checkout@v1
         with:
           path: go/src/github.com/${{ github.repository }}
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go/src/github.com/${{ github.repository }}/documentation/go.mod
+          cache: true
+        id: go
       - name: Run unit tests
         run: |
           make unit-test
