@@ -110,7 +110,7 @@ func-fmt:
 
 func-lint:
 	(which $(GOPATH)/bin/golangci-lint || \
-		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v1.64.8/install.sh | sh -s -- -b $(GOPATH)/bin v1.64.8)
+		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v2.8.0/install.sh | sh -s -- -b $(GOPATH)/bin v2.8.0)
 	cd $(CURRENT_FUNCTION) && time $(GOPATH)/bin/golangci-lint run --timeout=10m ./...
 
 func-test:
