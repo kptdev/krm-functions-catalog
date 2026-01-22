@@ -49,12 +49,11 @@ jobs:
           path: go/src/github.com/kptdev/krm-functions-catalog
       - name: List files
         run: |
-          ls -al
-
+          ls -al documentation/go.mod
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version-file: go/src/github.com/kptdev/krm-functions-catalog/documentation/go.mod
+          go-version-file: documentation/go.mod
           cache: true
         id: go
       - name: Run unit tests
