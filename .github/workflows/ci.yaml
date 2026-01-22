@@ -31,7 +31,7 @@ jobs:
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Lint shell scripts, ignoring third-party files
         run: |
           find . -name "*.sh" > shell_files.out
@@ -43,10 +43,11 @@ jobs:
       GOPATH: /home/runner/work/krm-functions-catalog/functions/go
       GO111MODULE: on
     steps:
-      - name: Set up Go 1.24.10
-        uses: actions/setup-go@v5
+      - name: Set up Go
+        uses: actions/setup-go@v6
         with:
-          go-version: '1.24.10'
+          go-version-file: documentation/go.mod
+          cache: true
         id: go
       - name: Check out code into GOPATH
         uses: actions/checkout@v1
@@ -63,11 +64,12 @@ jobs:
       GOPATH: /home/runner/work/krm-functions-catalog/functions/go
       GO111MODULE: on
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Go 1.24.10
-        uses: actions/setup-go@v5
+      - uses: actions/checkout@v5
+      - name: Set up Go
+        uses: actions/setup-go@v6
         with:
-          go-version: '1.24.10'
+          go-version-file: documentation/go.mod
+          cache: true
       - name: Install kpt
         run: |
           go install github.com/kptdev/kpt@main

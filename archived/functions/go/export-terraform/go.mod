@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/archived/functions/go/export-terraform
 
-go 1.24.10
+go 1.25.6
 
 require (
 	github.com/kptdev/krm-functions-catalog/archived/functions/go/export-terraform/thirdparty/kyaml/fnsdk v0.0.0

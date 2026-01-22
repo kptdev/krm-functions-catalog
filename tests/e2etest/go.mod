@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/tests/e2etest
 
-go 1.24.10
+go 1.25.6
 
 require github.com/kptdev/kpt v1.0.0-beta.59
 

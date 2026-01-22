@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/set-image
 
-go 1.24.10
+go 1.25.6
 
 require (
 	github.com/kptdev/krm-functions-sdk/go/fn v1.0.0
