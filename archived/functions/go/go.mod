@@ -3,8 +3,8 @@ module github.com/kptdev/krm-functions-catalog/archived/functions/go
 go 1.25.6
 
 require (
-	github.com/kptdev/krm-functions-sdk/go/fn v1.0.0
-	k8s.io/apimachinery v0.33.1
+	github.com/kptdev/krm-functions-sdk/go/fn v1.0.1
+	k8s.io/apimachinery v0.34.1
 )
 
 require (
@@ -17,7 +17,7 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/gnostic-models v0.7.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
-	github.com/kptdev/kpt v1.0.0-beta.59 // indirect
+	github.com/kptdev/kpt v1.0.0-beta.60 // indirect
 	github.com/mailru/easyjson v0.9.0 // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
