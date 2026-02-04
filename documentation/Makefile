@@ -3,7 +3,7 @@ serve: clean copy-examples inject-relatedexamples
 		--disableFastRender \
 		--buildDrafts \
 		--buildFuture \
-		--ignoreCache
+		--ignoreCache \
 		--printI18nWarnings \
 		--printMemoryUsage \
 		--printPathWarnings \

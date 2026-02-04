@@ -175,18 +175,14 @@ no = 'Sorry to hear that. Please <a href="https://github.com/cncf/tag-env-sustai
 enable = false
 
 [[menu.main]]
-  name = "Installation"
-  url = "https://kpt.dev/installation/"
-  weight = 10
-[[menu.main]]
   name = "Book"
   url = "https://kpt.dev/book/"
-  weight = 20
+  weight = 10
 [[menu.main]]
   name = "References"
   url = "https://kpt.dev/reference/"
-  weight = 30
+  weight = 20
 [[menu.main]]
   name = "Guides"
   url = "https://kpt.dev/guides/"
-  weight = 50
+  weight = 40

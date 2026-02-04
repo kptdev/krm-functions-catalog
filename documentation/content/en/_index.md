@@ -4,7 +4,7 @@ toc_hide: false
 hide_breadcrumb: true
 menu:
   main:
-    weight: 40
+    weight: 30
 ---
 
 {{< alert >}}
