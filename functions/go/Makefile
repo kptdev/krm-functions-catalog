@@ -27,6 +27,7 @@ FUNCTIONS := \
 	delete-annotations \
 	ensure-name-substring \
 	gatekeeper \
+	generate-folders \
 	generate-kpt-pkg-docs \
 	kubeconform \
 	list-setters \

@@ -1,0 +1,14 @@
+apiVersion: config.kubernetes.io/v1
+kind: ResourceList
+items:
+  - apiVersion: blueprints.cloud.google.com/v1alpha3
+    kind: ResourceHierarchy
+    metadata:
+      name: test-folder-parent
+    spec:
+      parentRef:
+        kind: Folder
+        external: parent-folder-id
+      config:
+        - Dev:
+            - Team1

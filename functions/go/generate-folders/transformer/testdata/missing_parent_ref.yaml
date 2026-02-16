@@ -1,0 +1,10 @@
+apiVersion: config.kubernetes.io/v1
+kind: ResourceList
+items:
+  - apiVersion: blueprints.cloud.google.com/v1alpha3
+    kind: ResourceHierarchy
+    metadata:
+      name: test-missing
+    spec:
+      config:
+        - Dev
