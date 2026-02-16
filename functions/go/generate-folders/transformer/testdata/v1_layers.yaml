@@ -1,0 +1,20 @@
+apiVersion: dev.cft.v1alpha1
+kind: ResourceHierarchy
+metadata:
+  name: v1-hierarchy
+spec:
+  organization: "123456789"
+  layers:
+    - environments
+    - divisions
+    - teams
+  config:
+    environments:
+      - Dev
+      - Prod
+    divisions:
+      - Engineering
+      - Marketing
+    teams:
+      - Team1
+      - Team2

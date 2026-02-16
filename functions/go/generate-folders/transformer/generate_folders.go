@@ -134,7 +134,8 @@ func processV1Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList) fn.Results {
 	namespace := obj.GetNamespace()
 	annotations := map[string]string{}
 
-	errResult := generateV1HierarchyTree(root, layers, 0, &configSubObj, namespace, annotations, rl)
+	// Start with empty path for v1 hierarchy
+	errResult := generateV1HierarchyTree(root, layers, 0, &configSubObj, namespace, annotations, []string{}, rl)
 	if errResult != nil {
 		results = append(results, errResult)
 	}
@@ -150,6 +151,7 @@ func generateV1HierarchyTree(
 	configSubObj *fn.SubObject,
 	namespace string,
 	annotations map[string]string,
+	path []string,
 	rl *fn.ResourceList,
 ) *fn.Result {
 	if layerIndex >= len(layers) {
@@ -182,10 +184,12 @@ func generateV1HierarchyTree(
 			kind: "Folder",
 		}
 
-		folder := generateManifest(folderName, nil, node, annotations, namespace, false)
+		// Thread path through to ensure proper folder naming (e.g., dev.team1)
+		currentPath := append(path, folderName)
+		folder := generateManifest(folderName, currentPath, node, annotations, namespace, false)
 		rl.Items = append(rl.Items, folder)
 
-		errResult := generateV1HierarchyTree(child, layers, layerIndex+1, configSubObj, namespace, annotations, rl)
+		errResult := generateV1HierarchyTree(child, layers, layerIndex+1, configSubObj, namespace, annotations, currentPath, rl)
 		if errResult != nil {
 			return errResult
 		}
@@ -245,17 +249,12 @@ func processV2V3Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList, isV3 bool) fn
 	}
 
 	// Process subtrees
+	// Note: Preserving insertion order for compatibility with TypeScript implementation
 	subtrees := map[string]*hierarchyNode{}
 	if subtreeRaw, ok := spec["subtrees"]; ok {
 		if subtreeMap, ok := subtreeRaw.(map[string]interface{}); ok {
-			// Sort subtree keys for deterministic processing
-			subtreeKeys := make([]string, 0, len(subtreeMap))
-			for name := range subtreeMap {
-				subtreeKeys = append(subtreeKeys, name)
-			}
-			sort.Strings(subtreeKeys)
-			for _, name := range subtreeKeys {
-				val := subtreeMap[name]
+			// Process subtrees in YAML insertion order (no sorting)
+			for name, val := range subtreeMap {
 				subtreeNode := &hierarchyNode{
 					name: name,
 					kind: "Subtree",
@@ -263,7 +262,7 @@ func processV2V3Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList, isV3 bool) fn
 				if children, ok := val.([]interface{}); ok {
 					if err := generateTree(subtreeNode, children, subtrees); err != nil {
 						results = append(results, fn.ErrorConfigObjectResult(
-							fmt.Errorf("ResourceHierarchy %s references non-existent subtree %q", obj.GetName(), err.Error()), obj))
+							fmt.Errorf("ResourceHierarchy %s: error processing subtree %q: %v", obj.GetName(), name, err), obj))
 						return results
 					}
 				}

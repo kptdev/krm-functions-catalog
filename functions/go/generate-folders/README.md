@@ -70,9 +70,11 @@ Subtrees allow reusing folder structure definitions across multiple branches.
 
 ### Annotation Inheritance
 
-Annotations from the `ResourceHierarchy` resource are inherited by generated
-`Folder` resources, except for internal kpt annotations (e.g.,
-`config.kubernetes.io/local-config`, `internal.config.kubernetes.io/*`).
+For v2/v3 `ResourceHierarchy` resources, annotations on the hierarchy object
+are inherited by generated `Folder` resources, except for internal kpt
+annotations (e.g., `config.kubernetes.io/local-config`,
+`internal.config.kubernetes.io/*`). The v1 implementation does **not**
+support annotation inheritance.
 
 ### Name Normalization
 
