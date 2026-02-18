@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/archived/functions/go/export-terraform/thirdparty/kyaml/fnsdk
 
-go 1.17
+go 1.25.7
 
 require (
 	github.com/stretchr/testify v1.7.0

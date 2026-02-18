@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/scripts/update_function_docs
 
-go 1.25.6
+go 1.25.7
 
 require (
 	github.com/kptdev/krm-functions-catalog/scripts/patch_reader v0.0.0

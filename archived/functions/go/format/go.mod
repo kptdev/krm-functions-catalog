@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/archived/functions/go/format
 
-go 1.25.6
+go 1.25.7
 
 require sigs.k8s.io/kustomize/kyaml v0.19.0
 

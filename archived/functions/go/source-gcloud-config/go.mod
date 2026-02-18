@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/archived/functions/go/source-gcloud-generator
 
-go 1.25.6
+go 1.25.7
 
 require (
 	gopkg.in/ini.v1 v1.67.0
