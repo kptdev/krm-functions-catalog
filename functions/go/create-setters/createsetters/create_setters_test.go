@@ -53,8 +53,8 @@ kind: Deployment
 metadata:
   name: nginx-deployment # kpt-set: ${name}-deployment
   env: # kpt-set: ${env}
-    - foo
-    - bar
+  - foo
+  - bar
 `,
 		},
 		{
@@ -82,9 +82,9 @@ metadata:
 kind: Service
 metadata:
   name: myService
-  namespace: foo 
-image: nginx:1.7.1 
-env: [foo, bar] 
+  namespace: foo
+image: nginx:1.7.1
+env: [foo, bar]
 `,
 			config: `
 data:
@@ -101,8 +101,8 @@ metadata:
   namespace: foo # kpt-set: ${ns}
 image: nginx:1.7.1 # kpt-set: ${image}:${tag}
 env: # kpt-set: ${env}
-  - foo # kpt-set: ${ns}
-  - bar
+- foo # kpt-set: ${ns}
+- bar
 `,
 		},
 		{
@@ -133,8 +133,8 @@ spec:
   image: ubuntu # kpt-set: ${env}
   app: "nginx:1.1.2" # kpt-set: nginx:${tag}
   os:
-    - ubuntu # kpt-set: ${env}
-    - mac
+  - ubuntu # kpt-set: ${env}
+  - mac
 `,
 		},
 
@@ -194,8 +194,8 @@ metadata:
   name: nginx-deployment
 spec:
   images:
-    - nginx
-    - ubuntu
+  - nginx
+  - ubuntu
 `,
 			expectedResources: `apiVersion: apps/v1
 kind: Deployment
@@ -203,8 +203,8 @@ metadata:
   name: nginx-deployment
 spec:
   images:
-    - nginx
-    - ubuntu
+  - nginx
+  - ubuntu
 `,
 		},
 		{
@@ -221,8 +221,8 @@ metadata:
   name: nginx-deployment
 spec:
   images:
-    - nginx
-    - ubuntu
+  - nginx
+  - ubuntu
 `,
 			expectedResources: `apiVersion: apps/v1
 kind: Deployment
@@ -230,8 +230,8 @@ metadata:
   name: nginx-deployment
 spec:
   images: # kpt-set: ${images}
-    - nginx
-    - ubuntu
+  - nginx
+  - ubuntu
 `,
 		},
 		{
@@ -359,8 +359,8 @@ metadata:
   name: nginx-deployment # kpt-set: ${image}-deployment
 spec:
   images:
-    - nginx # kpt-set: ${image}
-    - ubuntu
+  - nginx # kpt-set: ${image}
+  - ubuntu
 `,
 		},
 		{
@@ -417,8 +417,8 @@ metadata:
   name: nginx-deployment
 spec:
   images:
-    - nginx
-    - ubuntu
+  - nginx
+  - ubuntu
 `,
 			expectedResources: `apiVersion: apps/v1
 kind: Deployment
@@ -426,8 +426,8 @@ metadata:
   name: nginx-deployment
 spec:
   images:
-    - nginx
-    - ubuntu
+  - nginx
+  - ubuntu
 `,
 		},
 		{
@@ -464,8 +464,8 @@ metadata:
 kind: Deployment
 metadata:
   name: # kpt-set: ${image}
-    - nginx
-    - ubuntu # kpt-set: ${os}
+  - nginx
+  - ubuntu # kpt-set: ${os}
 `,
 		},
 		{
@@ -488,8 +488,8 @@ metadata:
   name: nginx-deployment # kpt-set: ${image}-deployment
 spec:
   images:
-    - nginx # kpt-set: ${image}
-    - ubuntu
+  - nginx # kpt-set: ${image}
+  - ubuntu
 `,
 		},
 		{
@@ -508,8 +508,8 @@ metadata:
 kind: Deployment
 metadata:
   name: # kpt-set: ${image}
-    - nginx
-    - ubuntu # kpt-set: ${os}
+  - nginx
+  - ubuntu # kpt-set: ${os}
 `,
 		},
 		{

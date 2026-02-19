@@ -20,8 +20,8 @@
 package nameref
 
 import (
+	"github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring/consts"
 	"sigs.k8s.io/kustomize/api/filters/nameref"
-	"sigs.k8s.io/kustomize/api/konfig/builtinpluginconsts"
 	"sigs.k8s.io/kustomize/api/resmap"
 	"sigs.k8s.io/kustomize/api/resource"
 	"sigs.k8s.io/kustomize/api/types"
@@ -60,7 +60,7 @@ func FixNameBackReference(m resmap.ResMap) error {
 	}
 	fMap := determineFilters(m.Resources(), c.NameReference)
 	for r, fList := range fMap {
-		c := m.SubsetThatCouldBeReferencedByResource(r)
+		c, _ := m.SubsetThatCouldBeReferencedByResource(r)
 		for _, f := range fList {
 			f.Referrer = r
 			f.ReferralCandidates = c
@@ -73,7 +73,7 @@ func FixNameBackReference(m resmap.ResMap) error {
 }
 
 func getDefaultConfig() (nameReferenceConfig, error) {
-	defaultConfigString := builtinpluginconsts.GetDefaultFieldSpecsAsMap()["namereference"]
+	defaultConfigString := consts.NameReference
 	var tc nameReferenceConfig
 	err := yaml.Unmarshal([]byte(defaultConfigString), &tc)
 	return tc, err

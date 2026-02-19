@@ -18,10 +18,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring/consts"
 	"github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring/generated"
 	"github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring/nameref"
 	"sigs.k8s.io/kustomize/api/hasher"
-	"sigs.k8s.io/kustomize/api/konfig/builtinpluginconsts"
 	"sigs.k8s.io/kustomize/api/resmap"
 	"sigs.k8s.io/kustomize/api/resource"
 	"sigs.k8s.io/kustomize/api/types"
@@ -104,7 +104,7 @@ type transformerConfig struct {
 }
 
 func getDefaultConfig() (transformerConfig, error) {
-	defaultConfigString := builtinpluginconsts.GetDefaultFieldSpecsAsMap()["nameprefix"]
+	defaultConfigString := consts.NamePrefix
 	var tc transformerConfig
 	err := yaml.Unmarshal([]byte(defaultConfigString), &tc)
 	return tc, err

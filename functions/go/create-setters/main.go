@@ -43,19 +43,16 @@ func main() {
 type CreateSettersProcessor struct{}
 
 func (csp *CreateSettersProcessor) Process(resourceList *framework.ResourceList) error {
-	resourceList.Result = &framework.Result{
-		Name: "create-setters",
-	}
 	items, err := run(resourceList)
 	if err != nil {
-		resourceList.Result.Items = getErrorItem(err.Error())
+		resourceList.Results = getErrorItem(err.Error())
 		return err
 	}
-	resourceList.Result.Items = items
+	resourceList.Results = items
 	return nil
 }
 
-func run(resourceList *framework.ResourceList) ([]framework.ResultItem, error) {
+func run(resourceList *framework.ResourceList) ([]*framework.Result, error) {
 	s, err := getSetters(resourceList.FunctionConfig)
 	if err != nil {
 		return nil, err
@@ -80,24 +77,24 @@ func getSetters(fc *kyaml.RNode) (createsetters.CreateSetters, error) {
 
 // resultsToItems converts the create-setters results to
 // equivalent items([]framework.Item)
-func resultsToItems(sr createsetters.CreateSetters) ([]framework.ResultItem, error) {
-	var items []framework.ResultItem
+func resultsToItems(sr createsetters.CreateSetters) ([]*framework.Result, error) {
+	var items []*framework.Result
 	if len(sr.Results) == 0 {
 		return nil, fmt.Errorf("no matches for the input list of setters")
 	}
 	for _, res := range sr.Results {
-		items = append(items, framework.ResultItem{
+		items = append(items, &framework.Result{
 			Message: fmt.Sprintf("Added line comment %q for field with value %q", res.Comment, res.Value),
-			Field:   framework.Field{Path: res.FieldPath},
-			File:    framework.File{Path: res.FilePath},
+			Field:   &framework.Field{Path: res.FieldPath},
+			File:    &framework.File{Path: res.FilePath},
 		})
 	}
 	return items, nil
 }
 
 // getErrorItem returns the item for input error message
-func getErrorItem(errMsg string) []framework.ResultItem {
-	return []framework.ResultItem{
+func getErrorItem(errMsg string) []*framework.Result {
+	return []*framework.Result{
 		{
 			Message:  fmt.Sprintf("failed to create setters: %s", errMsg),
 			Severity: framework.Error,

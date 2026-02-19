@@ -15,17 +15,20 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"regexp"
 	"strings"
 
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"sigs.k8s.io/kustomize/api/filters/prefixsuffix"
+	"sigs.k8s.io/kustomize/api/filters/prefix"
+	"sigs.k8s.io/kustomize/api/filters/suffix"
 	"sigs.k8s.io/kustomize/api/resmap"
 	"sigs.k8s.io/kustomize/api/resource"
 	"sigs.k8s.io/kustomize/api/types"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
+	"sigs.k8s.io/kustomize/kyaml/kio"
 	"sigs.k8s.io/kustomize/kyaml/resid"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 	k8syaml "sigs.k8s.io/yaml"
@@ -131,14 +134,12 @@ func (ens *EnsureNameSubstring) Transform(m resmap.ResMap) error {
 				}
 			}
 
-			fltr := prefixsuffix.Filter{
-				FieldSpec: fs,
-			}
+			var fltr kio.Filter
 			switch ens.EditMode {
 			case Prepend:
-				fltr.Prefix = ens.Substring
+				fltr = prefix.Filter{FieldSpec: fs, Prefix: ens.Substring}
 			case Append:
-				fltr.Suffix = ens.Substring
+				fltr = suffix.Filter{FieldSpec: fs, Suffix: ens.Substring}
 			}
 			err = r.ApplyFilter(fltr)
 			if err != nil {
@@ -153,6 +154,7 @@ func (ens *EnsureNameSubstring) Transform(m resmap.ResMap) error {
 }
 
 var _ yaml.Unmarshaler = &EnsureNameSubstring{}
+var _ json.Unmarshaler = &EnsureNameSubstring{}
 
 func (ens *EnsureNameSubstring) UnmarshalYAML(value *yaml.Node) error {
 	rn := yaml.NewRNode(value)
@@ -185,6 +187,17 @@ func (ens *EnsureNameSubstring) UnmarshalYAML(value *yaml.Node) error {
 			schema.FromAPIVersionAndKind(meta.APIVersion, meta.Kind).String())
 	}
 	return nil
+}
+
+// WA because k8syaml.Unmarshal does not call UnmarshalYAML anymore,
+// might be enough to remove UnmarshalYAML and put its contents in here.
+func (ens *EnsureNameSubstring) UnmarshalJSON(bytes []byte) error {
+	node, err := yaml.Parse(string(bytes))
+	if err != nil {
+		return err
+	}
+
+	return ens.UnmarshalYAML(node.YNode())
 }
 
 // set name substring if input matches one of the following:
