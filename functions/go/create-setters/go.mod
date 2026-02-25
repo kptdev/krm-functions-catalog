@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/create-setters
 
-go 1.25.6
+go 1.25.7
 
 require (
 	github.com/stretchr/testify v1.6.1
