@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
 
 # Copyright 2026 The kpt Authors
 #
@@ -18,6 +17,8 @@ set -euo pipefail
 # This script generates the 'gh' commands to create the releases for KRM functions.
 # The single parameter filters the old releases list and bumps the patch version for
 # each KRM function on the list that matches the entered parameter.
+
+set -euo pipefail
 
 bump_patch() {
   old_ver="$1"
@@ -55,7 +56,6 @@ fi
 
 # NOTE: This parsing assumes 'gh release list' outputs at least four space-separated columns.
 gh release list --limit 10000 | grep "$1" | sed 's/Latest//' | awk 'NF>=4 {printf("%s,%s,%s,%s\n", $1,$2,$3,$4)}' | \
-
 while read -r line
 do
   IFS=',' read -r -a old_release <<< "$line"
