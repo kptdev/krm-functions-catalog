@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/generate-folders
 
-go 1.25.6
+go 1.25.7
 
 require (
 	github.com/kptdev/krm-functions-sdk/go/fn v1.0.1

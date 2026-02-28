@@ -89,7 +89,7 @@ Generated folder names follow Kubernetes DNS subdomain naming rules:
 ## Function Invocation
 
 ```shell
-kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/generate-folders:unstable
+kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/generate-folders:latest
 ```
 
 ## Building

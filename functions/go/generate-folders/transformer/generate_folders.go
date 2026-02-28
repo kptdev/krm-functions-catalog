@@ -38,21 +38,33 @@ const (
 	folderAPIVersion = "resourcemanager.cnrm.cloud.google.com/v1beta1"
 	folderKind       = "Folder"
 	folderGroup      = "resourcemanager.cnrm.cloud.google.com"
+	organizationKind = "Organization"
+	subtreeKind      = "Subtree"
 
 	// Annotation constants
-	dependsOnAnnotation = "config.kubernetes.io/depends-on"
+	dependsOnAnnotation      = "config.kubernetes.io/depends-on"
+	organizationIDAnnotation = "cnrm.cloud.google.com/organization-id"
+	folderRefAnnotation      = "cnrm.cloud.google.com/folder-ref"
+	localConfigAnnotation    = "config.kubernetes.io/local-config"
+	functionAnnotation       = "config.k8s.io/function"
+	internalIDAnnotation     = "internal.config.kubernetes.io/id"
+	configIDAnnotation       = "config.kubernetes.io/id"
+	internalPathAnnotation   = "internal.config.kubernetes.io/path"
+	configPathAnnotation     = "config.kubernetes.io/path"
+	internalIndexAnnotation  = "internal.config.kubernetes.io/index"
+	configIndexAnnotation    = "config.kubernetes.io/index"
 )
 
 // Annotations that should not be inherited by generated Folders.
 var nonInheritableAnnotations = map[string]bool{
-	"config.kubernetes.io/local-config":   true,
-	"config.k8s.io/function":              true,
-	"internal.config.kubernetes.io/id":    true,
-	"config.kubernetes.io/id":             true,
-	"internal.config.kubernetes.io/path":  true,
-	"config.kubernetes.io/path":           true,
-	"internal.config.kubernetes.io/index": true,
-	"config.kubernetes.io/index":          true,
+	localConfigAnnotation:   true,
+	functionAnnotation:      true,
+	internalIDAnnotation:    true,
+	configIDAnnotation:      true,
+	internalPathAnnotation:  true,
+	configPathAnnotation:    true,
+	internalIndexAnnotation: true,
+	configIndexAnnotation:   true,
 }
 
 var normalizeRegex = regexp.MustCompile(`[^a-z0-9.\- ]`)
@@ -90,10 +102,9 @@ func Run(rl *fn.ResourceList) (bool, error) {
 			rl.Results = append(rl.Results, results...)
 		case v2APIVersion:
 			rl.Results = append(rl.Results, oldHierarchyWarning(obj))
-			results := processV2V3Hierarchy(obj, rl, false)
-			rl.Results = append(rl.Results, results...)
+			fallthrough
 		case v3APIVersion:
-			results := processV2V3Hierarchy(obj, rl, true)
+			results := processV2V3Hierarchy(obj, rl, apiVersion == v3APIVersion)
 			rl.Results = append(rl.Results, results...)
 		default:
 			rl.Results = append(rl.Results, fn.GeneralResult(fmt.Sprintf(
@@ -147,7 +158,7 @@ func processV1Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList) fn.Results {
 
 	root := &hierarchyNode{
 		name: orgID,
-		kind: "Organization",
+		kind: organizationKind,
 	}
 
 	namespace := obj.GetNamespace()
@@ -210,7 +221,7 @@ func generateV1HierarchyTree(
 
 		child := &hierarchyNode{
 			name: folderName,
-			kind: "Folder",
+			kind: folderKind,
 		}
 
 		folder := generateManifest(folderName, path, node, annotations, namespace, false)
@@ -241,14 +252,14 @@ func processV2V3Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList, isV3 bool) fn
 	}
 
 	parentKind, _, _ := obj.NestedString("spec", "parentRef", "kind")
-	if parentKind != "" && parentKind != "Organization" && parentKind != "Folder" {
+	if parentKind != "" && parentKind != organizationKind && parentKind != folderKind {
 		results = append(results, fn.ErrorConfigObjectResult(
 			fmt.Errorf("ResourceHierarchy %s has an unsupported parentRef kind", obj.GetName()), obj))
 		return results
 	}
 
 	if parentKind == "" {
-		parentKind = "Organization"
+		parentKind = organizationKind
 	}
 
 	namespace := obj.GetNamespace()
@@ -283,7 +294,7 @@ func processV2V3Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList, isV3 bool) fn
 			for name := range subtreeMap {
 				subtrees[name] = &hierarchyNode{
 					name: name,
-					kind: "Subtree",
+					kind: subtreeKind,
 				}
 			}
 
@@ -490,7 +501,7 @@ func generateManifest(name string, path []string, parent *hierarchyNode, annotat
 	if nativeRef {
 		if isRoot {
 			// Root node uses external refs
-			if parent.kind == "Organization" {
+			if parent.kind == organizationKind {
 				_ = folderObj.SetNestedField(parentRef, "spec", "organizationRef", "external")
 			} else {
 				_ = folderObj.SetNestedField(parentRef, "spec", "folderRef", "external")
@@ -508,10 +519,10 @@ func generateManifest(name string, path []string, parent *hierarchyNode, annotat
 		}
 	} else {
 		// Annotation-based refs (v2 and v1)
-		if isRoot && parent.kind == "Organization" {
-			combinedAnnotations["cnrm.cloud.google.com/organization-id"] = parentRef
+		if isRoot && parent.kind == organizationKind {
+			combinedAnnotations[organizationIDAnnotation] = parentRef
 		} else {
-			combinedAnnotations["cnrm.cloud.google.com/folder-ref"] = normalize(parentRef)
+			combinedAnnotations[folderRefAnnotation] = normalize(parentRef)
 		}
 	}
 
@@ -566,7 +577,7 @@ func normalize(name string) string {
 
 // filterNonInheritableAnnotations removes non-inheritable annotations.
 func filterNonInheritableAnnotations(annotations map[string]string) map[string]string {
-	if annotations == nil {
+	if len(annotations) == 0 {
 		return map[string]string{}
 	}
 	filtered := make(map[string]string)

@@ -19,7 +19,7 @@ package main
 import (
 	"syscall/js"
 
-	transformer "github.com/kptdev/krm-functions-catalog/functions/go/generate-folders/transformer"
+	"github.com/kptdev/krm-functions-catalog/functions/go/generate-folders/transformer"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
@@ -38,7 +38,7 @@ func run() error {
 }
 
 func transformFolders(input []byte) ([]byte, error) {
-	return fn.Run(fn.ResourceListProcessorFunc(transformer.Run), []byte(input))
+	return fn.Run(fn.ResourceListProcessorFunc(generate_folders.Run), []byte(input))
 }
 
 // This function will return ALL Results with Severity error,

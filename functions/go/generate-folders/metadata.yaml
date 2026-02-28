@@ -3,7 +3,4 @@ description: Generate Folder resources from ResourceHierarchy custom resources.
 tags:
   - generator
 sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/generate-folders
-
-emails:
-  - kpt-team@google.com
 license: Apache-2.0

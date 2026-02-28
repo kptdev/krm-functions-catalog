@@ -17,10 +17,10 @@
 package main
 
 import (
-	transformer "github.com/kptdev/krm-functions-catalog/functions/go/generate-folders/transformer"
+	"github.com/kptdev/krm-functions-catalog/functions/go/generate-folders/transformer"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
 func run() error {
-	return fn.AsMain(fn.ResourceListProcessorFunc(transformer.Run))
+	return fn.AsMain(fn.ResourceListProcessorFunc(generate_folders.Run))
 }
