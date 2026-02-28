@@ -1,0 +1,53 @@
+diff --git a/resources.yaml b/resources.yaml
+index c6e0011a..2e07cc7c 100644
+--- a/resources.yaml
++++ b/resources.yaml
+@@ -12,3 +12,48 @@ spec:
+     - Team_2
+   - Prod:
+     - Team One
++---
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: dev
++spec:
++  organizationRef:
++    external: test-organization
++  displayName: Dev
++---
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: dev.team-2
++spec:
++  folderRef:
++    name: dev
++  displayName: Team_2
++---
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: dev.team-one
++spec:
++  folderRef:
++    name: dev
++  displayName: Team One
++---
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: prod
++spec:
++  organizationRef:
++    external: test-organization
++  displayName: Prod
++---
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: prod.team-one
++spec:
++  folderRef:
++    name: prod
++  displayName: Team One

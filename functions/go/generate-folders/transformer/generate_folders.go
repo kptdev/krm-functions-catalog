@@ -16,9 +16,9 @@
 package generate_folders
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
-	"sort"
 	"strings"
 
 	"github.com/kptdev/krm-functions-sdk/go/fn"
@@ -64,6 +64,14 @@ type hierarchyNode struct {
 	name     string
 	kind     string
 	children []*hierarchyNode
+}
+
+type missingSubtreeError struct {
+	name string
+}
+
+func (e *missingSubtreeError) Error() string {
+	return e.name
 }
 
 // Run processes ResourceHierarchy resources and generates Folders.
@@ -118,9 +126,20 @@ func processV1Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList) fn.Results {
 		return results
 	}
 
-	// Get spec.config as SubObject
-	configSubObj, found, err := obj.NestedSubObject("spec", "config")
-	if err != nil || !found {
+	var rawObj map[string]interface{}
+	if err := yaml.Unmarshal([]byte(obj.String()), &rawObj); err != nil {
+		results = append(results, fn.ErrorConfigObjectResult(
+			fmt.Errorf("ResourceHierarchy %s: failed to parse spec: %v", obj.GetName(), err), obj))
+		return results
+	}
+	spec, ok := rawObj["spec"].(map[string]interface{})
+	if !ok {
+		results = append(results, fn.ErrorConfigObjectResult(
+			fmt.Errorf("ResourceHierarchy %s has an invalid spec", obj.GetName()), obj))
+		return results
+	}
+	configMap, found := spec["config"].(map[string]interface{})
+	if !found {
 		results = append(results, fn.ErrorConfigObjectResult(
 			fmt.Errorf("ResourceHierarchy %s has no config defined", obj.GetName()), obj))
 		return results
@@ -135,7 +154,7 @@ func processV1Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList) fn.Results {
 	annotations := map[string]string{}
 
 	// Start with empty path for v1 hierarchy
-	errResult := generateV1HierarchyTree(root, layers, 0, &configSubObj, namespace, annotations, []string{}, rl)
+	errResult := generateV1HierarchyTree(root, layers, 0, configMap, namespace, annotations, []string{}, rl)
 	if errResult != nil {
 		results = append(results, errResult)
 	}
@@ -148,7 +167,7 @@ func generateV1HierarchyTree(
 	node *hierarchyNode,
 	layers []string,
 	layerIndex int,
-	configSubObj *fn.SubObject,
+	config map[string]interface{},
 	namespace string,
 	annotations map[string]string,
 	path []string,
@@ -161,20 +180,30 @@ func generateV1HierarchyTree(
 	layer := layers[layerIndex]
 
 	// Check if this layer key is present in config
-	if !configSubObj.HasField(layer) {
+	foldersRaw, found := config[layer]
+	if !found {
 		return fn.GeneralResult(
 			fmt.Sprintf("Layer %q has no corresponding config entry. Either add to spec.config.%s or remove it from spec.layers", layer, layer),
 			fn.Error,
 		)
 	}
 
-	// Get the folders for this layer from config
-	foldersSlice := configSubObj.GetSlice(layer)
+	foldersSlice, ok := foldersRaw.([]interface{})
+	if !ok {
+		return fn.GeneralResult(
+			fmt.Sprintf("Layer %q has an invalid config entry; expected a list of folder names", layer),
+			fn.Error,
+		)
+	}
 
-	for _, folderSubObj := range foldersSlice {
-		folderName := folderSubObj.String()
-		// SubObject.String() returns YAML, which may have trailing newlines.
-		folderName = strings.TrimSpace(folderName)
+	for _, folderItem := range foldersSlice {
+		folderName, ok := folderItem.(string)
+		if !ok {
+			return fn.GeneralResult(
+				fmt.Sprintf("Layer %q contains a non-string folder entry", layer),
+				fn.Error,
+			)
+		}
 		if folderName == "" {
 			continue
 		}
@@ -184,12 +213,11 @@ func generateV1HierarchyTree(
 			kind: "Folder",
 		}
 
-		// Thread path through to ensure proper folder naming (e.g., dev.team1)
-		currentPath := append(path, folderName)
-		folder := generateManifest(folderName, currentPath, node, annotations, namespace, false)
+		folder := generateManifest(folderName, path, node, annotations, namespace, false)
 		rl.Items = append(rl.Items, folder)
 
-		errResult := generateV1HierarchyTree(child, layers, layerIndex+1, configSubObj, namespace, annotations, currentPath, rl)
+		currentPath := append(clonePath(path), folderName)
+		errResult := generateV1HierarchyTree(child, layers, layerIndex+1, config, namespace, annotations, currentPath, rl)
 		if errResult != nil {
 			return errResult
 		}
@@ -249,16 +277,18 @@ func processV2V3Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList, isV3 bool) fn
 	}
 
 	// Process subtrees
-	// Note: Preserving insertion order for compatibility with TypeScript implementation
 	subtrees := map[string]*hierarchyNode{}
 	if subtreeRaw, ok := spec["subtrees"]; ok {
 		if subtreeMap, ok := subtreeRaw.(map[string]interface{}); ok {
-			// Process subtrees in YAML insertion order (no sorting)
-			for name, val := range subtreeMap {
-				subtreeNode := &hierarchyNode{
+			for name := range subtreeMap {
+				subtrees[name] = &hierarchyNode{
 					name: name,
 					kind: "Subtree",
 				}
+			}
+
+			for name, val := range subtreeMap {
+				subtreeNode := subtrees[name]
 				if children, ok := val.([]interface{}); ok {
 					if err := generateTree(subtreeNode, children, subtrees); err != nil {
 						results = append(results, fn.ErrorConfigObjectResult(
@@ -290,8 +320,15 @@ func processV2V3Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList, isV3 bool) fn
 	// Build tree from config
 	buildErr := buildTreeFromRawConfig(root, configSlice, subtrees)
 	if buildErr != nil {
+		var missingErr *missingSubtreeError
+		if errors.As(buildErr, &missingErr) {
+			results = append(results, fn.ErrorConfigObjectResult(
+				fmt.Errorf("ResourceHierarchy %s references non-existent subtree %q", obj.GetName(), missingErr.name), obj))
+			return results
+		}
+
 		results = append(results, fn.ErrorConfigObjectResult(
-			fmt.Errorf("ResourceHierarchy %s references non-existent subtree %q", obj.GetName(), buildErr.Error()), obj))
+			fmt.Errorf("ResourceHierarchy %s: invalid spec.config: %v", obj.GetName(), buildErr), obj))
 		return results
 	}
 
@@ -315,14 +352,7 @@ func buildTreeFromRawConfig(parent *hierarchyNode, configSlice []interface{}, su
 				name: v,
 			})
 		case map[string]interface{}:
-			// Sort map keys for deterministic output
-			keys := make([]string, 0, len(v))
-			for name := range v {
-				keys = append(keys, name)
-			}
-			sort.Strings(keys)
-			for _, name := range keys {
-				val := v[name]
+			for name, val := range v {
 				node := &hierarchyNode{
 					name: name,
 				}
@@ -340,7 +370,7 @@ func buildTreeFromRawConfig(parent *hierarchyNode, configSlice []interface{}, su
 						}
 						subtreeNode, exists := subtrees[stName]
 						if !exists {
-							return fmt.Errorf("%s", stName)
+							return &missingSubtreeError{name: stName}
 						}
 						node.children = subtreeNode.children
 					}
@@ -378,21 +408,14 @@ func generateTree(root *hierarchyNode, children []interface{}, subtrees map[stri
 				}
 				subtreeNode, exists := subtrees[stName]
 				if !exists {
-					return fmt.Errorf("%s", stName)
+					return &missingSubtreeError{name: stName}
 				}
 				// Expand subtree children directly into parent
 				root.children = append(root.children, subtreeNode.children...)
 				continue
 			}
 
-			// Sort map keys for deterministic output
-			sortedKeys := make([]string, 0, len(v))
-			for name := range v {
-				sortedKeys = append(sortedKeys, name)
-			}
-			sort.Strings(sortedKeys)
-			for _, name := range sortedKeys {
-				val := v[name]
+			for name, val := range v {
 				node := &hierarchyNode{
 					name: name,
 				}
@@ -410,7 +433,7 @@ func generateTree(root *hierarchyNode, children []interface{}, subtrees map[stri
 						}
 						subtreeNode, exists := subtrees[stName]
 						if !exists {
-							return fmt.Errorf("%s", stName)
+							return &missingSubtreeError{name: stName}
 						}
 						node.children = subtreeNode.children
 					}
@@ -428,9 +451,7 @@ func generateConfigs(node *hierarchyNode, path []string, annotations map[string]
 	for _, child := range node.children {
 		folder := generateManifest(child.name, path, node, annotations, namespace, isV3)
 		rl.Items = append(rl.Items, folder)
-		newPath := make([]string, len(path))
-		copy(newPath, path)
-		newPath = append(newPath, child.name)
+		newPath := append(clonePath(path), child.name)
 		generateConfigs(child, newPath, annotations, namespace, isV3, rl)
 	}
 }
@@ -555,6 +576,12 @@ func filterNonInheritableAnnotations(annotations map[string]string) map[string]s
 		}
 	}
 	return filtered
+}
+
+func clonePath(path []string) []string {
+	cloned := make([]string, len(path))
+	copy(cloned, path)
+	return cloned
 }
 
 // oldHierarchyWarning generates a deprecation warning for v1/v2.

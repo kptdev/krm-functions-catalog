@@ -1,0 +1,19 @@
+diff --git a/resources.yaml b/resources.yaml
+index e99b5b56..40720ec0 100644
+--- a/resources.yaml
++++ b/resources.yaml
+@@ -11,3 +11,14 @@ spec:
+     external: test-organization
+   config:
+   - Dev
++---
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: dev
++  annotations:
++    cnrm.cloud.google.com/deletion-policy: abandon
++spec:
++  organizationRef:
++    external: test-organization
++  displayName: Dev

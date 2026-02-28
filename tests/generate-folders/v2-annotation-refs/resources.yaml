@@ -1,0 +1,11 @@
+apiVersion: dev.cft.v1alpha2
+kind: ResourceHierarchy
+metadata:
+  name: test-v2
+spec:
+  parentRef:
+    kind: Organization
+    external: test-organization
+  config:
+  - Dev
+  - Prod

@@ -1,0 +1,7 @@
+apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: v3-folder-parent
+pipeline:
+  mutators:
+    - image: ghcr.io/kptdev/krm-functions-catalog/generate-folders:latest

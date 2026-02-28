@@ -1,0 +1,7 @@
+apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: annotation-inheritance
+pipeline:
+  mutators:
+    - image: ghcr.io/kptdev/krm-functions-catalog/generate-folders:latest

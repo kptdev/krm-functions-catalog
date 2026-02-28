@@ -1,0 +1,30 @@
+diff --git a/resources.yaml b/resources.yaml
+index d5dc3e44..b87cc648 100644
+--- a/resources.yaml
++++ b/resources.yaml
+@@ -10,3 +10,25 @@ spec:
+   config:
+   - Dev:
+     - Team1
++---
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: dev
++  namespace: test-ns
++spec:
++  organizationRef:
++    external: test-organization
++  displayName: Dev
++---
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: dev.team1
++  namespace: test-ns
++  annotations:
++    config.kubernetes.io/depends-on: resourcemanager.cnrm.cloud.google.com/namespaces/test-ns/Folder/dev
++spec:
++  folderRef:
++    name: dev
++  displayName: Team1

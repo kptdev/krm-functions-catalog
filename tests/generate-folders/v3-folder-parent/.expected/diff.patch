@@ -1,0 +1,26 @@
+diff --git a/resources.yaml b/resources.yaml
+index 521e29ff..1bfbfb69 100644
+--- a/resources.yaml
++++ b/resources.yaml
+@@ -9,3 +9,21 @@ spec:
+   config:
+   - Dev:
+     - Team1
++---
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: dev
++spec:
++  folderRef:
++    external: parent-folder-id
++  displayName: Dev
++---
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
++  name: dev.team1
++spec:
++  folderRef:
++    name: dev
++  displayName: Team1

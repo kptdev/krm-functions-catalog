@@ -15,11 +15,12 @@
 package generate_folders
 
 import (
-	"os"
-	"path/filepath"
+	"errors"
 	"testing"
 
 	"github.com/kptdev/krm-functions-sdk/go/fn"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestNormalize(t *testing.T) {
@@ -43,10 +44,7 @@ func TestNormalize(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := normalize(tt.input)
-			if result != tt.expected {
-				t.Errorf("normalize(%q) = %q, want %q", tt.input, result, tt.expected)
-			}
+			assert.Equal(t, tt.expected, normalize(tt.input))
 		})
 	}
 }
@@ -64,10 +62,7 @@ func TestNormalizePath(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := Normalize(tt.parts)
-			if result != tt.expected {
-				t.Errorf("Normalize(%v) = %q, want %q", tt.parts, result, tt.expected)
-			}
+			assert.Equal(t, tt.expected, Normalize(tt.parts))
 		})
 	}
 }
@@ -113,16 +108,7 @@ func TestFilterNonInheritableAnnotations(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := filterNonInheritableAnnotations(tt.input)
-			if len(result) != len(tt.expected) {
-				t.Errorf("filterNonInheritableAnnotations() got %d entries, want %d", len(result), len(tt.expected))
-				return
-			}
-			for k, v := range tt.expected {
-				if result[k] != v {
-					t.Errorf("filterNonInheritableAnnotations()[%q] = %q, want %q", k, result[k], v)
-				}
-			}
+			assert.Equal(t, tt.expected, filterNonInheritableAnnotations(tt.input))
 		})
 	}
 }
@@ -130,21 +116,12 @@ func TestFilterNonInheritableAnnotations(t *testing.T) {
 func TestGenerateTree(t *testing.T) {
 	t.Run("simple flat list", func(t *testing.T) {
 		root := &hierarchyNode{name: "root", kind: "Organization"}
-		children := []interface{}{"Dev", "Prod"}
-		err := generateTree(root, children, nil)
-		if err != nil {
-			t.Fatalf("generateTree() returned error: %v", err)
-		}
+		err := generateTree(root, []interface{}{"Dev", "Prod"}, nil)
 
-		if len(root.children) != 2 {
-			t.Fatalf("expected 2 children, got %d", len(root.children))
-		}
-		if root.children[0].name != "Dev" {
-			t.Errorf("expected child 0 to be Dev, got %s", root.children[0].name)
-		}
-		if root.children[1].name != "Prod" {
-			t.Errorf("expected child 1 to be Prod, got %s", root.children[1].name)
-		}
+		require.NoError(t, err)
+		require.Len(t, root.children, 2)
+		assert.Equal(t, "Dev", root.children[0].name)
+		assert.Equal(t, "Prod", root.children[1].name)
 	})
 
 	t.Run("nested structure", func(t *testing.T) {
@@ -154,24 +131,15 @@ func TestGenerateTree(t *testing.T) {
 				"Dev": []interface{}{"Team1", "Team2"},
 			},
 		}
-		err := generateTree(root, children, nil)
-		if err != nil {
-			t.Fatalf("generateTree() returned error: %v", err)
-		}
 
-		if len(root.children) != 1 {
-			t.Fatalf("expected 1 child, got %d", len(root.children))
-		}
-		dev := root.children[0]
-		if dev.name != "Dev" {
-			t.Errorf("expected child to be Dev, got %s", dev.name)
-		}
-		if len(dev.children) != 2 {
-			t.Fatalf("expected 2 grandchildren, got %d", len(dev.children))
-		}
-		if dev.children[0].name != "Team1" {
-			t.Errorf("expected grandchild 0 to be Team1, got %s", dev.children[0].name)
-		}
+		err := generateTree(root, children, nil)
+
+		require.NoError(t, err)
+		require.Len(t, root.children, 1)
+		require.Len(t, root.children[0].children, 2)
+		assert.Equal(t, "Dev", root.children[0].name)
+		assert.Equal(t, "Team1", root.children[0].children[0].name)
+		assert.Equal(t, "Team2", root.children[0].children[1].name)
 	})
 
 	t.Run("subtree expansion", func(t *testing.T) {
@@ -185,7 +153,6 @@ func TestGenerateTree(t *testing.T) {
 				},
 			},
 		}
-
 		root := &hierarchyNode{name: "root", kind: "Organization"}
 		children := []interface{}{
 			map[string]interface{}{
@@ -194,21 +161,14 @@ func TestGenerateTree(t *testing.T) {
 				},
 			},
 		}
-		err := generateTree(root, children, subtrees)
-		if err != nil {
-			t.Fatalf("generateTree() returned error: %v", err)
-		}
 
-		if len(root.children) != 1 {
-			t.Fatalf("expected 1 child, got %d", len(root.children))
-		}
-		dev := root.children[0]
-		if len(dev.children) != 2 {
-			t.Fatalf("expected 2 grandchildren (from subtree), got %d", len(dev.children))
-		}
-		if dev.children[0].name != "Team1" {
-			t.Errorf("expected Team1, got %s", dev.children[0].name)
-		}
+		err := generateTree(root, children, subtrees)
+
+		require.NoError(t, err)
+		require.Len(t, root.children, 1)
+		require.Len(t, root.children[0].children, 2)
+		assert.Equal(t, "Team1", root.children[0].children[0].name)
+		assert.Equal(t, "Team2", root.children[0].children[1].name)
 	})
 
 	t.Run("subtree inline expansion in list", func(t *testing.T) {
@@ -222,8 +182,6 @@ func TestGenerateTree(t *testing.T) {
 				},
 			},
 		}
-
-		// This mirrors YAML: Dev:\n  - $subtree: teams\n  - QA
 		root := &hierarchyNode{name: "root", kind: "Organization"}
 		children := []interface{}{
 			map[string]interface{}{
@@ -233,276 +191,114 @@ func TestGenerateTree(t *testing.T) {
 				},
 			},
 		}
+
 		err := generateTree(root, children, subtrees)
-		if err != nil {
-			t.Fatalf("generateTree() returned error: %v", err)
-		}
 
-		if len(root.children) != 1 {
-			t.Fatalf("expected 1 child (Dev), got %d", len(root.children))
-		}
-		dev := root.children[0]
-		// Should have Team1, Team2 (from subtree) + QA = 3 children
-		if len(dev.children) != 3 {
-			t.Fatalf("expected 3 children (Team1,Team2,QA), got %d", len(dev.children))
-		}
-		if dev.children[0].name != "Team1" {
-			t.Errorf("expected Team1, got %s", dev.children[0].name)
-		}
-		if dev.children[1].name != "Team2" {
-			t.Errorf("expected Team2, got %s", dev.children[1].name)
-		}
-		if dev.children[2].name != "QA" {
-			t.Errorf("expected QA, got %s", dev.children[2].name)
-		}
+		require.NoError(t, err)
+		require.Len(t, root.children, 1)
+		require.Len(t, root.children[0].children, 3)
+		assert.Equal(t, "Team1", root.children[0].children[0].name)
+		assert.Equal(t, "Team2", root.children[0].children[1].name)
+		assert.Equal(t, "QA", root.children[0].children[2].name)
 	})
 
-	t.Run("missing subtree reference returns error", func(t *testing.T) {
+	t.Run("missing subtree reference returns typed error", func(t *testing.T) {
 		root := &hierarchyNode{name: "root", kind: "Organization"}
-		children := []interface{}{
-			map[string]interface{}{"$subtree": "nonexistent"},
-		}
-		err := generateTree(root, children, map[string]*hierarchyNode{})
-		if err == nil {
-			t.Fatal("expected error for missing subtree, got nil")
-		}
+		err := generateTree(root, []interface{}{map[string]interface{}{"$subtree": "nonexistent"}}, map[string]*hierarchyNode{})
+
+		require.Error(t, err)
+		var missingErr *missingSubtreeError
+		require.True(t, errors.As(err, &missingErr))
+		assert.Equal(t, "nonexistent", missingErr.name)
+	})
+
+	t.Run("invalid subtree value returns parse error", func(t *testing.T) {
+		root := &hierarchyNode{name: "root", kind: "Organization"}
+		err := generateTree(root, []interface{}{map[string]interface{}{"$subtree": 123}}, map[string]*hierarchyNode{})
+
+		require.EqualError(t, err, "$subtree value is not a string")
 	})
 }
 
-func loadTestData(t *testing.T, filename string) []byte {
-	t.Helper()
-	data, err := os.ReadFile(filepath.Join("testdata", filename))
-	if err != nil {
-		t.Fatalf("failed to read %s: %v", filename, err)
+func TestBuildTreeFromRawConfigAllowsForwardSubtreeReferences(t *testing.T) {
+	root := &hierarchyNode{name: "root", kind: "Organization"}
+	subtrees := map[string]*hierarchyNode{
+		"teams": {
+			name: "teams",
+			kind: "Subtree",
+			children: []*hierarchyNode{
+				{name: "Team1"},
+				{name: "Team2"},
+			},
+		},
 	}
-	return data
+	config := []interface{}{
+		map[string]interface{}{
+			"Dev": map[string]interface{}{"$subtree": "teams"},
+		},
+	}
+
+	err := buildTreeFromRawConfig(root, config, subtrees)
+
+	require.NoError(t, err)
+	require.Len(t, root.children, 1)
+	require.Len(t, root.children[0].children, 2)
+	assert.Equal(t, "dev.team1", generatedFolderName(root.children[0].children[0].name, []string{"Dev"}))
 }
 
-// Integration tests using full YAML ResourceList inputs
-
-func TestRunSimpleV3(t *testing.T) {
-	input := loadTestData(t, "simple_v3.yaml")
-
-	rl, err := fn.ParseResourceList(input)
-	if err != nil {
-		t.Fatalf("failed to parse resource list: %v", err)
+func TestBuildTreeFromRawConfigPreservesParseErrors(t *testing.T) {
+	root := &hierarchyNode{name: "root", kind: "Organization"}
+	config := []interface{}{
+		map[string]interface{}{
+			"Dev": map[string]interface{}{"$subtree": 123},
+		},
 	}
 
-	ok, err := Run(rl)
-	if err != nil {
-		t.Fatalf("Run() returned error: %v", err)
-	}
-	if !ok {
-		t.Fatal("Run() returned false")
-	}
+	err := buildTreeFromRawConfig(root, config, map[string]*hierarchyNode{})
 
-	// Count generated folders (items minus the original ResourceHierarchy)
-	folderCount := 0
-	for _, item := range rl.Items {
-		if item.GetKind() == "Folder" {
-			folderCount++
-		}
-	}
-
-	if folderCount < 4 {
-		t.Errorf("expected at least 4 folders, got %d", folderCount)
-	}
-
-	// Verify first folder is Dev
-	var devFolder *fn.KubeObject
-	for _, item := range rl.Items {
-		if item.GetKind() == "Folder" && item.GetName() == "dev" {
-			devFolder = item
-			break
-		}
-	}
-	if devFolder == nil {
-		t.Fatal("expected to find Folder with name 'dev'")
-	}
-
-	// Verify v3 uses native ref
-	orgRef, found, _ := devFolder.NestedString("spec", "organizationRef", "external")
-	if !found {
-		t.Error("expected organizationRef.external to be set for root-level folder")
-	}
-	if orgRef != "test-organization" {
-		t.Errorf("expected organizationRef.external = 'test-organization', got %q", orgRef)
-	}
-
-	// Verify displayName
-	displayName, found, _ := devFolder.NestedString("spec", "displayName")
-	if !found || displayName != "Dev" {
-		t.Errorf("expected displayName = 'Dev', got %q", displayName)
-	}
+	require.EqualError(t, err, "$subtree value is not a string")
 }
 
-func TestRunV3WithNamespace(t *testing.T) {
-	input := loadTestData(t, "v3_with_namespace.yaml")
-
-	rl, err := fn.ParseResourceList(input)
-	if err != nil {
-		t.Fatalf("failed to parse resource list: %v", err)
-	}
+func TestRunV1HierarchyUsesAncestorPathInFolderNames(t *testing.T) {
+	rl, err := fn.ParseResourceList([]byte(`
+apiVersion: config.kubernetes.io/v1
+kind: ResourceList
+items:
+  - apiVersion: dev.cft.v1alpha1
+    kind: ResourceHierarchy
+    metadata:
+      name: v1-hierarchy
+    spec:
+      organization: "123456789"
+      layers:
+        - environments
+        - teams
+      config:
+        environments:
+          - Dev
+        teams:
+          - Team1
+`))
+	require.NoError(t, err)
 
 	ok, err := Run(rl)
-	if err != nil {
-		t.Fatalf("Run() returned error: %v", err)
-	}
-	if !ok {
-		t.Fatal("Run() returned false")
-	}
 
-	// Find the child folder (Team1)
+	require.NoError(t, err)
+	require.True(t, ok)
+
+	folders := map[string]*fn.KubeObject{}
 	for _, item := range rl.Items {
-		if item.GetKind() == "Folder" && item.GetName() == "dev.team1" {
-			// Verify namespace is set
-			ns := item.GetNamespace()
-			if ns != "test-ns" {
-				t.Errorf("expected namespace 'test-ns', got %q", ns)
-			}
-
-			// Verify depends-on annotation for non-root folder
-			dependsOn := item.GetAnnotation(dependsOnAnnotation)
-			expected := "resourcemanager.cnrm.cloud.google.com/namespaces/test-ns/Folder/dev"
-			if dependsOn != expected {
-				t.Errorf("expected depends-on annotation %q, got %q", expected, dependsOn)
-			}
-			return
+		if item.GetKind() == folderKind {
+			folders[item.GetName()] = item
 		}
 	}
-	t.Error("expected to find Folder with name 'dev.team1'")
+
+	require.Contains(t, folders, "dev")
+	require.Contains(t, folders, "dev.team1")
+	assert.Equal(t, "123456789", folders["dev"].GetAnnotation("cnrm.cloud.google.com/organization-id"))
+	assert.Equal(t, "dev", folders["dev.team1"].GetAnnotation("cnrm.cloud.google.com/folder-ref"))
 }
 
-func TestRunV3WithFolderParent(t *testing.T) {
-	input := loadTestData(t, "v3_folder_parent.yaml")
-
-	rl, err := fn.ParseResourceList(input)
-	if err != nil {
-		t.Fatalf("failed to parse resource list: %v", err)
-	}
-
-	ok, err := Run(rl)
-	if err != nil {
-		t.Fatalf("Run() returned error: %v", err)
-	}
-	if !ok {
-		t.Fatal("Run() returned false")
-	}
-
-	// The root folder should use folderRef.external
-	for _, item := range rl.Items {
-		if item.GetKind() == "Folder" && item.GetName() == "dev" {
-			ref, found, _ := item.NestedString("spec", "folderRef", "external")
-			if !found || ref != "parent-folder-id" {
-				t.Errorf("expected folderRef.external = 'parent-folder-id', got %q (found=%v)", ref, found)
-			}
-			return
-		}
-	}
-	t.Error("expected to find Folder with name 'dev'")
-}
-
-func TestRunV2Deprecation(t *testing.T) {
-	input := loadTestData(t, "v2_deprecation.yaml")
-
-	rl, err := fn.ParseResourceList(input)
-	if err != nil {
-		t.Fatalf("failed to parse resource list: %v", err)
-	}
-
-	ok, err := Run(rl)
-	if err != nil {
-		t.Fatalf("Run() returned error: %v", err)
-	}
-	if !ok {
-		t.Fatal("Run() returned false")
-	}
-
-	// Should have at least one warning for deprecated version
-	hasWarning := false
-	for _, r := range rl.Results {
-		if r.Severity == fn.Warning {
-			hasWarning = true
-			break
-		}
-	}
-	if !hasWarning {
-		t.Error("expected deprecation warning for v2 hierarchy")
-	}
-
-	// Should use annotation-based refs for v2
-	for _, item := range rl.Items {
-		if item.GetKind() == "Folder" && item.GetName() == "dev" {
-			orgAnnotation := item.GetAnnotation("cnrm.cloud.google.com/organization-id")
-			if orgAnnotation != "test-organization" {
-				t.Errorf("expected cnrm.cloud.google.com/organization-id = 'test-organization', got %q", orgAnnotation)
-			}
-			return
-		}
-	}
-	t.Error("expected to find Folder with name 'dev'")
-}
-
-func TestRunMissingParentRef(t *testing.T) {
-	input := loadTestData(t, "missing_parent_ref.yaml")
-
-	rl, err := fn.ParseResourceList(input)
-	if err != nil {
-		t.Fatalf("failed to parse resource list: %v", err)
-	}
-
-	ok, err := Run(rl)
-	if err != nil {
-		t.Fatalf("Run() returned error: %v", err)
-	}
-	if !ok {
-		t.Fatal("Run() returned false")
-	}
-
-	// Should have an error result for missing parentRef
-	hasError := false
-	for _, r := range rl.Results {
-		if r.Severity == fn.Error {
-			hasError = true
-			break
-		}
-	}
-	if !hasError {
-		t.Error("expected error for missing parentRef")
-	}
-}
-
-func TestRunAnnotationInheritance(t *testing.T) {
-	input := loadTestData(t, "annotation_inheritance.yaml")
-
-	rl, err := fn.ParseResourceList(input)
-	if err != nil {
-		t.Fatalf("failed to parse resource list: %v", err)
-	}
-
-	ok, err := Run(rl)
-	if err != nil {
-		t.Fatalf("Run() returned error: %v", err)
-	}
-	if !ok {
-		t.Fatal("Run() returned false")
-	}
-
-	for _, item := range rl.Items {
-		if item.GetKind() == "Folder" && item.GetName() == "dev" {
-			// Should inherit deletion-policy
-			deletionPolicy := item.GetAnnotation("cnrm.cloud.google.com/deletion-policy")
-			if deletionPolicy != "abandon" {
-				t.Errorf("expected inherited deletion-policy annotation, got %q", deletionPolicy)
-			}
-
-			// Should NOT inherit local-config
-			localConfig := item.GetAnnotation("config.kubernetes.io/local-config")
-			if localConfig != "" {
-				t.Error("local-config annotation should not be inherited")
-			}
-			return
-		}
-	}
-	t.Error("expected to find Folder with name 'dev'")
+func generatedFolderName(name string, path []string) string {
+	return generateManifest(name, path, &hierarchyNode{name: "parent", kind: "Folder"}, nil, "", false).GetName()
 }
