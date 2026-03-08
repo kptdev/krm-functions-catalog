@@ -1,5 +1,13 @@
 # set-namespace
 
+## Known Issues
+
+**Versions v0.4.2 through v0.4.5 have a bug** where unknown Custom Resource Definitions (CRDs) without an existing `metadata.namespace` field are not processed.
+
+- **Affected versions**: v0.4.2, v0.4.3, v0.4.4, v0.4.5
+- **Workaround**: Use v0.4.1 or upgrade to the latest version
+- **Symptom**: Unknown CRDs (resources not in the Kubernetes built-in API) do not get the namespace field added
+
 ## Overview
 
 <!--mdtogo:Short-->

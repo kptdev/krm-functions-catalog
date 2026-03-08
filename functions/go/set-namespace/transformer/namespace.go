@@ -61,7 +61,7 @@ type ObjectMeta struct {
 // it provides the method "Transform" to change the "namespace" and update the "config.kubernetes.io/depends-on" annotation.
 type SetNamespace struct {
 	TypeMeta         `json:",inline" yaml:",inline"`
-	ObjectMeta       `json:"metadata,omitempty" yaml:"metadata,omitempty"`
+	ObjectMeta       `json:"metadata" yaml:"metadata,omitempty"`
 	NewNamespace     string `json:"namespace,omitempty" yaml:"namespace,omitempty"`
 	NamespaceMatcher string `json:"namespaceMatcher,omitempty" yaml:"namespaceMatcher,omitempty"`
 }
@@ -116,6 +116,9 @@ func (p *SetNamespace) Transform(objects fn.KubeObjects) fn.Results {
 	// Skip local resource which `kpt live apply` skips.
 	objects = objects.WhereNot(func(o *fn.KubeObject) bool { return o.IsLocalConfig() })
 
+	// Skip meta resources like Kptfile
+	objects = objects.WhereNot(fn.IsMetaResource())
+
 	// Store resources' GKNN before the namespace change. This map will be used to determine whether a resource which other
 	// resources depends on has its namespace changes.
 	dependsOnMap := MapGKNNBeforeChange(objects)
@@ -142,44 +145,13 @@ func ReplaceNamespace(objects fn.KubeObjects, newNs string, dependsOnMap map[str
 	return results
 }
 
-// ListAllOrigins adds the constraints for general replacement.
-// If a resource does not have upstream origin, it gives warnings (the resource will still be updated).
-func ListAllOrigins(objects fn.KubeObjects) ([]string, fn.Results, error) {
-	var results fn.Results
-	originNss := sets.NewString()
-	for _, o := range objects {
-		if o.HasUpstreamOrigin() {
-			origin, err := o.GetOriginID()
-			if err != nil {
-				continue
-			}
-			if o.IsClusterScoped() {
-				continue
-			}
-			if origin.Namespace == fn.UnknownNamespace {
-				// This should rarely happen.
-				return nil, nil, fmt.Errorf("%v is namespace-scoped, but has cluster-scoped or unknown scoped origin %v",
-					o.ShortString(), origin.String())
-			}
-			originNss.Insert(origin.Namespace)
-		} else {
-			results = append(results, fn.GeneralResult(fmt.Sprintf(
-				"%v does not have upstream origin.", o.ShortString()), fn.Warning))
-		}
-	}
-	return originNss.List(), results, nil
-}
-
 // WalkAndReplace iterate each KRM resource and updates the "namespace" fields.
 func WalkAndReplace(objects fn.KubeObjects, newNs string, matchers ...string) (fn.Results, int, []string) {
 	count := 0
 	oldnss := sets.NewString()
 	var results fn.Results
 	VisitAll(objects, func(origin string, currentPtr *string, idStr ...string) {
-		// Skip if the resource is a cluster scoped or unknown scoped resource.
-		if origin == fn.UnknownNamespace {
-			return
-		}
+		// Set default namespace if empty
 		if *currentPtr == "" {
 			*currentPtr = fn.DefaultNamespace
 		}
@@ -212,15 +184,8 @@ func WalkAndReplace(objects fn.KubeObjects, newNs string, matchers ...string) (f
 
 // VisitAll applies "visitor" function to both namespace scoped and cluster scoped resource.
 func VisitAll(objects fn.KubeObjects, visitor func(origin string, currentPtr *string, idStr ...string)) {
-	VisitSpecialClusterResource(objects, visitor)
-	VisitNamespaceResource(objects, visitor)
-}
-
-// VisitSpecialClusterResource applies "visitor" function to some special cluster-scoped resource that
-// have sub fields meaning "namespace".
-func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin string, currentPtr *string, idStr ...string)) {
-	clusterScoped := objects.Where(func(o *fn.KubeObject) bool { return o.IsClusterScoped() })
-	for _, o := range clusterScoped {
+	for _, o := range objects {
+		// Handle special cluster-scoped resources with nested namespace fields
 		switch {
 		case o.IsGVK("", "v1", "Namespace"):
 			name := o.GetName()
@@ -241,7 +206,8 @@ func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin str
 			nsPtr := &namespace
 			visitor("", nsPtr)
 			SetNestedStringOrDie(&o.SubObject, *nsPtr, "spec", "service", "namespace")
-		case o.GetKind() == "ClusterRoleBinding" || o.GetKind() == "RoleBinding":
+		case o.GetKind() == "ClusterRoleBinding":
+			// ClusterRoleBinding: process subjects' namespace fields only
 			subjects := o.GetSlice("subjects")
 			for _, s := range subjects {
 				if namespace, found, _ := s.NestedString("namespace"); found {
@@ -250,26 +216,41 @@ func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin str
 					SetNestedStringOrDie(s, *nsPtr, "namespace")
 				}
 			}
+		case o.GetKind() == "RoleBinding":
+			// RoleBinding: process both metadata.namespace and subjects' namespace fields
+			subjects := o.GetSlice("subjects")
+			for _, s := range subjects {
+				if namespace, found, _ := s.NestedString("namespace"); found {
+					nsPtr := &namespace
+					visitor("", nsPtr)
+					SetNestedStringOrDie(s, *nsPtr, "namespace")
+				}
+			}
+			// Also process metadata.namespace for RoleBinding (it's namespace-scoped)
+			namespace := o.GetNamespace()
+			nsPtr := &namespace
+			origin, err := o.GetOriginID()
+			originNs := ""
+			if err == nil {
+				originNs = origin.Namespace
+			}
+			visitor(originNs, nsPtr, o.ShortString())
+			_ = o.SetNamespace(*nsPtr)
+		case o.GetKind() == "ClusterRole":
+			// Skip ClusterRole - it's cluster-scoped and has no namespace fields
 		default:
-			// skip the cluster scoped resource
+			// For all other resources, process metadata.namespace
+			// This includes namespace-scoped resources and unknown CRDs
+			namespace := o.GetNamespace()
+			nsPtr := &namespace
+			origin, err := o.GetOriginID()
+			originNs := ""
+			if err == nil {
+				originNs = origin.Namespace
+			}
+			visitor(originNs, nsPtr, o.ShortString())
+			_ = o.SetNamespace(*nsPtr)
 		}
-	}
-}
-
-// VisitNamespaceResource applies "visitor" to namespace-scoped resource.
-// We made a hypothesis here that if a unknown scoped resource has a non-empty metadata.namespace, the resource will be
-// treated as namespace scoped.
-func VisitNamespaceResource(objects fn.KubeObjects, visitor func(origin string, currentPtr *string, idStr ...string)) {
-	namespaceScoped := objects.Where(func(o *fn.KubeObject) bool { return o.IsNamespaceScoped() })
-	for _, o := range namespaceScoped {
-		namespace := o.GetNamespace()
-		nsPtr := &namespace
-		origin, err := o.GetOriginID()
-		if err != nil {
-			origin.Namespace = fn.UnknownNamespace
-		}
-		visitor(origin.Namespace, nsPtr, o.ShortString())
-		_ = o.SetNamespace(*nsPtr)
 	}
 }
 
