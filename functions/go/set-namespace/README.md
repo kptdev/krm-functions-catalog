@@ -31,8 +31,8 @@ Replace namespaces are commonly used in the following scenarios:
 This function not only update the namespace scoped resources' `metadata.namespace` or Namespace object's `metadata.name`,
 but handle some special resource types. See the full targeting resources below:
 
-- This function updates all namespace-scoped KRM resources `metadata.namespace` fields. 
-  We determine whether a custom KRM resource is namespace scoped by checking if it has `metadata.namespace` set.
+- This function updates all namespace-scoped KRM resources `metadata.namespace` fields.
+  Unknown custom resources are treated as namespace-scoped and will have `metadata.namespace` added if missing.
 - This function updates `RoleBinding` and `ClusterRoleBinding` resources `subjects` element whose kind is `ServiceAccount`
   and the subject's `namespace` is set.
 - This function updates `CustomResourceDefinition` (CRD) `spec/conversion/webhook/clientConfig/service/namespace` field 
