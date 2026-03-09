@@ -2,11 +2,10 @@
 
 ## Known Issues
 
-**Versions v0.4.2 through v0.4.5 have a bug** where unknown Custom Resource Definitions (CRDs) without an existing `metadata.namespace` field are not processed.
-
+**Versions v0.4.2 through v0.4.5 have a bug** where unknown custom resources (CRs) without an existing `metadata.namespace` field are not processed.
 - **Affected versions**: v0.4.2, v0.4.3, v0.4.4, v0.4.5
-- **Workaround**: Use v0.4.1 or upgrade to the latest version
-- **Symptom**: Unknown CRDs (resources not in the Kubernetes built-in API) do not get the namespace field added
+- **Workaround**: Use v0.4.1 or upgrade to v0.4.6+
+- **Symptom**: Unknown custom resources (CRs) (resources defined by CustomResourceDefinitions, not in the Kubernetes built-in API) do not get the namespace field added
 
 ## Overview
 
@@ -32,7 +31,7 @@ This function not only update the namespace scoped resources' `metadata.namespac
 but handle some special resource types. See the full targeting resources below:
 
 - This function updates all namespace-scoped KRM resources `metadata.namespace` fields.
-  Unknown custom resources are treated as namespace-scoped and will have `metadata.namespace` added if missing.
+  Unknown custom resources (CRs) (resources not in the Kubernetes built-in API) do not get the namespace field added if missing.
 - This function updates `RoleBinding` and `ClusterRoleBinding` resources `subjects` element whose kind is `ServiceAccount`
   and the subject's `namespace` is set.
 - This function updates `CustomResourceDefinition` (CRD) `spec/conversion/webhook/clientConfig/service/namespace` field 
