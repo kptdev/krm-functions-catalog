@@ -41,4 +41,4 @@ More information and links about the CNCF Code of Conduct are [here](code-of-con
 
 ## CNCF
 
-The kpt project including the KRM Functions Catalog is a [CNCF Sandbox](https://www.cncf.io/sandbox-projects/) project.
+The kpt project including the KRM Functions Catalog is a [CNCF Sandbox](https://www.cncf.io/sandbox-projects/) project. 
