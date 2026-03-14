@@ -299,6 +299,99 @@ items:
 	assert.Equal(t, "dev", folders["dev.team1"].GetAnnotation("cnrm.cloud.google.com/folder-ref"))
 }
 
+func TestRunV3HierarchyPreservesSourceFilePlacement(t *testing.T) {
+	rl, err := fn.ParseResourceList([]byte(`
+apiVersion: config.kubernetes.io/v1
+kind: ResourceList
+items:
+  - apiVersion: blueprints.cloud.google.com/v1alpha3
+    kind: ResourceHierarchy
+    metadata:
+      name: test
+      annotations:
+        config.kubernetes.io/path: resources.yaml
+        internal.config.kubernetes.io/path: resources.yaml
+        config.kubernetes.io/index: "0"
+        internal.config.kubernetes.io/index: "0"
+    spec:
+      parentRef:
+        kind: Organization
+        external: "123456789"
+      config:
+        - Dev:
+            - Team1
+`))
+	require.NoError(t, err)
+
+	ok, err := Run(rl)
+
+	require.NoError(t, err)
+	require.True(t, ok)
+
+	var folders []*fn.KubeObject
+	for _, item := range rl.Items {
+		if item.GetKind() == folderKind {
+			folders = append(folders, item)
+		}
+	}
+
+	require.Len(t, folders, 2)
+	assert.Equal(t, "resources.yaml", folders[0].GetAnnotation(configPathAnnotation))
+	assert.Equal(t, "resources.yaml", folders[0].GetAnnotation(internalPathAnnotation))
+	assert.Equal(t, "1", folders[0].GetAnnotation(configIndexAnnotation))
+	assert.Equal(t, "1", folders[0].GetAnnotation(internalIndexAnnotation))
+	assert.Equal(t, "resources.yaml", folders[1].GetAnnotation(configPathAnnotation))
+	assert.Equal(t, "resources.yaml", folders[1].GetAnnotation(internalPathAnnotation))
+	assert.Equal(t, "2", folders[1].GetAnnotation(configIndexAnnotation))
+	assert.Equal(t, "2", folders[1].GetAnnotation(internalIndexAnnotation))
+}
+
+func TestRunV3HierarchyIsIdempotentWithSourceFilePlacement(t *testing.T) {
+	rl, err := fn.ParseResourceList([]byte(`
+apiVersion: config.kubernetes.io/v1
+kind: ResourceList
+items:
+  - apiVersion: blueprints.cloud.google.com/v1alpha3
+    kind: ResourceHierarchy
+    metadata:
+      name: test
+      annotations:
+        config.kubernetes.io/path: resources.yaml
+        internal.config.kubernetes.io/path: resources.yaml
+        config.kubernetes.io/index: "0"
+        internal.config.kubernetes.io/index: "0"
+    spec:
+      parentRef:
+        kind: Organization
+        external: "123456789"
+      config:
+        - Dev:
+            - Team1
+`))
+	require.NoError(t, err)
+
+	ok, err := Run(rl)
+	require.NoError(t, err)
+	require.True(t, ok)
+
+	ok, err = Run(rl)
+	require.NoError(t, err)
+	require.True(t, ok)
+
+	var folders []*fn.KubeObject
+	for _, item := range rl.Items {
+		if item.GetKind() == folderKind {
+			folders = append(folders, item)
+		}
+	}
+
+	require.Len(t, folders, 2)
+	assert.Equal(t, "dev", folders[0].GetName())
+	assert.Equal(t, "dev.team1", folders[1].GetName())
+	assert.Equal(t, "1", folders[0].GetAnnotation(configIndexAnnotation))
+	assert.Equal(t, "2", folders[1].GetAnnotation(configIndexAnnotation))
+}
+
 func generatedFolderName(name string, path []string) string {
-	return generateManifest(name, path, &hierarchyNode{name: "parent", kind: "Folder"}, nil, "", false).GetName()
+	return generateManifest(name, path, &hierarchyNode{name: "parent", kind: "Folder"}, nil, "", false, nil).GetName()
 }

@@ -19,6 +19,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/kptdev/krm-functions-sdk/go/fn"
@@ -80,6 +81,11 @@ type hierarchyNode struct {
 
 type missingSubtreeError struct {
 	name string
+}
+
+type sourcePlacement struct {
+	path      string
+	nextIndex int
 }
 
 func (e *missingSubtreeError) Error() string {
@@ -163,9 +169,10 @@ func processV1Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList) fn.Results {
 
 	namespace := obj.GetNamespace()
 	annotations := map[string]string{}
+	placement := newSourcePlacement(obj)
 
 	// Start with empty path for v1 hierarchy
-	errResult := generateV1HierarchyTree(root, layers, 0, configMap, namespace, annotations, []string{}, rl)
+	errResult := generateV1HierarchyTree(root, layers, 0, configMap, namespace, annotations, []string{}, placement, rl)
 	if errResult != nil {
 		results = append(results, errResult)
 	}
@@ -182,6 +189,7 @@ func generateV1HierarchyTree(
 	namespace string,
 	annotations map[string]string,
 	path []string,
+	placement *sourcePlacement,
 	rl *fn.ResourceList,
 ) *fn.Result {
 	if layerIndex >= len(layers) {
@@ -224,11 +232,11 @@ func generateV1HierarchyTree(
 			kind: folderKind,
 		}
 
-		folder := generateManifest(folderName, path, node, annotations, namespace, false)
-		rl.Items = append(rl.Items, folder)
+		folder := generateManifest(folderName, path, node, annotations, namespace, false, placement)
+		_ = rl.UpsertObjectToItems(folder, nil, true)
 
 		currentPath := append(clonePath(path), folderName)
-		errResult := generateV1HierarchyTree(child, layers, layerIndex+1, config, namespace, annotations, currentPath, rl)
+		errResult := generateV1HierarchyTree(child, layers, layerIndex+1, config, namespace, annotations, currentPath, placement, rl)
 		if errResult != nil {
 			return errResult
 		}
@@ -264,6 +272,7 @@ func processV2V3Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList, isV3 bool) fn
 
 	namespace := obj.GetNamespace()
 	annotations := filterNonInheritableAnnotations(obj.GetAnnotations())
+	placement := newSourcePlacement(obj)
 
 	root := &hierarchyNode{
 		name: parentExternal,
@@ -344,7 +353,7 @@ func processV2V3Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList, isV3 bool) fn
 	}
 
 	// Generate Folder manifests from the tree
-	generateConfigs(root, []string{}, annotations, namespace, isV3, rl)
+	generateConfigs(root, []string{}, annotations, namespace, isV3, placement, rl)
 
 	return results
 }
@@ -458,17 +467,17 @@ func generateTree(root *hierarchyNode, children []interface{}, subtrees map[stri
 }
 
 // generateConfigs recursively generates Folders for each node.
-func generateConfigs(node *hierarchyNode, path []string, annotations map[string]string, namespace string, isV3 bool, rl *fn.ResourceList) {
+func generateConfigs(node *hierarchyNode, path []string, annotations map[string]string, namespace string, isV3 bool, placement *sourcePlacement, rl *fn.ResourceList) {
 	for _, child := range node.children {
-		folder := generateManifest(child.name, path, node, annotations, namespace, isV3)
-		rl.Items = append(rl.Items, folder)
+		folder := generateManifest(child.name, path, node, annotations, namespace, isV3, placement)
+		_ = rl.UpsertObjectToItems(folder, nil, true)
 		newPath := append(clonePath(path), child.name)
-		generateConfigs(child, newPath, annotations, namespace, isV3, rl)
+		generateConfigs(child, newPath, annotations, namespace, isV3, placement, rl)
 	}
 }
 
 // generateManifest creates a Folder resource.
-func generateManifest(name string, path []string, parent *hierarchyNode, annotations map[string]string, namespace string, nativeRef bool) *fn.KubeObject {
+func generateManifest(name string, path []string, parent *hierarchyNode, annotations map[string]string, namespace string, nativeRef bool, placement *sourcePlacement) *fn.KubeObject {
 	// Build the folder object
 	folderObj := fn.NewEmptyKubeObject()
 	_ = folderObj.SetAPIVersion(folderAPIVersion)
@@ -535,6 +544,7 @@ func generateManifest(name string, path []string, parent *hierarchyNode, annotat
 
 	// Set spec.displayName
 	_ = folderObj.SetNestedField(name, "spec", "displayName")
+	applySourcePlacement(folderObj, placement)
 
 	return folderObj
 }
@@ -593,6 +603,39 @@ func clonePath(path []string) []string {
 	cloned := make([]string, len(path))
 	copy(cloned, path)
 	return cloned
+}
+
+func newSourcePlacement(obj *fn.KubeObject) *sourcePlacement {
+	path := obj.PathAnnotation()
+	if path == "" {
+		return nil
+	}
+
+	nextIndex := obj.IndexAnnotation()
+	if nextIndex < 0 {
+		nextIndex = 0
+	} else {
+		nextIndex++
+	}
+
+	return &sourcePlacement{
+		path:      path,
+		nextIndex: nextIndex,
+	}
+}
+
+func applySourcePlacement(folderObj *fn.KubeObject, placement *sourcePlacement) {
+	if placement == nil || placement.path == "" {
+		return
+	}
+
+	index := strconv.Itoa(placement.nextIndex)
+	placement.nextIndex++
+
+	_ = folderObj.SetAnnotation(internalPathAnnotation, placement.path)
+	_ = folderObj.SetAnnotation(configPathAnnotation, placement.path)
+	_ = folderObj.SetAnnotation(internalIndexAnnotation, index)
+	_ = folderObj.SetAnnotation(configIndexAnnotation, index)
 }
 
 // oldHierarchyWarning generates a deprecation warning for v1/v2.

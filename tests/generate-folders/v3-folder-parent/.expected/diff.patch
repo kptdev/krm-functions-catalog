@@ -1,8 +1,8 @@
 diff --git a/resources.yaml b/resources.yaml
-index 521e29ff..1bfbfb69 100644
+index 521e29f..f426e02 100644
 --- a/resources.yaml
 +++ b/resources.yaml
-@@ -9,3 +9,21 @@ spec:
+@@ -9,3 +9,25 @@ spec:
    config:
    - Dev:
      - Team1
@@ -11,6 +11,8 @@ index 521e29ff..1bfbfb69 100644
 +kind: Folder
 +metadata:
 +  name: dev
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  folderRef:
 +    external: parent-folder-id
@@ -20,6 +22,8 @@ index 521e29ff..1bfbfb69 100644
 +kind: Folder
 +metadata:
 +  name: dev.team1
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  folderRef:
 +    name: dev

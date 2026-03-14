@@ -1,8 +1,8 @@
 diff --git a/resources.yaml b/resources.yaml
-index e99b5b56..40720ec0 100644
+index e99b5b5..763ece3 100644
 --- a/resources.yaml
 +++ b/resources.yaml
-@@ -11,3 +11,14 @@ spec:
+@@ -11,3 +11,15 @@ spec:
      external: test-organization
    config:
    - Dev
@@ -13,6 +13,7 @@ index e99b5b56..40720ec0 100644
 +  name: dev
 +  annotations:
 +    cnrm.cloud.google.com/deletion-policy: abandon
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  organizationRef:
 +    external: test-organization
