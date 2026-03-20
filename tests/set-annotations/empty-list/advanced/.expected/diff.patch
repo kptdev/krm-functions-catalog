@@ -1,0 +1,16 @@
+diff --git a/Kptfile b/Kptfile
+index 28af78d..f248e48 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -6,3 +6,11 @@ pipeline:
+   mutators:
+     - image: ghcr.io/kptdev/krm-functions-catalog/set-annotations:latest
+       configPath: fn-config.yaml
++status:
++  conditions:
++    - type: Rendered
++      status: "False"
++      reason: RenderFailed
++      message: |-
++        pkg.render: pkg .:
++        	pipeline.run: already handled error

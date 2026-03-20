@@ -1,0 +1,16 @@
+diff --git a/Kptfile b/Kptfile
+index 6f2b190..062e871 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -8,3 +8,11 @@ pipeline:
+   validators:
+     - image: ghcr.io/kptdev/krm-functions-catalog/starlark:latest
+       configPath: fn-config.yaml
++status:
++  conditions:
++    - type: Rendered
++      status: "False"
++      reason: RenderFailed
++      message: |-
++        pkg.render: pkg .:
++        	pipeline.run: already handled error

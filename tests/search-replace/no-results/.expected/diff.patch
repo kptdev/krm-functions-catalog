@@ -1,0 +1,16 @@
+diff --git a/Kptfile b/Kptfile
+index 0d8769e..2d16d7f 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -6,5 +6,10 @@ pipeline:
+   mutators:
+     - image: ghcr.io/kptdev/krm-functions-catalog/search-replace:latest
+       configMap:
++        by-file-path: resources.yaml
+         by-value: non-existent-value
+-        by-file-path: 'resources.yaml'
++status:
++  conditions:
++    - type: Rendered
++      status: "True"
++      reason: RenderSuccess

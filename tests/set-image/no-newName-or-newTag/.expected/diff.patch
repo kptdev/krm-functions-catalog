@@ -1,0 +1,16 @@
+diff --git a/Kptfile b/Kptfile
+index 00be8d7..d169a59 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -7,3 +7,11 @@ pipeline:
+     - image: ghcr.io/kptdev/krm-functions-catalog/set-image:latest
+       configMap:
+         name: foo
++status:
++  conditions:
++    - type: Rendered
++      status: "False"
++      reason: RenderFailed
++      message: |-
++        pkg.render: pkg .:
++        	pipeline.run: already handled error

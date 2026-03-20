@@ -1,3 +1,16 @@
+diff --git a/Kptfile b/Kptfile
+index 152ea13..8e79b9d 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -8,3 +8,8 @@ pipeline:
+   mutators:
+     - image: ghcr.io/kptdev/krm-functions-catalog/apply-setters:latest
+       configPath: setters.yaml
++status:
++  conditions:
++    - type: Rendered
++      status: "True"
++      reason: RenderSuccess
 diff --git a/resources.yaml b/resources.yaml
 index b521905..0d10662 100644
 --- a/resources.yaml

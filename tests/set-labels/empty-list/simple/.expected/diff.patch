@@ -1,0 +1,18 @@
+diff --git a/Kptfile b/Kptfile
+index 7ca59ef..7f03149 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -5,4 +5,11 @@ metadata:
+ pipeline:
+   mutators:
+     - image: ghcr.io/kptdev/krm-functions-catalog/set-labels:latest
+-      configMap: {}
+\ No newline at end of file
++status:
++  conditions:
++    - type: Rendered
++      status: "False"
++      reason: RenderFailed
++      message: |-
++        pkg.render: pkg .:
++        	pipeline.run: already handled error

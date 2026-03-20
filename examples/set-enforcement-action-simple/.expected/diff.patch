@@ -1,3 +1,16 @@
+diff --git a/Kptfile b/Kptfile
+index bc7986a..7ae6676 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -9,3 +9,8 @@ pipeline:
+     - image: ghcr.io/kptdev/krm-functions-catalog/set-enforcement-action:latest
+       configMap:
+         enforcementAction: dryrun
++status:
++  conditions:
++    - type: Rendered
++      status: "True"
++      reason: RenderSuccess
 diff --git a/resources.yaml b/resources.yaml
 index 3e82c66..c15aa3c 100644
 --- a/resources.yaml

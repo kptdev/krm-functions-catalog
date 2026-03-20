@@ -1,0 +1,13 @@
+diff --git a/Kptfile b/Kptfile
+index 14a2c02..48ed71d 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -6,3 +6,8 @@ pipeline:
+   mutators:
+     - image: ghcr.io/kptdev/krm-functions-catalog/set-labels:latest
+       configPath: fn-config.yaml
++status:
++  conditions:
++    - type: Rendered
++      status: "True"
++      reason: RenderSuccess

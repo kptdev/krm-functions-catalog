@@ -1,0 +1,13 @@
+diff --git a/Kptfile b/Kptfile
+index cf1b069..dec3bad 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -5,3 +5,8 @@ metadata:
+ pipeline:
+   mutators:
+     - image: ghcr.io/kptdev/krm-functions-catalog/set-namespace:latest
++status:
++  conditions:
++    - type: Rendered
++      status: "True"
++      reason: RenderSuccess

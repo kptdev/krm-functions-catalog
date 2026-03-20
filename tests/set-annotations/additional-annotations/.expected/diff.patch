@@ -1,3 +1,16 @@
+diff --git a/Kptfile b/Kptfile
+index 5ab2ddf..352f7eb 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -8,3 +8,8 @@ pipeline:
+       configPath: fn-config.yaml
+       selectors:
+         - kind: ConfigMap
++status:
++  conditions:
++    - type: Rendered
++      status: "True"
++      reason: RenderSuccess
 diff --git a/local-config.yaml b/local-config.yaml
 index b8d83d1..1619258 100644
 --- a/local-config.yaml

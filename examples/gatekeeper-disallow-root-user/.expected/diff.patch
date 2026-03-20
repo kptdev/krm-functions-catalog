@@ -1,0 +1,16 @@
+diff --git a/Kptfile b/Kptfile
+index 0d32b6f..dd8642f 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -7,3 +7,11 @@ metadata:
+ pipeline:
+   validators:
+     - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest
++status:
++  conditions:
++    - type: Rendered
++      status: "False"
++      reason: RenderFailed
++      message: |-
++        pkg.render: pkg .:
++        	pipeline.run: already handled error
