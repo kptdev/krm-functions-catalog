@@ -26,6 +26,19 @@ npm install
 Then run the site using `npm run serve`. To have the site run locally with a functioning local search, run
 `npm run serve:with-pagefind`.
 
+## API Token for Version Fetching
+
+The documentation site fetches the latest release versions of KRM functions from
+the GitHub API. To avoid rate limiting, set the `KRM_CATALOG_API_TOKEN`
+environment variable with a GitHub personal access token (no scopes required for
+public repos).
+
+- `export KRM_CATALOG_API_TOKEN=<your-token>` before running `npm run serve`.
+
+The token is optional. Without it, unauthenticated API requests are subject to
+lower rate limits, which may cause version information to be unavailable during
+builds.
+
 ## License
 
 Licensed under the [Creative Commons Attribution 4.0 International license](LICENSE-documentation)

@@ -3,10 +3,57 @@
 
 {{ $files := readDir $currentDir }}
 
+<!-- Fetch all function release tags -->
+{{ $latestVersions := dict }}
+{{ $releaseTags := dict }}
+{{ $token := getenv "KRM_CATALOG_API_TOKEN" }}
+{{ $apiURL := "https://api.github.com/repos/kptdev/krm-functions-catalog/git/matching-refs/tags/functions/go/" }}
+{{ $apiHeaders := dict "Accept" "application/vnd.github+json" "X-GitHub-Api-Version" "2026-03-10" }}
+{{ if ne $token "" }}
+  {{ $apiHeaders = merge $apiHeaders (dict "Authorization" (printf "Bearer %s" $token)) }}
+{{ end }}
+{{ $opts := dict "headers" $apiHeaders }}
+{{ with resources.GetRemote $apiURL $opts }}
+  {{ $refs := . | transform.Unmarshal }}
+  {{ if and (reflect.IsSlice $refs) (gt (len $refs) 0) }}
+    {{ range $refs }}
+      {{ $tag := .ref | replaceRE "^refs/tags/functions/go/" "" }}
+      {{ $parts := split $tag "/" }}
+      {{ if eq (len $parts) 2 }}
+        {{ $fnName := index $parts 0 }}
+        {{ $v := index $parts 1 | replaceRE "^v" "" | replaceRE "[-+].*" "" }}
+        {{ $semver := split $v "." }}
+        {{ if ge (len $semver) 3 }}
+          {{ $maj := index $semver 0 | int }}
+          {{ $min := index $semver 1 | int }}
+          {{ $pat := index $semver 2 | int }}
+          {{ $curVer := index $latestVersions $fnName }}
+          {{ $isBetter := true }}
+          {{ if $curVer }}
+            {{ $curV := $curVer | replaceRE "^v" "" | replaceRE "[-+].*" "" }}
+            {{ $curParts := split $curV "." }}
+            {{ $curMaj := index $curParts 0 | int }}
+            {{ $curMin := index $curParts 1 | int }}
+            {{ $curPat := index $curParts 2 | int }}
+            {{ $isBetter = or (gt $maj $curMaj) (and (eq $maj $curMaj) (gt $min $curMin)) (and (eq $maj $curMaj) (eq $min $curMin) (gt $pat $curPat)) }}
+          {{ end }}
+          {{ if $isBetter }}
+            {{ $version := index $parts 1 }}
+            {{ $fullTag := printf "functions/go/%s/%s" $fnName $version }}
+            {{ $latestVersions = merge $latestVersions (dict $fnName $version) }}
+            {{ $releaseTags = merge $releaseTags (dict $fnName $fullTag) }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
 <table class="table table-striped">
 <thead>
   <tr>
     <th>Function</th>
+    <th>Latest Version</th>
     <th>Description</th>
     <th>Tags</th>
   </tr>
@@ -65,6 +112,13 @@
                 <a href="{{ printf "%s/%s/" $functionName $highestVersion }}">{{ .Title }}</a>
               {{ end }}
             </td>
+            <td>
+              {{ $ver := index $latestVersions $functionName }}
+              {{ $tag := index $releaseTags $functionName }}
+              {{ if $ver }}
+                <a href="https://github.com/kptdev/krm-functions-catalog/releases/tag/{{ $tag }}">{{ $ver }}</a>
+              {{ else }}—{{ end }}
+            </td>
             <td>{{ .Params.description | markdownify }}</td>
             <td>
               {{ if .Params.tags }}
@@ -79,6 +133,13 @@
       {{ $title := .Name | replaceRE "\\.[^.]+$" "" }}
       <tr>
         <td><a href="{{ printf "%s" .Name }}">{{ $title }}</a></td>
+        <td>
+          {{ $ver := index $latestVersions .Name }}
+          {{ $tag := index $releaseTags .Name }}
+          {{ if $ver }}
+            <a href="https://github.com/kptdev/krm-functions-catalog/releases/tag/{{ $tag }}">{{ $ver }}</a>
+          {{ else }}—{{ end }}
+        </td>
         <td>No description available</td>
         <td></td>
       </tr>

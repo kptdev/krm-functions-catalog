@@ -191,3 +191,7 @@ enable = false
   name = "Guides"
   url = "https://kpt.dev/guides/"
   weight = 40
+
+[security]
+  [security.funcs]
+    getenv = ['^HUGO_', '^CI$', '^KRM_CATALOG_API_TOKEN$']

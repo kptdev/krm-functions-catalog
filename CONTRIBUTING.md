@@ -147,6 +147,11 @@ examples and e2e tests, run the following command
 $ make e2e-test
 ```
 
+### Documentation
+
+For details on running the documentation site locally, refer to the
+[documentation README](documentation/README.md).
+
 ### Change Existing Functions
 
 You must follow the layout convention when you make changes to existing
