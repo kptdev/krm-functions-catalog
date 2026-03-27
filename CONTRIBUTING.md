@@ -9,13 +9,13 @@ All submissions, including submissions by project members, require review. We
 use GitHub pull requests for this purpose. Consult [GitHub Help] for more
 information on using pull requests.
 
-Process for Code reviews, before a “human” code review a PR:
+Code review process (before requesting human review on a PR):
 
 * Must have all tests passing
 * Must have all linting passing
 * Must meet code quality criteria (coverage etc)
-* Must have all automatically generated comments addressed (AI generated comments, SonarCloud comments, bot generated comments etc)
-* If it is not possible to resolve an automatic comment, please add a sub-comment indicating why the automated comment cannot be resolved or ask for help in resolving the comment
+* Must have all automatically generated comments addressed (AI-generated comments, SonarCloud comments, bot-generated comments, etc.)
+* If it is not possible to resolve an automatically generated comment, please add a sub-comment indicating why the comment cannot be resolved or ask for help in resolving the comment
 
 
 ## Style Guides
