@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index 5ab2ddf..352f7eb 100644
+index 5ab2ddf..7f2daf4 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -8,3 +8,8 @@ pipeline:
+@@ -8,3 +8,45 @@ pipeline:
        configPath: fn-config.yaml
        selectors:
          - kind: ConfigMap
@@ -11,6 +11,43 @@ index 5ab2ddf..352f7eb 100644
 +    - type: Rendered
 +      status: "True"
 +      reason: RenderSuccess
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/set-annotations:latest
++        exitCode: 0
++        results:
++          - message: 'set annotations: {"color":"orange","fruit":"apple"}'
++            field:
++              path: data.selector.annotations
++            file:
++              path: local-config.yaml
++          - message: 'set annotations: {"color":"orange","fruit":"apple"}'
++            field:
++              path: metadata.annotations
++            file:
++              path: local-config.yaml
++          - message: 'set annotations: {"color":"orange","fruit":"apple"}'
++            field:
++              path: data.selector.annotations
++            file:
++              path: resources.yaml
++          - message: 'set annotations: {"color":"orange","fruit":"apple"}'
++            field:
++              path: metadata.annotations
++            file:
++              path: resources.yaml
++          - message: 'set annotations: {"color":"orange","fruit":"apple"}'
++            field:
++              path: data.selector.annotations
++            file:
++              path: resources.yaml
++              index: 1
++          - message: 'set annotations: {"color":"orange","fruit":"apple"}'
++            field:
++              path: metadata.annotations
++            file:
++              path: resources.yaml
++              index: 1
 diff --git a/local-config.yaml b/local-config.yaml
 index b8d83d1..1619258 100644
 --- a/local-config.yaml

@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index f3843da..d59bc2f 100644
+index f3843da..334d29f 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -8,3 +8,8 @@ pipeline:
+@@ -8,3 +8,12 @@ pipeline:
    mutators:
      - image: ghcr.io/kptdev/krm-functions-catalog/apply-replacements:latest
        configPath: replacements.yaml
@@ -11,6 +11,10 @@ index f3843da..d59bc2f 100644
 +    - type: Rendered
 +      status: "True"
 +      reason: RenderSuccess
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/apply-replacements:latest
++        exitCode: 0
 diff --git a/job.yaml b/job.yaml
 index 4584bb9..66f3ebe 100644
 --- a/job.yaml

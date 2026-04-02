@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index df11a5f..1806fbe 100644
+index df11a5f..cd11f7c 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -5,3 +5,11 @@ metadata:
+@@ -5,3 +5,41 @@ metadata:
  pipeline:
    validators:
      - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest
@@ -14,3 +14,33 @@ index df11a5f..1806fbe 100644
 +      message: |-
 +        pkg.render: pkg .:
 +        	pipeline.run: already handled error
++  renderStatus:
++    validationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest
++        stderr: |-
++          [error] apps/v1/Deployment/nginx-deploy : Containers must not run as root
++          violatedConstraint: disallowroot
++        exitCode: 1
++        results:
++          - message: |-
++              Containers must not run as root
++              violatedConstraint: disallowroot
++            severity: error
++            resourceRef:
++              apiVersion: apps/v1
++              kind: Deployment
++              name: nginx-deploy
++            file:
++              path: deployment.yaml
++        errorResults:
++          - message: |-
++              Containers must not run as root
++              violatedConstraint: disallowroot
++            severity: error
++            resourceRef:
++              apiVersion: apps/v1
++              kind: Deployment
++              name: nginx-deploy
++            file:
++              path: deployment.yaml
++    errorSummary: 'ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest: exit code 1'

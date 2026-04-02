@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index cf1b069..dec3bad 100644
+index cf1b069..4d064a0 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -5,3 +5,8 @@ metadata:
+@@ -5,3 +5,24 @@ metadata:
  pipeline:
    mutators:
      - image: ghcr.io/kptdev/krm-functions-catalog/set-namespace:latest
@@ -11,3 +11,19 @@ index cf1b069..dec3bad 100644
 +    - type: Rendered
 +      status: "True"
 +      reason: RenderSuccess
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/set-namespace:latest
++        exitCode: 0
++        results:
++          - message: FunctionConfig is missing. Expect `ConfigMap.v1` or `SetNamespace.v1alpha1.fn.kpt.dev`
++            severity: error
++            resourceRef: {}
++            file:
++              index: -1
++        errorResults:
++          - message: FunctionConfig is missing. Expect `ConfigMap.v1` or `SetNamespace.v1alpha1.fn.kpt.dev`
++            severity: error
++            resourceRef: {}
++            file:
++              index: -1

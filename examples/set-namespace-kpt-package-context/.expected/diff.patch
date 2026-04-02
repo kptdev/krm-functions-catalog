@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index 0fa7424..fabc17b 100644
+index 0fa7424..c76e15b 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -8,3 +8,8 @@ pipeline:
+@@ -8,3 +8,17 @@ pipeline:
    mutators:
      - image: ghcr.io/kptdev/krm-functions-catalog/set-namespace:latest
        configPath: package-context.yaml
@@ -11,6 +11,15 @@ index 0fa7424..fabc17b 100644
 +    - type: Rendered
 +      status: "True"
 +      reason: RenderSuccess
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/set-namespace:latest
++        exitCode: 0
++        results:
++          - message: namespace [old] updated to "example", 4 value(s) changed
++            severity: info
++          - message: all `depends-on` annotations are up-to-date. no `namespace` changed
++            severity: info
 diff --git a/package-context.yaml b/package-context.yaml
 new file mode 100644
 index 0000000..6c33d9e

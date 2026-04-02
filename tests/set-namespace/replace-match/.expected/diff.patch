@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index 9f1bf48..9ea9258 100644
+index 9f1bf48..ad96b71 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -8,3 +8,8 @@ pipeline:
+@@ -8,3 +8,19 @@ pipeline:
        configMap:
          namespace: new-ns
          namespaceMatcher: example2
@@ -11,6 +11,17 @@ index 9f1bf48..9ea9258 100644
 +    - type: Rendered
 +      status: "True"
 +      reason: RenderSuccess
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/set-namespace:latest
++        exitCode: 0
++        results:
++          - message: '[Resource(apiVersion=v1, kind=Service, namespace=example2, name=the-service)] has matching origin example2'
++            severity: info
++          - message: namespace [example2] updated to "new-ns", 1 value(s) changed
++            severity: info
++          - message: all `depends-on` annotations are up-to-date. no `namespace` changed
++            severity: info
 diff --git a/resources.yaml b/resources.yaml
 index 9502a50..44c190f 100644
 --- a/resources.yaml

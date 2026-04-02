@@ -1,0 +1,2 @@
+# This is temporary fix. Should be removed once the fix for https://github.com/kptdev/kpt/issues/4462 is released.
+diffStripRegEx: "^\\+\\s+(results:|- message:|field:|path:|file:|severity:)"

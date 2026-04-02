@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index 54830f5..9c215a9 100644
+index 54830f5..1b9246a 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -8,3 +8,11 @@ pipeline:
+@@ -8,3 +8,25 @@ pipeline:
        configMap:
          newName: bar
          newTag: v1.0
@@ -14,3 +14,17 @@ index 54830f5..9c215a9 100644
 +      message: |-
 +        pkg.render: pkg .:
 +        	pipeline.run: already handled error
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/set-image:latest
++        stderr: 'failed to evaluate function: error: function failure'
++        exitCode: 1
++        results:
++          - message: 'invalid FunctionConfig: must specify `name`'
++            severity: error
++          - message: 'summary: updated a total of 0 image(s)'
++            severity: info
++        errorResults:
++          - message: 'invalid FunctionConfig: must specify `name`'
++            severity: error
++    errorSummary: 'ghcr.io/kptdev/krm-functions-catalog/set-image:latest: exit code 1'

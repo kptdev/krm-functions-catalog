@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index 14a2c02..48ed71d 100644
+index 14a2c02..0075b7a 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -6,3 +6,8 @@ pipeline:
+@@ -6,3 +6,15 @@ pipeline:
    mutators:
      - image: ghcr.io/kptdev/krm-functions-catalog/set-labels:latest
        configPath: fn-config.yaml
@@ -11,3 +11,10 @@ index 14a2c02..48ed71d 100644
 +    - type: Rendered
 +      status: "True"
 +      reason: RenderSuccess
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/set-labels:latest
++        exitCode: 0
++        results:
++          - message: no `labels` arguments are given in FunctionConfig
++            severity: warning

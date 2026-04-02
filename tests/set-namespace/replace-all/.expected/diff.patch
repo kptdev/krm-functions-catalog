@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index e626f62..a9bd8a3 100644
+index e626f62..928a69f 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -7,3 +7,8 @@ pipeline:
+@@ -7,3 +7,17 @@ pipeline:
      - image: ghcr.io/kptdev/krm-functions-catalog/set-namespace:latest
        configMap:
          namespace: new-ns
@@ -11,6 +11,15 @@ index e626f62..a9bd8a3 100644
 +    - type: Rendered
 +      status: "True"
 +      reason: RenderSuccess
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/set-namespace:latest
++        exitCode: 0
++        results:
++          - message: namespace [example1 example2 example3 example4 example5] updated to "new-ns", 5 value(s) changed
++            severity: info
++          - message: all `depends-on` annotations are up-to-date. no `namespace` changed
++            severity: info
 diff --git a/resources.yaml b/resources.yaml
 index 7d75912..b143b9d 100644
 --- a/resources.yaml

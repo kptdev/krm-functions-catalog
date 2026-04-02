@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index e9b883d..5aaf643 100644
+index e9b883d..8933da2 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -6,3 +6,8 @@ pipeline:
+@@ -6,3 +6,15 @@ pipeline:
    mutators:
      - image: ghcr.io/kptdev/krm-functions-catalog/starlark:latest
        configPath: fn-config.yaml
@@ -11,6 +11,13 @@ index e9b883d..5aaf643 100644
 +    - type: Rendered
 +      status: "True"
 +      reason: RenderSuccess
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/starlark:latest
++        stderr: |-
++          set(["foo", "bar"])
++          2
++        exitCode: 0
 diff --git a/app.yaml b/app.yaml
 index cd38f61..6261189 100644
 --- a/app.yaml

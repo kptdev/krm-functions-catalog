@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index 0d8769e..2d16d7f 100644
+index 0d8769e..556174b 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -6,5 +6,10 @@ pipeline:
+@@ -6,5 +6,16 @@ pipeline:
    mutators:
      - image: ghcr.io/kptdev/krm-functions-catalog/search-replace:latest
        configMap:
@@ -14,3 +14,9 @@ index 0d8769e..2d16d7f 100644
 +    - type: Rendered
 +      status: "True"
 +      reason: RenderSuccess
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/search-replace:latest
++        exitCode: 0
++        results:
++          - message: no matches

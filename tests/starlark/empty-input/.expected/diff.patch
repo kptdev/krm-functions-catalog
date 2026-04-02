@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index e9b883d..0594f99 100644
+index e9b883d..9ce4556 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -6,3 +6,11 @@ pipeline:
+@@ -6,3 +6,23 @@ pipeline:
    mutators:
      - image: ghcr.io/kptdev/krm-functions-catalog/starlark:latest
        configPath: fn-config.yaml
@@ -14,3 +14,15 @@ index e9b883d..0594f99 100644
 +      message: |-
 +        pkg.render: pkg .:
 +        	pipeline.run: already handled error
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/starlark:latest
++        stderr: 'failed to evaluate function: error: function failure'
++        exitCode: 1
++        results:
++          - message: '`source` must not be empty'
++            severity: error
++        errorResults:
++          - message: '`source` must not be empty'
++            severity: error
++    errorSummary: 'ghcr.io/kptdev/krm-functions-catalog/starlark:latest: exit code 1'

@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index b9c6f6b..f14cce8 100644
+index b9c6f6b..a5cbeaa 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -11,3 +11,8 @@ pipeline:
+@@ -11,3 +11,30 @@ pipeline:
        selectors:
          - kind: ConfigMap
          - kind: MyResource
@@ -11,6 +11,28 @@ index b9c6f6b..f14cce8 100644
 +    - type: Rendered
 +      status: "True"
 +      reason: RenderSuccess
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/set-annotations:latest
++        exitCode: 0
++        results:
++          - message: 'set annotations: {"color":"orange","fruit":"apple"}'
++            field:
++              path: metadata.annotations
++            file:
++              path: resources.yaml
++          - message: 'set annotations: {"color":"orange","fruit":"apple"}'
++            field:
++              path: metadata.annotations
++            file:
++              path: resources.yaml
++              index: 1
++          - message: 'set annotations: {"color":"orange","fruit":"apple"}'
++            field:
++              path: spec.selector.annotations
++            file:
++              path: resources.yaml
++              index: 1
 diff --git a/resources.yaml b/resources.yaml
 index bfeadb4..f4d4b27 100644
 --- a/resources.yaml

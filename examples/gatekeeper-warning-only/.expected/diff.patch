@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index 0d32b6f..db84bbe 100644
+index 0d32b6f..5de6d86 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -7,3 +7,8 @@ metadata:
+@@ -7,3 +7,24 @@ metadata:
  pipeline:
    validators:
      - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest
@@ -11,3 +11,19 @@ index 0d32b6f..db84bbe 100644
 +    - type: Rendered
 +      status: "True"
 +      reason: RenderSuccess
++  renderStatus:
++    validationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest
++        exitCode: 0
++        results:
++          - message: |-
++              The following banned keys are being used in the ConfigMap: {"private_key"}
++              violatedConstraint: no-secrets-in-configmap
++            severity: warning
++            resourceRef:
++              apiVersion: v1
++              kind: ConfigMap
++              name: super-secret
++              namespace: default
++            file:
++              path: config-map.yaml
