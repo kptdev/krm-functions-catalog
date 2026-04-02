@@ -248,6 +248,12 @@ func (cs *CreateSetters) visitScalar(object *yaml.RNode, path string) error {
 		return nil
 	}
 
+	// skip internal kpt annotations — these are runtime metadata, not user-authored content
+	if strings.Contains(path, ".annotations.internal.config.kubernetes.io") ||
+		strings.Contains(path, ".annotations.config.kubernetes.io") {
+		return nil
+	}
+
 	// doesn't add the comment to the nodes with multiple line values
 	if hasMultipleLines(object.YNode().Value) {
 		return nil

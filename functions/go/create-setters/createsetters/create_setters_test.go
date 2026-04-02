@@ -520,6 +520,33 @@ spec:
   image: dev # kpt-set: ${role}
 `,
 		},
+		{
+			name: "skip internal kpt annotations",
+			config: `
+data:
+  replicas: "4"
+`,
+			input: `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  annotations:
+    internal.config.kubernetes.io/package-path: /tmp/some-path-with-4-in-it
+    config.kubernetes.io/local-config: "true"
+spec:
+  replicas: 4
+`,
+			expectedResources: `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  annotations:
+    internal.config.kubernetes.io/package-path: /tmp/some-path-with-4-in-it
+    config.kubernetes.io/local-config: "true"
+spec:
+  replicas: 4 # kpt-set: ${replicas}
+`,
+		},
 	}
 	for i := range tests {
 		test := tests[i]
