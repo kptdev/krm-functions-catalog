@@ -9,7 +9,7 @@
 {{ $token := getenv "KRM_CATALOG_API_TOKEN" }}
 {{ $apiURL := "https://api.github.com/repos/kptdev/krm-functions-catalog/git/matching-refs/tags/functions/go/" }}
 {{ $apiHeaders := dict "Accept" "application/vnd.github+json" "X-GitHub-Api-Version" "2026-03-10" }}
-{{ if ne $token "" }}
+{{ if $token }}
   {{ $apiHeaders = merge $apiHeaders (dict "Authorization" (printf "Bearer %s" $token)) }}
 {{ end }}
 {{ $opts := dict "headers" $apiHeaders }}
