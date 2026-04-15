@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/kptdev/krm-functions-catalog/metadata-schema.json",
+  "title": "KRM Function Metadata",
+  "description": "Schema for metadata.yaml files in the KRM Functions Catalog",
+  "type": "object",
+  "required": ["image", "description", "tags"],
+  "additionalProperties": false,
+  "properties": {
+    "image": {
+      "type": "string",
+      "description": "Container image reference for the function",
+      "pattern": "^ghcr\\.io/"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description of the function"
+    },
+    "tags": {
+      "type": "array",
+      "description": "Function category tags",
+      "items": {
+        "type": "string",
+        "enum": ["mutator", "validator", "viewer", "generator", "test", "testing", "timing", "Config Sync", "GCP", "blueprints", "name prefix", "name suffix"]
+      },
+      "minItems": 1
+    },
+    "sourceURL": {
+      "type": "string",
+      "description": "URL to the function source code",
+      "format": "uri"
+    },
+    "examplePackageURLs": {
+      "type": "array",
+      "description": "URLs to example kpt packages",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "license": {
+      "type": "string",
+      "description": "SPDX license identifier",
+      "default": "Apache-2.0"
+    },
+    "hidden": {
+      "type": "boolean",
+      "description": "If true, the function is excluded from doc generation and the catalog listing",
+      "default": false
+    }
+  }
+}

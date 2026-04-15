@@ -37,6 +37,17 @@ jobs:
           find . -name "*.sh" > shell_files.out
           shellcheck $(cat shell_files.out)
 
+  validate-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Validate metadata.yaml files
+        run: make validate-metadata
+
   go-unit-test-ci:
     runs-on: ubuntu-latest
     env:

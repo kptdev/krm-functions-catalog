@@ -11,6 +11,4 @@ examplePackageURLs:
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-validation
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-configmap-as-functionconfig
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-load-library
-emails:
-  - kpt-team@google.com
 license: Apache-2.0

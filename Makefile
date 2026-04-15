@@ -52,6 +52,5 @@ push-curated: ## Push images to registry. WARN: This operation should only be do
 push-contrib: ## Push images to registry. WARN: This operation should only be done in CI environment.
 	cd contrib/functions/go && $(MAKE) push
 
-update-function-docs: ## Update documentation for a function release branch
-	(cd scripts/update_function_docs/ && go build -o update_function_docs .)
-	RELEASE_BRANCH=$(RELEASE_BRANCH) ./scripts/update_function_docs/update_function_docs
+validate-metadata: ## Validate all metadata.yaml files against the schema
+	bash scripts/generate_docs/validate_metadata.sh

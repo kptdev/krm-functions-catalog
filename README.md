@@ -6,7 +6,14 @@
 
 ## Documentation
 
-[Documentation](https://catalog.kpt.dev/)
+The KRM Functions Catalog documentation is published as part of the [kpt documentation site](https://catalog.kpt.dev/).
+
+## Getting Started
+
+- [Contributing](CONTRIBUTING.md) — how to contribute functions, run tests, and follow the repo layout
+- [Releasing](RELEASING.md) — how to release functions and update docs
+- [Versioning](VERSIONING.md) — semver strategy for function images
+- [Documentation site](documentation/README.md) — running the docs site locally
 
 ## Issues
 
@@ -30,7 +37,7 @@ Code is under the [Apache License 2.0](LICENSE), documentation is [CC BY 4.0](LI
 
 ## Governance
 
-The governance of the kpt project and KRM Functiona Catalog are described in the
+The governance of the kpt project and KRM Functions Catalog are described in the
 [governance repo](https://github.com/kptdev/governance).
 
 ## Code of Conduct

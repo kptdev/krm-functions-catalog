@@ -6,6 +6,4 @@ sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/g
 examplePackageURLs:
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/search-replace-simple
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/search-replace-create-setters
-emails:
-  - kpt-team@google.com
 license: Apache-2.0

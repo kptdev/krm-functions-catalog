@@ -7,6 +7,4 @@ examplePackageURLs:
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-annotations-simple
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-annotations-advanced
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-annotations-imperative
-emails:
-  - kpt-team@google.com
 license: Apache-2.0

@@ -1,4 +1,3 @@
-!! NOTE: This section needs to be revised
 # Release Process
 
 This doc covers the release process for the functions in the
@@ -8,57 +7,35 @@ krm-functions-catalog repo.
    If the CI is failing on the main, we need to fix it before doing a release.
 1. Go to the [releases pages] in your browser.
 1. Click `Draft a new release` to create a new release for a function. The tag
-   version format should be `functions/{language}/{function-name}/{semver}`. e.g.
-   `functions/go/set-namespace/v1.2.3`. The release name should be
-   `{funtion-name} {semver}`. The release notes for this function should be in
-   the body. 
+   version format should be `functions/go/{function-name}/{semver}`. e.g.
+   `functions/go/set-namespace/v0.1.0`. The release name should be
+   `{funtion-name} {semver}` (see [VERSIONING.md](VERSIONING.md) for the semver strategy).
+   The release notes for this function should be in the body.
 1. Click `Publish release` button.
 1. Verify the new functions are released in ghcr.io/kptdev/krm-functions-catalog/{funtion-name}/{semver} or, if using the GitHub based CD flow, check
    the relevant [GitHub packages section](https://github.com/orgs/kptdev/packages?repo_name=krm-functions-catalog)
 1. Send an announcement on the [kpt slack channel]
 
-> ⚠️ **Warning:**  The update docs section is currently being revised. DO NOT USE!!
-## Updating function docs
+## Updating or creating function docs
 
-After creating a release, the docs for the function should be updated to reflect
-the latest patch version. A script has been created to automate this process.
-The `RELEASE_BRANCH` branch should already exist in the [repo] and a tag should
-be created on the [releases pages]. `RELEASE_BRANCH` is in the form of
-`${FUNCTION_NAME}/v${MAJOR_VERSION}.${MINOR_VERSION}`.
-For example `set-namespace/v0.3`, `kubeval/v0.1`, etc.
+After creating a release, open a new PR to update/create the docs:
 
-1. Setup the release branch 
-	Release branch should have existed in the [upstream repo](https://github.com/kptdev/krm-functions-catalog) in the form of `<FUNCTION_NAME>/v<MAJOR>.<MINOR>`. Let's take `set-namespace/v0.4` as an example. You should replace that to your RELEASE_BRANCH.  
-	```shell
-	> export RELEASE_BRANCH=set-namespace/v0.4
-	```
-2. Clean up the local branch
-	The release script needs to run in the local <RELEASE BRANCH>. To avoid git ref conflicts, we suggest you delete your local branch OR make it up to date with the remote <RELEASE BRANCH>
-```shell
-> git branch -D ${RELEASE_BRANCH}
-```
-3. Fetch the upstream repository
-	Your `upstream` repo should point to the official krm-functions-catalog. Verify your git remote is set as below
-```shell
-> git remote -v | grep upstream
-upstream	git@github.com:kptdev/krm-functions-catalog.git (fetch)
-upstream	git@github.com:kptdev/krm-functions-catalog.git (push)
-# Fetch the latest upstream repo
-> git fetch upstream
-```
-4. Run the doc updating script.
-```shell
-git checkout remotes/upstream/main
-RELEASE_BRANCH=${RELEASE_BRANCH} make update-function-docs
-```
-5. Send out a Pull Request. 
-	Your local git reference is now pointing to the local RELEASE BRANCH.
-	A new git commit is auto-generated which contains the function document referring to the latest function version in the form of 
-	`<FUNCTION_NAME>/v<MAJOR>.<MINOR>.<PATCH>`
-	You should be ready to submit the Pull Request against the upstream <RELEASE_BRANCH>. 
-```shell
-> git push -f origin ${RELEASE_BRANCH}
-```
+1. Ensure you are on the `main` branch and it is up to date
+2. Create a new branch for the doc update:
+   ```shell
+   git checkout -b my-new-func-v0.1-docs
+   ```
+3. Run the doc generation script for the released function:
+   ```shell
+   bash scripts/generate_docs/generate_docs.sh set-namespace
+   ```
+4. Preview the docs locally (see [documentation/README.md](documentation/README.md)):
+   ```shell
+   cd documentation && npm run serve
+   ```
+5. Commit the generated docs and submit a PR
+
+See `scripts/generate_docs/generate_docs.sh --help` for additional options.
 
 [repo]: https://github.com/kptdev/krm-functions-catalog
 [releases pages]: https://github.com/kptdev/krm-functions-catalog/releases

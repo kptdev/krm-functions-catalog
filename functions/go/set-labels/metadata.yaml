@@ -7,6 +7,4 @@ examplePackageURLs:
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-labels-simple
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-labels-full-coverage
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-labels-imperative
-emails:
-  - kpt-team@google.com
 license: Apache-2.0

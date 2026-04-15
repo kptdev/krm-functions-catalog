@@ -7,6 +7,4 @@ tags:
   - testing
   - timing
 sourceURL: https://github.com/kpt-dev/krm-functions-catalog/functions/go/sleep
-emails:
-  - your-team@example.com
 license: Apache-2.0

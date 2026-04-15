@@ -5,6 +5,4 @@ tags:
 sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/create-setters
 examplePackageURLs:
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/create-setters-simple
-emails:
-  - kpt-team@google.com
 license: Apache-2.0

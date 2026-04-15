@@ -7,6 +7,4 @@ examplePackageURLs:
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/upsert-resource-simple
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/upsert-resource-multiple
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/upsert-resource-at-path
-emails:
-  - kpt-team@google.com
 license: Apache-2.0

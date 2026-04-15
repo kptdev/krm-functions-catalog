@@ -8,6 +8,4 @@ examplePackageURLs:
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-namespace-depends-on
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-namespace-kpt-package-context
 
-emails:
-  - kpt-team@google.com
 license: Apache-2.0
