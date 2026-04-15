@@ -1,3 +1,27 @@
+diff --git a/Kptfile b/Kptfile
+index 779ebf6..704a02a 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -7,3 +7,19 @@ pipeline:
+     - image: ghcr.io/kptdev/krm-functions-catalog/delete-annotations:latest
+       configMap:
+         annotationKeys: annotation-to-delete
++status:
++  conditions:
++    - type: Rendered
++      status: "True"
++      reason: RenderSuccess
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/delete-annotations:latest
++        exitCode: 0
++        results:
++          - message: The provided annotations were deleted from 1 resource(s)
++            severity: info
++          - message: 'Annonation: [annotation-to-delete] removed from resource: [the-map]'
++            severity: info
++            file:
++              path: resources.yaml
 diff --git a/resources.yaml b/resources.yaml
 index f8ec01d..bcc8f78 100644
 --- a/resources.yaml
