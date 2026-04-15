@@ -1,0 +1,13 @@
+diff --git a/resources.yaml b/resources.yaml
+index f8ec01d..bcc8f78 100644
+--- a/resources.yaml
++++ b/resources.yaml
+@@ -3,8 +3,6 @@ kind: ConfigMap
+ metadata:
+   name: the-map
+   namespace: the-namespace
+-  annotations:
+-    annotation-to-delete: "some_value"
+ data:
+   some-key: some-value
+ ---

@@ -1,0 +1,10 @@
+image: ghcr.io/kptdev/krm-functions-catalog/delete-annotations
+description: Deletes the provided annotations on resources
+tags:
+  - mutator
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/delete-annotations
+examplePackageURLs:
+  - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/delete-annotations-simple
+emails:
+  - kpt-team@google.com
+license: Apache-2.0

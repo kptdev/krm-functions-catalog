@@ -23,6 +23,7 @@ FUNCTIONS := \
 	apply-replacements \
 	apply-setters \
 	create-setters \
+	delete-annotations \
 	ensure-name-substring \
 	gatekeeper \
 	generate-kpt-pkg-docs \
