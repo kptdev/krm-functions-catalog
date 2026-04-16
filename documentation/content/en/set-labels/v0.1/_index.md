@@ -113,4 +113,4 @@ additionalLabelFields:
 
 [recommended labels]: https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/
 
-[commonlabels]: https://github.com/kubernetes-sigs/kustomize/blob/master/api/konfig/builtinpluginconsts/commonlabels.go#L6
+[commonlabels]: https://github.com/kubernetes-sigs/kustomize/blob/kustomize/v4.5.7/api/konfig/builtinpluginconsts/commonlabels.go#L6

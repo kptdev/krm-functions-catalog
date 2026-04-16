@@ -75,4 +75,4 @@ To pass validation, let's replace the key `private_key` in the `ConfigMap` in
 `resources.yaml` with something else e.g. `public_key`. Rerun the command. It
 will succeed.
 
-[`gatekeeper`]: https://catalog.kpt.dev/gatekeeper/v0.1/
+[`gatekeeper`]: {{< relref "gatekeeper/v0.2/" >}}

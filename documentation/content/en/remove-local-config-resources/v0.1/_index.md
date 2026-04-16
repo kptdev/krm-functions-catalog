@@ -1,14 +1,15 @@
 ---
 title: "remove-local-config-resources"
 linkTitle: "remove-local-config-resources"
-tags: "config sync, mutator"
+tags: "mutator"
 weight: 4
 description: |
-   Removes `local-config` annotated resources
+  Removes locally annotated resources
 menu:
   main:
     parent: "Function Catalog"
 ---
+<!-- DO NOT EDIT: generated from functions/go/remove-local-config-resources/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}

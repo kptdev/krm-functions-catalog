@@ -1,14 +1,15 @@
 ---
 title: "set-enforcement-action"
 linkTitle: "set-enforcement-action"
-tags: "config sync, mutator"
+tags: "mutator"
 weight: 4
 description: |
-   Set the enforcement action for policy constraints to deny or dryrun
+  Sets the enforcement action for policy constraints to deny or dryrun
 menu:
   main:
     parent: "Function Catalog"
 ---
+<!-- DO NOT EDIT: generated from functions/go/set-enforcement-action/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}

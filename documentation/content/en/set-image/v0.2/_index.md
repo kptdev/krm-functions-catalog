@@ -4,11 +4,12 @@ linkTitle: "set-image"
 tags: "mutator"
 weight: 4
 description: |
-   Set all images of a given name to a given name:tag or name@digest
+  Set all images of a given name to a given name:tag or name@digest.
 menu:
   main:
     parent: "Function Catalog"
 ---
+<!-- DO NOT EDIT: generated from functions/go/set-image/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}

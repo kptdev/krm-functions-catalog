@@ -4,12 +4,12 @@ linkTitle: "ensure-name-substring"
 tags: "mutator, name prefix, name suffix"
 weight: 4
 description: |
-   Ensures that a resource name contains the given substring
+  Ensures that a resource name contains the given substring.
 menu:
   main:
     parent: "Function Catalog"
 ---
-
+<!-- DO NOT EDIT: generated from functions/go/ensure-name-substring/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -135,10 +135,10 @@ additionalNameFields:
 
 [names]: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/
 
-[issue]: https://github.com/GoogleContainerTools/kpt/issues/new/choose
+[issue]: https://github.com/kptdev/kpt/issues/new/choose
 
-[namereference]: https://github.com/kubernetes-sigs/kustomize/blob/master/api/konfig/builtinpluginconsts/namereference.go#L7
+[namereference]: https://github.com/kubernetes-sigs/kustomize/blob/kustomize/v4.5.7/api/konfig/builtinpluginconsts/namereference.go#L7
 
-[defaultnamefields]: https://github.com/kubernetes-sigs/kustomize/blob/master/api/konfig/builtinpluginconsts/nameprefix.go#L7
+[defaultnamefields]: https://github.com/kubernetes-sigs/kustomize/blob/kustomize/v4.5.7/api/konfig/builtinpluginconsts/nameprefix.go#L7
 
 [depends-on]: https://kpt.dev/reference/annotations/depends-on/

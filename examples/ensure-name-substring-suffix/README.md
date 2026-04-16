@@ -47,4 +47,4 @@ Check all resources have `-prod` in their names:
 We have a `Service` object whose name is `the-service-prod` which already
 contains substring`-prod`. This resource will be skipped.
 
-[ensure-name-substring]: https://catalog.kpt.dev/ensure-name-substring/v0.1/
+[ensure-name-substring]: {{< relref "ensure-name-substring/v0.2/" >}}

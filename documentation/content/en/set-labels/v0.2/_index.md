@@ -4,11 +4,12 @@ linkTitle: "set-labels"
 tags: "mutator"
 weight: 4
 description: |
-   Add a list of labels to all resources
+  Add a list of labels to all resources.
 menu:
   main:
     parent: "Function Catalog"
 ---
+<!-- DO NOT EDIT: generated from functions/go/set-labels/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -91,4 +92,4 @@ labels:
 
 [recommended labels]: https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/
 
-[commonlabels]: https://github.com/kubernetes-sigs/kustomize/blob/master/api/konfig/builtinpluginconsts/commonlabels.go#L6
+[commonlabels]: https://github.com/kubernetes-sigs/kustomize/blob/kustomize/v4.5.7/api/konfig/builtinpluginconsts/commonlabels.go#L6

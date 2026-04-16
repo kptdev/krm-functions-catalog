@@ -4,11 +4,12 @@ linkTitle: "search-replace"
 tags: "mutator"
 weight: 4
 description: |
-   Search and optionally replace field values
+  Search and optionally replace field values.
 menu:
   main:
     parent: "Function Catalog"
 ---
+<!-- DO NOT EDIT: generated from functions/go/search-replace/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}

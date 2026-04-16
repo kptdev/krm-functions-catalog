@@ -21,7 +21,7 @@
       "description": "Function category tags",
       "items": {
         "type": "string",
-        "enum": ["mutator", "validator", "viewer", "generator", "test", "testing", "timing", "Config Sync", "GCP", "blueprints", "name prefix", "name suffix"]
+        "enum": ["mutator", "validator", "viewer", "generator", "test", "testing", "timing", "name prefix", "name suffix"]
       },
       "minItems": 1
     },

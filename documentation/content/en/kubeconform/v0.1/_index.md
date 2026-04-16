@@ -4,12 +4,12 @@ linkTitle: "kubeconform"
 tags: "validator"
 weight: 4
 description: |
-   Validate KRM resources against json schemas
+  Use kubeconform to validate KRM resources against their json schemas.
 menu:
   main:
     parent: "Function Catalog"
 ---
-
+<!-- DO NOT EDIT: generated from functions/go/kubeconform/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}

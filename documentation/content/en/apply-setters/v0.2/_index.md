@@ -3,11 +3,13 @@ title: "apply-setters"
 linkTitle: "apply-setters"
 tags: "mutator"
 weight: 4
-description: Update the field values parameterized by setters
+description: |
+  Update the field values parameterized by setters.
 menu:
   main:
     parent: "Function Catalog"
 ---
+<!-- DO NOT EDIT: generated from functions/go/apply-setters/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -118,7 +120,7 @@ $ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:v0.2 --
 Alternatively, setter values can be passed as key-value pairs in the CLI
 
 ```shell
-$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:v0.2 -- image=ubuntu replicas=3
+$ kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/apply-setters:v0.2 -- tag=1.16.2 nginx-replicas=3
 ```
 
 Modified resource looks like the following:

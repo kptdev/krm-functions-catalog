@@ -4,11 +4,12 @@ linkTitle: "gatekeeper"
 tags: "validator"
 weight: 4
 description: |
-   Validate the KRM resources using Gatekeeper policies
+  Validate the KRM resources using Gatekeeper policies.
 menu:
   main:
     parent: "Function Catalog"
 ---
+<!-- DO NOT EDIT: generated from functions/go/gatekeeper/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}

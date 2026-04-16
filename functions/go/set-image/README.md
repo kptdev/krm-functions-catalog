@@ -125,4 +125,4 @@ additionalImageFields:
 
 [image]: https://kubernetes.io/docs/concepts/containers/images/
 
-[commonimage]: https://github.com/kubernetes-sigs/kustomize/blob/master/api/konfig/builtinpluginconsts/images.go#L7
+[commonimage]: https://github.com/kubernetes-sigs/kustomize/blob/kustomize/v4.5.7/api/konfig/builtinpluginconsts/images.go#L7

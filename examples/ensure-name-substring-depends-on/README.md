@@ -61,6 +61,6 @@ package.
 annotation updated, since the corresponding `ClusterRole` is also included in
 the package.
 
-[ensure-name-substring]: https://catalog.kpt.dev/ensure-name-substring/v0.1/
+[ensure-name-substring]: {{< relref "ensure-name-substring/v0.2/" >}}
 
 [`depends-on`]: https://kpt.dev/reference/annotations/depends-on/

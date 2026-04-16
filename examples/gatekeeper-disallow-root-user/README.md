@@ -113,4 +113,4 @@ To pass validation, let's set
 field `spec.template.spec.securityContext.runAsNonRoot` to `true` in
 the `Deployment` in `resources.yaml`. Rerun the command. It will succeed.
 
-[gatekeeper]: https://catalog.kpt.dev/gatekeeper/v0.1/
+[gatekeeper]: {{< relref "gatekeeper/v0.2/" >}}

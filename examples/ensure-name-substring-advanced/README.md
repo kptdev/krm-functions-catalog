@@ -61,4 +61,4 @@ $ kpt fn render ensure-name-substring-advanced
 Check all resources have `prod-` in their names and the field `.spec.name` in
 `MyResource` also got updated.
 
-[ensure-name-substring]: https://catalog.kpt.dev/ensure-name-substring/v0.1/
+[ensure-name-substring]: {{< relref "ensure-name-substring/v0.2/" >}}
