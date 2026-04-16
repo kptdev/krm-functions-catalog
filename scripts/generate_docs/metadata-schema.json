@@ -27,15 +27,13 @@
     },
     "sourceURL": {
       "type": "string",
-      "description": "URL to the function source code",
-      "format": "uri"
+      "description": "URL to the function source code"
     },
     "examplePackageURLs": {
       "type": "array",
       "description": "URLs to example kpt packages",
       "items": {
-        "type": "string",
-        "format": "uri"
+        "type": "string"
       }
     },
     "license": {

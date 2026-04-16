@@ -6,5 +6,5 @@ tags:
   - test
   - testing
   - timing
-sourceURL: https://github.com/kpt-dev/krm-functions-catalog/functions/go/sleep
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/sleep
 license: Apache-2.0

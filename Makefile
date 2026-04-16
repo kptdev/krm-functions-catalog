@@ -53,4 +53,10 @@ push-contrib: ## Push images to registry. WARN: This operation should only be do
 	cd contrib/functions/go && $(MAKE) push
 
 validate-metadata: ## Validate all metadata.yaml files against the schema
-	bash scripts/generate_docs/validate_metadata.sh
+	cd scripts/generate_docs && go run . validate
+
+generate-docs: ## Generate/sync Hugo doc pages from function source
+	cd scripts/generate_docs && go run . generate $(FN)
+
+serve-docs: ## Preview the documentation site locally
+	cd documentation && $(MAKE) serve

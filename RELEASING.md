@@ -23,21 +23,20 @@ After creating a release, open a new PR to update/create the docs:
 1. Ensure you are on the `main` branch and it is up to date
 2. Create a new branch for the doc update:
    ```shell
-   git checkout -b my-new-func-v0.1-docs
+   git checkout -b docs/set-namespace-v0.4
    ```
-3. Run the doc generation script for the released function:
+3. Run the doc generation for the released function:
    ```shell
-   bash scripts/generate_docs/generate_docs.sh set-namespace
+   make generate-docs FN=set-namespace
    ```
 4. Preview the docs locally (see [documentation/README.md](documentation/README.md)):
    ```shell
-   cd documentation && npm run serve
+   make serve-docs
    ```
 5. Commit the generated docs and submit a PR
 
-See `scripts/generate_docs/generate_docs.sh --help` for additional options.
+See `make help` for additional targets.
 
 [repo]: https://github.com/kptdev/krm-functions-catalog
 [releases pages]: https://github.com/kptdev/krm-functions-catalog/releases
 [kpt slack channel]: https://kubernetes.slack.com/channels/kpt/
-
