@@ -9,10 +9,10 @@ krm-functions-catalog repo.
 1. Click `Draft a new release` to create a new release for a function. The tag
    version format should be `functions/go/{function-name}/{semver}`. e.g.
    `functions/go/set-namespace/v0.1.0`. The release name should be
-   `{funtion-name} {semver}` (see [VERSIONING.md](VERSIONING.md) for the semver strategy).
+   `{function-name} {semver}` (see [VERSIONING.md](VERSIONING.md) for the semver strategy).
    The release notes for this function should be in the body.
 1. Click `Publish release` button.
-1. Verify the new functions are released in ghcr.io/kptdev/krm-functions-catalog/{funtion-name}/{semver} or, if using the GitHub based CD flow, check
+1. Verify the new functions are released in ghcr.io/kptdev/krm-functions-catalog/{function-name}/{semver} or, if using the GitHub based CD flow, check
    the relevant [GitHub packages section](https://github.com/orgs/kptdev/packages?repo_name=krm-functions-catalog)
 1. Send an announcement on the [kpt slack channel]
 
