@@ -81,9 +81,14 @@ jobs:
           VERSION="${{ steps.extract.outputs.version }}"
           FUNC_DIR="functions/go/${IMAGE_NAME}"
 
-          IMAGE_BASE=$(grep '^image:' "${FUNC_DIR}/metadata.yaml" | awk '{print $2}')
+          if [[ ! -f "${FUNC_DIR}/metadata.yaml" ]]; then
+            echo "::error::${FUNC_DIR}/metadata.yaml not found"
+            exit 1
+          fi
+
+          IMAGE_BASE=$(grep '^image:' "${FUNC_DIR}/metadata.yaml" | awk '{print $2}' | tr -d '"')
           if [[ -z "$IMAGE_BASE" ]]; then
-            echo "::error::No image field found in ${FUNC_DIR}/metadata.yaml"
+            echo "::error::No image field in ${FUNC_DIR}/metadata.yaml"
             exit 1
           fi
 
@@ -109,8 +114,11 @@ jobs:
             exit 0
           fi
 
-          NEW_BODY="$(printf '%s\n\n## Container Image\n\n```\n%s\n```' "$CURRENT_BODY" "$IMAGE_REF")"
+          NOTES_FILE=$(mktemp)
+          printf '%s\n\n## Container Image\n\n```\n%s\n```' "$CURRENT_BODY" "$IMAGE_REF" > "$NOTES_FILE"
 
           gh release edit "$TAG" \
             --repo "${{ github.repository }}" \
-            --notes "$NEW_BODY"
+            --notes-file "$NOTES_FILE"
+
+          rm -f "$NOTES_FILE"
