@@ -48,7 +48,7 @@ data:
    - For an array node, checks if all values match with any of the array setters.
 4. Adds comments to the fields matching the setter values using setter names as parameters.
 
->? If this function adds setter comments to the fields for which you didn't intend to parameterize,
+If this function adds setter comments to the fields for which you didn't intend to parameterize,
 you can simply review and delete/modify those comments manually.
 
 <!--mdtogo-->
@@ -136,7 +136,7 @@ spec:
              containerPort: 80
 ```
 
->? This function doesn't add comments to scalar nodes with multi-line values.
+This function doesn't add comments to scalar nodes with multi-line values.
 
 Explanation for the changes:
 
