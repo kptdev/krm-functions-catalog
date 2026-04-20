@@ -1,5 +1,5 @@
 # Copyright 2022 Google LLC
-# Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
+# Modifications Copyright (C) 2025-2026 OpenInfra Foundation Europe.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
-      contents: read
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -73,3 +73,52 @@ jobs:
             echo "Tag does not match any known type, skipping."
             exit 0
           fi
+
+      - name: Read image reference from metadata
+        id: meta
+        run: |
+          IMAGE_NAME="${{ steps.extract.outputs.image_name }}"
+          VERSION="${{ steps.extract.outputs.version }}"
+          FUNC_DIR="functions/go/${IMAGE_NAME}"
+
+          if [[ ! -f "${FUNC_DIR}/metadata.yaml" ]]; then
+            echo "::error::${FUNC_DIR}/metadata.yaml not found"
+            exit 1
+          fi
+
+          IMAGE_BASE=$(grep '^image:' "${FUNC_DIR}/metadata.yaml" | awk '{print $2}' | tr -d '"')
+          if [[ -z "$IMAGE_BASE" ]]; then
+            echo "::error::No image field in ${FUNC_DIR}/metadata.yaml"
+            exit 1
+          fi
+
+          echo "image_ref=${IMAGE_BASE}:${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Add image reference to release notes
+        if: steps.meta.outputs.image_ref != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          IMAGE_REF="${{ steps.meta.outputs.image_ref }}"
+
+          if ! gh release view "$TAG" --repo "${{ github.repository }}" > /dev/null 2>&1; then
+            echo "No release found for tag $TAG, skipping."
+            exit 0
+          fi
+
+          CURRENT_BODY=$(gh release view "$TAG" --repo "${{ github.repository }}" --json body -q .body)
+
+          if [[ "$CURRENT_BODY" == *"$IMAGE_REF"* ]]; then
+            echo "Image reference already present in release notes, skipping."
+            exit 0
+          fi
+
+          NOTES_FILE=$(mktemp)
+          printf '%s\n\n## Container Image\n\n```\n%s\n```' "$CURRENT_BODY" "$IMAGE_REF" > "$NOTES_FILE"
+
+          gh release edit "$TAG" \
+            --repo "${{ github.repository }}" \
+            --notes-file "$NOTES_FILE"
+
+          rm -f "$NOTES_FILE"
