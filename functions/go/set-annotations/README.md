@@ -101,4 +101,4 @@ additionalAnnotationFields:
 
 [annotations]: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 
-[commonannotations]: https://github.com/kubernetes-sigs/kustomize/blob/master/api/konfig/builtinpluginconsts/commonannotations.go#L6
+[commonannotations]: https://github.com/kubernetes-sigs/kustomize/blob/kustomize/v4.5.7/api/konfig/builtinpluginconsts/commonannotations.go#L6

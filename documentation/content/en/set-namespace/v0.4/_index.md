@@ -4,11 +4,12 @@ linkTitle: "set-namespace"
 tags: "mutator"
 weight: 4
 description: |
-  Upsert `namespace` for KRM resources
+  Update KRM resources namespace.
 menu:
   main:
     parent: "Function Catalog"
 ---
+<!-- DO NOT EDIT: generated from functions/go/set-namespace/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}

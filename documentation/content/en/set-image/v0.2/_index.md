@@ -4,11 +4,12 @@ linkTitle: "set-image"
 tags: "mutator"
 weight: 4
 description: |
-   Set all images of a given name to a given name:tag or name@digest
+  Set all images of a given name to a given name:tag or name@digest.
 menu:
   main:
     parent: "Function Catalog"
 ---
+<!-- DO NOT EDIT: generated from functions/go/set-image/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -95,8 +96,8 @@ data:
 
 To use a `SetImage` custom resource as the `functionConfig`, the desired
 image specification must be specified in the `image` field. Sometimes you have
-resources (especially custom resources) that have image fields in fields
-other than the [defaults][commonimage], you can specify such label fields
+resources (especially custom resources) that have image fields at paths
+other than the [defaults][commonimage], you can specify such image fields
 using `additionalImageFields`. It will be used jointly with the
 [defaults][commonimage].
 

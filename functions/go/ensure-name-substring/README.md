@@ -123,8 +123,8 @@ additionalNameFields:
 
 [issue]: https://github.com/kptdev/kpt/issues/new/choose
 
-[namereference]: https://github.com/kubernetes-sigs/kustomize/blob/master/api/konfig/builtinpluginconsts/namereference.go#L7
+[namereference]: https://github.com/kubernetes-sigs/kustomize/blob/kustomize/v4.5.7/api/konfig/builtinpluginconsts/namereference.go#L7
 
-[defaultnamefields]: https://github.com/kubernetes-sigs/kustomize/blob/master/api/konfig/builtinpluginconsts/nameprefix.go#L7
+[defaultnamefields]: https://github.com/kubernetes-sigs/kustomize/blob/kustomize/v4.5.7/api/konfig/builtinpluginconsts/nameprefix.go#L7
 
 [depends-on]: https://kpt.dev/reference/annotations/depends-on/

@@ -4,12 +4,12 @@ linkTitle: "upsert-resource"
 tags: "mutator"
 weight: 4
 description: |
-   Upsert an existing KRM resource
+  Insert a resource, or if the resource already exists, update the existing resource.
 menu:
   main:
     parent: "Function Catalog"
 ---
-
+<!-- DO NOT EDIT: generated from functions/go/upsert-resource/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -22,9 +22,13 @@ Insert a resource, or if the resource already exists, update the existing resour
 
 <!--mdtogo-->
 
-### FunctionConfig
-
 <!--mdtogo:Long-->
+
+## Usage
+
+This function can be used imperatively only.
+
+### FunctionConfig
 
 Upsert is an operation that adds resources(uniquely identified by Group, Kind, Name, Namespace and Path)
 if they do not already exist, or replaces them if they already exist in the input list of resources.
@@ -49,6 +53,41 @@ metadata:
 spec:
   selector:
     app: foo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myDeployment
+  namespace: mySpace
+spec:
+  replicas: 3
+```
+
+Resource to upsert:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: myService
+  namespace: mySpace
+spec:
+  selector:
+    app: bar
+```
+
+Invoking `upsert-resource` function replaces the resource with name `myService`:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: myService
+  namespace: mySpace
+spec:
+  selector:
+    app: bar
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

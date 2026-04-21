@@ -31,4 +31,4 @@ kpt and used as the function configuration.
 
 Check all resources have `prod-` prefix in their names:
 
-[ensure-name-substring]: https://catalog.kpt.dev/ensure-name-substring/v0.1/
+[ensure-name-substring]: {{< relref "ensure-name-substring/v0.2/" >}}

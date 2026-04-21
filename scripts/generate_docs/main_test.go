@@ -174,6 +174,53 @@ func TestGenerateIndex(t *testing.T) {
 	}
 }
 
+func TestReplaceVersionTags(t *testing.T) {
+	tests := []struct {
+		name    string
+		body    string
+		fnName  string
+		minor   string
+		want    string
+	}{
+		{
+			name:   "replaces latest",
+			body:   "image: ghcr.io/kptdev/krm-functions-catalog/apply-setters:latest",
+			fnName: "apply-setters",
+			minor:  "v0.2",
+			want:   "image: ghcr.io/kptdev/krm-functions-catalog/apply-setters:v0.2",
+		},
+		{
+			name:   "replaces multiple occurrences",
+			body:   "use set-namespace:latest and set-namespace:latest",
+			fnName: "set-namespace",
+			minor:  "v0.4",
+			want:   "use set-namespace:v0.4 and set-namespace:v0.4",
+		},
+		{
+			name:   "no match leaves unchanged",
+			body:   "image: ghcr.io/kptdev/krm-functions-catalog/other-fn:latest",
+			fnName: "apply-setters",
+			minor:  "v0.2",
+			want:   "image: ghcr.io/kptdev/krm-functions-catalog/other-fn:latest",
+		},
+		{
+			name:   "no latest leaves unchanged",
+			body:   "image: ghcr.io/kptdev/krm-functions-catalog/apply-setters:v0.1",
+			fnName: "apply-setters",
+			minor:  "v0.2",
+			want:   "image: ghcr.io/kptdev/krm-functions-catalog/apply-setters:v0.1",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := replaceVersionTags(tt.body, tt.fnName, tt.minor)
+			if got != tt.want {
+				t.Errorf("replaceVersionTags() = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestProcessFunction(t *testing.T) {
 	dir := t.TempDir()
 	functionsDir := filepath.Join(dir, "functions", "go")

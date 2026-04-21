@@ -291,5 +291,5 @@ metadata:
 
 <!--mdtogo-->
 
-[this document]: https://github.com/kubernetes/community/blob/master/contributors/design-proposals/architecture/declarative-application-management.md#declarative-configuration
+[this document]: https://github.com/kubernetes/design-proposals-archive/blob/main/architecture/declarative-application-management.md
 [see "character classes"]: #character-classes

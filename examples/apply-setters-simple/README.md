@@ -50,4 +50,4 @@ $ kpt fn render apply-setters-simple
 
 #### Note:
 
-Refer to the `create-setters` function documentation for information about creating setters.
+Refer to the [`create-setters`]({{< relref "create-setters/v0.1/" >}}) function documentation for information about creating setters.

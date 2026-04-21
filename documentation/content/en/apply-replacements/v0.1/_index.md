@@ -4,12 +4,12 @@ linkTitle: "apply-replacements"
 tags: "mutator"
 weight: 4
 description: |
-   Use the kustomize replacements feature as a KRM function
+  Invoke the kustomize replacements feature as a KRM function.
 menu:
   main:
     parent: "Function Catalog"
 ---
-
+<!-- DO NOT EDIT: generated from functions/go/apply-replacements/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -55,4 +55,4 @@ replacements:
 ```
 <!--mdtogo-->
 
-[kustomize replacements]: https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/replacements/ ':target=_blank'
+[kustomize replacements]: https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/replacements/

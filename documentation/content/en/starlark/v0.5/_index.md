@@ -4,11 +4,12 @@ linkTitle: "starlark"
 tags: "mutator, validator"
 weight: 4
 description: |
-   Run a Starlark script to mutate or validate resources
+  Run a Starlark script to mutate or validate resources.
 menu:
   main:
     parent: "Function Catalog"
 ---
+<!-- DO NOT EDIT: generated from functions/go/starlark/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}
@@ -181,7 +182,7 @@ We support the following [Starlib libraries]:
 
 | Name               | How to load                            | Example |
 |--------------------|----------------------------------------|---------|
-| [bsoup]            | load('bsoup.star', 'bsoup')            | [example](https://github.com/qri-io/starlib/tree/master/bsoup)                              |
+| [bsoup]            | load('bsoup.star', 'bsoup')            | [example](https://github.com/qri-io/starlib/tree/master/bsoup)           |
 | [encoding/base64]  | load('encoding/base64.star', 'base64') | [example](https://github.com/qri-io/starlib/blob/master/encoding/base64/testdata/test.star) |
 | [encoding/csv]     | load('encoding/csv.star', 'csv')       | [example](https://github.com/qri-io/starlib/blob/master/encoding/csv/testdata/test.star)    |
 | [encoding/json]    | load('encoding/json.star', 'json')     | [example](https://github.com/google/starlark-go/blob/master/starlark/testdata/json.star)    |

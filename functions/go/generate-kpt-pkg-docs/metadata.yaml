@@ -2,7 +2,6 @@ image: ghcr.io/kptdev/krm-functions-catalog/generate-kpt-pkg-docs
 description: Generate opinionated blueprint documentation.
 tags:
   - generator
-  - blueprints
 sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/generate-kpt-pkg-docs
 examplePackageURLs:
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/generate-kpt-pkg-docs-simple

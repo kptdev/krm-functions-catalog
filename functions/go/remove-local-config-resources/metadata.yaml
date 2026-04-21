@@ -2,8 +2,6 @@ image: ghcr.io/kptdev/krm-functions-catalog/remove-local-config-resources
 description: Removes locally annotated resources
 tags:
   - mutator
-  - GCP
-  - Config Sync
 sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/remove-local-config-resources
 examplePackageURLs:
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/remove-local-config-resources-imperative

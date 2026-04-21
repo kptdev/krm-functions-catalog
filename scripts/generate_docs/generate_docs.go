@@ -27,8 +27,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const indexTemplate = `{{"<!--"}} DO NOT EDIT: generated from functions/go/{{.Name}}/README.md and metadata.yaml {{"-->"}}
----
+const indexTemplate = `---
 title: "{{.Name}}"
 linkTitle: "{{.Name}}"
 tags: "{{.Tags}}"
@@ -39,6 +38,7 @@ menu:
   main:
     parent: "Function Catalog"
 ---
+{{"<!--"}} DO NOT EDIT: generated from functions/go/{{.Name}}/README.md and metadata.yaml {{"-->"}}
 {{"{{"}}< listversions >{{"}}"}}
 
 {{"{{"}}< listexamples >{{"}}"}}
@@ -145,6 +145,12 @@ func generateIndex(data docData) (string, error) {
 	return buf.String(), nil
 }
 
+// replaceVersionTags replaces :latest with the minor version in image references.
+// e.g. "apply-setters:latest" -> "apply-setters:v0.2"
+func replaceVersionTags(body, fnName, minorVersion string) string {
+	return strings.ReplaceAll(body, fnName+":latest", fnName+":"+minorVersion)
+}
+
 func processFunction(fnName, functionsDir, docsDir string, tags []string, dryRun bool) {
 	fnDir := filepath.Join(functionsDir, fnName)
 	metadataPath := filepath.Join(fnDir, "metadata.yaml")
@@ -190,6 +196,8 @@ func processFunction(fnName, functionsDir, docsDir string, tags []string, dryRun
 	if idx := strings.Index(string(readmeBytes), "\n"); idx >= 0 {
 		body = string(readmeBytes[idx+1:])
 	}
+
+	body = replaceVersionTags(body, fnName, latestMinor)
 
 	data := docData{
 		Name:        fnName,

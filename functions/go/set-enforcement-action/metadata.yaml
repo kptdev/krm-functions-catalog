@@ -2,7 +2,6 @@ image: ghcr.io/kptdev/krm-functions-catalog/set-enforcement-action
 description: Sets the enforcement action for policy constraints to deny or dryrun
 tags:
   - mutator
-  - Config Sync
 sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/set-enforcement-action
 examplePackageURLs:
   - https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-enforcement-action-simple

@@ -17,7 +17,7 @@ Refer to the [create-setters] function documentation for information about creat
 `list-setters` function is expected to be executed imperatively like
 
 ```shell
-$ kpt fn eval -i list-setters:latest
+$ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/list-setters:latest
 ```
 
 `list-setters` function performs the following steps:
@@ -75,6 +75,6 @@ Output looks like the following:
 
 <!--mdtogo-->
 
-[setter]: https://catalog.kpt.dev/apply-setters/v0.1/?id=definitions
-[create-setters]: https://catalog.kpt.dev/create-setters/v0.1/
-[apply-setters]: https://catalog.kpt.dev/apply-setters/v0.1/
+[setters]: {{< relref "apply-setters/v0.2/#definitions" >}}
+[create-setters]: {{< relref "create-setters/v0.1/" >}}
+[apply-setters]: {{< relref "apply-setters/v0.2/" >}}

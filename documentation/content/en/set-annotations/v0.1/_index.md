@@ -4,17 +4,17 @@ linkTitle: "set-annotations"
 tags: "mutator"
 weight: 4
 description: |
-   Add a list of annotations to all resources
+  Add a list of annotations to all resources.
 menu:
   main:
     parent: "Function Catalog"
 ---
-
+<!-- DO NOT EDIT: generated from functions/go/set-annotations/README.md and metadata.yaml -->
 {{< listversions >}}
 
 {{< listexamples >}}
 
-### Overview
+## Overview
 
 <!--mdtogo:Short-->
 
@@ -35,7 +35,7 @@ For example, annotations can be used in the following scenarios:
 
 You can learn more about annotations [here][annotations].
 
-### Usage
+## Usage
 
 This function can be used with any KRM function orchestrators (e.g. kpt).
 
@@ -49,7 +49,7 @@ in `Deployment` will be updated to include the desired annotations.
 
 This function can be used both declaratively and imperatively.
 
-#### FunctionConfig
+### FunctionConfig
 
 <!--mdtogo:Long-->
 
@@ -115,4 +115,4 @@ additionalAnnotationFields:
 
 [annotations]: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 
-[commonannotations]: https://github.com/kubernetes-sigs/kustomize/blob/master/api/konfig/builtinpluginconsts/commonannotations.go#L6
+[commonannotations]: https://github.com/kubernetes-sigs/kustomize/blob/kustomize/v4.5.7/api/konfig/builtinpluginconsts/commonannotations.go#L6

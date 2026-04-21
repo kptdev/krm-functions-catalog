@@ -32,4 +32,4 @@ $ kpt fn eval -i generate-kpt-pkg-docs:latest --include-meta-resources \
 
 1. File `GENERATED.md` will be updated with the generated readme.
 
-[generate-kpt-pkg-docs]: https://catalog.kpt.dev/generate-kpt-pkg-docs/v0.1
+[generate-kpt-pkg-docs]: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/generate-kpt-pkg-docs
