@@ -5,10 +5,10 @@ small guidelines you need to follow.
 
 ## Developer Certificate of Origin (DCO)
 
-Contributors of this project should state that they agree with the terms published at https://developercertificate.org/
+Contributors to this project should state that they agree with the terms published at https://developercertificate.org/
 for their contribution. To do this when creating a commit with the Git CLI, a sign-off can be added with
 [the -s option](https://git-scm.com/docs/git-commit#git-commit--s). The sign-off is stored as part of the commit message
-itself. 
+itself.
 
 ## Copyright notices
 
@@ -63,7 +63,7 @@ For example:
 I have used AI in the creation of this PR.
 
 I have used the following AI tools:
-- GitHub Copilot to analyse the code
+- GitHub Copilot to analyze the code
 - Claude Code to generate the function someNewFunctionIAdded()
 - Amazon Q to generate unit tests
 ```
