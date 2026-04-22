@@ -3,6 +3,40 @@
 We'd love to accept your contributions to this project. There are just a few
 small guidelines you need to follow.
 
+## Developer Certificate of Origin (DCO)
+
+Contributors to this project should state that they agree with the terms published at https://developercertificate.org/
+for their contribution. To do this when creating a commit with the Git CLI, a sign-off can be added with
+[the -s option](https://git-scm.com/docs/git-commit#git-commit--s). The sign-off is stored as part of the commit message
+itself.
+
+## Copyright notices
+
+All files should have the copyright notice.
+```
+// Copyright 2026 The kpt Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+```
+
+If the file has never been modified: use the creation year only
+
+* Example: `Copyright 2026 The kpt Authors`
+
+If the file has been modified: use a year range from creation to last modification
+
+* Example: `Copyright 2024-2026 The kpt Authors`
+
 ## Code reviews
 
 All submissions, including submissions by project members, require review. We
@@ -16,6 +50,47 @@ Process for code reviews. Before requesting human review, a PR must:
 * Meeting project code quality requirements, including passing all configured static analysis / SonarCloud quality gates and not reducing automated test coverage for the affected components
 * The comments from the first run of automatically generated comments (AI generated comments, SonarCloud comments, bot generated comments, etc.) of the PR are addressed (addressing further re-runs of AI are optional)
 * If it is not possible to resolve an automatic comment, please add a sub-comment indicating why the automated comment cannot be resolved or ask for help in resolving the comment
+* The PR description states whether AI was used to help create the PR; if so, it lists the AI tools used and the areas where they were used
+
+## Declare any use of AI
+
+> In addition to the above, the use of AI in the creation of PRs is allowed, but you must declare any use of AI and you must be able to explain the PR code independently of any AI tools.
+
+Update the PR description to state whether you used AI to help you create this PR; if so, list the AI tools you have used and in what areas.
+
+For example:
+```text
+I have used AI in the creation of this PR.
+
+I have used the following AI tools:
+- GitHub Copilot to analyze the code
+- Claude Code to generate the function someNewFunctionIAdded()
+- Amazon Q to generate unit tests
+```
+
+### Attribute AI in the Git commit messages
+
+Following the [guidance of the Linux kernel](https://docs.kernel.org/process/coding-assistants.html#attribution)
+we recommend the attribution of AI tools in the commit messages using the following format:
+
+```text
+Assisted-by: AGENT_NAME:MODEL_VERSION [TOOL1] [TOOL2]
+```
+
+Where:
+
+- `AGENT_NAME` is the name of the AI tool or framework
+- `MODEL_VERSION` is the specific model version used
+- `[TOOL1] [TOOL2]` are optional specialized analysis tools used (e.g., coccinelle, sparse, smatch, clang-tidy)
+
+Basic development tools (git, gcc, make, editors) should not be listed.
+
+Example:
+
+```text
+Assisted-by: Claude:claude-3-opus coccinelle sparse
+```
+
 
 ## Style Guides
 
