@@ -71,7 +71,7 @@ func cmdGenerate(args []string, scriptDir string) error {
 	}
 
 	fmt.Println("\nFetching tags...")
-	_ = exec.Command("git", "fetch", "--tags", "--quiet").Run()
+	_ = exec.Command("git", "fetch", "--tags", "--all", "--quiet").Run()
 
 	tags, err := getGitTags()
 	if err != nil {
