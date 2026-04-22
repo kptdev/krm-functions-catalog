@@ -20,8 +20,7 @@ GOBIN := $(shell go env GOPATH)/bin
 
 # Edit this list to contain all go functions
 FUNCTIONS := \
-	annotate-apply-time-mutations \
-	delete-annotations
+	annotate-apply-time-mutations
 
 # Targets for running all function tests
 FUNCTION_TESTS := $(patsubst %,%-TEST,$(FUNCTIONS))
@@ -117,3 +116,4 @@ func-push:
 
 docs-generate:
 	$(GOBIN)/mdtogo $(CURRENT_FUNCTION) $(CURRENT_FUNCTION)/generated --license=none --strategy=cmdDocs
+	find $(CURRENT_FUNCTION)/generated -name '*.go' -exec sed -i '/./,$$!d' {} +

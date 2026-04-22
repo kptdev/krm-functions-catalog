@@ -23,6 +23,7 @@ FUNCTIONS := \
 	apply-replacements \
 	apply-setters \
 	create-setters \
+	delete-annotations \
 	ensure-name-substring \
 	gatekeeper \
 	generate-kpt-pkg-docs \
@@ -135,4 +136,5 @@ func-push:
 
 docs-generate:
 	$(GOBIN)/mdtogo $(CURRENT_FUNCTION) $(CURRENT_FUNCTION)/generated --license=none --strategy=cmdDocs
+	find $(CURRENT_FUNCTION)/generated -name '*.go' -exec sed -i '/./,$$!d' {} +
 

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: the-map
+  annotations:
+    annotation-to-delete: "some_value"
+data:
+  some-key: some-value
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: the-namespace

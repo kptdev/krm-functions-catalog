@@ -1,0 +1,4 @@
+testType: eval
+image: ghcr.io/kptdev/krm-functions-catalog/delete-annotations:latest
+args:
+  annotationKeys: annotation-to-delete

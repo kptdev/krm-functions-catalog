@@ -1,9 +1,9 @@
 diff --git a/Kptfile b/Kptfile
-index fee8bad..1dcb34b 100644
+index 779ebf6..704a02a 100644
 --- a/Kptfile
 +++ b/Kptfile
 @@ -7,3 +7,19 @@ pipeline:
-     - image: ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/delete-annotations:latest
+     - image: ghcr.io/kptdev/krm-functions-catalog/delete-annotations:latest
        configMap:
          annotationKeys: annotation-to-delete
 +status:
@@ -13,7 +13,7 @@ index fee8bad..1dcb34b 100644
 +      reason: RenderSuccess
 +  renderStatus:
 +    mutationSteps:
-+      - image: ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib/delete-annotations:latest
++      - image: ghcr.io/kptdev/krm-functions-catalog/delete-annotations:latest
 +        exitCode: 0
 +        results:
 +          - message: The provided annotations were deleted from 1 resource(s)

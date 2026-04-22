@@ -1,4 +1,4 @@
-module github.com/kptdev/krm-functions-catalog/contrib/functions/go/delete-annotations
+module github.com/kptdev/krm-functions-catalog/functions/go/delete-annotations
 
 go 1.25.7
 

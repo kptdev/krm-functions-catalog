@@ -22,7 +22,7 @@ You can delete multiple annotations provided as a comma separated string as part
 
 To execute imperatively:
 ```shell
-$ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/contrib/delete-annotations:latest -- annotationKeys=annotation-to-delete,another-annotation-to-delete
+$ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/delete-annotations:latest -- annotationKeys=annotation-to-delete,another-annotation-to-delete
 ```
 
 To execute `delete-annotations` declaratively include the function in kpt package pipeline as follows:
@@ -30,7 +30,7 @@ To execute `delete-annotations` declaratively include the function in kpt packag
 ...
 pipeline:
   mutators:
-    - image: ghcr.io/kptdev/krm-functions-catalog/contrib/delete-annotations:latest
+    - image: ghcr.io/kptdev/krm-functions-catalog/delete-annotations:latest
       configMap:
         annotationKeys: annotation-to-delete,another-annotation-to-delete
 ...
