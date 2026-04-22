@@ -20,6 +20,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 func getGitTags() ([]string, error) {
@@ -71,7 +72,22 @@ func cmdGenerate(args []string, scriptDir string) error {
 	}
 
 	fmt.Println("\nFetching tags...")
-	_ = exec.Command("git", "fetch", "--tags", "--all", "--quiet").Run()
+	// Fetch tags from all configured remotes, ignoring failures
+	out, _ := exec.Command("git", "remote").Output()
+	for _, remote := range strings.Split(strings.TrimSpace(string(out)), "\n") {
+		if remote != "" {
+			cmd := exec.Command("git", "fetch", "--tags", "--quiet", remote)
+			_ = cmd.Start()
+			done := make(chan error, 1)
+			go func() { done <- cmd.Wait() }()
+			select {
+			case <-done:
+			case <-time.After(10 * time.Second):
+				_ = cmd.Process.Kill()
+				fmt.Printf("  timeout fetching from %s, skipping\n", remote)
+			}
+		}
+	}
 
 	tags, err := getGitTags()
 	if err != nil {
