@@ -15,7 +15,7 @@ This example exercises several inline comment patterns:
 - Full field replacement with no token (replicas, DB_PORT)
 - Token substitution with prefix/suffix (DB_URL)
 - An existing annotation that is not modified (unmodified-key)
-- A field without a comment that is not modified (unmodifiedField)
+- A label that is not modified (unmodified-label)
 
 Running `annotate-apply-time-mutations` function on the example package will:
 
@@ -45,7 +45,7 @@ kpt fn eval annotate-apply-time-mutations-inline-comment --image ghcr.io/kptdev/
    annotations generated from the inline comments.
 2. The DB_URL field with prefix/suffix will be updated with a generated
    replacement token.
-3. Fields without comments and existing annotations are unchanged.
+3. Fields without comments, existing annotations, and labels are unchanged.
 
 When `kpt live apply` is subsequently run, it will use these annotations to
 wait for source resources to be reconciled and then substitute the referenced

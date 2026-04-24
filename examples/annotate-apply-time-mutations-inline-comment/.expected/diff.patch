@@ -1,9 +1,9 @@
 diff --git a/resources.yaml b/resources.yaml
-index 286b720..0e14007 100644
+index 850d1f2..4eff326 100644
 --- a/resources.yaml
 +++ b/resources.yaml
-@@ -5,6 +5,29 @@ metadata:
-   namespace: example
+@@ -7,6 +7,29 @@ metadata:
+     unmodified-label: no-diff
    annotations:
      unmodified-key: foobarbaz
 +    config.kubernetes.io/apply-time-mutation: |
@@ -32,10 +32,9 @@ index 286b720..0e14007 100644
  spec:
    replicas: 1 # apply-time-mutation: ${example.com/namespaces/example/Config/cluster-config:$.status.replicas}
    selector:
-@@ -22,5 +45,5 @@ spec:
+@@ -24,4 +47,4 @@ spec:
          - name: DB_PORT
            value: "0" # apply-time-mutation: ${example.com/v1beta1/namespaces/example/Database/my-db:$.status.port}
          - name: DB_URL
 -          value: placeholder # apply-time-mutation: jdbc:postgresql://${example.com/namespaces/example/Database/my-db:$.status.host}:5432/mydb
 +          value: jdbc:postgresql://${ref2}:5432/mydb # apply-time-mutation: jdbc:postgresql://${example.com/namespaces/example/Database/my-db:$.status.host}:5432/mydb
-   unmodifiedField: "no-diff"
