@@ -35,7 +35,7 @@ type CommentScanner struct {
 
 type ScanResult struct {
 	Path         string
-	Value        interface{}
+	Value        any
 	Comment      string
 	Substitution mutation.FieldSubstitution
 }
@@ -185,8 +185,8 @@ func extractMutationPattern(lineComment string) string {
 
 // nodeValue decodes a YAML node value of any type.
 // Returns an error if the value is unparsable/invalid.
-func nodeValue(node *yaml.RNode) (interface{}, error) {
-	var value interface{}
+func nodeValue(node *yaml.RNode) (any, error) {
+	var value any
 	err := node.YNode().Decode(&value)
 	if err != nil {
 		return value, fmt.Errorf("failed to decode field value: %w", err)
@@ -195,7 +195,7 @@ func nodeValue(node *yaml.RNode) (interface{}, error) {
 }
 
 type PathBuilder struct {
-	Fields []interface{}
+	Fields []any
 }
 
 // String returns a JSONPath expression to the specified field. This conforms
@@ -205,12 +205,12 @@ func (pb *PathBuilder) String() string {
 }
 
 // Push appends a field to the path.
-func (pb *PathBuilder) Push(field interface{}) {
+func (pb *PathBuilder) Push(field any) {
 	pb.Fields = append(pb.Fields, field)
 }
 
 // Pop removes and returns the last field in the path. Returns nil if empty.
-func (pb *PathBuilder) Pop() interface{} {
+func (pb *PathBuilder) Pop() any {
 	if len(pb.Fields) == 0 {
 		return nil
 	}

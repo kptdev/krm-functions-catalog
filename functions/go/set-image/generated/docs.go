@@ -69,8 +69,8 @@ for all resources, we use the following ` + "`" + `functionConfig` + "`" + `:
 
 To use a ` + "`" + `SetImage` + "`" + ` custom resource as the ` + "`" + `functionConfig` + "`" + `, the desired
 image specification must be specified in the ` + "`" + `image` + "`" + ` field. Sometimes you have
-resources (especially custom resources) that have image fields in fields
-other than the [defaults][commonimage], you can specify such label fields
+resources (especially custom resources) that have image fields at paths
+other than the [defaults][commonimage], you can specify such image fields
 using ` + "`" + `additionalImageFields` + "`" + `. It will be used jointly with the
 [defaults][commonimage].
 

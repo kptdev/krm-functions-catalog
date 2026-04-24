@@ -62,7 +62,7 @@ type ObjectMeta struct {
 // it provides the method "Transform" to change the "namespace" and update the "config.kubernetes.io/depends-on" annotation.
 type SetNamespace struct {
 	TypeMeta         `json:",inline" yaml:",inline"`
-	ObjectMeta       `json:"metadata,omitempty" yaml:"metadata,omitempty"`
+	ObjectMeta       `json:"metadata" yaml:"metadata,omitempty"`
 	NewNamespace     string `json:"namespace,omitempty" yaml:"namespace,omitempty"`
 	NamespaceMatcher string `json:"namespaceMatcher,omitempty" yaml:"namespaceMatcher,omitempty"`
 }

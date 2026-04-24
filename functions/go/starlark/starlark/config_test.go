@@ -86,7 +86,6 @@ data:
 		},
 	}
 	for _, tc := range testcases {
-		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			sr := &StarlarkRun{}
 			ko, err := fn.ParseKubeObject([]byte(tc.config))

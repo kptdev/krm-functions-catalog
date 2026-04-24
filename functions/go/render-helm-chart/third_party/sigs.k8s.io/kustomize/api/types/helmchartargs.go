@@ -43,11 +43,11 @@ type HelmGlobals struct {
 type HelmChart struct {
 	// ChartArgs encapsulates information about the chart being inflated, including
 	// the chart's name, version, and repo.
-	ChartArgs `json:"chartArgs,omitempty" yaml:"chartArgs,omitempty"`
+	ChartArgs `json:"chartArgs" yaml:"chartArgs,omitempty"`
 
 	// TemplateOptions are fields that become flags to `helm template` when
 	// the helm chart is being rendered.
-	TemplateOptions `json:"templateOptions,omitempty" yaml:"templateOptions,omitempty"`
+	TemplateOptions `json:"templateOptions" yaml:"templateOptions,omitempty"`
 }
 
 type ChartArgs struct {
@@ -103,7 +103,7 @@ type TemplateOptions struct {
 	SkipTests bool `json:"skipTests,omitempty" yaml:"skipTests,omitempty"`
 
 	// Values are values that are specified inline or in a yaml file to use.
-	Values `json:"values,omitempty" yaml:"values,omitempty"`
+	Values `json:"values" yaml:"values,omitempty"`
 }
 
 type Values struct {
@@ -114,7 +114,7 @@ type Values struct {
 
 	// ValuesInline holds value mappings specified directly,
 	// rather than in a separate file.
-	ValuesInline map[string]interface{} `json:"valuesInline,omitempty" yaml:"valuesInline,omitempty"`
+	ValuesInline map[string]any `json:"valuesInline,omitempty" yaml:"valuesInline,omitempty"`
 
 	// ValuesMerge specifies how to treat ValuesInline with respect to Values.
 	// Legal values: 'merge', 'override', 'replace'.

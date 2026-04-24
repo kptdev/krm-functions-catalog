@@ -55,7 +55,7 @@ func oa() (starlark.Value, error) {
 }
 
 func env() (starlark.Value, error) {
-	env := map[string]interface{}{}
+	env := map[string]any{}
 	for _, e := range os.Environ() {
 		pair := strings.SplitN(e, "=", 2)
 		if len(pair) < 2 {
@@ -119,13 +119,13 @@ func (v *LazyInitializationOpenapi) Get(val starlark.Value) (starlark.Value, boo
 	return nil, false, nil
 }
 
-func interfaceToValue(i interface{}) (starlark.Value, error) {
+func interfaceToValue(i any) (starlark.Value, error) {
 	b, err := json.Marshal(i)
 	if err != nil {
 		return nil, err
 	}
 
-	var in map[string]interface{}
+	var in map[string]any
 	if err := yaml.Unmarshal(b, &in); err != nil {
 		return nil, errors.Wrap(err)
 	}

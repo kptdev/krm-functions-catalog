@@ -385,12 +385,12 @@ func (sr *SearchReplace) resultsString() string {
 	} else {
 		action = "Matched"
 	}
-	var out string
+	var out strings.Builder
 	for _, res := range sr.Results {
-		out += fmt.Sprintf("%s\nfieldPath: %s\nvalue: %s\n\n", res.FilePath, res.FieldPath, res.Value)
+		fmt.Fprintf(&out, "%s\nfieldPath: %s\nvalue: %s\n\n", res.FilePath, res.FieldPath, res.Value)
 	}
-	out += fmt.Sprintf("%s %d field(s)\n", action, sr.Count)
-	return out
+	fmt.Fprintf(&out, "%s %d field(s)\n", action, sr.Count)
+	return out.String()
 }
 
 // Decode decodes the input yaml RNode into SearchReplace struct

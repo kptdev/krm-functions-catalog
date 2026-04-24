@@ -236,7 +236,7 @@ func buildKubeconformArgs(schemaLocation string, additional []string, ignoreMiss
 
 func marshalKubeObject(obj *fn.KubeObject) ([]byte, error) {
 	// Convert KubeObject to a typed object (e.g., map[string]interface{})
-	var typed map[string]interface{}
+	var typed map[string]any
 	if err := obj.As(&typed); err != nil {
 		return nil, fmt.Errorf("failed to convert KubeObject to typed map: %w", err)
 	}

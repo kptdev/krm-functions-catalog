@@ -95,7 +95,7 @@ var containersFsSlice = func() types.FsSlice {
 // SetImage supports the set-image workflow, it uses Config to parse functionConfig, Transform to change the image
 type SetImage struct {
 	// Image is the desired image
-	Image types.Image `json:"image,omitempty" yaml:"image,omitempty"`
+	Image types.Image `json:"image" yaml:"image,omitempty"`
 	// ConfigMap keeps the data field that holds image information
 	DataFromDefaultConfig map[string]string `json:"data,omitempty" yaml:"data,omitempty"`
 	// ONLY for kustomize, AdditionalImageFields is the user supplied fieldspec

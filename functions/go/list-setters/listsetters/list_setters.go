@@ -17,6 +17,7 @@ package listsetters
 import (
 	goerrors "errors"
 	"fmt"
+	"maps"
 	"regexp"
 	"sort"
 	"strings"
@@ -153,12 +154,8 @@ func FindSettersFromKptfile(nodes []*yaml.RNode) (map[string]string, error) {
 // if duplicate key map b takes precedence
 func mergeSetters(a, b map[string]string) map[string]string {
 	merged := make(map[string]string, len(a)+len(b))
-	for k, v := range a {
-		merged[k] = v
-	}
-	for k, v := range b {
-		merged[k] = v
-	}
+	maps.Copy(merged, a)
+	maps.Copy(merged, b)
 	return merged
 }
 

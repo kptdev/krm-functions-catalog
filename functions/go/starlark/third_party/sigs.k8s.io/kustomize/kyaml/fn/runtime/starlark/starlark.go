@@ -267,10 +267,10 @@ func WrapResources(nodes []*yaml.RNode, fc *yaml.RNode) (*yaml.RNode, error) {
 	for _, rnode := range nodes {
 		ynodes = append(ynodes, rnode.YNode())
 	}
-	m := map[string]interface{}{
+	m := map[string]any{
 		"apiVersion": kio.ResourceListAPIVersion,
 		"kind":       kio.ResourceListKind,
-		"items":      []interface{}{},
+		"items":      []any{},
 	}
 	out, err := yaml.FromMap(m)
 	if err != nil {
