@@ -20,6 +20,7 @@ GOBIN := $(shell go env GOPATH)/bin
 
 # Edit this list to contain all go functions
 FUNCTIONS := \
+	annotate-apply-time-mutations \
 	apply-replacements \
 	apply-setters \
 	create-setters \
