@@ -7,6 +7,7 @@
 {{ $latestVersions := dict }}
 {{ $releaseTags := dict }}
 {{ $token := getenv "KRM_CATALOG_API_TOKEN" }}
+{{ warnf "DEBUG KRM_CATALOG_API_TOKEN length=%d" (len $token) }}
 {{ $apiURL := "https://api.github.com/repos/kptdev/krm-functions-catalog/git/matching-refs/tags/functions/go/" }}
 {{ $apiHeaders := dict "Accept" "application/vnd.github+json" "X-GitHub-Api-Version" "2026-03-10" }}
 {{ if $token }}
@@ -14,7 +15,9 @@
 {{ end }}
 {{ $opts := dict "headers" $apiHeaders }}
 {{ with resources.GetRemote $apiURL $opts }}
+  {{ warnf "DEBUG GetRemote contentLen=%d mediaType=%s" (len .Content) .MediaType }}
   {{ $refs := . | transform.Unmarshal }}
+  {{ warnf "DEBUG Unmarshal isSlice=%v len=%d" (reflect.IsSlice $refs) (cond (reflect.IsSlice $refs) (len $refs) -1) }}
   {{ if and (reflect.IsSlice $refs) (gt (len $refs) 0) }}
     {{ range $refs }}
       {{ $tag := .ref | replaceRE "^refs/tags/functions/go/" "" }}
