@@ -22,7 +22,7 @@ export DEFAULT_CONTRIB_CR ?= ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib
 help: ## Print this help
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: test unit-test e2e-test build push
+.PHONY: test unit-test e2e-test push
 
 unit-test: ## Run unit tests for Go functions
 	cd functions/go && $(MAKE) test
@@ -42,9 +42,15 @@ GO_MOD_DIRS = $(shell find . -name 'go.mod' -not -path './documentation/*' -exec
 tidy:
 	@for f in $(GO_MOD_DIRS); do (cd $$f; echo "Tidying $$f"; go mod tidy) || exit 1; done
 
+.PHONY: build
 build: ## Build all function images.
 	cd functions/go && $(MAKE) build
 	cd contrib/functions/go && $(MAKE) build
+
+.PHONY:
+format: ## Run go fix, vet, fmt, lint and generate docs for all functions
+	cd functions/go && $(MAKE) format
+	cd contrib/functions/go && $(MAKE) format
 
 push-curated: ## Push images to registry. WARN: This operation should only be done in CI environment.
 	cd functions/go && $(MAKE) push
