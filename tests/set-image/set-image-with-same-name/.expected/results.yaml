@@ -7,5 +7,5 @@ items:
   - image: ghcr.io/kptdev/krm-functions-catalog/set-image:latest
     exitCode: 0
     results:
-      - message: 'summary: updated a total of 1 image(s)'
+      - message: 'summary: updated a total of 2 image(s)'
         severity: info
