@@ -14,7 +14,6 @@
 SHELL=/bin/bash
 export TAG ?= latest
 export DEFAULT_CR ?= ghcr.io/kptdev/krm-functions-catalog
-export DEFAULT_CONTRIB_CR ?= ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib
 
 
 .DEFAULT_GOAL := help
@@ -26,7 +25,6 @@ help: ## Print this help
 
 unit-test: ## Run unit tests for Go functions
 	cd functions/go && $(MAKE) test
-	cd contrib/functions/go && $(MAKE) test
 
 e2e-test: ## Run all e2e tests
 	cd tests/e2etest && go test -v -run TestE2E ./...
@@ -45,18 +43,13 @@ tidy:
 .PHONY: build
 build: ## Build all function images.
 	cd functions/go && $(MAKE) build
-	cd contrib/functions/go && $(MAKE) build
 
 .PHONY: format
 format: ## Run go fix, vet, fmt, lint and generate docs for all functions
 	cd functions/go && $(MAKE) format
-	cd contrib/functions/go && $(MAKE) format
 
-push-curated: ## Push images to registry. WARN: This operation should only be done in CI environment.
+push: ## Push images to registry. WARN: This operation should only be done in CI environment.
 	cd functions/go && $(MAKE) push
-
-push-contrib: ## Push images to registry. WARN: This operation should only be done in CI environment.
-	cd contrib/functions/go && $(MAKE) push
 
 validate-metadata: ## Validate all metadata.yaml files against the schema
 	cd scripts/generate_docs && go run . validate

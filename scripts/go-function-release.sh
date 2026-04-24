@@ -19,7 +19,7 @@
 # TAG can be any valid docker tags. If the TAG is semver e.g. v1.2.3, shorter
 # version of this semver will be tagged too. e.g. v1.2 and v1.
 # DEFAULT_CR is the desired container registry e.g. ghcr.io/kptdev/krm-functions-catalog. This is
-# optional. If not set, the default value ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib will be used.
+# optional. If not set, the default value ghcr.io/kptdev/krm-functions-catalog will be used.
 # If CR_REGISTRY is set, it will override DEFAULT_CR.
 # example 1:
 # Invocation: DEFAULT_CR=ghcr.io/kptdev/krm-functions-catalog CURRENT_FUNCTION=set-namespace TAG=v1.2.3 go-function-release.sh build
@@ -61,18 +61,17 @@ for tag in "${tags[@]}"; do
     done <<< "$versions"
 done
 
-FUNCTION_TYPE="${2:-curated}"
 EXTRA_BUILD_ARGS="${EXTRA_BUILD_ARGS:-}"
 
 case "$1" in
   build)
     for version in "${version_array[@]}"; do
-      docker_build "load" "${FUNCTION_TYPE}" "${CURRENT_FUNCTION}" "${version}" "${EXTRA_BUILD_ARGS}"
+      docker_build "load" "${CURRENT_FUNCTION}" "${version}"
     done
     ;;
   push)
     for version in "${version_array[@]}"; do
-      docker_build "push" "${FUNCTION_TYPE}" "${CURRENT_FUNCTION}" "${version}" "${EXTRA_BUILD_ARGS}"
+      docker_build "push" "${CURRENT_FUNCTION}" "${version}"
     done
     ;;
   *)

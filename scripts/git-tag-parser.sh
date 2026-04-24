@@ -69,10 +69,6 @@ function parse_git_tag {
     fn_lang=${GIT_TAG_ARRAY[1]}
     fn_name=${GIT_TAG_ARRAY[2]}
     fn_ver=${GIT_TAG_ARRAY[3]}
-  elif [ "${GIT_TAG_ARRAY[0]}" == "contrib" ]; then
-    fn_lang=${GIT_TAG_ARRAY[2]}
-    fn_name=${GIT_TAG_ARRAY[3]}
-    fn_ver=${GIT_TAG_ARRAY[4]}
   else
     fn_lang=${GIT_TAG_ARRAY[0]}
     fn_name=${GIT_TAG_ARRAY[1]}

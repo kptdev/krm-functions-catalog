@@ -21,8 +21,8 @@ on:
     - "main"
 
 jobs:
-  build-push-curated:
-    name: Build and push latest curated images
+  build-push:
+    name: Build and push latest images
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -40,24 +40,4 @@ jobs:
     - name: Push latest and github-ref images
       run: |
         SHORT_SHA=$(git rev-parse --short HEAD)
-        make push-curated TAG=latest,$SHORT_SHA DEFAULT_CR=ghcr.io/${{ github.repository }}
-  build-push-contrib:
-    name: Build and push latest contrib images
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
-    steps:
-    - uses: actions/checkout@v5
-    - uses: actions/setup-go@v6
-      with:
-        go-version-file: documentation/go.mod
-        cache: true
-    - uses: docker/setup-qemu-action@v4
-    - uses: docker/setup-buildx-action@v4
-    - name: Log in to GHCR
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-    - name: Push latest and github-ref images
-      run: |
-        SHORT_SHA=$(git rev-parse --short HEAD)
-        make push-contrib TAG=latest,$SHORT_SHA DEFAULT_CONTRIB_CR=ghcr.io/${{ github.repository }}/krm-fn-contrib
+        make push TAG=latest,$SHORT_SHA DEFAULT_CR=ghcr.io/${{ github.repository }}
