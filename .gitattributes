@@ -5,7 +5,7 @@ archived/functions/ts/*/src/gen/** linguist-generated
 functions/go/*/generated/** linguist-generated
 
 # JSON schemas (vendored)
-examples/kubeconform-mount-schema/jsonschema/** linguist-generated
+examples/kubeconform-mount-schema/jsonschema/** linguist-vendored
 
 # Documentation site build output
 documentation/public/** linguist-generated
