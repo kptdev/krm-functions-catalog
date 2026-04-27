@@ -41,13 +41,13 @@ import (
 )
 
 type HelmArgs struct {
-	types.HelmGlobals `json:"helmGlobals" yaml:"helmGlobals,omitempty"`
+	types.HelmGlobals `json:"helmGlobals,omitempty" yaml:"helmGlobals,omitempty"`
 	HelmCharts        []types.HelmChart `json:"helmCharts,omitempty" yaml:"helmCharts,omitempty"`
 }
 
 type HelmChartInflationGeneratorPlugin struct {
-	types.HelmGlobals `json:",inline" yaml:",inline,omitempty"`
-	types.HelmChart   `json:",inline" yaml:",inline,omitempty"`
+	types.HelmGlobals `json:",inline,omitempty" yaml:",inline,omitempty"`
+	types.HelmChart   `json:",inline,omitempty" yaml:",inline,omitempty"`
 	username          string
 	password          string
 	tmpDir            string

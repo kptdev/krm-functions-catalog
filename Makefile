@@ -47,7 +47,7 @@ build: ## Build all function images.
 	cd functions/go && $(MAKE) build
 	cd contrib/functions/go && $(MAKE) build
 
-.PHONY:
+.PHONY: format
 format: ## Run go fix, vet, fmt, lint and generate docs for all functions
 	cd functions/go && $(MAKE) format
 	cd contrib/functions/go && $(MAKE) format

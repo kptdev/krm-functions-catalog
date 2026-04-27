@@ -10,13 +10,13 @@ import (
 // object.
 type ApplyTimeMutation struct {
 	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata"`
-	Spec              ApplyTimeMutationSpec `json:"spec"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	Spec              ApplyTimeMutationSpec `json:"spec,omitempty"`
 }
 
 // ApplyTimeMutationSpec specifies a one or more substitutions to perform on a
 // target object at apply-time.
 type ApplyTimeMutationSpec struct {
-	TargetRef     mutation.ResourceReference `json:"targetRef"`
+	TargetRef     mutation.ResourceReference `json:"targetRef,omitempty"`
 	Substitutions mutation.ApplyTimeMutation `json:"substitutions,omitempty"`
 }

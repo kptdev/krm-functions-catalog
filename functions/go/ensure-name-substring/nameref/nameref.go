@@ -32,7 +32,7 @@ import (
 type filterMap map[*resource.Resource][]nameref.Filter
 
 type nameBackReferences struct {
-	resid.Gvk `json:",inline" yaml:",inline,omitempty"`
+	resid.Gvk `json:",inline,omitempty" yaml:",inline,omitempty"`
 	Referrers types.FsSlice `json:"fieldSpecs,omitempty" yaml:"fieldSpecs,omitempty"`
 }
 
