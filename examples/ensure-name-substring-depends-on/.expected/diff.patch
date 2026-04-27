@@ -10,16 +10,16 @@ index 0000000..17dfdd4
 +  name: prod-secret-reader
 diff --git a/clusterrolebinding_prod-read-secrets-global.yaml b/clusterrolebinding_prod-read-secrets-global.yaml
 new file mode 100644
-index 0000000..20ac075
+index 0000000..132852a
 --- /dev/null
 +++ b/clusterrolebinding_prod-read-secrets-global.yaml
 @@ -0,0 +1,14 @@
 +apiVersion: rbac.authorization.k8s.io/v1
 +kind: ClusterRoleBinding
 +metadata:
++  name: prod-read-secrets-global
 +  annotations:
 +    config.kubernetes.io/depends-on: rbac.authorization.k8s.io/ClusterRole/prod-secret-reader
-+  name: prod-read-secrets-global
 +roleRef:
 +  apiGroup: rbac.authorization.k8s.io
 +  kind: ClusterRole
@@ -30,34 +30,34 @@ index 0000000..20ac075
 +  name: admin
 diff --git a/default/deployment_prod-bar.yaml b/default/deployment_prod-bar.yaml
 new file mode 100644
-index 0000000..238ca01
+index 0000000..f8e9243
 --- /dev/null
 +++ b/default/deployment_prod-bar.yaml
 @@ -0,0 +1,9 @@
 +apiVersion: v1
 +kind: Deployment
 +metadata:
-+  annotations:
-+    config.kubernetes.io/depends-on: /namespaces/default/StatefulSet/outside-resource
 +  labels:
 +    app: bar
 +  name: prod-bar
 +  namespace: default
++  annotations:
++    config.kubernetes.io/depends-on: /namespaces/default/StatefulSet/outside-resource
 diff --git a/default/deployment_prod-wordpress.yaml b/default/deployment_prod-wordpress.yaml
 new file mode 100644
-index 0000000..3615061
+index 0000000..cb2fd0b
 --- /dev/null
 +++ b/default/deployment_prod-wordpress.yaml
 @@ -0,0 +1,9 @@
 +apiVersion: v1
 +kind: Deployment
 +metadata:
-+  annotations:
-+    config.kubernetes.io/depends-on: /namespaces/default/StatefulSet/prod-wordpress-mysql
 +  labels:
 +    app: wordpress
 +  name: prod-wordpress
 +  namespace: default
++  annotations:
++    config.kubernetes.io/depends-on: /namespaces/default/StatefulSet/prod-wordpress-mysql
 diff --git a/default/statefulset_prod-wordpress-mysql.yaml b/default/statefulset_prod-wordpress-mysql.yaml
 new file mode 100644
 index 0000000..184db64
