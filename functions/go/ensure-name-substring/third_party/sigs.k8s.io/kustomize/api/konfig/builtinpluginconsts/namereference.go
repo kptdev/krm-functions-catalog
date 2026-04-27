@@ -1,14 +1,13 @@
-package consts
+// Copyright 2019 The Kubernetes Authors.
+// SPDX-License-Identifier: Apache-2.0
+//
+// Copied from
+// https://github.com/kubernetes-sigs/kustomize/blob/72b0fd14d1d1d975a1b43204e6e68601126403f7/api/internal/konfig/builtinpluginconsts/namereference.go
 
-// These constants were moved to the api/internal package of kustomize, so they must be copied.
-// v0.21.1
+package builtinpluginconsts
 
-const NamePrefix = `
-namePrefix:
-- path: metadata/name
-`
-
-const NameReference = `
+const (
+	NameReferenceFieldSpecs = `
 nameReference:
 - kind: Deployment
   fieldSpecs:
@@ -432,3 +431,4 @@ nameReference:
     kind: ValidatingAdmissionPolicyBinding
     group: admissionregistration.k8s.io
 `
+)
