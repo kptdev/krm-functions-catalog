@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ResourceList
+items:
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: nginx-deploy
+    spec:
+      selector:
+        matchLabels:
+          app: nginx
+      template:
+        metadata:
+          labels:
+            app: nginx
+        spec:
+          containers:
+            - name: backend
+              image: nginx
+          securityContext:
+            runAsNonRoot: false
+  - apiVersion: templates.gatekeeper.sh/v1beta1
+    kind: ConstraintTemplate
+    metadata:
+      name: disallowroot
+    spec:
+      crd:
+        spec:
+          names:
+            kind: DisallowRoot
+      targets:
+        - target: admission.k8s.gatekeeper.sh
+          rego: |-
+            package disallowroot
+            violation[{"msg": msg}] {
+              not input.review.object.spec.template.spec.securityContext.runAsNonRoot
+              msg := "Containers must not run as root"
+            }
+  - apiVersion: constraints.gatekeeper.sh/v1beta1
+    kind: DisallowRoot
+    metadata:
+      name: disallowroot
+    spec:
+      match:
+        kinds:
+          - apiGroups:
+              - 'apps'
+            kinds:
+              - Deployment

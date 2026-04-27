@@ -1,0 +1,5 @@
+apiVersion: example.co/v1alpha1
+kind: FooFnConfig
+metadata:
+  name: my-fn-config
+desiredReplicas: 5
