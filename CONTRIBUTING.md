@@ -140,7 +140,11 @@ For each function, its files spread in the follow places:
   are also being tested as e2e tests. Each function should have at least one
   example here. There must be a README.md file in each example directory, and it
   should follow the [template][example-template].
-- The `tests/` directory contains additional e2e tests.
+- The `tests/` directory contains the e2e test harness (`tests/e2etest/`) which
+  scans both `examples/` and `functions/go/*/tests/` for test cases.
+- Each function may also have a `tests/` subdirectory inside its source
+  directory (`functions/go/<fn>/tests/`) for edge case and error handling tests
+  that are not suitable as user-facing examples.
 - `master` branch should should contain examples with the `latest` tag for
   your function images.  When you release the function version that tag should 
   have the samples and tests that match the function version.
@@ -185,8 +189,9 @@ very easy to write and set up with our e2e test harness. You can find all the
 supported options and expected test directory
 structure [here][e2e test harness doc].
 
-You can choose to put the e2e test in either the `examples/` directory or in the
-`tests/` directory depending on if it is worthwhile to be shown as an example.
+You can choose to put the e2e test in either the `examples/` directory or in
+the function's `tests/` subdirectory (`functions/go/<fn>/tests/`) depending on
+whether it is worthwhile to be shown as a user-facing example.
 
 **Note**: The e2e tests don't build the images. So you need to ensure you have built
 the latest image(s) before running any e2e tests.
@@ -196,8 +201,13 @@ To test a specific example or the e2e test, run
 ```shell
 $ cd tests/e2etest
 $ go test -v ./... -run TestE2E/../../examples/$EXAMPLE_NAME
-# To test the example in contrib
-$ go test -v ./... -run TestE2E/../../contrib/examples/$EXAMPLE_NAME
+
+# To test edge case tests for a specific function
+$ go test -v ./... -run TestE2E/../../functions/go/$FUNCTION_NAME/tests/$TEST_NAME
+
+# To run all tests for a specific function (examples + edge cases)
+$ go test -v ./... -run "TestE2E/../../examples/$FUNCTION_NAME"
+$ go test -v ./... -run "TestE2E/../../functions/go/$FUNCTION_NAME/tests"
 ```
 
 If you encounter some test failure saying something like "actual diff doesn't
@@ -207,8 +217,9 @@ expected `diff.patch` or `results.yaml` by running the following commands:
 ```shell
 # Update one example
 $ KPT_E2E_UPDATE_EXPECTED=true go test -v ./... -run TestE2E/../../examples/$EXAMPLE_NAME
-# Update one example in contrib 
-$ KPT_E2E_UPDATE_EXPECTED=true go test -v ./... -run TestE2E/../../contrib/examples/$EXAMPLE_NAME
+
+# Update one edge case test
+$ KPT_E2E_UPDATE_EXPECTED=true go test -v ./... -run TestE2E/../../functions/go/$FUNCTION_NAME/tests/$TEST_NAME
 
 # Update all examples
 $ KPT_E2E_UPDATE_EXPECTED=true go test -v ./...
