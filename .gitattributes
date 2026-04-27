@@ -1,0 +1,11 @@
+# Generated Kubernetes API type definitions (archived TypeScript functions)
+archived/functions/ts/*/src/gen/** linguist-generated
+
+# Generated Go docs from mdtogo
+functions/go/*/generated/** linguist-generated
+
+# JSON schemas (vendored)
+examples/kubeconform-mount-schema/jsonschema/** linguist-generated
+
+# Documentation site build output
+documentation/public/** linguist-generated
