@@ -11,9 +11,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 package upsertresource
 
 import (
+	"maps"
 	"strings"
 
 	"sigs.k8s.io/kustomize/kyaml/fn/runtime/runtimeutil"
@@ -165,8 +167,8 @@ func upsertPathMatch(inputResourceMeta, targetResourceMeta yaml.ResourceMeta) bo
 
 // ParseGroupVersion parses a KRM metadata apiVersion field.
 func ParseGroupVersion(apiVersion string) (group, version string) {
-	if i := strings.Index(apiVersion, "/"); i > -1 {
-		return apiVersion[:i], apiVersion[i+1:]
+	if before, after, ok := strings.Cut(apiVersion, "/"); ok {
+		return before, after
 	}
 	return "", apiVersion
 }
@@ -183,9 +185,7 @@ func combineInputAndMatchedAnnotations(inputResourceAnno, matchedResourceAnno ma
 	res := make(map[string]string)
 	// retain the annotations from the input resource in fn-config,
 	// these should be written to matched resource
-	for k, v := range inputResourceAnno {
-		res[k] = v
-	}
+	maps.Copy(res, inputResourceAnno)
 	// retain the path and index annotation from matched resource to result
 	res[kioutil.PathAnnotation] = matchedResourceAnno[kioutil.PathAnnotation]
 	res[kioutil.IndexAnnotation] = matchedResourceAnno[kioutil.IndexAnnotation]

@@ -114,7 +114,7 @@ type Values struct {
 
 	// ValuesInline holds value mappings specified directly,
 	// rather than in a separate file.
-	ValuesInline map[string]interface{} `json:"valuesInline,omitempty" yaml:"valuesInline,omitempty"`
+	ValuesInline map[string]any `json:"valuesInline,omitempty" yaml:"valuesInline,omitempty"`
 
 	// ValuesMerge specifies how to treat ValuesInline with respect to Values.
 	// Legal values: 'merge', 'override', 'replace'.

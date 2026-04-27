@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 package starlark
 
 import (
@@ -42,7 +43,7 @@ type StarlarkRun struct {
 	// Source is a required field for providing a starlark script inline.
 	Source string `json:"source" yaml:"source"`
 	// Params are the parameters in key-value pairs format.
-	Params map[string]interface{} `json:"params,omitempty" yaml:"params,omitempty"`
+	Params map[string]any `json:"params,omitempty" yaml:"params,omitempty"`
 }
 
 func (sr *StarlarkRun) Config(fnCfg *fn.KubeObject) error {
@@ -57,7 +58,7 @@ func (sr *StarlarkRun) Config(fnCfg *fn.KubeObject) error {
 		// Convert ConfigMap to StarlarkRun
 		sr.Name = cm.Name
 		sr.Namespace = cm.Namespace
-		sr.Params = map[string]interface{}{}
+		sr.Params = map[string]any{}
 		for k, v := range cm.Data {
 			if k == sourceKey {
 				sr.Source = v

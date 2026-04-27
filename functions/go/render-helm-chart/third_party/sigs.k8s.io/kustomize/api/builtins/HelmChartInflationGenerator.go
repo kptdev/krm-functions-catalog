@@ -29,6 +29,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"strings"
 
 	"github.com/imdario/mergo"
@@ -146,10 +147,8 @@ func (p *HelmChartInflationGeneratorPlugin) errIfIllegalValuesMerge() error {
 		p.ValuesMerge = valuesMergeOptionOverride
 		return nil
 	}
-	for _, opt := range legalMergeOptions {
-		if p.ValuesMerge == opt {
-			return nil
-		}
+	if slices.Contains(legalMergeOptions, p.ValuesMerge) {
+		return nil
 	}
 	return fmt.Errorf("valuesMerge must be one of %v", legalMergeOptions)
 }
@@ -233,7 +232,7 @@ func (p *HelmChartInflationGeneratorPlugin) createNewMergedValuesFiles(path stri
 
 func (p *HelmChartInflationGeneratorPlugin) replaceValuesInline(pValues []byte) error {
 	var err error
-	chValues := make(map[string]interface{})
+	chValues := make(map[string]any)
 	if err = yaml.Unmarshal(pValues, &chValues); err != nil {
 		return err
 	}

@@ -9,7 +9,7 @@ var ListSettersLong = `
 
 ` + "`" + `list-setters` + "`" + ` function is expected to be executed imperatively like
 
-  $ kpt fn eval -i list-setters:latest
+  $ kpt fn eval -i ghcr.io/kptdev/krm-functions-catalog/list-setters:latest
 
 ` + "`" + `list-setters` + "`" + ` function performs the following steps:
 

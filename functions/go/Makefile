@@ -48,6 +48,8 @@ FUNCTION_GENERATE_DOCS := $(patsubst %,%-GENERATE,$(FUNCTIONS))
 
 # Targets to build functions
 FUNCTION_BUILDS := $(patsubst %,%-BUILD,$(FUNCTIONS))
+
+FUNCTION_FORMATS := $(patsubst %,%-FORMAT,$(FUNCTIONS))
 # Targets to push images
 FUNCTION_PUSH := $(patsubst %,%-PUSH,$(FUNCTIONS))
 # Current function name used by individual function targets
@@ -88,6 +90,13 @@ build: generate $(FUNCTION_BUILDS) ## Build all function images. 'TAG' env is us
 $(FUNCTION_BUILDS):
 	$(MAKE) CURRENT_FUNCTION=$(subst -BUILD,,$@) TAG=$(TAG) DEFAULT_CR=$(DEFAULT_CR) func-build
 
+.PHONY: format
+format: generate $(FUNCTION_FORMATS)
+
+.PHONY: $(FUNCTION_FORMATS)
+$(FUNCTION_FORMATS):
+	$(MAKE) CURRENT_FUNCTION=$(subst -FORMAT,,$@) TAG=$(TAG) DEFAULT_CR=$(DEFAULT_CR) func-format
+
 .PHONY: push
 push: $(FUNCTION_PUSH) ## Push images to registry. WARN: This operation should only be done in CI environment.
 
@@ -99,20 +108,20 @@ install-mdtogo:
 	go install github.com/kptdev/kpt/mdtogo@main
 
 # Recipes for individual function
-.PHONY: func-fix func-vet func-fmt func-test func-lint \
-	func-build func-push func-verify docs-generate
-func-verify: docs-generate func-fix func-vet func-fmt func-test func-lint
+.PHONY: func-fix func-vet func-fmt func-test func-lint func-build func-push func-verify docs-generate func-format
+func-verify: func-format func-test
+func-format: docs-generate func-fix func-vet func-fmt func-lint
 
 func-fix:
-	cd $(CURRENT_FUNCTION) && go fix ./...
+	cd $(CURRENT_FUNCTION) && go fix -omitzero=false ./...
 
 func-fmt:
 	cd $(CURRENT_FUNCTION) && go fmt ./...
 
 func-lint:
 	(which $(GOPATH)/bin/golangci-lint || \
-		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v2.8.0/install.sh | sh -s -- -b $(GOPATH)/bin v2.8.0)
-	cd $(CURRENT_FUNCTION) && time $(GOPATH)/bin/golangci-lint run --timeout=10m ./...
+		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v2.11.4/install.sh | sh -s -- -b $(GOPATH)/bin v2.11.4)
+	cd $(CURRENT_FUNCTION) && time $(GOPATH)/bin/golangci-lint run --fix --timeout=10m ./...
 
 func-test:
 	cd $(CURRENT_FUNCTION) && go test -cover ./...
