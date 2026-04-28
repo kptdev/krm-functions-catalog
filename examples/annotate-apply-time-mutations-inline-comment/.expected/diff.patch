@@ -1,0 +1,40 @@
+diff --git a/resources.yaml b/resources.yaml
+index 850d1f2..4eff326 100644
+--- a/resources.yaml
++++ b/resources.yaml
+@@ -7,6 +7,29 @@ metadata:
+     unmodified-label: no-diff
+   annotations:
+     unmodified-key: foobarbaz
++    config.kubernetes.io/apply-time-mutation: |
++      - sourcePath: $.status.replicas
++        sourceRef:
++          group: example.com
++          kind: Config
++          name: cluster-config
++          namespace: example
++        targetPath: $.spec.replicas
++      - sourcePath: $.status.port
++        sourceRef:
++          apiVersion: example.com/v1beta1
++          kind: Database
++          name: my-db
++          namespace: example
++        targetPath: $.spec.template.spec.containers[0].env[0].value
++      - sourcePath: $.status.host
++        sourceRef:
++          group: example.com
++          kind: Database
++          name: my-db
++          namespace: example
++        targetPath: $.spec.template.spec.containers[0].env[1].value
++        token: ${ref2}
+ spec:
+   replicas: 1 # apply-time-mutation: ${example.com/namespaces/example/Config/cluster-config:$.status.replicas}
+   selector:
+@@ -24,4 +47,4 @@ spec:
+         - name: DB_PORT
+           value: "0" # apply-time-mutation: ${example.com/v1beta1/namespaces/example/Database/my-db:$.status.port}
+         - name: DB_URL
+-          value: placeholder # apply-time-mutation: jdbc:postgresql://${example.com/namespaces/example/Database/my-db:$.status.host}:5432/mydb
++          value: jdbc:postgresql://${ref2}:5432/mydb # apply-time-mutation: jdbc:postgresql://${example.com/namespaces/example/Database/my-db:$.status.host}:5432/mydb

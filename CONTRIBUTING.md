@@ -104,18 +104,14 @@ Contributions are required to follow these style guides:
 ### Repo Layout
 
 ```shell
-├── examples: Home for all curated function examples
-│     ├── curated_function_bar_example
-│     └── curated_function_foo_example
+├── examples: Home for all function examples
+│     ├── function_bar_example
+│     └── function_foo_example
 ├── functions
-│     └── go: Home for all golang-based curated function source code
+│     └── go: Home for all golang-based function source code
 │         ├── Makefile
-│         ├── curated_go_function_bar
-│         └── curated_go_function_foo
-├── contrib
-│     ├── functions
-│     │     └── go: Home for all golang-based contrib function source code
-│     └── examples: Home for all contrib function examples.
+│         ├── go_function_bar
+│         └── go_function_foo
 ├── scripts
 ├── tests: Home for e2e tests
 └── build
@@ -196,8 +192,6 @@ To test a specific example or the e2e test, run
 ```shell
 $ cd tests/e2etest
 $ go test -v ./... -run TestE2E/../../examples/$EXAMPLE_NAME
-# To test the example in contrib
-$ go test -v ./... -run TestE2E/../../contrib/examples/$EXAMPLE_NAME
 ```
 
 If you encounter some test failure saying something like "actual diff doesn't
@@ -207,8 +201,6 @@ expected `diff.patch` or `results.yaml` by running the following commands:
 ```shell
 # Update one example
 $ KPT_E2E_UPDATE_EXPECTED=true go test -v ./... -run TestE2E/../../examples/$EXAMPLE_NAME
-# Update one example in contrib 
-$ KPT_E2E_UPDATE_EXPECTED=true go test -v ./... -run TestE2E/../../contrib/examples/$EXAMPLE_NAME
 
 # Update all examples
 $ KPT_E2E_UPDATE_EXPECTED=true go test -v ./...
