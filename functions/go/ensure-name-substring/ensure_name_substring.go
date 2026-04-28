@@ -155,11 +155,19 @@ func (ens *EnsureNameSubstring) Transform(m resmap.ResMap) error {
 	return nil
 }
 
-var _ kyaml.Unmarshaler = &EnsureNameSubstring{}
 var _ json.Unmarshaler = &EnsureNameSubstring{}
 
-func (ens *EnsureNameSubstring) UnmarshalYAML(value *kyaml.Node) error {
-	rn := kyaml.NewRNode(value)
+func (ens *EnsureNameSubstring) UnmarshalJSON(bytes []byte) error {
+	yamlBytes, err := k8syaml.JSONToYAML(bytes)
+	if err != nil {
+		return err
+	}
+
+	rn, err := kyaml.Parse(string(yamlBytes))
+	if err != nil {
+		return err
+	}
+
 	meta, err := rn.GetValidatedMetadata()
 	if err != nil {
 		return err
@@ -189,22 +197,6 @@ func (ens *EnsureNameSubstring) UnmarshalYAML(value *kyaml.Node) error {
 			schema.FromAPIVersionAndKind(meta.APIVersion, meta.Kind).String())
 	}
 	return nil
-}
-
-// Workaround because k8syaml.Unmarshal does not call UnmarshalYAML anymore,
-// might be enough to remove UnmarshalYAML and put its contents in here.
-func (ens *EnsureNameSubstring) UnmarshalJSON(bytes []byte) error {
-	yamlBytes, err := k8syaml.JSONToYAML(bytes)
-	if err != nil {
-		return err
-	}
-
-	node, err := kyaml.Parse(string(yamlBytes))
-	if err != nil {
-		return err
-	}
-
-	return ens.UnmarshalYAML(node.YNode())
 }
 
 // set name substring if input matches one of the following:
@@ -319,7 +311,7 @@ func resourceContainsSubstring(r *resource.Resource, substring string, fs types.
 	}
 	rn, err := kyaml.FromMap(m)
 	if err != nil {
-		return false, fmt.Errorf("unable to check if the substring exsits in %v: %w", r.OrgId().String(), err)
+		return false, fmt.Errorf("unable to check if the substring exists in %v: %w", r.OrgId().String(), err)
 	}
 	pathElements := strings.Split(fs.Path, "/")
 	val, err := rn.Pipe(kyaml.Lookup(pathElements...))
@@ -328,7 +320,7 @@ func resourceContainsSubstring(r *resource.Resource, substring string, fs types.
 	}
 	valStr, err := val.String()
 	if err != nil {
-		return false, fmt.Errorf("unable to check if the substring exsits in %v: %w", r.OrgId().String(), err)
+		return false, fmt.Errorf("unable to check if the substring exists in %v: %w", r.OrgId().String(), err)
 	}
 	return strings.Contains(valStr, substring), nil
 }
