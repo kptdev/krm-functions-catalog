@@ -30,7 +30,7 @@ import (
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/kio"
 	"sigs.k8s.io/kustomize/kyaml/resid"
-	"sigs.k8s.io/kustomize/kyaml/yaml"
+	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 	k8syaml "sigs.k8s.io/yaml"
 )
 
@@ -51,7 +51,7 @@ var (
 )
 
 type EnsureNameSubstring struct {
-	yaml.ResourceMeta `json:",inline" yaml:",inline"`
+	kyaml.ResourceMeta `json:",inline" yaml:",inline"`
 	// Substring is the desired name substring.
 	Substring string `json:"substring" yaml:"substring"`
 	// EditMode controls the desired action when the desired substring is not found in the name.
@@ -155,11 +155,11 @@ func (ens *EnsureNameSubstring) Transform(m resmap.ResMap) error {
 	return nil
 }
 
-var _ yaml.Unmarshaler = &EnsureNameSubstring{}
+var _ kyaml.Unmarshaler = &EnsureNameSubstring{}
 var _ json.Unmarshaler = &EnsureNameSubstring{}
 
-func (ens *EnsureNameSubstring) UnmarshalYAML(value *yaml.Node) error {
-	rn := yaml.NewRNode(value)
+func (ens *EnsureNameSubstring) UnmarshalYAML(value *kyaml.Node) error {
+	rn := kyaml.NewRNode(value)
 	meta, err := rn.GetValidatedMetadata()
 	if err != nil {
 		return err
@@ -191,10 +191,15 @@ func (ens *EnsureNameSubstring) UnmarshalYAML(value *yaml.Node) error {
 	return nil
 }
 
-// WA because k8syaml.Unmarshal does not call UnmarshalYAML anymore,
+// Workaround because k8syaml.Unmarshal does not call UnmarshalYAML anymore,
 // might be enough to remove UnmarshalYAML and put its contents in here.
 func (ens *EnsureNameSubstring) UnmarshalJSON(bytes []byte) error {
-	node, err := yaml.Parse(string(bytes))
+	yamlBytes, err := k8syaml.JSONToYAML(bytes)
+	if err != nil {
+		return err
+	}
+
+	node, err := kyaml.Parse(string(yamlBytes))
 	if err != nil {
 		return err
 	}
@@ -312,12 +317,12 @@ func resourceContainsSubstring(r *resource.Resource, substring string, fs types.
 	if err != nil {
 		return false, fmt.Errorf("unable to convert resource for %v: %w", r.OrgId().String(), err)
 	}
-	rn, err := yaml.FromMap(m)
+	rn, err := kyaml.FromMap(m)
 	if err != nil {
 		return false, fmt.Errorf("unable to check if the substring exsits in %v: %w", r.OrgId().String(), err)
 	}
 	pathElements := strings.Split(fs.Path, "/")
-	val, err := rn.Pipe(yaml.Lookup(pathElements...))
+	val, err := rn.Pipe(kyaml.Lookup(pathElements...))
 	if err != nil {
 		return false, fmt.Errorf("unable to lookup path %v in %v: %w", fs.Path, r.OrgId().String(), err)
 	}

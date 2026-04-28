@@ -87,9 +87,6 @@ func (ensp *EnsureNameSubstringProcessor) Process(resourceList *framework.Resour
 	// remove kustomize build annotations
 	resMap.RemoveBuildAnnotations()
 	resourceList.Items = resMap.ToRNodeSlice()
-	if err != nil {
-		return fmt.Errorf("failed to convert resource map to items: %w", err)
-	}
 	return nil
 }
 
