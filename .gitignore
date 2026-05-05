@@ -18,13 +18,8 @@ documentation/content/en/examples
 
 # Hugo
 .hugo*
-resources/
 public/
-
-# Hugo
-.hugo*
-resources/
-public/
+documentation/resources/
 
 # We use sed -i.bak when doing in-line replace, because it works better cross-platform
 *.bak
