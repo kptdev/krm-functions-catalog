@@ -104,18 +104,14 @@ Contributions are required to follow these style guides:
 ### Repo Layout
 
 ```shell
-├── examples: Home for all curated function examples
-│     ├── curated_function_bar_example
-│     └── curated_function_foo_example
+├── examples: Home for all function examples
+│     ├── function_bar_example
+│     └── function_foo_example
 ├── functions
-│     └── go: Home for all golang-based curated function source code
+│     └── go: Home for all golang-based function source code
 │         ├── Makefile
-│         ├── curated_go_function_bar
-│         └── curated_go_function_foo
-├── contrib
-│     ├── functions
-│     │     └── go: Home for all golang-based contrib function source code
-│     └── examples: Home for all contrib function examples.
+│         ├── go_function_bar
+│         └── go_function_foo
 ├── scripts
 ├── tests: Home for e2e tests
 └── build

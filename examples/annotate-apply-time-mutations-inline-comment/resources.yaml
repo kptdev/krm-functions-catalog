@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+  namespace: example
+  labels:
+    unmodified-label: no-diff
+  annotations:
+    unmodified-key: foobarbaz
+spec:
+  replicas: 1 # apply-time-mutation: ${example.com/namespaces/example/Config/cluster-config:$.status.replicas}
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: app
+        image: nginx:1.21
+        env:
+        - name: DB_PORT
+          value: "0" # apply-time-mutation: ${example.com/v1beta1/namespaces/example/Database/my-db:$.status.port}
+        - name: DB_URL
+          value: placeholder # apply-time-mutation: jdbc:postgresql://${example.com/namespaces/example/Database/my-db:$.status.host}:5432/mydb

@@ -1,0 +1,27 @@
+diff --git a/resources.yaml b/resources.yaml
+index 7d662b0..cfd88d4 100644
+--- a/resources.yaml
++++ b/resources.yaml
+@@ -45,6 +45,22 @@ kind: Pod
+ metadata:
+   name: pod-b
+   namespace: example
++  annotations:
++    config.kubernetes.io/apply-time-mutation: |
++      - sourcePath: $.status.podIP
++        sourceRef:
++          kind: Pod
++          name: pod-a
++          namespace: example
++        targetPath: $.spec.containers[?(@.name=="app")].env[?(@.name=="SERVICE_HOST")].value
++        token: ${pod-a-ip}
++      - sourcePath: $.spec.containers[?(@.name=="nginx")].ports[?(@.name=="http")].containerPort
++        sourceRef:
++          kind: Pod
++          name: pod-a
++          namespace: example
++        targetPath: $.spec.containers[?(@.name=="app")].env[?(@.name=="SERVICE_HOST")].value
++        token: ${pod-a-port}
+ spec:
+   containers:
+   - name: app

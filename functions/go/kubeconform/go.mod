@@ -1,4 +1,4 @@
-module github.com/kptdev/krm-functions-catalog/contrib/functions/go/kubeconform
+module github.com/kptdev/krm-functions-catalog/functions/go/kubeconform
 
 go 1.25.7
 

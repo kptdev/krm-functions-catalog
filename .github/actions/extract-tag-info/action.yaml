@@ -12,9 +12,8 @@ runs:
         TAG="${REF#refs/tags/}"           # remove 'refs/tags/' prefix
         VERSION="${TAG##*/}"              # get last part after last slash
 
-        # Remove 'functions/' or 'contrib/functions/' prefix
+        # Remove 'functions/' prefix
         PATH_WITHOUT_PREFIX="${TAG#functions/}"
-        PATH_WITHOUT_PREFIX="${PATH_WITHOUT_PREFIX#contrib/functions/}"
 
         # Remove 'go/' prefix if present
         IMAGE_NAME="${PATH_WITHOUT_PREFIX#go/}"
@@ -34,5 +33,5 @@ outputs:
     description: "The extracted semantic version from the tag"
     value: ${{ steps.extract.outputs.version }}  # reference step id
   image_name:
-    description: "The extracted image name (without functions/, contrib/functions/, or go/ prefixes)"
+    description: "The extracted image name (without functions/ or go/ prefixes)"
     value: ${{ steps.extract.outputs.image_name }}  # reference step id
