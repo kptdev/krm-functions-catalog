@@ -14,7 +14,10 @@
 
 package generate_folders
 
-import "regexp"
+import (
+	"regexp"
+	"slices"
+)
 
 const (
 	// ResourceHierarchy API versions
@@ -82,4 +85,13 @@ type sourcePlacement struct {
 
 func (e *missingSubtreeError) Error() string {
 	return e.name
+}
+
+func sortedMapKeys(m map[string]any) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	slices.Sort(keys)
+	return keys
 }

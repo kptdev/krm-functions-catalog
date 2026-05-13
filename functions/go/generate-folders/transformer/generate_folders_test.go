@@ -336,14 +336,23 @@ items:
 	}
 
 	require.Len(t, folders, 2)
-	assert.Equal(t, "resources.yaml", folders[0].GetAnnotation(configPathAnnotation))
-	assert.Equal(t, "resources.yaml", folders[0].GetAnnotation(internalPathAnnotation))
-	assert.Equal(t, "1", folders[0].GetAnnotation(configIndexAnnotation))
-	assert.Equal(t, "1", folders[0].GetAnnotation(internalIndexAnnotation))
-	assert.Equal(t, "resources.yaml", folders[1].GetAnnotation(configPathAnnotation))
-	assert.Equal(t, "resources.yaml", folders[1].GetAnnotation(internalPathAnnotation))
-	assert.Equal(t, "2", folders[1].GetAnnotation(configIndexAnnotation))
-	assert.Equal(t, "2", folders[1].GetAnnotation(internalIndexAnnotation))
+	foldersByName := map[string]*fn.KubeObject{}
+	for _, folder := range folders {
+		foldersByName[folder.GetName()] = folder
+	}
+
+	dev := foldersByName["dev"]
+	team := foldersByName["dev.team1"]
+	require.NotNil(t, dev)
+	require.NotNil(t, team)
+	assert.Equal(t, "resources.yaml", dev.GetAnnotation(configPathAnnotation))
+	assert.Equal(t, "resources.yaml", dev.GetAnnotation(internalPathAnnotation))
+	assert.Equal(t, "1", dev.GetAnnotation(configIndexAnnotation))
+	assert.Equal(t, "1", dev.GetAnnotation(internalIndexAnnotation))
+	assert.Equal(t, "resources.yaml", team.GetAnnotation(configPathAnnotation))
+	assert.Equal(t, "resources.yaml", team.GetAnnotation(internalPathAnnotation))
+	assert.Equal(t, "2", team.GetAnnotation(configIndexAnnotation))
+	assert.Equal(t, "2", team.GetAnnotation(internalIndexAnnotation))
 }
 
 func TestRunV3HierarchyIsIdempotentWithSourceFilePlacement(t *testing.T) {
@@ -386,10 +395,17 @@ items:
 	}
 
 	require.Len(t, folders, 2)
-	assert.Equal(t, "dev", folders[0].GetName())
-	assert.Equal(t, "dev.team1", folders[1].GetName())
-	assert.Equal(t, "1", folders[0].GetAnnotation(configIndexAnnotation))
-	assert.Equal(t, "2", folders[1].GetAnnotation(configIndexAnnotation))
+	foldersByName := map[string]*fn.KubeObject{}
+	for _, folder := range folders {
+		foldersByName[folder.GetName()] = folder
+	}
+
+	dev := foldersByName["dev"]
+	team := foldersByName["dev.team1"]
+	require.NotNil(t, dev)
+	require.NotNil(t, team)
+	assert.Equal(t, "1", dev.GetAnnotation(configIndexAnnotation))
+	assert.Equal(t, "2", team.GetAnnotation(configIndexAnnotation))
 }
 
 func generatedFolderName(name string, path []string) string {

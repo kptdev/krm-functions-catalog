@@ -1,8 +1,8 @@
 diff --git a/resources.yaml b/resources.yaml
-index f631955..bdc40fb 100644
+index f631955..ac3e5f1 100644
 --- a/resources.yaml
 +++ b/resources.yaml
-@@ -9,3 +9,23 @@ spec:
+@@ -9,3 +9,21 @@ spec:
    config:
    - Dev
    - Prod
@@ -13,7 +13,6 @@ index f631955..bdc40fb 100644
 +  name: dev
 +  annotations:
 +    cnrm.cloud.google.com/organization-id: test-organization
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  displayName: Dev
 +---
@@ -23,6 +22,5 @@ index f631955..bdc40fb 100644
 +  name: prod
 +  annotations:
 +    cnrm.cloud.google.com/organization-id: test-organization
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  displayName: Prod

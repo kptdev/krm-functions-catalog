@@ -1,8 +1,16 @@
 diff --git a/resources.yaml b/resources.yaml
-index e99b5b5..763ece3 100644
+index e99b5b5..af76a98 100644
 --- a/resources.yaml
 +++ b/resources.yaml
-@@ -11,3 +11,15 @@ spec:
+@@ -4,10 +4,21 @@ metadata:
+   name: test-annotations
+   annotations:
+     cnrm.cloud.google.com/deletion-policy: abandon
+-    config.kubernetes.io/local-config: "true"
++    config.kubernetes.io/local-config: 'true'
+ spec:
+   parentRef:
+     kind: Organization
      external: test-organization
    config:
    - Dev
@@ -13,7 +21,6 @@ index e99b5b5..763ece3 100644
 +  name: dev
 +  annotations:
 +    cnrm.cloud.google.com/deletion-policy: abandon
-+    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  organizationRef:
 +    external: test-organization

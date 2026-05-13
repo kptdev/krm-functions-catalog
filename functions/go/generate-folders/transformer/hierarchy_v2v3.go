@@ -36,7 +36,7 @@ func processV2V3Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList, isV3 bool) fn
 	parentKind, _, _ := obj.NestedString("spec", "parentRef", "kind")
 	if parentKind != "" && parentKind != organizationKind && parentKind != folderKind {
 		results = append(results, fn.ErrorConfigObjectResult(
-			fmt.Errorf("ResourceHierarchy %s has an unsupported parentRef kind", obj.GetName()), obj))
+			fmt.Errorf("ResourceHierarchy %s has unsupported parentRef.kind %q (supported: %s, %s)", obj.GetName(), parentKind, organizationKind, folderKind), obj))
 		return results
 	}
 	if parentKind == "" {
@@ -72,7 +72,8 @@ func processV2V3Hierarchy(obj *fn.KubeObject, rl *fn.ResourceList, isV3 bool) fn
 			for name := range subtreeMap {
 				subtrees[name] = &hierarchyNode{name: name, kind: subtreeKind}
 			}
-			for name, val := range subtreeMap {
+			for _, name := range sortedMapKeys(subtreeMap) {
+				val := subtreeMap[name]
 				subtreeNode := subtrees[name]
 				if children, ok := val.([]any); ok {
 					if err := generateTree(subtreeNode, children, subtrees); err != nil {
@@ -130,7 +131,8 @@ func buildTreeFromRawConfig(parent *hierarchyNode, configSlice []any, subtrees m
 		case string:
 			parent.children = append(parent.children, &hierarchyNode{name: v})
 		case map[string]any:
-			for name, val := range v {
+			for _, name := range sortedMapKeys(v) {
+				val := v[name]
 				node := &hierarchyNode{name: name}
 
 				switch innerVal := val.(type) {
@@ -184,7 +186,8 @@ func generateTree(root *hierarchyNode, children []any, subtrees map[string]*hier
 				continue
 			}
 
-			for name, val := range v {
+			for _, name := range sortedMapKeys(v) {
+				val := v[name]
 				node := &hierarchyNode{name: name}
 				switch innerVal := val.(type) {
 				case []any:
