@@ -2,21 +2,67 @@
 
 ## Overview
 
-The `generate-folders` function generates
-[Folder](https://cloud.google.com/config-connector/docs/reference/resource-docs/resourcemanager/folder)
-resources from `ResourceHierarchy` custom resources.
+<!--mdtogo:Short-->
 
-## Usage
+Generate Config Connector `Folder` resources from `ResourceHierarchy` custom resources.
 
-The function accepts `ResourceHierarchy` resources in the following API versions:
+<!--mdtogo-->
+
+<!--mdtogo:Long-->
+
+The `generate-folders` function converts a `ResourceHierarchy` tree into one or
+more [Folder](https://cloud.google.com/config-connector/docs/reference/resource-docs/resourcemanager/folder)
+resources.
+
+Supported input API versions:
 
 | API Version | Status |
 | --- | --- |
-| `blueprints.cloud.google.com/v1alpha3` | **Current** |
+| `blueprints.cloud.google.com/v1alpha3` | Current |
 | `dev.cft.v1alpha2` | Deprecated |
 | `dev.cft.v1alpha1` | Deprecated |
 
-### Simple Example (v3)
+### Parent reference behavior
+
+- `kind: Organization` — generated root folders reference the organization.
+- `kind: Folder` — generated root folders reference the parent folder.
+- In v3, child folders use native `spec.folderRef.name` references.
+- In v1/v2, parent links are expressed with Config Connector annotations.
+
+### Annotation inheritance
+
+For v2/v3 `ResourceHierarchy` resources, annotations on the hierarchy object
+are inherited by generated `Folder` resources, except for internal kpt
+annotations such as `config.kubernetes.io/local-config` and
+`internal.config.kubernetes.io/*` metadata. The v1 implementation does not
+inherit annotations.
+
+### Name normalization
+
+Generated folder names follow Kubernetes DNS subdomain naming rules:
+
+- convert to lowercase
+- strip quotes
+- replace spaces/underscores with dashes
+- remove invalid characters
+- join path segments with dots (for example `dev.team1`)
+
+### Function invocation
+
+Run the function declaratively with `kpt fn render` using a `Kptfile`, or
+imperatively with:
+
+```shell
+kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/generate-folders:latest
+```
+
+<!--mdtogo-->
+
+## Examples
+
+<!--mdtogo:Examples-->
+
+### Simple example (v3)
 
 ```yaml
 apiVersion: blueprints.cloud.google.com/v1alpha3
@@ -35,9 +81,9 @@ spec:
 ```
 
 This produces `Folder` resources named `dev`, `dev.team1`, `dev.team2`, and
-`prod`, each with proper parent references and display names.
+`prod`.
 
-### Subtree Example (v3)
+### Reusable subtree example (v3)
 
 ```yaml
 apiVersion: blueprints.cloud.google.com/v1alpha3
@@ -59,38 +105,15 @@ spec:
         $subtree: teams
 ```
 
-Subtrees allow reusing folder structure definitions across multiple branches.
+Subtrees let you reuse the same folder structure across multiple branches.
 
-### Parent Reference Types
+### Namespace-aware example (v3)
 
-- `kind: Organization` — uses `spec.organizationRef.external` on generated
-  Folders (v3) or `cnrm.cloud.google.com/organization-id` annotation (v1/v2)
-- `kind: Folder` — uses `spec.folderRef.external` on generated Folders (v3) or
-  `cnrm.cloud.google.com/folder-ref` annotation (v1/v2)
+When the input `ResourceHierarchy` has a namespace, generated folders inherit
+that namespace and child folders gain a `config.kubernetes.io/depends-on`
+annotation to enforce ordering.
 
-### Annotation Inheritance
-
-For v2/v3 `ResourceHierarchy` resources, annotations on the hierarchy object
-are inherited by generated `Folder` resources, except for internal kpt
-annotations (e.g., `config.kubernetes.io/local-config`,
-`internal.config.kubernetes.io/*`). The v1 implementation does **not**
-support annotation inheritance.
-
-### Name Normalization
-
-Generated folder names follow Kubernetes DNS subdomain naming rules:
-
-- Converted to lowercase
-- Quotes removed
-- Underscores and spaces replaced with dashes
-- Invalid characters removed
-- Path segments joined with dots (e.g., `dev.team1`)
-
-## Function Invocation
-
-```shell
-kpt fn eval --image ghcr.io/kptdev/krm-functions-catalog/generate-folders:latest
-```
+<!--mdtogo-->
 
 ## Building
 

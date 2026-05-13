@@ -1,4 +1,4 @@
-// Copyright 2022 Google LLC
+// Copyright 2026 The kpt Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -116,7 +116,7 @@ func TestFilterNonInheritableAnnotations(t *testing.T) {
 func TestGenerateTree(t *testing.T) {
 	t.Run("simple flat list", func(t *testing.T) {
 		root := &hierarchyNode{name: "root", kind: "Organization"}
-		err := generateTree(root, []interface{}{"Dev", "Prod"}, nil)
+		err := generateTree(root, []any{"Dev", "Prod"}, nil)
 
 		require.NoError(t, err)
 		require.Len(t, root.children, 2)
@@ -126,9 +126,9 @@ func TestGenerateTree(t *testing.T) {
 
 	t.Run("nested structure", func(t *testing.T) {
 		root := &hierarchyNode{name: "root", kind: "Organization"}
-		children := []interface{}{
-			map[string]interface{}{
-				"Dev": []interface{}{"Team1", "Team2"},
+		children := []any{
+			map[string]any{
+				"Dev": []any{"Team1", "Team2"},
 			},
 		}
 
@@ -154,9 +154,9 @@ func TestGenerateTree(t *testing.T) {
 			},
 		}
 		root := &hierarchyNode{name: "root", kind: "Organization"}
-		children := []interface{}{
-			map[string]interface{}{
-				"Dev": map[string]interface{}{
+		children := []any{
+			map[string]any{
+				"Dev": map[string]any{
 					"$subtree": "teams",
 				},
 			},
@@ -183,10 +183,10 @@ func TestGenerateTree(t *testing.T) {
 			},
 		}
 		root := &hierarchyNode{name: "root", kind: "Organization"}
-		children := []interface{}{
-			map[string]interface{}{
-				"Dev": []interface{}{
-					map[string]interface{}{"$subtree": "teams"},
+		children := []any{
+			map[string]any{
+				"Dev": []any{
+					map[string]any{"$subtree": "teams"},
 					"QA",
 				},
 			},
@@ -204,7 +204,7 @@ func TestGenerateTree(t *testing.T) {
 
 	t.Run("missing subtree reference returns typed error", func(t *testing.T) {
 		root := &hierarchyNode{name: "root", kind: "Organization"}
-		err := generateTree(root, []interface{}{map[string]interface{}{"$subtree": "nonexistent"}}, map[string]*hierarchyNode{})
+		err := generateTree(root, []any{map[string]any{"$subtree": "nonexistent"}}, map[string]*hierarchyNode{})
 
 		require.Error(t, err)
 		var missingErr *missingSubtreeError
@@ -214,7 +214,7 @@ func TestGenerateTree(t *testing.T) {
 
 	t.Run("invalid subtree value returns parse error", func(t *testing.T) {
 		root := &hierarchyNode{name: "root", kind: "Organization"}
-		err := generateTree(root, []interface{}{map[string]interface{}{"$subtree": 123}}, map[string]*hierarchyNode{})
+		err := generateTree(root, []any{map[string]any{"$subtree": 123}}, map[string]*hierarchyNode{})
 
 		require.EqualError(t, err, "$subtree value is not a string")
 	})
@@ -232,9 +232,9 @@ func TestBuildTreeFromRawConfigAllowsForwardSubtreeReferences(t *testing.T) {
 			},
 		},
 	}
-	config := []interface{}{
-		map[string]interface{}{
-			"Dev": map[string]interface{}{"$subtree": "teams"},
+	config := []any{
+		map[string]any{
+			"Dev": map[string]any{"$subtree": "teams"},
 		},
 	}
 
@@ -248,9 +248,9 @@ func TestBuildTreeFromRawConfigAllowsForwardSubtreeReferences(t *testing.T) {
 
 func TestBuildTreeFromRawConfigPreservesParseErrors(t *testing.T) {
 	root := &hierarchyNode{name: "root", kind: "Organization"}
-	config := []interface{}{
-		map[string]interface{}{
-			"Dev": map[string]interface{}{"$subtree": 123},
+	config := []any{
+		map[string]any{
+			"Dev": map[string]any{"$subtree": 123},
 		},
 	}
 
