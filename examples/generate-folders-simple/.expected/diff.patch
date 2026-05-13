@@ -1,8 +1,8 @@
 diff --git a/resources.yaml b/resources.yaml
-index c6e0011..2e07cc7 100644
+index c6e0011..45602f1 100644
 --- a/resources.yaml
 +++ b/resources.yaml
-@@ -12,3 +12,48 @@ spec:
+@@ -12,3 +12,58 @@ spec:
      - Team_2
    - Prod:
      - Team One
@@ -11,6 +11,8 @@ index c6e0011..2e07cc7 100644
 +kind: Folder
 +metadata:
 +  name: dev
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  organizationRef:
 +    external: test-organization
@@ -19,16 +21,9 @@ index c6e0011..2e07cc7 100644
 +apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
 +kind: Folder
 +metadata:
-+  name: dev.team-2
-+spec:
-+  folderRef:
-+    name: dev
-+  displayName: Team_2
-+---
-+apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
-+kind: Folder
-+metadata:
 +  name: dev.team-one
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  folderRef:
 +    name: dev
@@ -37,7 +32,20 @@ index c6e0011..2e07cc7 100644
 +apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
 +kind: Folder
 +metadata:
++  name: dev.team-2
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
++spec:
++  folderRef:
++    name: dev
++  displayName: Team_2
++---
++apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
++kind: Folder
++metadata:
 +  name: prod
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  organizationRef:
 +    external: test-organization
@@ -47,6 +55,8 @@ index c6e0011..2e07cc7 100644
 +kind: Folder
 +metadata:
 +  name: prod.team-one
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  folderRef:
 +    name: prod

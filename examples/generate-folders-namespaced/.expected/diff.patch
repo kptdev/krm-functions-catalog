@@ -1,8 +1,8 @@
 diff --git a/resources.yaml b/resources.yaml
-index d5dc3e4..b87cc64 100644
+index d5dc3e4..ecae64e 100644
 --- a/resources.yaml
 +++ b/resources.yaml
-@@ -10,3 +10,25 @@ spec:
+@@ -10,3 +10,28 @@ spec:
    config:
    - Dev:
      - Team1
@@ -12,6 +12,8 @@ index d5dc3e4..b87cc64 100644
 +metadata:
 +  name: dev
 +  namespace: test-ns
++  annotations:
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  organizationRef:
 +    external: test-organization
@@ -24,6 +26,7 @@ index d5dc3e4..b87cc64 100644
 +  namespace: test-ns
 +  annotations:
 +    config.kubernetes.io/depends-on: resourcemanager.cnrm.cloud.google.com/namespaces/test-ns/Folder/dev
++    cnrm.cloud.google.com/blueprint: 'krm-fn'
 +spec:
 +  folderRef:
 +    name: dev
