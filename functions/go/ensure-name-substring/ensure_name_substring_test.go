@@ -19,7 +19,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
@@ -34,7 +33,7 @@ func runEnsureNameSubstringTransformerE(config, input string) (string, error) {
 		return "", err
 	}
 	ens := &EnsureNameSubstring{}
-	if err = framework.LoadFunctionConfig(configRN, ens); err != nil {
+	if err = loadFunctionConfig(configRN, ens); err != nil {
 		return "", err
 	}
 	if defaultConfig, err := getDefaultConfig(); err != nil {

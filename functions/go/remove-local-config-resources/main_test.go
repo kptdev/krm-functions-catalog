@@ -71,15 +71,13 @@ func TestPrunedResources(t *testing.T) {
 				return
 			}
 
-			var items []framework.ResultItem
-
-			items, err = processResources(rl)
+			results, err := processResources(rl)
 			if err != nil {
 				t.Errorf("Error when calling processResources %s", err.Error())
 			}
 
-			for j := range items {
-				require.Equal(t, test.ExpectedResult[j], items[j].Message)
+			for j := range results {
+				require.Equal(t, test.ExpectedResult[j], results[j].Message)
 			}
 		})
 	}

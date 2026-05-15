@@ -89,23 +89,24 @@ func (p *plugin) Transform(m resmap.ResMap) error {
 		if err != nil {
 			return err
 		}
-		err = r.ApplyFilter(annotations.Filter{
+		filter := annotations.Filter{
 			FsSlice:     p.AdditionalAnnotationFields,
 			Annotations: p.Annotations,
-			SetEntryCallback: func(key, value, tag string, node *kyaml.RNode) {
-				resultKey := AnnotationResultKey{
-					FieldPath: strings.Join(node.FieldPath(), "."),
-					FilePath:  filePath,
-					FileIndex: fileIndex,
-				}
-				result, ok := p.Results[resultKey]
-				if ok {
-					result[key] = value
-				} else {
-					p.Results[resultKey] = AnnotationValues{key: value}
-				}
-			},
+		}
+		filter.WithMutationTracker(func(key, value, tag string, node *kyaml.RNode) {
+			resultKey := AnnotationResultKey{
+				FieldPath: strings.Join(node.FieldPath(), "."),
+				FilePath:  filePath,
+				FileIndex: fileIndex,
+			}
+			result, ok := p.Results[resultKey]
+			if ok {
+				result[key] = value
+			} else {
+				p.Results[resultKey] = AnnotationValues{key: value}
+			}
 		})
+		err = r.ApplyFilter(filter)
 		if err != nil {
 			return err
 		}

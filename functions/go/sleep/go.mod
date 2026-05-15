@@ -1,10 +1,10 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/sleep
 
-go 1.25.7
+go 1.26.2
 
 require (
 	github.com/stretchr/testify v1.11.1
-	sigs.k8s.io/kustomize/kyaml v0.21.0
+	sigs.k8s.io/kustomize/kyaml v0.21.1
 )
 
 require (

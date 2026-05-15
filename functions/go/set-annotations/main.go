@@ -23,7 +23,6 @@ import (
 
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-annotations/generated"
 	"sigs.k8s.io/kustomize/api/hasher"
-	"sigs.k8s.io/kustomize/api/konfig/builtinpluginconsts"
 	"sigs.k8s.io/kustomize/api/resmap"
 	"sigs.k8s.io/kustomize/api/resource"
 	"sigs.k8s.io/kustomize/api/types"
@@ -150,11 +149,55 @@ func (f *setAnnotationFunction) resultsToItems() (framework.Results, error) {
 }
 
 func getDefaultConfig() (transformerConfig, error) {
-	defaultConfigString := builtinpluginconsts.GetDefaultFieldSpecsAsMap()["commonannotations"]
 	var tc transformerConfig
-	err := yaml.Unmarshal([]byte(defaultConfigString), &tc)
+	err := yaml.Unmarshal([]byte(defaultCommonAnnotationFieldSpecs), &tc)
 	return tc, err
 }
+
+// defaultCommonAnnotationFieldSpecs is inlined from kustomize/api's
+// internal/konfig/builtinpluginconsts/commonannotations.go since the
+// package was moved to internal in v0.21.0.
+const defaultCommonAnnotationFieldSpecs = `
+commonAnnotations:
+- path: metadata/annotations
+  create: true
+
+- path: spec/template/metadata/annotations
+  create: true
+  version: v1
+  kind: ReplicationController
+
+- path: spec/template/metadata/annotations
+  create: true
+  kind: Deployment
+
+- path: spec/template/metadata/annotations
+  create: true
+  kind: ReplicaSet
+
+- path: spec/template/metadata/annotations
+  create: true
+  kind: DaemonSet
+
+- path: spec/template/metadata/annotations
+  create: true
+  kind: StatefulSet
+
+- path: spec/template/metadata/annotations
+  create: true
+  group: batch
+  kind: Job
+
+- path: spec/jobTemplate/metadata/annotations
+  create: true
+  group: batch
+  kind: CronJob
+
+- path: spec/jobTemplate/spec/template/metadata/annotations
+  create: true
+  group: batch
+  kind: CronJob
+`
 
 func newResMapFactory() *resmap.Factory {
 	resourceFactory := resource.NewFactory(&hasher.Hasher{})

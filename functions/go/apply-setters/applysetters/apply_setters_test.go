@@ -389,8 +389,8 @@ metadata:
   namespace: "foo" # kpt-set: ${ns}
 image: nginx:1.7.1 # kpt-set: ${image}:${tag}
 env: # kpt-set: ${env}
-  - foo
-  - bar
+- foo
+- bar
 roles: [dev, prod] # kpt-set: ${roles}
 `,
 			config: `
