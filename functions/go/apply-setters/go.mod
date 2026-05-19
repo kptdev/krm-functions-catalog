@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/apply-setters
 
-go 1.25.9
+go 1.26.3
 
 require (
 	github.com/stretchr/testify v1.11.1
