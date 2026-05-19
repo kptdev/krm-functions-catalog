@@ -1,0 +1,54 @@
+apiVersion: fn.kpt.dev/v1alpha1
+kind: ApplyTimeMutation
+metadata:
+  name: inject-pod-ip
+  annotations:
+    config.kubernetes.io/local-config: "true"
+spec:
+  targetRef:
+    kind: Pod
+    name: pod-b
+    namespace: example
+  substitutions:
+  - sourceRef:
+      kind: Pod
+      name: pod-a
+      namespace: example
+    sourcePath: $.status.podIP
+    targetPath: $.spec.containers[?(@.name=="app")].env[?(@.name=="SERVICE_HOST")].value
+    token: "${pod-a-ip}"
+  - sourceRef:
+      kind: Pod
+      name: pod-a
+      namespace: example
+    sourcePath: $.spec.containers[?(@.name=="nginx")].ports[?(@.name=="http")].containerPort
+    targetPath: $.spec.containers[?(@.name=="app")].env[?(@.name=="SERVICE_HOST")].value
+    token: "${pod-a-port}"
+---
+# Source object: pod-a exposes an HTTP port and will have a podIP assigned after scheduling.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-a
+  namespace: example
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.21
+    ports:
+    - name: http
+      containerPort: 80
+---
+# Target object: pod-b needs pod-a's IP and port in an environment variable.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-b
+  namespace: example
+spec:
+  containers:
+  - name: app
+    image: busybox
+    env:
+    - name: SERVICE_HOST
+      value: "${pod-a-ip}:${pod-a-port}"

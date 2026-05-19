@@ -48,24 +48,21 @@ make unit-test-ts
 
 ### E2E Tests
 
-To test archived function examples:
-
-```shell
-make e2e-test
-```
-
-To test a specific archived example:
+Archived function tests are skipped by default in CI. To run them from the
+test harness:
 
 ```shell
 cd ../tests/e2etest
-go test -v ./... -run TestArchivedE2E/../../archived/examples/$EXAMPLE_NAME
+
+# Run all archived examples
+KPT_E2E_INCLUDE_ARCHIVED=true go test -v ./... -run "TestE2E/../../archived"
+
+# Run a specific archived example
+KPT_E2E_INCLUDE_ARCHIVED=true go test -v ./... -run "TestE2E/../../archived/examples/$EXAMPLE_NAME"
 ```
 
-To run all tests (unit + examples):
-
-```shell
-make test
-```
+Note: some archived tests are expected to fail as the images are no longer
+actively maintained.
 
 ## Directory Structure
 

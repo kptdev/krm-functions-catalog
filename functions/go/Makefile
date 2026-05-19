@@ -20,6 +20,7 @@ GOBIN := $(shell go env GOPATH)/bin
 
 # Edit this list to contain all go functions
 FUNCTIONS := \
+	annotate-apply-time-mutations \
 	apply-replacements \
 	apply-setters \
 	create-setters \
@@ -131,13 +132,13 @@ func-vet:
 
 func-build: func-verify
 	@echo Building image for $(CURRENT_FUNCTION)...
-	../../scripts/go-function-release.sh build curated
+	../../scripts/go-function-release.sh build
 
 func-push:
 	@echo "Checking if $(CURRENT_FUNCTION) is a valid listed function..."
 	@if echo "$(FUNCTIONS)" | grep -qw "$(CURRENT_FUNCTION)"; then \
 		echo "Pushing image $(CURRENT_FUNCTION)..."; \
-		../../scripts/go-function-release.sh push curated; \
+		../../scripts/go-function-release.sh push; \
 	else \
 		echo "Error: $(CURRENT_FUNCTION) is not a valid listed function!"; \
 		exit 1; \

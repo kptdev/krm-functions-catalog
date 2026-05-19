@@ -17,7 +17,7 @@
 
 repo_base=$(cd "$(dirname "$(dirname "$0")")" || exit ; pwd)
 
-CR_REGISTRY=${DEFAULT_CR:-ghcr.io/kptdev/krm-functions-catalog/krm-fn-contrib}
+CR_REGISTRY=${DEFAULT_CR:-ghcr.io/kptdev/krm-functions-catalog}
 
 function err {
   echo "$1"
@@ -26,17 +26,12 @@ function err {
 
 function docker_build {
   action=$1 # docker buildx operation, it should be either load or push.
-  type=$2 # function type, e.g. contrib, curated
-  name=$3 # function name, e.g. apply-setters
-  tag=$4 # function tag, e.g. v1.2.3
+  name=$2 # function name, e.g. apply-setters
+  tag=$3 # function tag, e.g. v1.2.3
 
   build_args=()
 
-  case "${type}" in
-    contrib) function_dir="${repo_base}/contrib/functions/go/${name}" ;;
-    curated) function_dir="${repo_base}/functions/go/${name}" ;;
-    *) err "unknown function type: ${type}" ;;
-  esac
+  function_dir="${repo_base}/functions/go/${name}"
 
   override_dockerfile="${function_dir}"/Dockerfile
 
@@ -54,10 +49,7 @@ function docker_build {
   build_args+=(--build-arg "BASE_IMAGE=${BASE_IMAGE}")
 
   if [[ ! -f "${function_dir}/go.mod" ]]; then
-    case "${type}" in
-      contrib) function_dir="${repo_base}/contrib/functions/go/" ;;
-      curated) function_dir="${repo_base}/functions/go/" ;;
-    esac
+    function_dir="${repo_base}/functions/go/"
     echo "Setting build context to ${function_dir}"
   fi
 

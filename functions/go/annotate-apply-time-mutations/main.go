@@ -1,4 +1,4 @@
-// Copyright 2025-2026 The kpt Authors
+// Copyright 2021-2025 The kpt Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,24 +15,19 @@
 package main
 
 import (
-	"github.com/kptdev/krm-functions-catalog/functions/go/kubeconform/generated"
-	"github.com/kptdev/krm-functions-sdk/go/fn"
-	"github.com/spf13/cobra"
+	"fmt"
 	"os"
+
+	"github.com/kptdev/krm-functions-catalog/functions/go/annotate-apply-time-mutations/pkg"
+	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
 )
 
 func main() {
-	cmd := &cobra.Command{
-		Short: generated.KubeconformShort,
-		Long:  generated.KubeconformLong,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return fn.AsMain(fn.ResourceListProcessorFunc(Run))
-		},
-		SilenceUsage:  true,
-		SilenceErrors: true,
-	}
+	fn := pkg.Function{}
+	cmd := command.Build(&fn, command.StandaloneEnabled, false)
 
 	if err := cmd.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }

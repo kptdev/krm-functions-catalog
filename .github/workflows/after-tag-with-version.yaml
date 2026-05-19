@@ -19,7 +19,6 @@ on:
   push:
     tags:
       - "functions/*/*/v*"
-      - "contrib/functions/*/*/v*"
 
 jobs:
   build-push-release:
@@ -62,13 +61,9 @@ jobs:
           IMAGE_NAME="${{ steps.extract.outputs.image_name }}"
 
           if [[ "${GITHUB_REF#refs/tags/}" == functions/* ]]; then
-            echo "Detected curated functions release"
+            echo "Detected functions release"
             cd functions/go
             make func-push TAG=$VERSION CURRENT_FUNCTION=$IMAGE_NAME DEFAULT_CR=ghcr.io/${GITHUB_REPOSITORY}
-          elif [[ "${GITHUB_REF#refs/tags/}" == contrib/functions/* ]]; then
-            echo "Detected contrib functions release"
-            cd contrib/functions/go
-            make func-push TAG=$VERSION CURRENT_FUNCTION=$IMAGE_NAME DEFAULT_CR=ghcr.io/${GITHUB_REPOSITORY}/krm-fn-contrib
           else
             echo "Tag does not match any known type, skipping."
             exit 0

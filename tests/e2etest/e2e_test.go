@@ -1,11 +1,14 @@
 package e2etest
 
 import (
+	"os"
 	"strings"
 	"testing"
 
 	"github.com/kptdev/kpt/pkg/test/runner"
 )
+
+const includeArchivedEnv = "KPT_E2E_INCLUDE_ARCHIVED"
 
 // TestE2E accepts a path and scans the path to find all available packages that can
 // be tested. A package which contains a directory '.expected' is considered testable.
@@ -42,10 +45,6 @@ func TestE2E(t *testing.T) {
 	runTests(t, "../..")
 }
 
-func TestArchivedE2E(t *testing.T) {
-	runTests(t, "../../archived/examples")
-}
-
 func runTests(t *testing.T, path string) {
 	cases, err := runner.ScanTestCases(path)
 	if err != nil {
@@ -54,8 +53,7 @@ func runTests(t *testing.T, path string) {
 	setImagePullPolicyToIfNotPresent(*cases)
 	for _, c := range *cases {
 		c := c // capture range variable
-		// Skip archived/examples when running from root
-		if path == "../.." && strings.Contains(c.Path, "archived/examples") {
+		if strings.Contains(c.Path, "archived/") && strings.ToLower(os.Getenv(includeArchivedEnv)) != "true" {
 			continue
 		}
 		t.Run(c.Path, func(t *testing.T) {
