@@ -1,0 +1,10 @@
+image: ghcr.io/kptdev/krm-functions-catalog/no-op
+description: A no-op function used for testing and demo purposes.
+hidden: true
+tags:
+  - mutator
+  - test
+  - testing
+  - timing
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/no-op
+license: Apache-2.0

@@ -1,5 +1,5 @@
 # Copyright 2020 Google LLC
-# Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
+# Modifications Copyright (C) 2025-2026 OpenInfra Foundation Europe.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ FUNCTIONS := \
 	generate-kpt-pkg-docs \
 	kubeconform \
 	list-setters \
+	no-op \
 	remove-local-config-resources \
 	render-helm-chart \
 	search-replace \
