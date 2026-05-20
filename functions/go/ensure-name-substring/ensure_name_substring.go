@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//      http://www.apache.org/licenses/LICENSE-2.0
+//	http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,19 +15,22 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"regexp"
 	"strings"
 
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"sigs.k8s.io/kustomize/api/filters/prefixsuffix"
+	"sigs.k8s.io/kustomize/api/filters/prefix"
+	"sigs.k8s.io/kustomize/api/filters/suffix"
 	"sigs.k8s.io/kustomize/api/resmap"
 	"sigs.k8s.io/kustomize/api/resource"
 	"sigs.k8s.io/kustomize/api/types"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
+	"sigs.k8s.io/kustomize/kyaml/kio"
 	"sigs.k8s.io/kustomize/kyaml/resid"
-	"sigs.k8s.io/kustomize/kyaml/yaml"
+	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 	k8syaml "sigs.k8s.io/yaml"
 )
 
@@ -48,7 +51,7 @@ var (
 )
 
 type EnsureNameSubstring struct {
-	yaml.ResourceMeta `json:",inline" yaml:",inline"`
+	kyaml.ResourceMeta `json:",inline" yaml:",inline"`
 	// Substring is the desired name substring.
 	Substring string `json:"substring" yaml:"substring"`
 	// EditMode controls the desired action when the desired substring is not found in the name.
@@ -131,14 +134,14 @@ func (ens *EnsureNameSubstring) Transform(m resmap.ResMap) error {
 				}
 			}
 
-			fltr := prefixsuffix.Filter{
-				FieldSpec: fs,
-			}
+			var fltr kio.Filter
 			switch ens.EditMode {
 			case Prepend:
-				fltr.Prefix = ens.Substring
+				fltr = prefix.Filter{FieldSpec: fs, Prefix: ens.Substring}
 			case Append:
-				fltr.Suffix = ens.Substring
+				fltr = suffix.Filter{FieldSpec: fs, Suffix: ens.Substring}
+			default:
+				return fmt.Errorf("unknown edit mode: %s", ens.EditMode)
 			}
 			err = r.ApplyFilter(fltr)
 			if err != nil {
@@ -152,10 +155,19 @@ func (ens *EnsureNameSubstring) Transform(m resmap.ResMap) error {
 	return nil
 }
 
-var _ yaml.Unmarshaler = &EnsureNameSubstring{}
+var _ json.Unmarshaler = &EnsureNameSubstring{}
 
-func (ens *EnsureNameSubstring) UnmarshalYAML(value *yaml.Node) error {
-	rn := yaml.NewRNode(value)
+func (ens *EnsureNameSubstring) UnmarshalJSON(bytes []byte) error {
+	yamlBytes, err := k8syaml.JSONToYAML(bytes)
+	if err != nil {
+		return err
+	}
+
+	rn, err := kyaml.Parse(string(yamlBytes))
+	if err != nil {
+		return err
+	}
+
 	meta, err := rn.GetValidatedMetadata()
 	if err != nil {
 		return err
@@ -297,18 +309,18 @@ func resourceContainsSubstring(r *resource.Resource, substring string, fs types.
 	if err != nil {
 		return false, fmt.Errorf("unable to convert resource for %v: %w", r.OrgId().String(), err)
 	}
-	rn, err := yaml.FromMap(m)
+	rn, err := kyaml.FromMap(m)
 	if err != nil {
-		return false, fmt.Errorf("unable to check if the substring exsits in %v: %w", r.OrgId().String(), err)
+		return false, fmt.Errorf("unable to check if the substring exists in %v: %w", r.OrgId().String(), err)
 	}
 	pathElements := strings.Split(fs.Path, "/")
-	val, err := rn.Pipe(yaml.Lookup(pathElements...))
+	val, err := rn.Pipe(kyaml.Lookup(pathElements...))
 	if err != nil {
 		return false, fmt.Errorf("unable to lookup path %v in %v: %w", fs.Path, r.OrgId().String(), err)
 	}
 	valStr, err := val.String()
 	if err != nil {
-		return false, fmt.Errorf("unable to check if the substring exsits in %v: %w", r.OrgId().String(), err)
+		return false, fmt.Errorf("unable to check if the substring exists in %v: %w", r.OrgId().String(), err)
 	}
 	return strings.Contains(valStr, substring), nil
 }
