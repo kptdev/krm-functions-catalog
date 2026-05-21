@@ -1,9 +1,9 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/list-setters
 
-go 1.25.7
+go 1.26.3
 
 require (
-	github.com/kptdev/kpt v1.0.0-beta.61
+	github.com/kptdev/kpt v1.0.0-beta.62.1
 	github.com/stretchr/testify v1.11.1
 	sigs.k8s.io/kustomize/kyaml v0.20.1
 )
@@ -30,7 +30,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
-	github.com/spf13/cobra v1.10.1 // indirect
+	github.com/spf13/cobra v1.10.2 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/xlab/treeprint v1.2.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect

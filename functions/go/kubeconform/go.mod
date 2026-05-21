@@ -1,10 +1,10 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/kubeconform
 
-go 1.25.7
+go 1.26.3
 
 require (
 	github.com/kptdev/krm-functions-sdk/go/fn v1.0.2
-	github.com/spf13/cobra v1.10.1
+	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.11.1
 )
 
@@ -29,7 +29,7 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/gnostic-models v0.7.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/kptdev/kpt v1.0.0-beta.61 // indirect
+	github.com/kptdev/kpt v1.0.0-beta.62.1 // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect

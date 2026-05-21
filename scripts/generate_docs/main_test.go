@@ -23,9 +23,9 @@ import (
 
 func TestParseSemver(t *testing.T) {
 	tests := []struct {
-		version              string
-		major, minor, patch  int
-		wantErr              bool
+		version             string
+		major, minor, patch int
+		wantErr             bool
 	}{
 		{"v0.1.0", 0, 1, 0, false},
 		{"v1.2.3", 1, 2, 3, false},
@@ -176,11 +176,11 @@ func TestGenerateIndex(t *testing.T) {
 
 func TestReplaceVersionTags(t *testing.T) {
 	tests := []struct {
-		name    string
-		body    string
-		fnName  string
-		minor   string
-		want    string
+		name   string
+		body   string
+		fnName string
+		minor  string
+		want   string
 	}{
 		{
 			name:   "replaces latest",

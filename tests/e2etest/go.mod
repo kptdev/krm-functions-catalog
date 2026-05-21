@@ -1,8 +1,8 @@
 module github.com/kptdev/krm-functions-catalog/tests/e2etest
 
-go 1.25.7
+go 1.26.3
 
-require github.com/kptdev/kpt v1.0.0-beta.62
+require github.com/kptdev/kpt v1.0.0-beta.62.1
 
 replace cloud.google.com/go => cloud.google.com/go v0.27.0
 
@@ -61,6 +61,7 @@ require (
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f // indirect
+	github.com/onsi/ginkgo/v2 v2.22.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect

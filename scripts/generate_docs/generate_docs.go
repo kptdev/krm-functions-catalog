@@ -63,19 +63,19 @@ var semverPattern = regexp.MustCompile(`^v(\d+)\.(\d+)\.(\d+)$`)
 // Returns an error if the string doesn't match the expected pattern.
 func parseSemver(version string) (major, minor, patch int, err error) {
 	matches := semverPattern.FindStringSubmatch(version)
-    if matches == nil {
-        return 0, 0, 0, fmt.Errorf("invalid semver: %s", version)
-    }
-    if _, err := fmt.Sscanf(matches[1], "%d", &major); err != nil {
-        return 0, 0, 0, fmt.Errorf("cannot parse major version: %w", err)
-    }
-    if _, err := fmt.Sscanf(matches[2], "%d", &minor); err != nil {
-        return 0, 0, 0, fmt.Errorf("cannot parse minor version: %w", err)
-    }
-    if _, err := fmt.Sscanf(matches[3], "%d", &patch); err != nil {
-        return 0, 0, 0, fmt.Errorf("cannot parse patch version: %w", err)
-    }
-    return major, minor, patch, nil
+	if matches == nil {
+		return 0, 0, 0, fmt.Errorf("invalid semver: %s", version)
+	}
+	if _, err := fmt.Sscanf(matches[1], "%d", &major); err != nil {
+		return 0, 0, 0, fmt.Errorf("cannot parse major version: %w", err)
+	}
+	if _, err := fmt.Sscanf(matches[2], "%d", &minor); err != nil {
+		return 0, 0, 0, fmt.Errorf("cannot parse minor version: %w", err)
+	}
+	if _, err := fmt.Sscanf(matches[3], "%d", &patch); err != nil {
+		return 0, 0, 0, fmt.Errorf("cannot parse patch version: %w", err)
+	}
+	return major, minor, patch, nil
 }
 
 // compareSemver compares two semver strings.
@@ -103,7 +103,7 @@ func getLatestMinor(fnName string, tags []string) string {
 	prefix := fmt.Sprintf("functions/go/%s/", fnName)
 	var versions []string
 	for _, tag := range tags {
-		if after, ok := strings.CutPrefix(tag, prefix); ok  {
+		if after, ok := strings.CutPrefix(tag, prefix); ok {
 			versions = append(versions, after)
 		}
 	}
