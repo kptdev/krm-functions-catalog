@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/set-labels
 
-go 1.25.7
+go 1.26.3
 
 require github.com/kptdev/krm-functions-sdk/go/fn v1.0.2
 
@@ -24,7 +24,7 @@ require (
 	github.com/go-openapi/swag/yamlutils v0.25.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/gnostic-models v0.7.0 // indirect
-	github.com/kptdev/kpt v1.0.0-beta.61 // indirect
+	github.com/kptdev/kpt v1.0.0-beta.62.1 // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/xlab/treeprint v1.2.0 // indirect
