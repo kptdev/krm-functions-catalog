@@ -1,4 +1,4 @@
-// Copyright 2022 The kpt Authors
+// Copyright 2022-2026 The kpt Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -224,8 +224,7 @@ func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin str
 	for _, o := range clusterScoped {
 		switch {
 		case o.IsGVK("", "v1", "Namespace"):
-			name := o.GetName()
-			nsPtr := &name
+			nsPtr := new(o.GetName())
 			origin, err := o.GetOriginID()
 			if err != nil {
 				origin.Name = ""
@@ -233,13 +232,11 @@ func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin str
 			visitor(origin.Name, nsPtr, o.ShortString())
 			_ = o.SetName(*nsPtr)
 		case o.IsGVK("apiextensions.k8s.io", "v1", "CustomResourceDefinition"):
-			namespace := NestedStringOrDie(o, "spec", "conversion", "webhook", "clientConfig", "service", "namespace")
-			nsPtr := &namespace
+			nsPtr := new(NestedStringOrDie(o, "spec", "conversion", "webhook", "clientConfig", "service", "namespace"))
 			visitor("", nsPtr)
 			SetNestedStringOrDie(&o.SubObject, *nsPtr, "spec", "conversion", "webhook", "clientConfig", "service", "namespace")
 		case o.IsGVK("apiregistration.k8s.io", "v1", "APIService"):
-			namespace := NestedStringOrDie(o, "spec", "service", "namespace")
-			nsPtr := &namespace
+			nsPtr := new(NestedStringOrDie(o, "spec", "service", "namespace"))
 			visitor("", nsPtr)
 			SetNestedStringOrDie(&o.SubObject, *nsPtr, "spec", "service", "namespace")
 		case o.GetKind() == "ClusterRoleBinding" || o.GetKind() == "RoleBinding":
@@ -263,8 +260,7 @@ func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin str
 func VisitNamespaceResource(objects fn.KubeObjects, visitor func(origin string, currentPtr *string, idStr ...string)) {
 	namespaceScoped := objects.Where(func(o *fn.KubeObject) bool { return o.IsNamespaceScoped() })
 	for _, o := range namespaceScoped {
-		namespace := o.GetNamespace()
-		nsPtr := &namespace
+		nsPtr := new(o.GetNamespace())
 		origin, err := o.GetOriginID()
 		if err != nil {
 			origin.Namespace = fn.UnknownNamespace

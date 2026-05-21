@@ -35,21 +35,17 @@ func main() {
 	}
 }
 func (fp *RemoveLocalConfigResourcesConfigProcessor) Process(resourceList *framework.ResourceList) error {
-	resourceList.Result = &framework.Result{
-		Name: "remove-local-config-resources",
-	}
-
-	items, err := processResources(resourceList)
+	results, err := processResources(resourceList)
 	if err != nil {
-		resourceList.Result.Items = getErrorItem(err.Error())
+		resourceList.Results = getErrorResult(err.Error())
 		return err
 	}
-	resourceList.Result.Items = items
+	resourceList.Results = results
 	return nil
 }
 
-func processResources(resourceList *framework.ResourceList) ([]framework.ResultItem, error) {
-	var resultItems []framework.ResultItem
+func processResources(resourceList *framework.ResourceList) (framework.Results, error) {
+	var resultItems framework.Results
 	var res []*yaml.RNode
 	for _, node := range resourceList.Items {
 		if node.IsNilOrEmpty() {
@@ -64,9 +60,9 @@ func processResources(resourceList *framework.ResourceList) ([]framework.ResultI
 				itemFilePath = node.GetAnnotations()["config.kubernetes.io/path"]
 			}
 
-			resultItems = append(resultItems, framework.ResultItem{
+			resultItems = append(resultItems, &framework.Result{
 				Message: fmt.Sprintf("Resource name: [%s]", node.GetName()),
-				File: framework.File{
+				File: &framework.File{
 					Path: itemFilePath,
 				},
 				Severity: framework.Info,
@@ -77,15 +73,16 @@ func processResources(resourceList *framework.ResourceList) ([]framework.ResultI
 	resourceList.Items = res
 
 	if len(resultItems) > 0 {
-		infoResultSlice := []framework.ResultItem{}
-		infoResultSlice = append(infoResultSlice, framework.ResultItem{
-			Severity: framework.Info,
-			Message:  fmt.Sprintf("Number of resources pruned: %d", len(resultItems)),
-		})
+		infoResultSlice := framework.Results{
+			&framework.Result{
+				Severity: framework.Info,
+				Message:  fmt.Sprintf("Number of resources pruned: %d", len(resultItems)),
+			},
+		}
 
 		resultItems = append(infoResultSlice, resultItems...)
 	} else if len(resultItems) == 0 {
-		resultItems = append(resultItems, framework.ResultItem{
+		resultItems = append(resultItems, &framework.Result{
 			Message:  "Found no resources to prune with the local config annotation",
 			Severity: framework.Warning,
 		})
@@ -94,10 +91,10 @@ func processResources(resourceList *framework.ResourceList) ([]framework.ResultI
 	return resultItems, nil
 }
 
-// getErrorItem returns the item for an error message
-func getErrorItem(errMsg string) []framework.ResultItem {
-	return []framework.ResultItem{
-		{
+// getErrorResult returns the result for an error message
+func getErrorResult(errMsg string) framework.Results {
+	return framework.Results{
+		&framework.Result{
 			Message:  fmt.Sprintf("failed to remove local configs: %s", errMsg),
 			Severity: framework.Error,
 		},

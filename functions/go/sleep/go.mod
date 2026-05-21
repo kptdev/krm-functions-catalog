@@ -4,7 +4,7 @@ go 1.26.3
 
 require (
 	github.com/stretchr/testify v1.11.1
-	sigs.k8s.io/kustomize/kyaml v0.21.0
+	sigs.k8s.io/kustomize/kyaml v0.21.1
 )
 
 require (
