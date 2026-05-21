@@ -1,9 +1,9 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/generate-kpt-pkg-docs
 
-go 1.25.7
+go 1.26.3
 
 require (
-	github.com/kptdev/kpt v1.0.0-beta.61
+	github.com/kptdev/kpt v1.0.0-beta.62.1
 	github.com/kptdev/krm-functions-catalog/functions/go/list-setters v0.0.0-20251006065330-cad54762e815
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/stretchr/testify v1.11.1
@@ -34,7 +34,7 @@ require (
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
-	github.com/spf13/cobra v1.10.1 // indirect
+	github.com/spf13/cobra v1.10.2 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/xlab/treeprint v1.2.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect

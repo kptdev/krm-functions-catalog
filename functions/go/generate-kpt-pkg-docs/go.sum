@@ -46,8 +46,8 @@ github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
 github.com/kisielk/errcheck v1.5.0/go.mod h1:pFxgyoBC7bSaBwPgfKdkLd5X25qrDl4LWUI2bnpBCr8=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
-github.com/kptdev/kpt v1.0.0-beta.61 h1:uTMcRVmLnVTUUXS1PYoTbc0QEda8sL9J3ymU96RhMDk=
-github.com/kptdev/kpt v1.0.0-beta.61/go.mod h1:EvyF48ocsuwB1XO+2KAwjqMX+qYVYbZ8h/HKufXRmcE=
+github.com/kptdev/kpt v1.0.0-beta.62.1 h1:TIzz/12Uysrs+KuPpNMExHGChz8o6CQNKYL6b+z8z2Q=
+github.com/kptdev/kpt v1.0.0-beta.62.1/go.mod h1:9j5Q9sEBKA0nM0+mlLIFY5FRSskaR6/uX7xGkz0/g8w=
 github.com/kptdev/krm-functions-catalog/functions/go/list-setters v0.0.0-20251006065330-cad54762e815 h1:rsnVcMVkCBu2dSO8VJGm+I2tV8p5lfKdSEJZUWaGkdg=
 github.com/kptdev/krm-functions-catalog/functions/go/list-setters v0.0.0-20251006065330-cad54762e815/go.mod h1:UWYRdzsenntI0tlGKl6L79MklA/eXG4xyx87YIderFw=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=
@@ -72,8 +72,8 @@ github.com/rogpeppe/go-internal v1.13.1/go.mod h1:uMEvuHeurkdAXX61udpOXGD/AzZDWN
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/sergi/go-diff v1.4.0 h1:n/SP9D5ad1fORl+llWyN+D6qoUETXNZARKjyY2/KVCw=
 github.com/sergi/go-diff v1.4.0/go.mod h1:A0bzQcvG0E7Rwjx0REVgAGH58e96+X0MeOfepqsbeW4=
-github.com/spf13/cobra v1.10.1 h1:lJeBwCfmrnXthfAupyUTzJ/J4Nc1RsHC/mSRU2dll/s=
-github.com/spf13/cobra v1.10.1/go.mod h1:7SmJGaTHFVBY0jW4NXGluQoLvhqFQM+6XSKD+P4XaB0=
+github.com/spf13/cobra v1.10.2 h1:DMTTonx5m65Ic0GOoRY2c16WCbHxOOw6xxezuLaBpcU=
+github.com/spf13/cobra v1.10.2/go.mod h1:7C1pvHqHw5A4vrJfjNwvOdzYu0Gml16OCs2GRiTUUS4=
 github.com/spf13/pflag v1.0.9/go.mod h1:McXfInJRrz4CZXVZOBLb0bTZqETkiAhM9Iw0y3An2Bg=
 github.com/spf13/pflag v1.0.10 h1:4EBh2KAYBwaONj6b2Ye1GiHfwjqyROoF4RwYO+vPwFk=
 github.com/spf13/pflag v1.0.10/go.mod h1:McXfInJRrz4CZXVZOBLb0bTZqETkiAhM9Iw0y3An2Bg=

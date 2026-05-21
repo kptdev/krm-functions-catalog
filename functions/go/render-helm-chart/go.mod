@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/render-helm-chart
 
-go 1.25.7
+go 1.26.3
 
 require (
 	github.com/imdario/mergo v0.3.16
@@ -32,7 +32,7 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/google/gnostic-models v0.7.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/kptdev/kpt v1.0.0-beta.61 // indirect
+	github.com/kptdev/kpt v1.0.0-beta.62.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect

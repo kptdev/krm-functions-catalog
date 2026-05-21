@@ -51,8 +51,8 @@ github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnr
 github.com/json-iterator/go v1.1.12/go.mod h1:e30LSqwooZae/UwlEbR2852Gd8hjQvJoHmT4TnhNGBo=
 github.com/kisielk/errcheck v1.5.0/go.mod h1:pFxgyoBC7bSaBwPgfKdkLd5X25qrDl4LWUI2bnpBCr8=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
-github.com/kptdev/kpt v1.0.0-beta.61 h1:uTMcRVmLnVTUUXS1PYoTbc0QEda8sL9J3ymU96RhMDk=
-github.com/kptdev/kpt v1.0.0-beta.61/go.mod h1:EvyF48ocsuwB1XO+2KAwjqMX+qYVYbZ8h/HKufXRmcE=
+github.com/kptdev/kpt v1.0.0-beta.62.1 h1:TIzz/12Uysrs+KuPpNMExHGChz8o6CQNKYL6b+z8z2Q=
+github.com/kptdev/kpt v1.0.0-beta.62.1/go.mod h1:9j5Q9sEBKA0nM0+mlLIFY5FRSskaR6/uX7xGkz0/g8w=
 github.com/kptdev/krm-functions-sdk/go/fn v1.0.2 h1:g9N6SW5axEXMagUbHliH14XpfvvvwkAVDLcN3ApVh2M=
 github.com/kptdev/krm-functions-sdk/go/fn v1.0.2/go.mod h1:NSfdmtQ9AwNg5wdS9gE/H9SQs7Vomzq7E7N9hyEju1U=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=
