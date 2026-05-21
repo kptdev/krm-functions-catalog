@@ -20,7 +20,7 @@ concurrency:
   # In a workflow github.head_ref exists only for PRs while github.ref exists for the repo branches/tags.
   # Concurrency group will be of form ${{ github.head_ref }}-ci when triggered via PR creating 1 group per PR. Older jobs are cancelled when new commits are pushed to that PR branch.
   # Concurrency group will be of form ${{ github.ref }}-ci when triggered from repo branch or tag ref. Older jobs are cancelled when new jobs are triggered from that same branch/tag.
-  # `-ci` suffix is to namespace the concurrency group incase you want to add a group for another workflow in the future..
+  # `-ci` suffix is to namespace the concurrency group incase you want to add a group for another workflow in the future.
   group: "${{ github.head_ref || github.ref }}-ci"
   cancel-in-progress: true
 
