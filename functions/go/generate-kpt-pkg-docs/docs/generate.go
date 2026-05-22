@@ -86,9 +86,15 @@ func generateSetterTableSection(r *blueprintReadme) error {
 		buf := &bytes.Buffer{}
 		table := newMarkdownTable([]string{"Name", "Value", "Type", "Count"}, buf)
 		for _, setter := range setters {
-			table.Append([]string{setter.Name, setter.Value, setter.Type, fmt.Sprintf("%d", setter.Count)})
+			err := table.Append([]string{setter.Name, setter.Value, setter.Type, fmt.Sprintf("%d", setter.Count)})
+			if err != nil {
+				return err
+			}
 		}
-		table.Render()
+		err := table.Render()
+		if err != nil {
+			return err
+		}
 		r.write(buf.String())
 		return nil
 	}
@@ -128,13 +134,19 @@ func generateResourceTableSection(r *blueprintReadme) error {
 		if err != nil {
 			return err
 		}
-		table.Append([]string{path, r.GetApiVersion(), r.GetKind(), r.GetName(), r.GetNamespace()})
+		err = table.Append([]string{path, r.GetApiVersion(), r.GetKind(), r.GetName(), r.GetNamespace()})
+		if err != nil {
+			return err
+		}
 	}
 	r.write(getMdHeading("Resources", 2))
 	if len(r.filteredNodes) == 0 {
 		r.writeLn("This package has no top-level resources. See sub-packages.")
 	} else {
-		table.Render()
+		err := table.Render()
+		if err != nil {
+			return err
+		}
 		r.write(buf.String())
 	}
 	return nil

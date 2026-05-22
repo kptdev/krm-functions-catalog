@@ -87,11 +87,11 @@ Config Connector.
 
 |        Name        |        Value         | Type | Count |
 |--------------------|----------------------|------|-------|
-| billing-account-id | AAAAAA-BBBBBB-CCCCCC | str  |     1 |
-| folder-name        | name.of.folder       | str  |     1 |
-| folder-namespace   | hierarchy            | str  |     1 |
-| project-id         | project-id           | str  |     2 |
-| projects-namespace | projects             | str  |     1 |
+| billing-account-id | AAAAAA-BBBBBB-CCCCCC | str  | 1     |
+| folder-name        | name.of.folder       | str  | 1     |
+| folder-namespace   | hierarchy            | str  | 1     |
+| project-id         | project-id           | str  | 2     |
+| projects-namespace | projects             | str  | 1     |
 
 ## Sub-packages
 
@@ -205,11 +205,11 @@ Config Connector.
 
 |        Name        |        Value         | Type | Count |
 |--------------------|----------------------|------|-------|
-| billing-account-id | AAAAAA-BBBBBB-CCCCCC | str  |     1 |
-| folder-name        | name.of.folder       | str  |     1 |
-| folder-namespace   | hierarchy            | str  |     1 |
-| project-id         | project-id           | str  |     2 |
-| projects-namespace | projects             | str  |     1 |
+| billing-account-id | AAAAAA-BBBBBB-CCCCCC | str  | 1     |
+| folder-name        | name.of.folder       | str  | 1     |
+| folder-namespace   | hierarchy            | str  | 1     |
+| project-id         | project-id           | str  | 2     |
+| projects-namespace | projects             | str  | 1     |
 
 ## Sub-packages
 
@@ -691,11 +691,11 @@ data:
 
 |        Name        |        Value         | Type | Count |
 |--------------------|----------------------|------|-------|
-| billing-account-id | AAAAAA-BBBBBB-CCCCCC | str  |     1 |
-| folder-name        | name.of.folder       | str  |     1 |
-| folder-namespace   | hierarchy            | str  |     1 |
-| project-id         | project-id           | str  |     2 |
-| projects-namespace | projects             | str  |     1 |
+| billing-account-id | AAAAAA-BBBBBB-CCCCCC | str  | 1     |
+| folder-name        | name.of.folder       | str  | 1     |
+| folder-namespace   | hierarchy            | str  | 1     |
+| project-id         | project-id           | str  | 2     |
+| projects-namespace | projects             | str  | 1     |
 `,
 		},
 	}

@@ -18,15 +18,25 @@ import (
 	"bytes"
 
 	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/renderer"
+	"github.com/olekukonko/tablewriter/tw"
 )
 
 // newMarkdownTable returns a configured md table with specified headings
 func newMarkdownTable(headings []string, buf *bytes.Buffer) tablewriter.Table {
-	table := tablewriter.NewWriter(buf)
-	table.SetAutoFormatHeaders(false)
-	table.SetHeader(headings)
-	table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
-	table.SetCenterSeparator("|")
-	table.SetAutoWrapText(false)
+	table := tablewriter.NewTable(buf,
+		tablewriter.WithRenderer(renderer.NewMarkdown()),
+		tablewriter.WithRowAutoWrap(0),
+		tablewriter.WithConfig(tablewriter.Config{
+			Header: tw.CellConfig{
+				Formatting: tw.CellFormatting{AutoFormat: tw.Off},
+				Alignment:  tw.CellAlignment{Global: tw.AlignNone},
+			},
+			Row: tw.CellConfig{
+				Alignment: tw.CellAlignment{Global: tw.AlignNone},
+			},
+		}),
+	)
+	table.Header(headings)
 	return *table
 }
