@@ -18,18 +18,21 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/kptdev/krm-functions-catalog/functions/go/gatekeeper/generated"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/kio"
+	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
 	k8syaml "sigs.k8s.io/yaml"
 )
 
 const (
-	stdin  = "/dev/stdin"
-	stdout = "/dev/stdout"
+	stdin    = "/dev/stdin"
+	stdout   = "/dev/stdout"
+	nullByte = "\x00"
 )
 
 type GatekeeperProcessor struct {
@@ -58,6 +61,15 @@ func (gkp *GatekeeperProcessor) Process(resourceList *framework.ResourceList) er
 			return err
 		}
 
+		// add the filepath to the objects name in sanitized form. this is done
+		// to get unique identifier in case the same resource is defined in
+		// different files. Usually this happens when running the function
+		// across packages
+		if !isTemplate(un) && !isConstraint(un) {
+			un.SetName(fmt.Sprintf("%s%s%s", un.GetName(), nullByte,
+				strings.ReplaceAll(item.GetAnnotations()[kioutil.PathAnnotation], "/", nullByte)))
+		}
+
 		objects = append(objects, un)
 	}
 
@@ -73,6 +85,19 @@ func (gkp *GatekeeperProcessor) Process(resourceList *framework.ResourceList) er
 			},
 		}
 	}
+
+	// unwrap the null-byte filename hack again
+	if result != nil {
+		for i, item := range result.Items {
+			parts := strings.SplitN(item.ResourceRef.Name, nullByte, 2)
+			item.ResourceRef.Name = parts[0]
+			if len(parts) == 2 {
+				item.Field.Path = strings.ReplaceAll(parts[1], nullByte, "/")
+			}
+			result.Items[i] = item
+		}
+	}
+
 	resourceList.Result = result
 	if resultContainsError(result) {
 		return result
@@ -196,4 +221,14 @@ func resultContainsError(result *framework.Result) bool {
 		}
 	}
 	return false
+}
+
+func isTemplate(u *unstructured.Unstructured) bool {
+	gvk := u.GroupVersionKind()
+	return gvk.Kind == "ConstraintTemplate"
+}
+
+func isConstraint(u *unstructured.Unstructured) bool {
+	gvk := u.GroupVersionKind()
+	return gvk.Group == "constraints.gatekeeper.sh"
 }
