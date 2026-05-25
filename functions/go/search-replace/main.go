@@ -43,20 +43,17 @@ func main() {
 type SearchReplaceProcessor struct{}
 
 func (srp *SearchReplaceProcessor) Process(resourceList *framework.ResourceList) error {
-	resourceList.Result = &framework.Result{
-		Name: "search-replace",
-	}
-	items, err := run(resourceList)
+	results, err := run(resourceList)
 	if err != nil {
-		resourceList.Result.Items = getErrorItem(err.Error())
+		resourceList.Results = getErrorResult(err.Error())
 		return err
 	}
-	resourceList.Result.Items = items
+	resourceList.Results = results
 	return nil
 }
 
 // run resolves the function params from input ResourceList and runs the function on resources
-func run(resourceList *framework.ResourceList) ([]framework.ResultItem, error) {
+func run(resourceList *framework.ResourceList) (framework.Results, error) {
 	sr, err := getSearchReplaceParams(resourceList.FunctionConfig)
 	if err != nil {
 		return nil, err
@@ -80,14 +77,14 @@ func getSearchReplaceParams(fc *kyaml.RNode) (searchreplace.SearchReplace, error
 }
 
 // searchResultsToItems converts the Search and Replace results to
-// equivalent items([]framework.Item)
-func searchResultsToItems(sr searchreplace.SearchReplace) []framework.ResultItem {
-	var items []framework.ResultItem
+// equivalent items(framework.Results)
+func searchResultsToItems(sr searchreplace.SearchReplace) framework.Results {
+	var results framework.Results
 	if len(sr.Results) == 0 {
-		items = append(items, framework.ResultItem{
+		results = append(results, &framework.Result{
 			Message: "no matches",
 		})
-		return items
+		return results
 	}
 	for _, res := range sr.Results {
 		var message string
@@ -97,19 +94,19 @@ func searchResultsToItems(sr searchreplace.SearchReplace) []framework.ResultItem
 			message = fmt.Sprintf("Matched field value %q", res.Value)
 		}
 
-		items = append(items, framework.ResultItem{
+		results = append(results, &framework.Result{
 			Message: message,
-			Field:   framework.Field{Path: res.FieldPath},
-			File:    framework.File{Path: res.FilePath},
+			Field:   &framework.Field{Path: res.FieldPath},
+			File:    &framework.File{Path: res.FilePath},
 		})
 	}
-	return items
+	return results
 }
 
-// getErrorItem returns the item for input error message
-func getErrorItem(errMsg string) []framework.ResultItem {
-	return []framework.ResultItem{
-		{
+// getErrorResult returns the result for input error message
+func getErrorResult(errMsg string) framework.Results {
+	return framework.Results{
+		&framework.Result{
 			Message:  fmt.Sprintf("failed to perform search-replace operation: %q", errMsg),
 			Severity: framework.Error,
 		},

@@ -22,8 +22,8 @@ import (
 	"strconv"
 
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-annotations/generated"
+	consts "github.com/kptdev/krm-functions-catalog/functions/go/set-annotations/third_party/sigs.k8s.io/kustomize/api/konfig/builtinpluginconsts"
 	"sigs.k8s.io/kustomize/api/hasher"
-	"sigs.k8s.io/kustomize/api/konfig/builtinpluginconsts"
 	"sigs.k8s.io/kustomize/api/resmap"
 	"sigs.k8s.io/kustomize/api/resource"
 	"sigs.k8s.io/kustomize/api/types"
@@ -150,9 +150,8 @@ func (f *setAnnotationFunction) resultsToItems() (framework.Results, error) {
 }
 
 func getDefaultConfig() (transformerConfig, error) {
-	defaultConfigString := builtinpluginconsts.GetDefaultFieldSpecsAsMap()["commonannotations"]
 	var tc transformerConfig
-	err := yaml.Unmarshal([]byte(defaultConfigString), &tc)
+	err := yaml.Unmarshal([]byte(consts.CommonAnnotationFieldSpecs), &tc)
 	return tc, err
 }
 

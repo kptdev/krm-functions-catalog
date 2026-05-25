@@ -41,30 +41,26 @@ func main() {
 	}
 }
 func (fp *SetEnforcementActionProcessor) Process(resourceList *framework.ResourceList) error {
-	resourceList.Result = &framework.Result{
-		Name: "set-enforcement-action",
-	}
-
 	// get the enforcementAction value from functionConfig
 	var acn string
 	err := getEnforcementAction(resourceList.FunctionConfig, &acn)
 	if err != nil {
-		resourceList.Result.Items = getErrorItem(err.Error())
+		resourceList.Results = getErrorItem(err.Error())
 		return err
 	}
 
 	// process policies in the package and display results
 	items, err := processPolicies(resourceList.Items, acn)
 	if err != nil {
-		resourceList.Result.Items = getErrorItem(err.Error())
+		resourceList.Results = getErrorItem(err.Error())
 		return err
 	}
-	resourceList.Result.Items = items
+	resourceList.Results = items
 	return nil
 }
 
-func processPolicies(resourceList []*yaml.RNode, acn string) ([]framework.ResultItem, error) {
-	var resultItems []framework.ResultItem
+func processPolicies(resourceList []*yaml.RNode, acn string) ([]*framework.Result, error) {
+	var resultItems []*framework.Result
 	for _, node := range resourceList {
 		if node.IsNilOrEmpty() {
 			continue
@@ -92,9 +88,9 @@ func processPolicies(resourceList []*yaml.RNode, acn string) ([]framework.Result
 			itemFilePath = node.GetAnnotations()["config.kubernetes.io/path"]
 		}
 
-		resultItems = append(resultItems, framework.ResultItem{
+		resultItems = append(resultItems, &framework.Result{
 			Message: fmt.Sprintf("Policy name: [%s]", node.GetName()),
-			File: framework.File{
+			File: &framework.File{
 				Path: itemFilePath,
 			},
 			Severity: framework.Info,
@@ -102,15 +98,16 @@ func processPolicies(resourceList []*yaml.RNode, acn string) ([]framework.Result
 	}
 
 	if len(resultItems) > 0 {
-		infoResultSlice := []framework.ResultItem{}
-		infoResultSlice = append(infoResultSlice, framework.ResultItem{
-			Severity: framework.Info,
-			Message:  fmt.Sprintf("Number of policies set to [%s]: %d", acn, len(resultItems)),
-		})
+		infoResultSlice := []*framework.Result{
+			{
+				Severity: framework.Info,
+				Message:  fmt.Sprintf("Number of policies set to [%s]: %d", acn, len(resultItems)),
+			},
+		}
 
 		resultItems = append(infoResultSlice, resultItems...)
 	} else if len(resultItems) == 0 {
-		resultItems = append(resultItems, framework.ResultItem{
+		resultItems = append(resultItems, &framework.Result{
 			Message:  fmt.Sprintf("Found no policy to set to [%s]", acn),
 			Severity: framework.Warning,
 		})
@@ -134,8 +131,8 @@ func getEnforcementAction(fc *yaml.RNode, acn *string) error {
 }
 
 // getErrorItem returns the item for an error message
-func getErrorItem(errMsg string) []framework.ResultItem {
-	return []framework.ResultItem{
+func getErrorItem(errMsg string) []*framework.Result {
+	return []*framework.Result{
 		{
 			Message:  fmt.Sprintf("failed to process policies: %s", errMsg),
 			Severity: framework.Error,

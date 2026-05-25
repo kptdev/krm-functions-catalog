@@ -1,5 +1,5 @@
 diff --git a/GENERATED.md b/GENERATED.md
-index 800f955..201cb1d 100755
+index 800f955..1346142 100755
 --- a/GENERATED.md
 +++ b/GENERATED.md
 @@ -1,6 +1,71 @@
@@ -15,10 +15,10 @@ index 800f955..201cb1d 100755
 +
 +|     Name      |     Value      | Type | Count |
 +|---------------|----------------|------|-------|
-+| name          | bucket         | str  |     1 |
-+| namespace     | config-control | str  |     1 |
-+| project-id    | project-id     | str  |     2 |
-+| storage-class | standard       | str  |     1 |
++| name          | bucket         | str  | 1     |
++| namespace     | config-control | str  | 1     |
++| project-id    | project-id     | str  | 2     |
++| storage-class | standard       | str  | 1     |
 +
 +## Sub-packages
 +
