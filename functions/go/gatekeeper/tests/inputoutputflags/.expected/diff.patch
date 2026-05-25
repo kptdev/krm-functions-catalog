@@ -1,18 +1,17 @@
 diff --git a/resources/resources.yaml b/resources/resources.yaml
-index f4eb4e1..ac7a147 100644
+index 2ce2aca..f9dba22 100644
 --- a/resources/resources.yaml
 +++ b/resources/resources.yaml
-@@ -47,3 +47,13 @@ items:
-               - 'apps'
-             kinds:
-               - Deployment
+@@ -47,3 +47,12 @@ items:
+         - 'apps'
+         kinds:
+         - Deployment
 +results:
-+  items:
-+    - message: |-
-+        Containers must not run as root
-+        violatedConstraint: disallowroot
-+      severity: error
-+      resourceRef:
-+        apiVersion: apps/v1
-+        kind: Deployment
-+        name: nginx-deploy
++- message: |-
++    Containers must not run as root
++    violatedConstraint: disallowroot
++  severity: error
++  resourceRef:
++    apiVersion: apps/v1
++    kind: Deployment
++    name: nginx-deploy

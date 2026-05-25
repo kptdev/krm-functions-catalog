@@ -1,5 +1,5 @@
 diff --git a/Kptfile b/Kptfile
-index 0d32b6f..9abb071 100644
+index 0d32b6f..c5e93a8 100644
 --- a/Kptfile
 +++ b/Kptfile
 @@ -7,3 +7,43 @@ metadata:
@@ -18,7 +18,7 @@ index 0d32b6f..9abb071 100644
 +    validationSteps:
 +      - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest
 +        stderr: |-
-+          [error] v1/ConfigMap/default/super-secret : The following banned keys are being used in the ConfigMap: {"private_key"}
++          [error] v1/ConfigMap/default/super-secret: The following banned keys are being used in the ConfigMap: {"private_key"}
 +          violatedConstraint: no-secrets-in-configmap
 +        exitCode: 1
 +        results:

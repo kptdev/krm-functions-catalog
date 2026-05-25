@@ -1,4 +1,4 @@
-// Copyright 2019 The kpt Authors
+// Copyright 2019-2026 The kpt Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,14 +16,12 @@ package main
 
 import (
 	"fmt"
-	"sort"
 	"strconv"
 
-	opatypes "github.com/open-policy-agent/frameworks/constraint/pkg/types"
-	// The gatekeeper/pkg/gator/test package is the underlying libraries for
+	// The gatekeeper/v3/pkg/gator/test package is the underlying libraries for
 	// the `gator test` subcommand, not a library for testing golang code.
-	gatortest "github.com/open-policy-agent/gatekeeper/pkg/gator/test"
-	opautil "github.com/open-policy-agent/gatekeeper/pkg/util"
+	gatortest "github.com/open-policy-agent/gatekeeper/v3/pkg/gator/test"
+	opautil "github.com/open-policy-agent/gatekeeper/v3/pkg/util"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
@@ -32,7 +30,7 @@ import (
 
 // Validate makes sure the configs passed to it comply with any Constraints and
 // Constraint Templates present in the list of configs
-func Validate(objects []*unstructured.Unstructured) (*framework.Result, error) {
+func Validate(objects []*unstructured.Unstructured) (framework.Results, error) {
 	resps, err := gatortest.Test(objects)
 	if err != nil {
 		return nil, err
@@ -45,18 +43,18 @@ func Validate(objects []*unstructured.Unstructured) (*framework.Result, error) {
 	return nil, nil
 }
 
-func parseResults(results []*opatypes.Result) (*framework.Result, error) {
-	var items []framework.ResultItem
+func parseResults(results []*gatortest.GatorResult) (framework.Results, error) {
+	var items framework.Results
 
 	for _, r := range results {
-		u, ok := r.Resource.(*unstructured.Unstructured)
-		if !ok {
-			return nil, fmt.Errorf("could not cast to unstructured: %+v", r.Resource)
+		u := r.ViolatingObject
+		if u == nil {
+			continue
 		}
 
-		item := framework.ResultItem{
+		item := &framework.Result{
 			Message: fmt.Sprintf("%s\nviolatedConstraint: %s", r.Msg, r.Constraint.GetName()),
-			ResourceRef: yaml.ResourceIdentifier{
+			ResourceRef: &yaml.ResourceIdentifier{
 				TypeMeta: yaml.TypeMeta{
 					APIVersion: u.GetAPIVersion(),
 					Kind:       u.GetKind(),
@@ -80,7 +78,7 @@ func parseResults(results []*opatypes.Result) (*framework.Result, error) {
 		path, foundPath := u.GetAnnotations()[kioutil.PathAnnotation]
 		index, foundIndex := u.GetAnnotations()[kioutil.IndexAnnotation]
 		if foundPath {
-			item.File = framework.File{
+			item.File = &framework.File{
 				Path: path,
 			}
 			if foundIndex {
@@ -94,56 +92,7 @@ func parseResults(results []*opatypes.Result) (*framework.Result, error) {
 
 		items = append(items, item)
 	}
-	sortResultItems(items)
+	items.Sort()
 
-	return &framework.Result{
-		Items: items,
-	}, nil
-}
-
-// TODO(mengqiy): upstream this to the SDK
-func sortResultItems(items []framework.ResultItem) {
-	sort.SliceStable(items, func(i, j int) bool {
-		if fileLess(items, i, j) != 0 {
-			return fileLess(items, i, j) < 0
-		}
-		if severityLess(items, i, j) != 0 {
-			return severityLess(items, i, j) < 0
-		}
-		return resultItemToString(items[i]) < resultItemToString(items[j])
-	})
-}
-
-func severityLess(items []framework.ResultItem, i, j int) int {
-	severityToNumber := map[framework.Severity]int{
-		framework.Error:   0,
-		framework.Warning: 1,
-		framework.Info:    2,
-	}
-
-	severityLevelI, found := severityToNumber[items[i].Severity]
-	if !found {
-		severityLevelI = 3
-	}
-	severityLevelJ, found := severityToNumber[items[j].Severity]
-	if !found {
-		severityLevelJ = 3
-	}
-	return severityLevelI - severityLevelJ
-}
-
-func fileLess(items []framework.ResultItem, i, j int) int {
-	if items[i].File.Path != items[j].File.Path {
-		if items[i].File.Path < items[j].File.Path {
-			return -1
-		} else {
-			return 1
-		}
-	}
-	return items[i].File.Index - items[j].File.Index
-}
-
-func resultItemToString(item framework.ResultItem) string {
-	return fmt.Sprintf("resource-ref:%s,field:%s,message:%s",
-		item.ResourceRef, item.Field, item.Message)
+	return items, nil
 }
