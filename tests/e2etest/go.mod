@@ -2,7 +2,7 @@ module github.com/kptdev/krm-functions-catalog/tests/e2etest
 
 go 1.26.3
 
-require github.com/kptdev/kpt v1.0.0-beta.63
+require github.com/kptdev/kpt v1.0.0-beta.64
 
 require (
 	cloud.google.com/go/compute/metadata v0.9.0 // indirect

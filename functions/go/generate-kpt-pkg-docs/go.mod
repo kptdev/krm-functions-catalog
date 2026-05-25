@@ -3,7 +3,7 @@ module github.com/kptdev/krm-functions-catalog/functions/go/generate-kpt-pkg-doc
 go 1.26.3
 
 require (
-	github.com/kptdev/kpt v1.0.0-beta.63
+	github.com/kptdev/kpt v1.0.0-beta.64
 	github.com/kptdev/krm-functions-catalog/functions/go/list-setters v0.1.3
 	github.com/olekukonko/tablewriter v1.1.4
 	github.com/stretchr/testify v1.11.1

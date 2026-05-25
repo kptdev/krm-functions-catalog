@@ -3,7 +3,7 @@ module github.com/kptdev/krm-functions-catalog/functions/go/starlark
 go 1.26.3
 
 require (
-	github.com/kptdev/krm-functions-sdk/go/fn v1.0.2
+	github.com/kptdev/krm-functions-sdk/go/fn v1.0.3
 	github.com/qri-io/starlib v0.5.0
 	github.com/stretchr/testify v1.11.1
 	go.starlark.net v0.0.0-20260326113308-fadfc96def35
@@ -37,7 +37,6 @@ require (
 	github.com/go-openapi/swag/yamlutils v0.26.0 // indirect
 	github.com/google/gnostic-models v0.7.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/kptdev/kpt v1.0.0-beta.63 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
@@ -61,7 +60,6 @@ require (
 	k8s.io/kube-openapi v0.0.0-20260520065146-aa012df4f4af // indirect
 	k8s.io/utils v0.0.0-20260507154919-ff6756f316d2 // indirect
 	sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730 // indirect
-	sigs.k8s.io/kustomize/api v0.21.1 // indirect
 	sigs.k8s.io/randfill v1.0.0 // indirect
 	sigs.k8s.io/structured-merge-diff/v6 v6.4.0 // indirect
 	sigs.k8s.io/yaml v1.6.0 // indirect

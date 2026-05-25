@@ -3,7 +3,7 @@ module github.com/kptdev/krm-functions-catalog/functions/go/list-setters
 go 1.26.3
 
 require (
-	github.com/kptdev/kpt v1.0.0-beta.63
+	github.com/kptdev/kpt v1.0.0-beta.64
 	github.com/stretchr/testify v1.11.1
 	sigs.k8s.io/kustomize/kyaml v0.21.1
 )
