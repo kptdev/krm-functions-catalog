@@ -1,5 +1,5 @@
 # Copyright 2022 Google LLC
-# Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
+# Modifications Copyright (C) 2025-2026 OpenInfra Foundation Europe.
 #
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,11 +28,11 @@ jobs:
       packages: write
       contents: read
     steps:
-    - uses: actions/checkout@v5
-    - uses: actions/setup-go@v6
+    - uses: actions/checkout@v6
+    - uses: kptdev/porch/.github/actions/setup-go-kpt@main
       with:
         go-version-file: documentation/go.mod
-        cache: true
+        install-kpt: 'false'
     - uses: docker/setup-qemu-action@v4
     - uses: docker/setup-buildx-action@v4
     - name: Log in to GHCR

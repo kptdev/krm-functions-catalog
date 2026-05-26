@@ -31,7 +31,7 @@ jobs:
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Lint shell scripts, ignoring third-party files
         run: |
           find . -name "*.sh" > shell_files.out
@@ -40,31 +40,24 @@ jobs:
   validate-metadata:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: kptdev/porch/.github/actions/setup-go-kpt@main
         with:
           go-version-file: documentation/go.mod
-          cache: true
+          install-kpt: 'false'
       - name: Validate metadata.yaml files
         run: make validate-metadata
 
   go-unit-test-ci:
     runs-on: ubuntu-latest
-    env:
-      GOPATH: /home/runner/work/krm-functions-catalog/functions/go
-      GO111MODULE: on
     steps:
-      - name: Check out code into GOPATH
-        uses: actions/checkout@v1
-        with:
-          path: go/src/github.com/kptdev/krm-functions-catalog
+      - uses: actions/checkout@v6
       - name: Set up Go
-        uses: actions/setup-go@v6
+        uses: kptdev/porch/.github/actions/setup-go-kpt@main
         with:
           go-version-file: documentation/go.mod
-          cache: true
-        id: go
+          install-kpt: 'false'
       - name: Run unit tests
         run: |
           make unit-test
@@ -76,15 +69,11 @@ jobs:
       GOPATH: /home/runner/work/krm-functions-catalog/functions/go
       GO111MODULE: on
     steps:
-      - uses: actions/checkout@v5
-      - name: Set up Go
-        uses: actions/setup-go@v6
+      - uses: actions/checkout@v6
+      - name: Set up Go and install kpt
+        uses: kptdev/porch/.github/actions/setup-go-kpt@main
         with:
-          go-version-file: documentation/go.mod
-          cache: true
-      - name: Install kpt
-        run: |
-          go install github.com/kptdev/kpt@main
+          go-version-file: functions/go/list-setters/go.mod
       - name: Install kustomize
         uses: syntaqx/setup-kustomize@v1
         with:
