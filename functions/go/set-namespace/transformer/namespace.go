@@ -30,7 +30,7 @@ func Run(rl *fn.ResourceList) (bool, error) {
 	err := tc.Config(rl.FunctionConfig)
 	if err != nil {
 		rl.Results = append(rl.Results, fn.ErrorConfigObjectResult(err, rl.FunctionConfig))
-		return true, nil
+		return false, nil
 	}
 	// Update "namespace" to the proper resources.
 	results := tc.Transform(rl.Items)

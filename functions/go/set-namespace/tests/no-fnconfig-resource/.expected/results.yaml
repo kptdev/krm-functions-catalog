@@ -2,10 +2,11 @@ apiVersion: kpt.dev/v1
 kind: FunctionResultList
 metadata:
   name: fnresults
-exitCode: 0
+exitCode: 1
 items:
   - image: ghcr.io/kptdev/krm-functions-catalog/set-namespace:latest
-    exitCode: 0
+    stderr: 'failed to evaluate function: error: function failure'
+    exitCode: 1
     results:
       - message: FunctionConfig is missing. Expect `ConfigMap.v1` or `SetNamespace.v1alpha1.fn.kpt.dev`
         severity: error
