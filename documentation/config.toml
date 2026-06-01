@@ -191,6 +191,10 @@ enable = false
   name = "Guides"
   url = "https://kpt.dev/guides/"
   weight = 40
+[[menu.main]]
+  name = "Porch"
+  url = "https://kpt-porch.netlify.app/"
+  weight = 50
 
 [security]
   [security.funcs]
