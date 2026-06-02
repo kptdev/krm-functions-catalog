@@ -1,5 +1,4 @@
-# Copyright 2022 Google LLC
-# Modifications Copyright (C) 2025-2026 OpenInfra Foundation Europe.
+# Copyright 2025-2026 The kpt Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,13 +27,13 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Go
-        uses: actions/setup-go@v6
+        uses: kptdev/porch/.github/actions/setup-go-kpt@main
         with:
           go-version-file: documentation/go.mod
-          cache: true
+          install-kpt: 'false'
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v4
