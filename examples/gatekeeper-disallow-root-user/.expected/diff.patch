@@ -1,5 +1,5 @@
 diff --git a/Kptfile b/Kptfile
-index 0d32b6f..b9e2ee6 100644
+index 0d32b6f..4530702 100644
 --- a/Kptfile
 +++ b/Kptfile
 @@ -7,3 +7,41 @@ metadata:
@@ -18,7 +18,7 @@ index 0d32b6f..b9e2ee6 100644
 +    validationSteps:
 +      - image: ghcr.io/kptdev/krm-functions-catalog/gatekeeper:latest
 +        stderr: |-
-+          [error] apps/v1/Deployment/nginx-deploy : Containers must not run as root
++          [error] apps/v1/Deployment/nginx-deploy: Containers must not run as root
 +          violatedConstraint: disallowroot
 +        exitCode: 1
 +        results:
