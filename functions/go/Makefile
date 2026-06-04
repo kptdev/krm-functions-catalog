@@ -26,6 +26,7 @@ FUNCTIONS := \
 	bar \
 	create-setters \
 	delete-annotations \
+	drop-comments \
 	ensure-name-substring \
 	foo \
 	gatekeeper \

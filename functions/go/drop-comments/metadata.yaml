@@ -1,0 +1,8 @@
+image: ghcr.io/kptdev/krm-functions-catalog/drop-comments
+description: A test function that strips YAML comments from resources.
+hidden: true
+tags:
+  - mutator
+  - test
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/drop-comments
+license: Apache-2.0
