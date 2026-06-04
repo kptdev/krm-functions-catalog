@@ -1,0 +1,8 @@
+image: ghcr.io/kptdev/krm-functions-catalog/bar
+description: A test function that prints 'bar' to stderr and exits with code 1.
+hidden: true
+tags:
+  - mutator
+  - test
+sourceURL: https://github.com/kptdev/krm-functions-catalog/tree/main/functions/go/bar
+license: Apache-2.0

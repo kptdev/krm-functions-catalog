@@ -23,14 +23,17 @@ FUNCTIONS := \
 	annotate-apply-time-mutations \
 	apply-replacements \
 	apply-setters \
+	bar \
 	create-setters \
 	delete-annotations \
 	ensure-name-substring \
+	foo \
 	gatekeeper \
 	generate-kpt-pkg-docs \
 	kubeconform \
 	list-setters \
 	no-op \
+	printenv \
 	remove-local-config-resources \
 	render-helm-chart \
 	search-replace \
