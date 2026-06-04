@@ -23,7 +23,9 @@ import (
 )
 
 func main() {
-	_, _ = io.Copy(os.Stdout, os.Stdin)
+	if _, err := io.Copy(os.Stdout, os.Stdin); err != nil {
+		fmt.Fprintf(os.Stderr, "stdin copy error: %v\n", err)
+	}
 	envs := os.Environ()
 	sort.Strings(envs)
 	fmt.Fprintln(os.Stderr, strings.Join(envs, "\n"))

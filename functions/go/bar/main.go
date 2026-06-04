@@ -21,7 +21,9 @@ import (
 )
 
 func main() {
-	_, _ = io.Copy(os.Stdout, os.Stdin)
+	if _, err := io.Copy(os.Stdout, os.Stdin); err != nil {
+		fmt.Fprintf(os.Stderr, "stdin copy error: %v\n", err)
+	}
 	fmt.Fprintln(os.Stderr, "bar")
 	os.Exit(1)
 }

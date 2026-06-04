@@ -11,6 +11,11 @@ A test KRM function that prints environment variables to stderr and exits with c
 This function is used in kpt e2e tests to verify that environment variables are correctly
 passed to container functions via the `-e` flag.
 
+> **Note:** This image is intended for controlled test environments only. It prints all
+> environment variables passed to the container to stderr. When run as a container function,
+> it only receives variables explicitly injected via `-e` flags - it does not inherit the
+> host environment.
+
 <!--mdtogo:Long-->
 
 ## Usage
