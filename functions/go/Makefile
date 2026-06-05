@@ -106,6 +106,7 @@ push: $(FUNCTION_PUSH) ## Push images to registry. WARN: This operation should o
 $(FUNCTION_PUSH):
 	$(MAKE) CURRENT_FUNCTION=$(subst -PUSH,,$@) TAG=$(TAG) DEFAULT_CR=$(DEFAULT_CR) func-push
 
+.PHONY: install-mdtogo
 install-mdtogo:
 	go install github.com/kptdev/kpt/mdtogo@main
 
@@ -114,6 +115,7 @@ install-mdtogo:
 func-verify: func-format func-test
 func-format: docs-generate func-fix func-vet func-fmt func-lint
 
+.PHONY: install-golangci-lint
 install-golangci-lint:
 	(which $(GOPATH)/bin/golangci-lint || \
 		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(GOPATH)/bin latest)
