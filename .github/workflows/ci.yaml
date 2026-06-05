@@ -90,6 +90,12 @@ jobs:
         with:
           go-version-file: functions/go/list-setters/go.mod
           cache-dependency-path: functions/go/*/go.sum
+      - name: Cache golangci-lint
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/golangci-lint
+          key: golangci-lint-${{ hashFiles('functions/go/*/go.sum') }}
+          restore-keys: golangci-lint-
       - name: Install kustomize
         uses: syntaqx/setup-kustomize@v1
         with:
