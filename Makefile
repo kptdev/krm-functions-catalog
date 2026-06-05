@@ -14,6 +14,7 @@
 SHELL=/bin/bash
 export TAG ?= latest
 export DEFAULT_CR ?= ghcr.io/kptdev/krm-functions-catalog
+NPROC := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
 
 
 .DEFAULT_GOAL := help
@@ -24,7 +25,7 @@ help: ## Print this help
 .PHONY: test unit-test e2e-test push
 
 unit-test: ## Run unit tests for Go functions
-	cd functions/go && $(MAKE) test -j$(shell nproc)
+	cd functions/go && $(MAKE) test -j$(NPROC)
 
 e2e-test: ## Run all e2e tests
 	cd tests/e2etest && go test -v -run TestE2E ./...
@@ -42,14 +43,14 @@ tidy:
 
 .PHONY: build
 build: ## Build all function images.
-	cd functions/go && $(MAKE) build -j$(shell nproc)
+	cd functions/go && $(MAKE) build -j$(NPROC)
 
 .PHONY: format
 format: ## Run go fix, vet, fmt, lint and generate docs for all functions
-	cd functions/go && $(MAKE) format -j$(shell nproc)
+	cd functions/go && $(MAKE) format -j$(NPROC)
 
 push: ## Push images to registry. WARN: This operation should only be done in CI environment.
-	cd functions/go && $(MAKE) push -j$(shell nproc)
+	cd functions/go && $(MAKE) push -j$(NPROC)
 
 validate-metadata: ## Validate all metadata.yaml files against the schema
 	cd scripts/generate_docs && go run . validate
