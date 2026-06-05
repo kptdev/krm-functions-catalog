@@ -73,7 +73,7 @@ $(FUNCTIONS):
 test: generate $(FUNCTION_TESTS) ## Run unit tests for all functions
 
 .PHONY: $(FUNCTION_TESTS)
-$(FUNCTION_TESTS):
+$(FUNCTION_TESTS): | generate
 	$(MAKE) CURRENT_FUNCTION=$(subst -TEST,,$@) func-test
 
 generate: install-mdtogo generate-docs
@@ -82,21 +82,21 @@ generate: install-mdtogo generate-docs
 generate-docs: $(FUNCTION_GENERATE_DOCS) ## Generate docs for all functions
 
 .PHONY: $(FUNCTION_GENERATE_DOCS)
-$(FUNCTION_GENERATE_DOCS):
+$(FUNCTION_GENERATE_DOCS): | install-mdtogo
 	$(MAKE) CURRENT_FUNCTION=$(subst -GENERATE,,$@) docs-generate
 
 .PHONY: build
 build: generate $(FUNCTION_BUILDS) ## Build all function images. 'TAG' env is used to specify tag. 'dev' will be used if not set.
 
 .PHONY: $(FUNCTION_BUILDS)
-$(FUNCTION_BUILDS):
+$(FUNCTION_BUILDS): | generate install-golangci-lint
 	$(MAKE) CURRENT_FUNCTION=$(subst -BUILD,,$@) TAG=$(TAG) DEFAULT_CR=$(DEFAULT_CR) func-build
 
 .PHONY: format
 format: generate $(FUNCTION_FORMATS)
 
 .PHONY: $(FUNCTION_FORMATS)
-$(FUNCTION_FORMATS):
+$(FUNCTION_FORMATS): | generate install-golangci-lint
 	$(MAKE) CURRENT_FUNCTION=$(subst -FORMAT,,$@) TAG=$(TAG) DEFAULT_CR=$(DEFAULT_CR) func-format
 
 .PHONY: push
@@ -114,16 +114,18 @@ install-mdtogo:
 func-verify: func-format func-test
 func-format: docs-generate func-fix func-vet func-fmt func-lint
 
+install-golangci-lint:
+	(which $(GOPATH)/bin/golangci-lint || \
+		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(GOPATH)/bin latest)
+
 func-fix:
 	cd $(CURRENT_FUNCTION) && go fix -omitzero=false ./...
 
 func-fmt:
 	cd $(CURRENT_FUNCTION) && go fmt ./...
 
-func-lint:
-	(which $(GOPATH)/bin/golangci-lint || \
-		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/v2.11.4/install.sh | sh -s -- -b $(GOPATH)/bin v2.11.4)
-	cd $(CURRENT_FUNCTION) && time $(GOPATH)/bin/golangci-lint run --fix --timeout=10m ./...
+func-lint: install-golangci-lint
+	cd $(CURRENT_FUNCTION) && time $(GOPATH)/bin/golangci-lint run --allow-parallel-runners --fix --timeout=10m ./...
 
 func-test:
 	cd $(CURRENT_FUNCTION) && go test -cover ./...
