@@ -34,6 +34,7 @@ jobs:
         with:
           go-version-file: documentation/go.mod
           install-kpt: 'false'
+          cache-dependency-path: functions/go/*/go.sum
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v4
