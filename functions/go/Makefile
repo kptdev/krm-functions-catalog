@@ -1,5 +1,5 @@
 # Copyright 2020 Google LLC
-# Modifications Copyright (C) 2025-2026 OpenInfra Foundation Europe.
+# Modifications Copyright (C) 2025-2026 The kpt Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,10 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 SHELL=/bin/bash
-GOPATH := $(shell go env GOPATH)
 TAG ?= latest
 DEFAULT_CR ?= ghcr.io/kptdev/krm-functions-catalog
 GOBIN := $(shell go env GOPATH)/bin
+
+GOLANGCI_LINT_VERSION ?= 2.12.2
 
 # Edit this list to contain all go functions
 FUNCTIONS := \
@@ -93,14 +94,14 @@ $(FUNCTION_GENERATE_DOCS): | install-mdtogo
 build: generate $(FUNCTION_BUILDS) ## Build all function images. 'TAG' env is used to specify tag. 'dev' will be used if not set.
 
 .PHONY: $(FUNCTION_BUILDS)
-$(FUNCTION_BUILDS): | generate install-golangci-lint
+$(FUNCTION_BUILDS): | generate
 	$(MAKE) CURRENT_FUNCTION=$(subst -BUILD,,$@) TAG=$(TAG) DEFAULT_CR=$(DEFAULT_CR) func-build
 
 .PHONY: format
 format: generate $(FUNCTION_FORMATS)
 
 .PHONY: $(FUNCTION_FORMATS)
-$(FUNCTION_FORMATS): | generate install-golangci-lint
+$(FUNCTION_FORMATS): | generate
 	$(MAKE) CURRENT_FUNCTION=$(subst -FORMAT,,$@) TAG=$(TAG) DEFAULT_CR=$(DEFAULT_CR) func-format
 
 .PHONY: push
@@ -119,19 +120,19 @@ install-mdtogo:
 func-verify: func-format func-test
 func-format: docs-generate func-fix func-vet func-fmt func-lint
 
-.PHONY: install-golangci-lint
-install-golangci-lint:
-	(which $(GOPATH)/bin/golangci-lint || \
-		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(GOPATH)/bin latest)
-
 func-fix:
 	cd $(CURRENT_FUNCTION) && go fix -omitzero=false ./...
 
 func-fmt:
 	cd $(CURRENT_FUNCTION) && go fmt ./...
 
-func-lint: install-golangci-lint
-	cd $(CURRENT_FUNCTION) && time $(GOPATH)/bin/golangci-lint run --allow-parallel-runners --fix --timeout=10m ./...
+func-lint:
+	@if ! command -v golangci-lint >/dev/null 2>&1 || \
+	  ! golangci-lint version --short 2>/dev/null | grep -qx "$(GOLANGCI_LINT_VERSION)"; then \
+		echo "Installing golangci-lint v$(GOLANGCI_LINT_VERSION)..."; \
+		go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v$(GOLANGCI_LINT_VERSION); \
+	fi
+	cd $(CURRENT_FUNCTION) && time golangci-lint run --allow-parallel-runners --fix --timeout=10m ./...
 
 func-test:
 	cd $(CURRENT_FUNCTION) && go test -cover ./...
