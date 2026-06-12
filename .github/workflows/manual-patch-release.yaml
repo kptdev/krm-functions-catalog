@@ -14,9 +14,9 @@
 
 # Manual patch release for functions/go KRM functions.
 #
-# - Input: comma-separated function names, or "all" (case-insensitive) for every Makefile function
-#   except utilities in MANUAL_PATCH_EXCLUDE_FROM_ALL in scripts/manual-patch-release.sh (e.g. sleep).
-#   With "all", functions without a prior functions/go/<name>/v* semver tag are skipped with a notice.
+# - Input: comma-separated function names, or "all" (case-insensitive) for every name from
+#   `make list-functions`. With "all", functions without a prior functions/go/<name>/v* semver tag
+#   are skipped with a notice.
 # - Resolves the latest functions/go/<name>/vMAJOR.MINOR.PATCH tag, bumps patch only.
 # - Pushes multi-arch images (make func-push), long + short git tags at github.sha, then
 #   creates a GitHub Release with GitHub-generated notes (scoped via previous_tag_name) plus
@@ -31,8 +31,8 @@ on:
       functions:
         description: >-
           Comma-separated function names (e.g. kubeconform,apply-setters), or "all" to patch-release
-          every Makefile-listed function except excluded utilities (see scripts/manual-patch-release.sh).
-          Functions with no prior v* semver tag are skipped with a notice when using "all".
+          every function from `make list-functions`. Functions with no prior v* semver tag
+          are skipped with a notice when using "all".
         required: true
         type: string
       dry_run:

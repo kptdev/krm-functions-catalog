@@ -17,11 +17,10 @@
 # Manual patch release for functions/go KRM functions (used by GitHub Actions and runnable locally).
 #
 # Environment (required unless noted):
-#   MANUAL_PATCH_FUNCTIONS  Comma-separated function names (must match FUNCTIONS in functions/go/Makefile),
-#                           or the single word "all" (case-insensitive) to release every Makefile-listed
-#                           function except keys in MANUAL_PATCH_EXCLUDE_FROM_ALL below. With "all",
-#                           functions with no prior functions/go/<name>/vMAJOR.MINOR.PATCH tag are skipped
-#                           with a notice.
+#   MANUAL_PATCH_FUNCTIONS  Comma-separated function names (must match output of: make list-functions),
+#                           or the single word "all" (case-insensitive) to release every name from
+#                           `make list-functions`. With "all", functions with no prior
+#                           functions/go/<name>/vMAJOR.MINOR.PATCH tag are skipped with a notice.
 #   GITHUB_REPOSITORY       owner/repo (e.g. kptdev/krm-functions-catalog).
 #   GITHUB_SHA              Commit SHA to tag and release (images built from this tree).
 #   GH_TOKEN                Token for gh api / gh release create (optional in dry-run).
@@ -55,41 +54,19 @@ if [[ -z "$sha" ]]; then
   exit 1
 fi
 
-# Tags/releases appear as the GitHub Actions bot in the UI.
-git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-git config user.name "github-actions[bot]"
-
-# Same list make func-push uses (see FUNCTIONS in functions/go/Makefile).
-mapfile -t allowed < <(awk '
-  /^FUNCTIONS :=/ { p = 1; next }
-  p && /^# Targets for running/ { exit }
-  p && /^[[:space:]]+[a-z0-9-]+/ {
-    line = $0
-    sub(/^[[:space:]]+/, "", line)
-    sub(/[[:space:]]*\\$/, "", line)
-    if (line != "") print line
-  }
-' functions/go/Makefile)
+# Same names as FUNCTIONS in functions/go/Makefile (see target list-functions).
+mapfile -t allowed < <(make -s list-functions)
 
 if [[ ${#allowed[@]} -eq 0 ]]; then
-  echo "::error::Could not parse FUNCTIONS from functions/go/Makefile" >&2
+  echo "::error::make list-functions produced no output" >&2
   exit 1
 fi
-
-# Keys = function names omitted when MANUAL_PATCH_FUNCTIONS is "all" (no SemVer line / not shipped).
-declare -A MANUAL_PATCH_EXCLUDE_FROM_ALL=(
-  [sleep]=1
-)
 
 _trim_space() {
   local s="$1"
   s="${s#"${s%%[![:space:]]*}"}"
   s="${s%"${s##*[![:space:]]}"}"
   printf '%s' "$s"
-}
-
-is_excluded_from_all() {
-  [[ -v MANUAL_PATCH_EXCLUDE_FROM_ALL["$1"] ]]
 }
 
 is_allowed() {
@@ -104,40 +81,18 @@ outer_trim="$(_trim_space "${functions_input}")"
 declare -a functions=()
 expand_all=0
 
-# Bulk mode: every Makefile function except MANUAL_PATCH_EXCLUDE_FROM_ALL.
+# Bulk mode: every function from `make list-functions`.
 if [[ "${outer_trim,,}" == "all" ]]; then
   expand_all=1
-  for a in "${allowed[@]}"; do
-    if is_excluded_from_all "$a"; then
-      continue
-    fi
-    if [[ ! -f "functions/go/${a}/metadata.yaml" ]]; then
-      echo "::error::Missing functions/go/${a}/metadata.yaml" >&2
-      exit 1
-    fi
-    functions+=("$a")
-  done
-  if [[ ${#functions[@]} -eq 0 ]]; then
-    echo "::error::No functions left after applying MANUAL_PATCH_EXCLUDE_FROM_ALL" >&2
-    exit 1
-  fi
-  mapfile -t functions < <(printf '%s\n' "${functions[@]}" | sort -u)
+  mapfile -t functions < <(printf '%s\n' "${allowed[@]}" | sort -u)
 else
-  # Explicit list: comma-separated names (strict if missing tags or excluded utility).
+  # Explicit list: comma-separated names (strict if missing tags).
   IFS=',' read -ra raw_parts <<< "${functions_input}"
   for part in "${raw_parts[@]}"; do
     fn="$(_trim_space "$part")"
     [[ -z "$fn" ]] && continue
-    if is_excluded_from_all "$fn"; then
-      echo "::error::Function '${fn}' is not SemVer-released (excluded from catalog patch releases)." >&2
-      exit 1
-    fi
     if ! is_allowed "$fn"; then
-      echo "::error::Function '$fn' is not in FUNCTIONS in functions/go/Makefile" >&2
-      exit 1
-    fi
-    if [[ ! -f "functions/go/${fn}/metadata.yaml" ]]; then
-      echo "::error::Missing functions/go/${fn}/metadata.yaml" >&2
+      echo "::error::Function '$fn' is not in output of: make list-functions" >&2
       exit 1
     fi
     functions+=("$fn")
@@ -199,12 +154,8 @@ for fn in "${functions[@]}"; do
   git tag -f "$short_tag" "$oid"
   git push -f origin "refs/tags/${short_tag}"
 
-  image_base="$(grep '^image:' "functions/go/${fn}/metadata.yaml" | awk '{print $2}' | tr -d '"')"
-  if [[ -z "$image_base" ]]; then
-    echo "::error::No image: field in functions/go/${fn}/metadata.yaml" >&2
-    exit 1
-  fi
-  image_ref="${image_base}:${next_ver}"
+  # Same registry path as make func-push (DEFAULT_CR + function name).
+  image_ref="ghcr.io/${repo}/${fn}:${next_ver}"
 
   # GitHub-generated notes between previous_tag_name and target; subshell + trap cleans mktemp on failure.
   notes_json="$(gh api "repos/${repo}/releases/generate-notes" \
@@ -213,7 +164,8 @@ for fn in "${functions[@]}"; do
     -f previous_tag_name="${prev_long}")"
 
   gen_body="$(printf '%s' "$notes_json" | jq -r .body)"
-  gen_name="$(printf '%s' "$notes_json" | jq -r .name)"
+  # Match existing catalog releases (see scripts/release-krm-functions.sh): "<fn> vX.Y.Z".
+  release_title="${fn} ${next_ver}"
 
   (
     notes_file="$(mktemp)"
@@ -230,7 +182,7 @@ for fn in "${functions[@]}"; do
 
     gh release create "${long_tag}" \
       --repo "${repo}" \
-      --title "${gen_name}" \
+      --title "${release_title}" \
       --notes-file "${notes_file}"
   )
 done

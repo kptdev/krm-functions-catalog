@@ -48,6 +48,10 @@ FUNCTIONS := \
 	upsert-resource \
 	sleep
 
+.PHONY: list-functions
+list-functions: ## Print Go KRM function names (FUNCTIONS), one per line
+	@printf '%s\n' $(FUNCTIONS)
+
 # Targets for running all function tests
 FUNCTION_TESTS := $(patsubst %,%-TEST,$(FUNCTIONS))
 # Targets for generating all functions docs
