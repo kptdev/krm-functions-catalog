@@ -111,7 +111,7 @@ for fn in "${functions[@]}"; do
     git tag -l "functions/go/${fn}/v*" |
       grep -E -- '/v[0-9]+\.[0-9]+\.[0-9]+$' |
       sort -V |
-      tail -n 1
+      tail -n 1 || true
   )"
 
   if [[ -z "${prev_long}" ]]; then
@@ -136,13 +136,20 @@ for fn in "${functions[@]}"; do
     continue
   fi
 
-  # Multi-arch push (see go-function-release.sh / docker.sh).
-  (cd functions/go && make func-push TAG="${next_ver}" CURRENT_FUNCTION="${fn}" DEFAULT_CR="ghcr.io/${repo}")
+  # Fail fast before pushing images, to avoid overwriting an existing release.
+  short_tag="${fn}/${next_ver}"
 
   if git rev-parse "$long_tag" >/dev/null 2>&1; then
     echo "::error::Tag ${long_tag} already exists locally" >&2
     exit 1
   fi
+  if git rev-parse "$short_tag" >/dev/null 2>&1; then
+    echo "::error::Tag ${short_tag} already exists locally" >&2
+    exit 1
+  fi
+
+  # Multi-arch push (see go-function-release.sh / docker.sh).
+  (cd functions/go && make func-push TAG="${next_ver}" CURRENT_FUNCTION="${fn}" DEFAULT_CR="ghcr.io/${repo}")
 
   # Long tag (full path) then short tag (<fn>/v…) to match release.yaml behavior.
   git tag "$long_tag" "$sha"
@@ -151,8 +158,8 @@ for fn in "${functions[@]}"; do
   git fetch origin "refs/tags/${long_tag}"
   oid="$(git rev-parse FETCH_HEAD^{})"
   short_tag="${fn}/${next_ver}"
-  git tag -f "$short_tag" "$oid"
-  git push -f origin "refs/tags/${short_tag}"
+  git tag "$short_tag" "$oid"
+  git push origin "refs/tags/${short_tag}"
 
   # Same registry path as make func-push (DEFAULT_CR + function name).
   image_ref="ghcr.io/${repo}/${fn}:${next_ver}"
