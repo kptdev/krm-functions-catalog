@@ -56,7 +56,7 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           fetch-tags: true
@@ -65,10 +65,10 @@ jobs:
         run: git fetch --tags origin
 
       - name: Setup Go
-        uses: actions/setup-go@v6
+        uses: kptdev/porch/.github/actions/setup-go-kpt@main
         with:
           go-version-file: documentation/go.mod
-          cache: true
+          install-kpt: 'false'
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v4
