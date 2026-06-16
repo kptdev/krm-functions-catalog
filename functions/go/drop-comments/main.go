@@ -15,40 +15,36 @@
 package main
 
 import (
-	"fmt"
+	_ "embed"
 	"os"
 
-	"github.com/kptdev/krm-functions-catalog/functions/go/drop-comments/generated"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
-func main() {
-	cmd := command.Build(&DropCommentsProcessor{}, command.StandaloneEnabled, false)
-	cmd.Short = generated.DropCommentsShort
-	cmd.Long = generated.DropCommentsLong
-	cmd.Example = generated.DropCommentsExamples
+//go:embed README.md
+var readme []byte
 
-	if err := cmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+//go:embed metadata.yaml
+var metadata []byte
+
+func main() {
+	if err := fn.AsMain(fn.ResourceListProcessorFunc(processDropComments), fn.WithDocs(readme, metadata)); err != nil {
 		os.Exit(1)
 	}
 }
 
-type DropCommentsProcessor struct{}
-
-func (dcp *DropCommentsProcessor) Process(resourceList *framework.ResourceList) error {
-	for i := range resourceList.Items {
-		jsonItem, err := resourceList.Items[i].MarshalJSON()
+func processDropComments(rl *fn.ResourceList) (bool, error) {
+	for i, item := range rl.Items {
+		jsonBytes, err := item.CopyToResourceNode().MarshalJSON()
 		if err != nil {
-			return err
+			return false, err
 		}
-		node, err := yaml.ConvertJSONToYamlNode(string(jsonItem))
+		node, err := yaml.ConvertJSONToYamlNode(string(jsonBytes))
 		if err != nil {
-			return err
+			return false, err
 		}
-		resourceList.Items[i] = node
+		rl.Items[i] = fn.MoveToKubeObject(node)
 	}
-	return nil
+	return true, nil
 }

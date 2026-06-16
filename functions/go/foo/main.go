@@ -15,15 +15,26 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
-	"io"
 	"os"
+
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
+
 func main() {
-	if _, err := io.Copy(os.Stdout, os.Stdin); err != nil {
-		fmt.Fprintf(os.Stderr, "stdin copy error: %v\n", err)
+	if err := fn.AsMain(fn.ResourceListProcessorFunc(processFoo), fn.WithDocs(readme, metadata)); err != nil {
+		os.Exit(1)
 	}
-	fmt.Fprintln(os.Stderr, "foo")
-	os.Exit(1)
+}
+
+func processFoo(_ *fn.ResourceList) (bool, error) {
+	fn.Logf("foo\n")
+	return false, fmt.Errorf("foo")
 }
