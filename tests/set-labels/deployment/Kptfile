@@ -1,0 +1,20 @@
+apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: example
+  annotations:
+    config.kubernetes.io/local-config: "true"
+pipeline:
+  mutators:
+    - image: gcr.io/kpt-fn/set-labels:unstable
+      configPath: fn-config-selector-labels-false.yaml
+      selectors:
+        - name: the-deployment-selector-labels-false
+    - image: gcr.io/kpt-fn/set-labels:unstable
+      configPath: fn-config-selector-labels-true.yaml
+      selectors:
+        - name: the-deployment-selector-labels-true
+    - image: gcr.io/kpt-fn/set-labels:unstable
+      configPath: fn-config-selector-labels-undefined.yaml
+      selectors:
+        - name: the-deployment-selector-labels-undefined

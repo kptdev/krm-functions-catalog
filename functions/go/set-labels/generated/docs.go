@@ -42,4 +42,21 @@ following ` + "`" + `functionConfig` + "`" + `:
   labels:
     color: orange
     fruit: apple
+
+The ` + "`" + `set-labels` + "`" + ` function adds the desired labels to more fields than just the one
+found in ` + "`" + `.metadata` + "`" + `. For example, the ` + "`" + `Deployment` + "`" + ` resource has a ` + "`" + `spec.selector` + "`" + `,
+which gets updated by the ` + "`" + `set-labels` + "`" + ` function by default. This is not always desired.
+
+To disable updating of ` + "`" + `.spec.selectors` + "`" + `, define a ` + "`" + `SetLabels` + "`" + ` custom resource, and set
+` + "`" + `.options.setSelectorLabels` + "`" + ` to ` + "`" + `false` + "`" + ` like so:
+
+  apiVersion: fn.kpt.dev/v1alpha1
+  kind: SetLabels
+  metadata:
+    name: my-config
+  labels:
+    color: orange
+    fruit: apple
+  options:
+    setSelectorLabels: false # default is true
 `
