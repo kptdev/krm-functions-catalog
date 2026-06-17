@@ -193,7 +193,7 @@ enable = false
   weight = 40
 [[menu.main]]
   name = "Porch"
-  url = "https://kpt-porch.netlify.app/"
+  url = "https://porch.kpt.dev/"
   weight = 50
 
 [security]
