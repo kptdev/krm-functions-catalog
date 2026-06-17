@@ -25,18 +25,13 @@ FUNCTIONS := \
 	annotate-apply-time-mutations \
 	apply-replacements \
 	apply-setters \
-	bar \
 	create-setters \
 	delete-annotations \
-	drop-comments \
 	ensure-name-substring \
-	foo \
 	gatekeeper \
 	generate-kpt-pkg-docs \
 	kubeconform \
 	list-setters \
-	no-op \
-	printenv \
 	remove-local-config-resources \
 	render-helm-chart \
 	search-replace \
@@ -46,8 +41,19 @@ FUNCTIONS := \
 	set-labels \
 	set-namespace \
 	starlark \
-	upsert-resource \
+	upsert-resource
+
+# Test/example functions
+TEST_FUNCTIONS := \
+	bar \
+	drop-comments \
+	foo \
+	no-op \
+	printenv \
 	sleep
+
+# All functions combined
+FUNCTIONS += $(TEST_FUNCTIONS)
 
 .PHONY: list-functions
 list-functions: ## Print Go KRM function names (FUNCTIONS), one per line
