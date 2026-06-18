@@ -18,10 +18,14 @@
 #   `make list-functions`. With "all", functions without a prior functions/go/<name>/v* semver tag
 #   are skipped with a notice.
 # - Resolves the latest functions/go/<name>/vMAJOR.MINOR.PATCH tag, bumps patch only.
-# - Pushes multi-arch images (make func-push), long + short git tags at github.sha, then
-#   creates a GitHub Release with GitHub-generated notes (scoped via previous_tag_name) plus
-#   a container image section.
-# - Does not rely on other workflows running after GITHUB_TOKEN pushes (see GitHub docs).
+# - Creates a GitHub Release (and tag at github.sha) via `gh` using repository secret
+#   MANUAL_PATCH_RELEASE_TOKEN (a PAT or equivalent). GITHUB_TOKEN must not be used for this step,
+#   or tag push events would not start other workflows (see GitHub Actions docs).
+# - Image build/push, short tag, and appending the container image line to release notes are handled
+#   by workflows triggered on the new tag (e.g. after-tag-with-version.yaml, release.yaml).
+#
+# Configure MANUAL_PATCH_RELEASE_TOKEN on the repository (classic PAT with repo scope, or
+# fine-grained PAT with Contents and Releases write for this repo).
 
 name: Manual patch release (functions/go)
 
@@ -36,7 +40,7 @@ on:
         required: true
         type: string
       dry_run:
-        description: "If true, only print planned versions (no registry, tags, or releases)"
+        description: "If true, only print planned versions (no releases)"
         required: false
         type: boolean
         default: false
@@ -46,14 +50,13 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: write
-  packages: write
+  contents: read
 
 jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.MANUAL_PATCH_RELEASE_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -64,24 +67,19 @@ jobs:
       - name: Fetch remote tags
         run: git fetch --tags origin
 
+      - name: Require PAT secret for non dry-run
+        if: ${{ !inputs.dry_run && secrets.MANUAL_PATCH_RELEASE_TOKEN == '' }}
+        run: |
+          echo "::error::MANUAL_PATCH_RELEASE_TOKEN repository secret is not set (required when dry_run is false)"
+          exit 1
+
       - name: Setup Go
         uses: kptdev/porch/.github/actions/setup-go-kpt@main
         with:
           go-version-file: documentation/go.mod
           install-kpt: 'false'
 
-      - name: Setup QEMU
-        uses: docker/setup-qemu-action@v4
-
-      - name: Setup Buildx
-        uses: docker/setup-buildx-action@v4
-
-      - name: Log in to GHCR
-        if: ${{ !inputs.dry_run }}
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-
-      - name: Patch release (build, tag, release)
+      - name: Patch release (GitHub release only)
         env:
           MANUAL_PATCH_FUNCTIONS: ${{ inputs.functions }}
           MANUAL_PATCH_DRY_RUN: ${{ inputs.dry_run }}

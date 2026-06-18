@@ -16,19 +16,26 @@
 
 # Manual patch release for functions/go KRM functions (used by GitHub Actions and runnable locally).
 #
+# Creates a GitHub Release (and the semver tag on the server at GITHUB_SHA) via `gh`. Image build,
+# short tag creation, and appending the container image to release notes are left to workflows
+# that run on tag push (e.g. after-tag-with-version.yaml, release.yaml). Use a PAT for GH_TOKEN in
+# CI so those workflows are triggered; GITHUB_TOKEN-created tag/release events do not start them.
+#
 # Environment (required unless noted):
 #   MANUAL_PATCH_FUNCTIONS  Comma-separated function names (must match output of: make list-functions),
 #                           or the single word "all" (case-insensitive) to release every name from
 #                           `make list-functions`. With "all", functions with no prior
 #                           functions/go/<name>/vMAJOR.MINOR.PATCH tag are skipped with a notice.
 #   GITHUB_REPOSITORY       owner/repo (e.g. kptdev/krm-functions-catalog).
-#   GITHUB_SHA              Commit SHA to tag and release (images built from this tree).
-#   GH_TOKEN                Token for gh api / gh release create (optional in dry-run).
+#   GITHUB_SHA              Commit SHA for the new tag and release target.
+#   GH_TOKEN                PAT (or equivalent) for gh api / gh release create — required when not
+#                           in dry-run; must allow creating releases and tags on the repo.
 #
 # Optional:
-#   MANUAL_PATCH_DRY_RUN    If "true", only print planned versions (no push, tags, or releases).
+#   MANUAL_PATCH_DRY_RUN    If "true", only print planned versions (no gh calls).
 #
-# Prerequisites when not dry-run: docker logged in to GHCR; gh, jq, git, make, Go toolchains as in CI.
+# Prerequisites when not dry-run: gh, jq, git, make, Go as in CI; remote `origin` must exist.
+# Prerequisites when dry-run: same except GH_TOKEN not used.
 
 set -euo pipefail
 
@@ -51,6 +58,11 @@ if [[ -z "$repo" ]]; then
 fi
 if [[ -z "$sha" ]]; then
   echo "::error::GITHUB_SHA is not set" >&2
+  exit 1
+fi
+
+if [[ "$dry_run" != "true" ]] && [[ -z "${GH_TOKEN:-}" ]]; then
+  echo "::error::GH_TOKEN is required when not in dry-run (use a PAT with permission to create releases and tags)" >&2
   exit 1
 fi
 
@@ -128,41 +140,28 @@ for fn in "${functions[@]}"; do
   IFS=. read -r major minor patch <<< "${v}"
   next_ver="v${major}.${minor}.$((patch + 1))"
   long_tag="functions/go/${fn}/${next_ver}"
+  short_tag="${fn}/${next_ver}"
 
   echo "Previous: ${prev_long} -> Next: ${long_tag}"
 
   if [[ "$dry_run" == "true" ]]; then
-    echo "(dry_run) would func-push, tag, and gh release create for ${long_tag}"
+    echo "(dry_run) would run: gh release create \"${long_tag}\" --repo \"${repo}\" --target \"${sha}\" --title \"${fn} ${next_ver}\" --notes-file <generated-notes>"
     continue
   fi
 
-  # Fail fast before pushing images, to avoid overwriting an existing release.
-  short_tag="${fn}/${next_ver}"
-
-  if git rev-parse "$long_tag" >/dev/null 2>&1; then
-    echo "::error::Tag ${long_tag} already exists locally" >&2
+  if [[ -n "$(git ls-remote origin "refs/tags/${long_tag}")" ]]; then
+    echo "::error::Tag ${long_tag} already exists on origin" >&2
     exit 1
   fi
-  if git rev-parse "$short_tag" >/dev/null 2>&1; then
-    echo "::error::Tag ${short_tag} already exists locally" >&2
+  if [[ -n "$(git ls-remote origin "refs/tags/${short_tag}")" ]]; then
+    echo "::error::Tag ${short_tag} already exists on origin" >&2
     exit 1
   fi
 
-  # Multi-arch push (see go-function-release.sh / docker.sh).
-  (cd functions/go && make func-push TAG="${next_ver}" CURRENT_FUNCTION="${fn}" DEFAULT_CR="ghcr.io/${repo}")
-
-  # Long tag (full path) then short tag (<fn>/v…) to match release.yaml behavior.
-  git tag "$long_tag" "$sha"
-  git push origin "refs/tags/${long_tag}"
-
-  git fetch origin "refs/tags/${long_tag}"
-  oid="$(git rev-parse FETCH_HEAD^{})"
-  short_tag="${fn}/${next_ver}"
-  git tag "$short_tag" "$oid"
-  git push origin "refs/tags/${short_tag}"
-
-  # Same registry path as make func-push (DEFAULT_CR + function name).
-  image_ref="ghcr.io/${repo}/${fn}:${next_ver}"
+  if gh release view "${long_tag}" --repo "${repo}" >/dev/null 2>&1; then
+    echo "::error::Release for tag ${long_tag} already exists" >&2
+    exit 1
+  fi
 
   # GitHub-generated notes between previous_tag_name and target; subshell + trap cleans mktemp on failure.
   notes_json="$(gh api "repos/${repo}/releases/generate-notes" \
@@ -177,18 +176,11 @@ for fn in "${functions[@]}"; do
   (
     notes_file="$(mktemp)"
     trap 'rm -f "$notes_file"' EXIT
-    {
-      echo "## Container image"
-      echo
-      echo '```'
-      echo "${image_ref}"
-      echo '```'
-      echo
-      printf '%s\n' "${gen_body}"
-    } >"${notes_file}"
+    printf '%s\n' "${gen_body}" >"${notes_file}"
 
     gh release create "${long_tag}" \
       --repo "${repo}" \
+      --target "${sha}" \
       --title "${release_title}" \
       --notes-file "${notes_file}"
   )
