@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 
 # Copyright 2026 The kpt Authors
 #
@@ -120,9 +120,8 @@ for fn in "${functions[@]}"; do
 
   # Latest strict SemVer long tag for this function (sort -V orders versions correctly).
   prev_long="$(
-    git tag -l "functions/go/${fn}/v*" |
+    git tag -l "functions/go/${fn}/v*" --sort=v:refname |
       grep -E -- '/v[0-9]+\.[0-9]+\.[0-9]+$' |
-      sort -V |
       tail -n 1 || true
   )"
 
