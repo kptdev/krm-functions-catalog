@@ -28,14 +28,12 @@
 #                           functions/go/<name>/vMAJOR.MINOR.PATCH tag are skipped with a notice.
 #   GITHUB_REPOSITORY       owner/repo (e.g. kptdev/krm-functions-catalog).
 #   GITHUB_SHA              Commit SHA for the new tag and release target.
-#   GH_TOKEN                PAT (or equivalent) for gh api / gh release create — required when not
-#                           in dry-run; must allow creating releases and tags on the repo.
+#   GH_TOKEN                PAT (or equivalent) for gh release create — required when not in dry-run;
 #
 # Optional:
 #   MANUAL_PATCH_DRY_RUN    If "true", only print planned versions (no gh calls).
 #
-# Prerequisites when not dry-run: gh, jq, git, make, Go as in CI; remote `origin` must exist.
-# Prerequisites when dry-run: same except GH_TOKEN not used.
+# Prerequisites: gh, git; remote `origin` must exist for non dry-run.
 
 set -euo pipefail
 
@@ -140,12 +138,12 @@ for fn in "${functions[@]}"; do
   IFS=. read -r major minor patch <<< "${v}"
   next_ver="v${major}.${minor}.$((patch + 1))"
   long_tag="functions/go/${fn}/${next_ver}"
-  short_tag="${fn}/${next_ver}"
+  release_title="${fn} ${next_ver}"
 
   echo "Previous: ${prev_long} -> Next: ${long_tag}"
 
   if [[ "$dry_run" == "true" ]]; then
-    echo "(dry_run) would run: gh release create \"${long_tag}\" --repo \"${repo}\" --target \"${sha}\" --title \"${fn} ${next_ver}\" --notes-file <generated-notes>"
+    echo "(dry_run) would run: gh release create \"${long_tag}\" --repo \"${repo}\" --target \"${sha}\" --title \"${release_title}\" --generate-notes --notes-start-tag \"${prev_long}\""
     continue
   fi
 
@@ -153,35 +151,11 @@ for fn in "${functions[@]}"; do
     echo "::error::Tag ${long_tag} already exists on origin" >&2
     exit 1
   fi
-  if [[ -n "$(git ls-remote origin "refs/tags/${short_tag}")" ]]; then
-    echo "::error::Tag ${short_tag} already exists on origin" >&2
-    exit 1
-  fi
 
-  if gh release view "${long_tag}" --repo "${repo}" >/dev/null 2>&1; then
-    echo "::error::Release for tag ${long_tag} already exists" >&2
-    exit 1
-  fi
-
-  # GitHub-generated notes between previous_tag_name and target; subshell + trap cleans mktemp on failure.
-  notes_json="$(gh api "repos/${repo}/releases/generate-notes" \
-    -f tag_name="${long_tag}" \
-    -f target_commitish="${sha}" \
-    -f previous_tag_name="${prev_long}")"
-
-  gen_body="$(printf '%s' "$notes_json" | jq -r .body)"
-  # Match existing catalog releases (see scripts/release-krm-functions.sh): "<fn> vX.Y.Z".
-  release_title="${fn} ${next_ver}"
-
-  (
-    notes_file="$(mktemp)"
-    trap 'rm -f "$notes_file"' EXIT
-    printf '%s\n' "${gen_body}" >"${notes_file}"
-
-    gh release create "${long_tag}" \
-      --repo "${repo}" \
-      --target "${sha}" \
-      --title "${release_title}" \
-      --notes-file "${notes_file}"
-  )
+  gh release create "${long_tag}" \
+    --repo "${repo}" \
+    --target "${sha}" \
+    --title "${release_title}" \
+    --generate-notes \
+    --notes-start-tag "${prev_long}"
 done

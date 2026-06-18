@@ -73,12 +73,6 @@ jobs:
           echo "::error::MANUAL_PATCH_RELEASE_TOKEN repository secret is not set (required when dry_run is false)"
           exit 1
 
-      - name: Setup Go
-        uses: kptdev/porch/.github/actions/setup-go-kpt@main
-        with:
-          go-version-file: documentation/go.mod
-          install-kpt: 'false'
-
       - name: Patch release (GitHub release only)
         env:
           MANUAL_PATCH_FUNCTIONS: ${{ inputs.functions }}
