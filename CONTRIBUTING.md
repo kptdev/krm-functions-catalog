@@ -58,14 +58,12 @@ Process for code reviews. Before requesting human review, a PR must:
 * The PR description states whether AI was used to help create the PR; if so, it lists the AI tools
   used and the areas where they were used
 
-All pr-s should be approved by at least two memebrs of the [CODEOWNERS](./CODEOWNERS) file, have all
-checks passed and all discussions resolved before merge.
+All PRs should be approved by at least two members listed in the [CODEOWNERS](./CODEOWNERS) file, have all checks passing, and have all discussions resolved before merge.
 
-### Stale pr-s
+### Stale PRs
 
-In the case if the comments of a pr are not addressed for more than 2 weeks the pr will be closed.
-The pr can be re-opened any time and the work can be continued if there is a willingness to continue
-the work after a break.
+If there is no activity from the PR author for more than 2 weeks (for example, no commits or replies to review comments), the PR will be closed.
+The PR can be re-opened at any time if there is willingness to continue the work after a break.
 
 
 ## Declare any use of AI
