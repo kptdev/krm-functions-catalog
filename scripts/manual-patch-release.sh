@@ -18,8 +18,9 @@
 #
 # Creates a GitHub Release (and the semver tag on the server at GITHUB_SHA) via `gh`. Image build,
 # short tag creation, and appending the container image to release notes are left to workflows
-# that run on tag push (e.g. after-tag-with-version.yaml, release.yaml). Use a PAT for GH_TOKEN in
-# CI so those workflows are triggered; GITHUB_TOKEN-created tag/release events do not start them.
+# that run on tag push (e.g. after-tag-with-version.yaml, release.yaml). Use a GitHub App
+# installation access token or PAT for GH_TOKEN in CI so those workflows are triggered;
+# GITHUB_TOKEN-created tag/release events do not start them.
 #
 # Environment (required unless noted):
 #   MANUAL_PATCH_FUNCTIONS  Comma-separated function names (must match output of: make list-functions),
@@ -28,7 +29,8 @@
 #                           functions/go/<name>/vMAJOR.MINOR.PATCH tag are skipped with a notice.
 #   GITHUB_REPOSITORY       owner/repo (e.g. kptdev/krm-functions-catalog).
 #   GITHUB_SHA              Commit SHA for the new tag and release target.
-#   GH_TOKEN                PAT (or equivalent) for gh release create — required when not in dry-run;
+#   GH_TOKEN                GitHub App installation token or PAT for gh release create — required
+#                           when not in dry-run; must allow creating releases and tags on the repo.
 #
 # Optional:
 #   MANUAL_PATCH_DRY_RUN    If "true", only print planned versions (no gh calls).
@@ -60,7 +62,7 @@ if [[ -z "$sha" ]]; then
 fi
 
 if [[ "$dry_run" != "true" ]] && [[ -z "${GH_TOKEN:-}" ]]; then
-  echo "::error::GH_TOKEN is required when not in dry-run (use a PAT with permission to create releases and tags)" >&2
+  echo "::error::GH_TOKEN is required when not in dry-run (GitHub App installation token or PAT with permission to create releases and tags)" >&2
   exit 1
 fi
 
