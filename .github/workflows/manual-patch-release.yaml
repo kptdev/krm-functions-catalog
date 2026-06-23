@@ -72,8 +72,8 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v3
         with:
-          app-id: ${{ vars.MANUAL_PATCH_RELEASE_APP_ID }}
-          private-key: ${{ secrets.MANUAL_PATCH_RELEASE_APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.CI_BOT_APP_ID }}
+          private-key: ${{ secrets.CI_BOT_PRIVATE_KEY }}
           permission-contents: write
 
       - name: Patch release (GitHub release only)
