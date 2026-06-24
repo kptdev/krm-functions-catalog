@@ -27,7 +27,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Go
         uses: kptdev/porch/.github/actions/setup-go-kpt@main
