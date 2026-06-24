@@ -1,4 +1,4 @@
-// Copyright 2022 The kpt Authors
+// Copyright 2022-2026 The kpt Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,15 +18,22 @@ package main
 
 import (
 	"context"
+	_ "embed"
 
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-labels/setlabels"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
+
 func NewTransformer() fn.ResourceListProcessor {
-	return fn.WithContext(fn.Context{Context: context.Background()}, &setlabels.SetLabels{})
+	return fn.WithContext(context.Background(), &setlabels.SetLabels{})
 }
 
 func run() error {
-	return fn.AsMain(NewTransformer())
+	return fn.AsMain(NewTransformer(), fn.WithDocs(readme, metadata))
 }

@@ -1,4 +1,4 @@
-// Copyright 2022 The kpt Authors
+// Copyright 2022-2026 The kpt Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package main
 
 import (
+	"context"
 	"syscall/js"
 
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-labels/setlabels"
@@ -37,7 +38,7 @@ func run() error {
 }
 
 func transformLabels(input []byte) ([]byte, error) {
-	runner := fn.WithContext(fn.Context{Context: nil}, &setlabels.SetLabels{})
+	runner := fn.WithContext(context.Background(), &setlabels.SetLabels{})
 	return fn.Run(runner, []byte(input))
 }
 
