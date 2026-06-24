@@ -45,7 +45,7 @@ jobs:
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Lint shell scripts, ignoring third-party files
         run: |
           find . -name "*.sh" > shell_files.out
@@ -54,7 +54,7 @@ jobs:
   validate-metadata:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up Go
         uses: kptdev/porch/.github/actions/setup-go-kpt@main
         with:
@@ -66,7 +66,7 @@ jobs:
   go-unit-test-ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up Go
         uses: kptdev/porch/.github/actions/setup-go-kpt@main
         with:
@@ -84,7 +84,7 @@ jobs:
       GOPATH: /home/runner/work/krm-functions-catalog/functions/go
       GO111MODULE: on
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up Go and install kpt
         uses: kptdev/porch/.github/actions/setup-go-kpt@main
         with:
