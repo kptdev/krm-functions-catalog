@@ -96,7 +96,7 @@ expand_all=0
 # Bulk mode: every function from `make list-functions`.
 if [[ "${outer_trim,,}" == "all" ]]; then
   expand_all=1
-  mapfile -t functions < <(printf '%s\n' "${allowed[@]}" | sort -u)
+  functions=("${allowed[@]}")
 else
   # Explicit list: comma-separated names (strict if missing tags).
   IFS=',' read -ra raw_parts <<< "${functions_input}"
@@ -109,10 +109,13 @@ else
     fi
     functions+=("$fn")
   done
-  if [[ ${#functions[@]} -eq 0 ]]; then
-    echo "::error::No function names after parsing MANUAL_PATCH_FUNCTIONS" >&2
-    exit 1
-  fi
+fi
+
+mapfile -t functions < <(printf '%s\n' "${functions[@]}" | sort -u)
+
+if [[ ${#functions[@]} -eq 0 ]]; then
+  echo "::error::No function names after parsing MANUAL_PATCH_FUNCTIONS" >&2
+  exit 1
 fi
 
 for fn in "${functions[@]}"; do

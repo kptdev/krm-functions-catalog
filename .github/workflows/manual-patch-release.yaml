@@ -26,8 +26,8 @@
 # GitHub App setup (org or user app, installed on this repository):
 #   1. Create a GitHub App with Repository permissions: Contents (Read and write), Metadata (Read).
 #   2. Install the app on this repository (Only select repositories).
-#   3. Repository variable: MANUAL_PATCH_RELEASE_APP_ID = App ID (numeric, from app settings).
-#   4. Repository secret: MANUAL_PATCH_RELEASE_APP_PRIVATE_KEY = App private key (.pem contents).
+#   3. Repository secret: CI_BOT_APP_ID = App ID (numeric, from app settings).
+#   4. Repository secret: CI_BOT_PRIVATE_KEY = App private key (.pem contents).
 
 name: Manual patch release (functions/go)
 
@@ -63,9 +63,6 @@ jobs:
         with:
           fetch-depth: 0
           fetch-tags: true
-
-      - name: Fetch remote tags
-        run: git fetch --tags origin
 
       - name: Generate GitHub App token
         if: ${{ !inputs.dry_run }}
