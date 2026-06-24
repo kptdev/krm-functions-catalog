@@ -91,7 +91,7 @@ jobs:
           go-version-file: functions/go/list-setters/go.mod
           cache-dependency-path: functions/go/*/go.sum
       - name: Cache golangci-lint
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.cache/golangci-lint
           key: golangci-lint-${{ hashFiles('functions/go/*/go.sum') }}
