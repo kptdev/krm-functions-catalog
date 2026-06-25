@@ -145,8 +145,10 @@ func isLongBase64Like(value string) bool {
 }
 
 func truncateValue(value string) string {
-	if len(value) <= maxLoggedValueLen {
+	runes := []rune(value)
+	if len(runes) <= maxLoggedValueLen {
 		return value
 	}
-	return value[:maxLoggedValueLen] + fmt.Sprintf("... (truncated %d chars)", len(value)-maxLoggedValueLen)
+	truncated := runes[:maxLoggedValueLen]
+	return string(truncated) + fmt.Sprintf("... (truncated %d chars)", len(value)-maxLoggedValueLen)
 }

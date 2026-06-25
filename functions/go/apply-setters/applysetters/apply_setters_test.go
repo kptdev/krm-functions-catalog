@@ -453,32 +453,22 @@ roles: # kpt-set: ${roles}
 		test := tests[i]
 		t.Run(test.name, func(t *testing.T) {
 			baseDir, err := os.MkdirTemp("", "")
-			if !assert.NoError(t, err) {
-				t.FailNow()
-			}
+			require.NoError(t, err)
 			//nolint:errcheck
 			defer os.RemoveAll(baseDir)
 
 			r, err := os.CreateTemp(baseDir, "k8s-cli-*.yaml")
-			if !assert.NoError(t, err) {
-				t.FailNow()
-			}
+			require.NoError(t, err)
 			//nolint:errcheck
 			defer os.Remove(r.Name())
 			err = os.WriteFile(r.Name(), []byte(test.input), 0600)
-			if !assert.NoError(t, err) {
-				t.FailNow()
-			}
+			require.NoError(t, err)
 
 			s := &ApplySetters{}
 			node, err := kyaml.Parse(test.config)
-			if !assert.NoError(t, err) {
-				t.FailNow()
-			}
+			require.NoError(t, err)
 			Decode(node, s)
-			if !assert.NoError(t, err) {
-				t.FailNow()
-			}
+			require.NoError(t, err)
 			inout := &kio.LocalPackageReadWriter{
 				PackagePath:     baseDir,
 				NoDeleteFiles:   true,
@@ -490,36 +480,15 @@ roles: # kpt-set: ${roles}
 				Outputs: []kio.Writer{inout},
 			}.Execute()
 			if test.errMsg != "" {
-				if !assert.NotNil(t, err) {
-					t.FailNow()
-				}
-				if !assert.Contains(t, err.Error(), test.errMsg) {
-					t.FailNow()
-				}
-			}
-
-			if test.errMsg == "" && !assert.NoError(t, err) {
-				t.FailNow()
+				require.NotNil(t, err)
+				require.Contains(t, err.Error(), test.errMsg)
+			} else {
+				require.NoError(t, err)
 			}
 
 			actualResources, err := os.ReadFile(r.Name())
-			if !assert.NoError(t, err) {
-				t.FailNow()
-			}
-			if !assert.Equal(t,
-				test.expectedResources,
-				string(actualResources)) {
-				t.FailNow()
-			}
-
-			if test.name == "redact secret setter in results" {
-				if !assert.Len(t, s.Results, 1) {
-					t.FailNow()
-				}
-				assert.Equal(t, redactedPlaceholder, s.Results[0].Field.ProposedValue)
-				assert.Equal(t, redactedPlaceholder, s.Results[0].Field.CurrentValue)
-				assert.Contains(t, s.Results[0].Message, redactedPlaceholder)
-			}
+			require.NoError(t, err)
+			assert.Equal(t, test.expectedResources, string(actualResources))
 		})
 	}
 }

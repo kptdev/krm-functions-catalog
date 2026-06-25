@@ -81,7 +81,10 @@ func (as *ApplySetters) visitMapping(object *yaml.RNode, path string) error {
 			lineComment = node.Value.YNode().LineComment
 		}
 
-		origValue := node.Value.YNode().Value
+		origValue, err := yaml.String(node.Value.YNode())
+		if err != nil {
+			return errors.Wrap(err)
+		}
 
 		setterPattern := extractSetterPattern(lineComment)
 		if setterPattern == "" {
@@ -314,11 +317,12 @@ func validArraySetterPattern(pattern string) bool {
 		strings.HasSuffix(pattern, "}")
 }
 
+var unresolvedSettersRE = regexp.MustCompile(`\$\{([^}]*)\}`)
+
 // unresolvedSetters returns the list of values enclosed in ${} present within given
 // pattern e.g. pattern = foo-${image}:${tag}-bar return ["${image}", "${tag}"]
 func unresolvedSetters(pattern string) []string {
-	re := regexp.MustCompile(`\$\{([^}]*)\}`)
-	return re.FindAllString(pattern, -1)
+	return unresolvedSettersRE.FindAllString(pattern, -1)
 }
 
 // clean extracts value enclosed in ${}
