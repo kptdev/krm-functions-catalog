@@ -80,16 +80,28 @@ func getSetters(fc *kyaml.RNode) (applysetters.ApplySetters, error) {
 func resultsToItems(sr applysetters.ApplySetters) ([]*framework.Result, error) {
 	var items []*framework.Result
 	if len(sr.Results) == 0 {
-		items = append(items, &framework.Result{
-			Message: "no matches for input setter(s)",
-		})
-		return items, nil
+		return []*framework.Result{{Message: "no matches for input setter(s)"}}, nil
 	}
 	for _, res := range sr.Results {
 		items = append(items, &framework.Result{
-			Message: fmt.Sprintf("set field value to %q", res.Value),
-			Field:   &framework.Field{Path: res.FieldPath},
-			File:    &framework.File{Path: res.FilePath},
+			Message:  res.Message,
+			Severity: framework.Severity(res.Severity),
+			File:     &framework.File{Path: res.File.Path},
+			ResourceRef: &kyaml.ResourceIdentifier{
+				TypeMeta: kyaml.TypeMeta{
+					APIVersion: res.ResourceRef.APIVersion,
+					Kind:       res.ResourceRef.Kind,
+				},
+				NameMeta: kyaml.NameMeta{
+					Name:      res.ResourceRef.Name,
+					Namespace: res.ResourceRef.Namespace,
+				},
+			},
+			Field: &framework.Field{
+				Path:          res.Field.Path,
+				CurrentValue:  res.Field.CurrentValue,
+				ProposedValue: res.Field.ProposedValue,
+			},
 		})
 	}
 	return items, nil

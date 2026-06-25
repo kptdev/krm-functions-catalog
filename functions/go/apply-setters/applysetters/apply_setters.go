@@ -19,6 +19,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"sigs.k8s.io/kustomize/kyaml/errors"
 	"sigs.k8s.io/kustomize/kyaml/kio"
 	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
@@ -36,10 +37,13 @@ type ApplySetters struct {
 	Setters []Setter
 
 	// Results are the results of applying setter values
-	Results []*Result
+	Results fn.Results
 
-	// filePath file path of resource
+	// filePath file path of currently resource
 	filePath string
+
+	// metadata of the currently processing resource
+	metadata *fn.ResourceRef
 }
 
 type Setter struct {
@@ -50,27 +54,21 @@ type Setter struct {
 	Value string
 }
 
-// Result holds result of search and replace operation
-type Result struct {
-	// FilePath is the file path of the matching field
-	FilePath string
-
-	// FieldPath is field path of the matching field
-	FieldPath string
-
-	// Value of the matching field
-	Value string
-}
-
 // Filter implements Set as a yaml.Filter
 func (as *ApplySetters) Filter(nodes []*yaml.RNode) ([]*yaml.RNode, error) {
-	for i := range nodes {
-		filePath, _, err := kioutil.GetFileAnnotations(nodes[i])
+	for _, node := range nodes {
+		filePath, _, err := kioutil.GetFileAnnotations(node)
 		if err != nil {
 			return nodes, err
 		}
 		as.filePath = filePath
-		err = accept(as, nodes[i])
+		as.metadata = &fn.ResourceRef{
+			APIVersion: node.GetApiVersion(),
+			Kind:       node.GetKind(),
+			Name:       node.GetName(),
+			Namespace:  node.GetNamespace(),
+		}
+		err = accept(as, node)
 		if err != nil {
 			return nil, errors.Wrap(err)
 		}
@@ -91,7 +89,7 @@ environments: # kpt-set: ${env}
 - dev
 - stage
 
-For input ApplySetters [name: env, value: "[stage, prod]"], qthe yaml node is transformed to
+For input ApplySetters [name: env, value: "[stage, prod]"], the yaml node is transformed to
 
 environments: # kpt-set: ${env}
 - stage
@@ -116,6 +114,8 @@ func (as *ApplySetters) visitMapping(object *yaml.RNode, path string) error {
 			// the setter comment will be on value node
 			lineComment = node.Value.YNode().LineComment
 		}
+
+		origValue := node.Value.YNode().Value
 
 		setterPattern := extractSetterPattern(lineComment)
 		if setterPattern == "" {
@@ -147,10 +147,16 @@ func (as *ApplySetters) visitMapping(object *yaml.RNode, path string) error {
 			// setter pattern comment must be on value node
 			node.Value.YNode().LineComment = lineComment
 			node.Key.YNode().LineComment = ""
-			as.Results = append(as.Results, &Result{
-				FilePath:  as.filePath,
-				FieldPath: fieldPath,
-				Value:     sv,
+			as.Results = append(as.Results, &fn.Result{
+				Message:     fmt.Sprintf("set field value to %q", sv),
+				Severity:    fn.Info,
+				File:        &fn.File{Path: as.filePath},
+				ResourceRef: as.metadata,
+				Field: &fn.Field{
+					Path:          fieldPath,
+					CurrentValue:  origValue,
+					ProposedValue: sv,
+				},
 			})
 			return nil
 		}
@@ -174,10 +180,16 @@ func (as *ApplySetters) visitMapping(object *yaml.RNode, path string) error {
 		//  - bar
 		node.Value.YNode().Style = yaml.FoldedStyle
 
-		as.Results = append(as.Results, &Result{
-			FilePath:  as.filePath,
-			FieldPath: fieldPath,
-			Value:     sv,
+		as.Results = append(as.Results, &fn.Result{
+			Message:     fmt.Sprintf("set field value to %q", sv),
+			Severity:    fn.Info,
+			File:        &fn.File{Path: as.filePath},
+			ResourceRef: as.metadata,
+			Field: &fn.Field{
+				Path:          fieldPath,
+				CurrentValue:  origValue,
+				ProposedValue: sv,
+			},
 		})
 		return nil
 	})
@@ -213,6 +225,8 @@ func (as *ApplySetters) visitScalar(object *yaml.RNode, path string) error {
 		// return if it is not a scalar node
 		return nil
 	}
+
+	origValue := object.YNode().Value
 
 	// perform a direct set of the field if it matches
 	setterPattern := extractSetterPattern(object.YNode().LineComment)
@@ -258,10 +272,16 @@ func (as *ApplySetters) visitScalar(object *yaml.RNode, path string) error {
 		object.YNode().Style = yaml.DoubleQuotedStyle
 	}
 	object.YNode().Tag = yaml.NodeTagEmpty
-	as.Results = append(as.Results, &Result{
-		FilePath:  as.filePath,
-		FieldPath: strings.TrimPrefix(path, "."),
-		Value:     object.YNode().Value,
+	as.Results = append(as.Results, &fn.Result{
+		Message:     fmt.Sprintf("set field value to %q", object.YNode().Value),
+		Severity:    fn.Info,
+		File:        &fn.File{Path: as.filePath},
+		ResourceRef: as.metadata,
+		Field: &fn.Field{
+			Path:          strings.TrimPrefix(path, "."),
+			CurrentValue:  origValue,
+			ProposedValue: object.YNode().Value,
+		},
 	})
 	return nil
 }
