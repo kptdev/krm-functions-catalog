@@ -113,17 +113,7 @@ func (as *ApplySetters) visitMapping(object *yaml.RNode, path string) error {
 			// setter pattern comment must be on value node
 			node.Value.YNode().LineComment = lineComment
 			node.Key.YNode().LineComment = ""
-			as.Results = append(as.Results, &v1.ResultItem{
-				Message:     fmt.Sprintf("set field value to %q", sv),
-				Severity:    framework.Info,
-				File:        &framework.File{Path: as.filePath},
-				ResourceRef: as.metadata,
-				Field: &v1.Field{
-					Path:          fieldPath,
-					CurrentValue:  origValue,
-					ProposedValue: sv,
-				},
-			})
+			as.Results = append(as.Results, as.buildResultItem(fieldPath, origValue, sv, setterPattern))
 			return nil
 		}
 
@@ -146,17 +136,7 @@ func (as *ApplySetters) visitMapping(object *yaml.RNode, path string) error {
 		//  - bar
 		node.Value.YNode().Style = yaml.FoldedStyle
 
-		as.Results = append(as.Results, &v1.ResultItem{
-			Message:     fmt.Sprintf("set field value to %q", sv),
-			Severity:    framework.Info,
-			File:        &framework.File{Path: as.filePath},
-			ResourceRef: as.metadata,
-			Field: &v1.Field{
-				Path:          fieldPath,
-				CurrentValue:  origValue,
-				ProposedValue: sv,
-			},
-		})
+		as.Results = append(as.Results, as.buildResultItem(fieldPath, origValue, sv, setterPattern))
 		return nil
 	})
 }
@@ -238,17 +218,7 @@ func (as *ApplySetters) visitScalar(object *yaml.RNode, path string) error {
 		object.YNode().Style = yaml.DoubleQuotedStyle
 	}
 	object.YNode().Tag = yaml.NodeTagEmpty
-	as.Results = append(as.Results, &v1.ResultItem{
-		Message:     fmt.Sprintf("set field value to %q", object.YNode().Value),
-		Severity:    framework.Info,
-		File:        &framework.File{Path: as.filePath},
-		ResourceRef: as.metadata,
-		Field: &v1.Field{
-			Path:          strings.TrimPrefix(path, "."),
-			CurrentValue:  origValue,
-			ProposedValue: object.YNode().Value,
-		},
-	})
+	as.Results = append(as.Results, as.buildResultItem(strings.TrimPrefix(path, "."), origValue, object.YNode().Value, curPattern))
 	return nil
 }
 
@@ -355,4 +325,21 @@ func unresolvedSetters(pattern string) []string {
 func clean(input string) string {
 	input = strings.TrimSpace(input)
 	return strings.TrimSuffix(strings.TrimPrefix(input, "${"), "}")
+}
+
+// buildResultItem creates a ResultItem with sanitized Message and Field values.
+func (as *ApplySetters) buildResultItem(fieldPath, currentValue, proposedValue, setterPattern string) *v1.ResultItem {
+	sanitizedCurrent := Sanitize(currentValue, fieldPath, setterPattern)
+	sanitizedProposed := Sanitize(proposedValue, fieldPath, setterPattern)
+	return &v1.ResultItem{
+		Message:     fmt.Sprintf("set field value to %q", sanitizedProposed),
+		Severity:    framework.Info,
+		File:        &framework.File{Path: as.filePath},
+		ResourceRef: as.metadata,
+		Field: &v1.Field{
+			Path:          fieldPath,
+			CurrentValue:  sanitizedCurrent,
+			ProposedValue: sanitizedProposed,
+		},
+	}
 }

@@ -19,6 +19,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"sigs.k8s.io/kustomize/kyaml/kio"
 	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 )
@@ -510,8 +511,76 @@ roles: # kpt-set: ${roles}
 				string(actualResources)) {
 				t.FailNow()
 			}
+
+			if test.name == "redact secret setter in results" {
+				if !assert.Len(t, s.Results, 1) {
+					t.FailNow()
+				}
+				assert.Equal(t, redactedPlaceholder, s.Results[0].Field.ProposedValue)
+				assert.Equal(t, redactedPlaceholder, s.Results[0].Field.CurrentValue)
+				assert.Contains(t, s.Results[0].Message, redactedPlaceholder)
+			}
 		})
 	}
+}
+
+func TestRedaction(t *testing.T) {
+	config := `
+data:
+  db-password: super-secret-password
+`
+	input := `apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+stringData:
+  password: old-value # kpt-set: ${db-password}
+`
+	expectedResources := `apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+stringData:
+  password: super-secret-password # kpt-set: ${db-password}
+`
+
+	baseDir, err := os.MkdirTemp("", "")
+	require.NoError(t, err)
+	//nolint:errcheck
+	defer os.RemoveAll(baseDir)
+
+	r, err := os.CreateTemp(baseDir, "k8s-cli-*.yaml")
+	require.NoError(t, err)
+	//nolint:errcheck
+	defer os.Remove(r.Name())
+	err = os.WriteFile(r.Name(), []byte(input), 0600)
+	require.NoError(t, err)
+
+	s := &ApplySetters{}
+	node, err := kyaml.Parse(config)
+	require.NoError(t, err)
+	Decode(node, s)
+	require.NoError(t, err)
+	inout := &kio.LocalPackageReadWriter{
+		PackagePath:     baseDir,
+		NoDeleteFiles:   true,
+		PackageFileName: "Kptfile",
+	}
+	err = kio.Pipeline{
+		Inputs:  []kio.Reader{inout},
+		Filters: []kio.Filter{s},
+		Outputs: []kio.Writer{inout},
+	}.Execute()
+	require.NoError(t, err)
+
+	actualResources, err := os.ReadFile(r.Name())
+	require.NoError(t, err)
+	require.Equal(t, expectedResources, string(actualResources))
+
+	require.Len(t, s.Results, 1)
+	assert.Equal(t, redactedPlaceholder, s.Results[0].Field.ProposedValue)
+	assert.Equal(t, redactedPlaceholder, s.Results[0].Field.CurrentValue)
+	assert.Contains(t, s.Results[0].Message, redactedPlaceholder)
 }
 
 type patternTest struct {
