@@ -19,11 +19,12 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/kptdev/krm-functions-sdk/go/fn"
+	fnresult "github.com/kptdev/kpt/api/fnresult/v1"
 	"sigs.k8s.io/kustomize/kyaml/errors"
+	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/kio"
 	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
-	"sigs.k8s.io/kustomize/kyaml/yaml"
+	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
 const SetterCommentIdentifier = "# kpt-set: "
@@ -37,13 +38,13 @@ type ApplySetters struct {
 	Setters []Setter
 
 	// Results are the results of applying setter values
-	Results fn.Results
+	Results []*fnresult.ResultItem
 
-	// filePath file path of currently resource
+	// filePath file path of current resource
 	filePath string
 
-	// metadata of the currently processing resource
-	metadata *fn.ResourceRef
+	// metadata of the current resource
+	metadata *kyaml.ResourceIdentifier
 }
 
 type Setter struct {
@@ -55,18 +56,22 @@ type Setter struct {
 }
 
 // Filter implements Set as a yaml.Filter
-func (as *ApplySetters) Filter(nodes []*yaml.RNode) ([]*yaml.RNode, error) {
+func (as *ApplySetters) Filter(nodes []*kyaml.RNode) ([]*kyaml.RNode, error) {
 	for _, node := range nodes {
 		filePath, _, err := kioutil.GetFileAnnotations(node)
 		if err != nil {
 			return nodes, err
 		}
 		as.filePath = filePath
-		as.metadata = &fn.ResourceRef{
-			APIVersion: node.GetApiVersion(),
-			Kind:       node.GetKind(),
-			Name:       node.GetName(),
-			Namespace:  node.GetNamespace(),
+		as.metadata = &kyaml.ResourceIdentifier{
+			TypeMeta: kyaml.TypeMeta{
+				APIVersion: node.GetApiVersion(),
+				Kind:       node.GetKind(),
+			},
+			NameMeta: kyaml.NameMeta{
+				Name:      node.GetName(),
+				Namespace: node.GetNamespace(),
+			},
 		}
 		err = accept(as, node)
 		if err != nil {
@@ -95,21 +100,21 @@ environments: # kpt-set: ${env}
 - stage
 - prod
 */
-func (as *ApplySetters) visitMapping(object *yaml.RNode, path string) error {
-	return object.VisitFields(func(node *yaml.MapNode) error {
+func (as *ApplySetters) visitMapping(object *kyaml.RNode, path string) error {
+	return object.VisitFields(func(node *kyaml.MapNode) error {
 		if node == nil || node.Key.IsNil() || node.Value.IsNil() {
 			// don't do IsNilOrEmpty check as empty sequences are allowed
 			return nil
 		}
 
 		// the aim of this method is to apply-setter for sequence nodes
-		if node.Value.YNode().Kind != yaml.SequenceNode {
+		if node.Value.YNode().Kind != kyaml.SequenceNode {
 			// return if it is not a sequence node
 			return nil
 		}
 
 		lineComment := node.Key.YNode().LineComment
-		if node.Value.YNode().Style == yaml.FlowStyle {
+		if node.Value.YNode().Style == kyaml.FlowStyle {
 			// if node is FlowStyle e.g. env: [foo, bar] # kpt-set: ${env}
 			// the setter comment will be on value node
 			lineComment = node.Value.YNode().LineComment
@@ -141,18 +146,18 @@ func (as *ApplySetters) visitMapping(object *yaml.RNode, path string) error {
 		fieldPath := strings.TrimPrefix(fmt.Sprintf("%s.%s", path, node.Key.YNode().Value), ".")
 
 		if sv == "" {
-			node.Value.YNode().Content = []*yaml.Node{}
+			node.Value.YNode().Content = []*kyaml.Node{}
 			// empty sequence must be FlowStyle e.g. env: [] # kpt-set: ${env}
-			node.Value.YNode().Style = yaml.FlowStyle
+			node.Value.YNode().Style = kyaml.FlowStyle
 			// setter pattern comment must be on value node
 			node.Value.YNode().LineComment = lineComment
 			node.Key.YNode().LineComment = ""
-			as.Results = append(as.Results, &fn.Result{
+			as.Results = append(as.Results, &fnresult.ResultItem{
 				Message:     fmt.Sprintf("set field value to %q", sv),
-				Severity:    fn.Info,
-				File:        &fn.File{Path: as.filePath},
+				Severity:    framework.Info,
+				File:        &framework.File{Path: as.filePath},
 				ResourceRef: as.metadata,
-				Field: &fn.Field{
+				Field: &fnresult.Field{
 					Path:          fieldPath,
 					CurrentValue:  origValue,
 					ProposedValue: sv,
@@ -162,13 +167,13 @@ func (as *ApplySetters) visitMapping(object *yaml.RNode, path string) error {
 		}
 
 		// parse the setter value as yaml node
-		rn, err := yaml.Parse(sv)
+		rn, err := kyaml.Parse(sv)
 		if err != nil {
 			return errors.Errorf("input to array setter must be an array of values, but found %q", sv)
 		}
 
 		// the setter value must parse as sequence node
-		if rn.YNode().Kind != yaml.SequenceNode {
+		if rn.YNode().Kind != kyaml.SequenceNode {
 			return errors.Errorf("input to array setter must be an array of values, but found %q", sv)
 		}
 
@@ -178,14 +183,14 @@ func (as *ApplySetters) visitMapping(object *yaml.RNode, path string) error {
 		// env: # kpt-set: ${env}
 		//  - foo
 		//  - bar
-		node.Value.YNode().Style = yaml.FoldedStyle
+		node.Value.YNode().Style = kyaml.FoldedStyle
 
-		as.Results = append(as.Results, &fn.Result{
+		as.Results = append(as.Results, &fnresult.ResultItem{
 			Message:     fmt.Sprintf("set field value to %q", sv),
-			Severity:    fn.Info,
-			File:        &fn.File{Path: as.filePath},
+			Severity:    framework.Info,
+			File:        &framework.File{Path: as.filePath},
 			ResourceRef: as.metadata,
-			Field: &fn.Field{
+			Field: &fnresult.Field{
 				Path:          fieldPath,
 				CurrentValue:  origValue,
 				ProposedValue: sv,
@@ -216,12 +221,12 @@ apiVersion: v1
 
 	image: ubuntu:1.8.0 # kpt-set: ${image}:${tag}
 */
-func (as *ApplySetters) visitScalar(object *yaml.RNode, path string) error {
+func (as *ApplySetters) visitScalar(object *kyaml.RNode, path string) error {
 	if object.IsNil() {
 		return nil
 	}
 
-	if object.YNode().Kind != yaml.ScalarNode {
+	if object.YNode().Kind != kyaml.ScalarNode {
 		// return if it is not a scalar node
 		return nil
 	}
@@ -269,15 +274,15 @@ func (as *ApplySetters) visitScalar(object *yaml.RNode, path string) error {
 
 	object.YNode().Value = setterPattern
 	if setterPattern == "" {
-		object.YNode().Style = yaml.DoubleQuotedStyle
+		object.YNode().Style = kyaml.DoubleQuotedStyle
 	}
-	object.YNode().Tag = yaml.NodeTagEmpty
-	as.Results = append(as.Results, &fn.Result{
+	object.YNode().Tag = kyaml.NodeTagEmpty
+	as.Results = append(as.Results, &fnresult.ResultItem{
 		Message:     fmt.Sprintf("set field value to %q", object.YNode().Value),
-		Severity:    fn.Info,
-		File:        &fn.File{Path: as.filePath},
+		Severity:    framework.Info,
+		File:        &framework.File{Path: as.filePath},
 		ResourceRef: as.metadata,
-		Field: &fn.Field{
+		Field: &fnresult.Field{
 			Path:          strings.TrimPrefix(path, "."),
 			CurrentValue:  origValue,
 			ProposedValue: object.YNode().Value,
@@ -392,7 +397,7 @@ func clean(input string) string {
 }
 
 // Decode decodes the input yaml node into Set struct
-func Decode(rn *yaml.RNode, fcd *ApplySetters) {
+func Decode(rn *kyaml.RNode, fcd *ApplySetters) {
 	for k, v := range rn.GetDataMap() {
 		fcd.Setters = append(fcd.Setters, Setter{Name: k, Value: v})
 	}

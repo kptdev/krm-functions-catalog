@@ -84,19 +84,10 @@ func resultsToItems(sr applysetters.ApplySetters) ([]*framework.Result, error) {
 	}
 	for _, res := range sr.Results {
 		items = append(items, &framework.Result{
-			Message:  res.Message,
-			Severity: framework.Severity(res.Severity),
-			File:     &framework.File{Path: res.File.Path},
-			ResourceRef: &kyaml.ResourceIdentifier{
-				TypeMeta: kyaml.TypeMeta{
-					APIVersion: res.ResourceRef.APIVersion,
-					Kind:       res.ResourceRef.Kind,
-				},
-				NameMeta: kyaml.NameMeta{
-					Name:      res.ResourceRef.Name,
-					Namespace: res.ResourceRef.Namespace,
-				},
-			},
+			Message:     res.Message,
+			Severity:    res.Severity,
+			File:        res.File,
+			ResourceRef: res.ResourceRef,
 			Field: &framework.Field{
 				Path:          res.Field.Path,
 				CurrentValue:  res.Field.CurrentValue,
