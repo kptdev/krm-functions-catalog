@@ -13,9 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 SHELL=/bin/bash
+GOPATH ?= $(shell go env GOPATH || echo $(HOME)/go)
 TAG ?= latest
 DEFAULT_CR ?= ghcr.io/kptdev/krm-functions-catalog
-GOBIN := $(shell go env GOPATH)/bin
+GOBIN ?= $(GOPATH)/bin
 
 GOLANGCI_LINT_VERSION ?= 2.12.2
 
@@ -47,6 +48,10 @@ FUNCTIONS := \
 	starlark \
 	upsert-resource \
 	sleep
+
+.PHONY: list-functions
+list-functions: ## Print Go KRM function names (FUNCTIONS), one per line
+	@printf '%s\n' $(FUNCTIONS)
 
 # Targets for running all function tests
 FUNCTION_TESTS := $(patsubst %,%-TEST,$(FUNCTIONS))

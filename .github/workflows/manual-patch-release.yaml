@@ -1,0 +1,83 @@
+# Copyright 2026 The kpt Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Manual patch release for functions/go KRM functions.
+#
+# - Input: comma-separated function names, or "all" (case-insensitive) for every name from
+#   `make list-functions`. With "all", functions without a prior functions/go/<name>/v* semver tag
+#   are skipped with a notice.
+# - Resolves the latest functions/go/<name>/vMAJOR.MINOR.PATCH tag, bumps patch only.
+# - Creates a GitHub Release (and tag at github.sha) via `gh` using a GitHub App installation
+#   access token (not GITHUB_TOKEN), so tag push events start other workflows.
+# - Image build/push, short tag, and appending the container image line to release notes are handled
+#   by workflows triggered on the new tag (e.g. after-tag-with-version.yaml, release.yaml).
+#
+# GitHub App setup (org or user app, installed on this repository):
+#   1. Create a GitHub App with Repository permissions: Contents (Read and write), Metadata (Read).
+#   2. Install the app on this repository (Only select repositories).
+#   3. Repository secret: CI_BOT_APP_ID = App ID (numeric, from app settings).
+#   4. Repository secret: CI_BOT_PRIVATE_KEY = App private key (.pem contents).
+
+name: Manual patch release (functions/go)
+
+on:
+  workflow_dispatch:
+    inputs:
+      functions:
+        description: >-
+          Comma-separated function names (e.g. kubeconform,apply-setters), or "all" to patch-release
+          every function from `make list-functions`. Functions with no prior v* semver tag
+          are skipped with a notice when using "all".
+        required: true
+        type: string
+      dry_run:
+        description: "If true, only print planned versions (no releases)"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: manual-patch-release-catalog
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Generate GitHub App token
+        if: ${{ !inputs.dry_run }}
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.CI_BOT_APP_ID }}
+          private-key: ${{ secrets.CI_BOT_PRIVATE_KEY }}
+          permission-contents: write
+
+      - name: Patch release (GitHub release only)
+        env:
+          MANUAL_PATCH_FUNCTIONS: ${{ inputs.functions }}
+          MANUAL_PATCH_DRY_RUN: ${{ inputs.dry_run }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_SHA: ${{ github.sha }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: bash scripts/manual-patch-release.sh
