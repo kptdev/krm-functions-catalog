@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index 152ea13..0f2859d 100644
+index 152ea13..d2c2af5 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -8,3 +8,50 @@ pipeline:
+@@ -8,3 +8,53 @@ pipeline:
    mutators:
      - image: ghcr.io/kptdev/krm-functions-catalog/apply-setters:latest
        configPath: setters.yaml
@@ -48,6 +48,9 @@ index 152ea13..0f2859d 100644
 +              name: foo
 +            field:
 +              path: environments
++              currentValue: |-
++                - dev
++                - stage
 +              proposedValue: |-
 +                - prod
 +                - dev

@@ -88,8 +88,8 @@ jobs:
       - name: Set up Go and install kpt
         uses: kptdev/porch/.github/actions/setup-go-kpt@main
         with:
-          go-version-file: functions/go/list-setters/go.mod
-          cache-dependency-path: functions/go/*/go.sum
+          go-version-file: tests/e2etest/go.mod
+          cache-dependency-path: tests/e2etest/go.sum
       - name: Cache golangci-lint
         uses: actions/cache@v6
         with:
