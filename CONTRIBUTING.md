@@ -47,10 +47,24 @@ Process for code reviews. Before requesting human review, a PR must:
 
 * All tests passing
 * All linting passing
-* Meeting project code quality requirements, including passing all configured static analysis / SonarCloud quality gates and not reducing automated test coverage for the affected components
-* The comments from the first run of automatically generated comments (AI generated comments, SonarCloud comments, bot generated comments, etc.) of the PR are addressed (addressing further re-runs of AI are optional)
-* If it is not possible to resolve an automatic comment, please add a sub-comment indicating why the automated comment cannot be resolved or ask for help in resolving the comment
-* The PR description states whether AI was used to help create the PR; if so, it lists the AI tools used and the areas where they were used
+* Meeting project code quality requirements, including passing all configured
+  static analysis / SonarCloud quality gates and not reducing automated test coverage for the
+  affected components
+* The comments from the first run of automatically generated comments (AI generated comments,
+  SonarCloud comments, bot generated comments, etc.) of the PR are addressed (addressing further
+  re-runs of AI are optional)
+* If it is not possible to resolve an automatic comment, please add a sub-comment indicating why
+  the automated comment cannot be resolved or ask for help in resolving the comment
+* The PR description states whether AI was used to help create the PR; if so, it lists the AI tools
+  used and the areas where they were used
+
+All PRs should be approved by at least two members listed in the [CODEOWNERS](./CODEOWNERS) file, have all checks passing, and have all discussions resolved before merge.
+
+### Stale PRs
+
+If there is no activity from the PR author for more than 2 weeks (for example, no commits or replies to review comments), the PR will be closed.
+The PR can be re-opened at any time if there is willingness to continue the work after a break.
+
 
 ## Declare any use of AI
 
