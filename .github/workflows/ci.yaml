@@ -89,7 +89,9 @@ jobs:
         uses: kptdev/porch/.github/actions/setup-go-kpt@main
         with:
           go-version-file: tests/e2etest/go.mod
-          cache-dependency-path: tests/e2etest/go.sum
+          cache-dependency-path: |
+            tests/e2etest/go.sum
+            functions/go/*/go.sum
       - name: Cache golangci-lint
         uses: actions/cache@v6
         with:
