@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index 5aa759e..8ac91d5 100644
+index 5aa759e..7ca4e2c 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -11,3 +11,38 @@ pipeline:
+@@ -11,3 +11,28 @@ pipeline:
        selectors:
          - kind: Deployment
          - kind: MyKind
@@ -16,11 +16,6 @@ index 5aa759e..8ac91d5 100644
 +      - image: ghcr.io/kptdev/krm-functions-catalog/create-setters:latest
 +        exitCode: 0
 +        results:
-+          - message: 'Added line comment "kpt-set: /tmp/kpt-pipeline-e2e-39110${nginx-replicas}1686/create-setters-simple" for field with value "/tmp/kpt-pipeline-e2e-3911041686/create-setters-simple"'
-+            field:
-+              path: metadata.annotations.internal.config.kubernetes.io/package-path
-+            file:
-+              path: resources.yaml
 +          - message: 'Added line comment "kpt-set: ${nginx-replicas}" for field with value "4"'
 +            field:
 +              path: spec.replicas
@@ -34,11 +29,6 @@ index 5aa759e..8ac91d5 100644
 +          - message: 'Added line comment "kpt-set: ${env}" for field with value "[dev stage]"'
 +            field:
 +              path: environments
-+            file:
-+              path: resources.yaml
-+          - message: 'Added line comment "kpt-set: /tmp/kpt-pipeline-e2e-39110${nginx-replicas}1686/create-setters-simple" for field with value "/tmp/kpt-pipeline-e2e-3911041686/create-setters-simple"'
-+            field:
-+              path: metadata.annotations.internal.config.kubernetes.io/package-path
 +            file:
 +              path: resources.yaml
 diff --git a/resources.yaml b/resources.yaml
