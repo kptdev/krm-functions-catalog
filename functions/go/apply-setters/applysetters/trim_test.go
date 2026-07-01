@@ -67,13 +67,43 @@ func TestSanitize(t *testing.T) {
 		},
 		{
 			name:     "aws key prefix",
-			value:    "AKIAIOSFODNN7EXAMPLE",
+			value:    "AKIAUM2VG3ANQNP3IXQG",
+			expected: redactedPlaceholder,
+		},
+		{
+			name:     "asia temporary aws key",
+			value:    "ASIAUM2VG3ANQNP3IXQG",
 			expected: redactedPlaceholder,
 		},
 		{
 			name:     "github token",
-			value:    "ghp_123456789012345678901234567890123456",
+			value:    "ghp_abcdefghijklmnopqrstuvwxyz1234567890ab",
 			expected: redactedPlaceholder,
+		},
+		{
+			name:     "github fine grained pat",
+			value:    "github_pat_" + strings.Repeat("a", 82),
+			expected: redactedPlaceholder,
+		},
+		{
+			name:     "mongodb connection string",
+			value:    "mongodb+srv://user:pass@cluster.example.net/db",
+			expected: redactedPlaceholder,
+		},
+		{
+			name:     "postgres connection string",
+			value:    "postgresql://user:secret@host:5432/db",
+			expected: redactedPlaceholder,
+		},
+		{
+			name:     "benign image ref",
+			value:    "nginx:1.7.9",
+			expected: "nginx:1.7.9",
+		},
+		{
+			name:     "setter template only",
+			value:    "${image}:${tag}",
+			expected: "${image}:${tag}",
 		},
 		{
 			name:     "empty value",
