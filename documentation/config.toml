@@ -193,7 +193,7 @@ enable = false
   weight = 40
 [[menu.main]]
   name = "Porch"
-  url = "https://porch.kpt.dev/"
+  url = "https://porch.kpt.dev/docs/"
   weight = 50
 
 [security]
