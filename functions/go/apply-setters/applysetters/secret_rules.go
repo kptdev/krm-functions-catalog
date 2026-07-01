@@ -16,8 +16,8 @@ package applysetters
 
 import "regexp"
 
-// Secret detection rules derived from Betterleaks v1.5.0 default config (MIT).
-// https://github.com/betterleaks/betterleaks/blob/v1.5.0/config/betterleaks.toml
+// Secret detection rules derived from Betterleaks v1.6.1 default config (MIT).
+// https://github.com/betterleaks/betterleaks/blob/v1.6.1/config/betterleaks.toml
 //
 // Maintenance: when bumping rules, diff upstream betterleaks.toml for these IDs
 // and copy regex/keywords/entropy hints. Verify with go test ./...
@@ -61,8 +61,8 @@ var secretRules = []secretRule{
 		skipAWSExample: true,
 	},
 	{
-		id:      "github-token",
-		pattern: `(?:ghp|gho|ghu|ghs)_[0-9a-zA-Z]{36}`,
+		id:       "github-token",
+		pattern:  `(?:ghp|gho|ghu|ghs)_[0-9a-zA-Z]{36}`,
 		keywords: []string{"ghp_", "gho_", "ghu_", "ghs_"},
 	},
 	{
@@ -84,8 +84,8 @@ var secretRules = []secretRule{
 		secretGroup: 1,
 	},
 	{
-		id:      "openai-api-key",
-		pattern: `\b(sk-(?:proj|svcacct|admin)-(?:[A-Za-z0-9_-]{74}|[A-Za-z0-9_-]{58}|[A-Za-z0-9_-]{20})T3BlbkFJ(?:[A-Za-z0-9_-]{74}|[A-Za-z0-9_-]{58}|[A-Za-z0-9_-]{20})|sk-[a-zA-Z0-9]{20}T3BlbkFJ[a-zA-Z0-9]{20})(?:['"\x60]|[\s;]|$)`,
+		id:       "openai-api-key",
+		pattern:  `\b(sk-(?:proj|svcacct|admin)-(?:[A-Za-z0-9_-]{74}|[A-Za-z0-9_-]{58}|[A-Za-z0-9_-]{20})T3BlbkFJ(?:[A-Za-z0-9_-]{74}|[A-Za-z0-9_-]{58}|[A-Za-z0-9_-]{20})|sk-[a-zA-Z0-9]{20}T3BlbkFJ[a-zA-Z0-9]{20})(?:['"\x60]|[\s;]|$)`,
 		keywords: []string{"t3blbkfj", "sk-proj", "sk-svcacct", "sk-admin"},
 	},
 	{

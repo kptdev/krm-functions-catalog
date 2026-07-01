@@ -58,7 +58,7 @@ func TestSecretScannerMatches(t *testing.T) {
 
 func stringsRepeat(s string, count int) string {
 	out := make([]byte, 0, len(s)*count)
-	for i := 0; i < count; i++ {
+	for range count {
 		out = append(out, s...)
 	}
 	return string(out)
