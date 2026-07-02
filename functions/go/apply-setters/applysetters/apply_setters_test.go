@@ -468,7 +468,6 @@ roles: # kpt-set: ${roles}
 			node, err := kyaml.Parse(test.config)
 			require.NoError(t, err)
 			Decode(node, s)
-			require.NoError(t, err)
 			inout := &kio.LocalPackageReadWriter{
 				PackagePath:     baseDir,
 				NoDeleteFiles:   true,
@@ -529,7 +528,6 @@ stringData:
 	node, err := kyaml.Parse(config)
 	require.NoError(t, err)
 	Decode(node, s)
-	require.NoError(t, err)
 	inout := &kio.LocalPackageReadWriter{
 		PackagePath:     baseDir,
 		NoDeleteFiles:   true,

@@ -85,5 +85,5 @@ func truncateValue(value string) string {
 		return value
 	}
 	truncated := runes[:maxLoggedValueLen]
-	return string(truncated) + fmt.Sprintf("... (truncated %d chars)", len(value)-maxLoggedValueLen)
+	return string(truncated) + fmt.Sprintf("... (truncated %d chars)", len(runes)-maxLoggedValueLen)
 }
