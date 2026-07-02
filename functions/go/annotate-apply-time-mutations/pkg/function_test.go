@@ -1,4 +1,4 @@
-// Copyright 2021-2025 The kpt Authors
+// Copyright 2021-2026 The kpt Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +27,11 @@ import (
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
+// filePathPattern matches test file path annotations in the form file-N.yaml.
+var filePathPattern = regexp.MustCompile(`file-(\d+)\.yaml`)
+
 func TestFunctionProcess(t *testing.T) {
+	t.Parallel()
 	testCases := map[string]struct {
 		configs         [][]string
 		expectedConfigs [][]string
@@ -256,14 +260,14 @@ func stringsToItems(configs [][]string) ([]*yaml.RNode, error) {
 		for j, config := range file {
 			node, err := yaml.Parse(config)
 			if err != nil {
-				return items, fmt.Errorf("failed to parse yaml (configs[%d][%d]): %v", i, j, err)
+				return items, fmt.Errorf("failed to parse yaml (configs[%d][%d]): %w", i, j, err)
 			}
 			a := node.GetAnnotations()
 			a[kioutil.PathAnnotation] = fmt.Sprintf("file-%d.yaml", i)
 			a[kioutil.IndexAnnotation] = strconv.Itoa(j)
 			err = node.SetAnnotations(a)
 			if err != nil {
-				return items, fmt.Errorf("failed to update annotations: %v", err)
+				return items, fmt.Errorf("failed to update annotations: %w", err)
 			}
 			items = append(items, node)
 		}
@@ -274,7 +278,6 @@ func stringsToItems(configs [][]string) ([]*yaml.RNode, error) {
 // itemsToStrings simulates writing a package of yaml files, each with zero or
 // more objects.
 func itemsToStrings(items []*yaml.RNode) ([][]string, error) {
-	filePathPattern := regexp.MustCompile(`file-(\d+).yaml`)
 	var configs [][]string
 	for i, item := range items {
 		a := item.GetAnnotations()
@@ -284,7 +287,7 @@ func itemsToStrings(items []*yaml.RNode) ([][]string, error) {
 		delete(a, kioutil.IndexAnnotation)
 		err := item.SetAnnotations(a)
 		if err != nil {
-			return configs, fmt.Errorf("failed to update annotations: %v", err)
+			return configs, fmt.Errorf("failed to update annotations: %w", err)
 		}
 
 		match := filePathPattern.FindStringSubmatch(filePath)
@@ -303,7 +306,7 @@ func itemsToStrings(items []*yaml.RNode) ([][]string, error) {
 
 		config, err := item.String()
 		if err != nil {
-			return configs, fmt.Errorf("failed to format yaml (configs[%d][%d]): %v", filePathIndex, fileIndex, err)
+			return configs, fmt.Errorf("failed to format yaml (configs[%d][%d]): %w", filePathIndex, fileIndex, err)
 		}
 
 		for filePathIndex >= len(configs) {

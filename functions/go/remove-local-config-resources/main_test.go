@@ -59,6 +59,7 @@ var Tests = []PrunerTest{
 }
 
 func TestPrunedResources(t *testing.T) {
+	t.Parallel()
 
 	for i := range Tests {
 		test := Tests[i]

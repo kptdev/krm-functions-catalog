@@ -24,6 +24,7 @@ import (
 )
 
 func TestListSettersFilter(t *testing.T) {
+	t.Parallel()
 	var tests = []struct {
 		name           string
 		resourceMap    map[string]string
@@ -543,6 +544,7 @@ func setupInputs(t *testing.T, resourceMap map[string]string) string {
 }
 
 func TestCurrentSetterValues(t *testing.T) {
+	t.Parallel()
 	var tests = []struct {
 		name     string
 		value    string

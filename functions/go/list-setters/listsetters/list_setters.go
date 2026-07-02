@@ -31,6 +31,9 @@ import (
 
 const SetterCommentIdentifier = "# kpt-set: "
 
+// setterRefPattern matches setter references in the form ${name}.
+var setterRefPattern = regexp.MustCompile(`\$\{([^}]*)\}`)
+
 // ListSetters lists setters identified by the setter comments
 type ListSetters struct {
 	// ScalarSetters holds the discovered scalar setters
@@ -419,8 +422,7 @@ func currentSetterValues(pattern, value string) map[string]string {
 // unresolvedSetters returns the list of values enclosed in ${} present within given
 // pattern e.g. pattern = foo-${image}:${tag}-bar return ["${image}", "${tag}"]
 func unresolvedSetters(pattern string) []string {
-	re := regexp.MustCompile(`\$\{([^}]*)\}`)
-	return re.FindAllString(pattern, -1)
+	return setterRefPattern.FindAllString(pattern, -1)
 }
 
 // clean extracts value enclosed in ${}

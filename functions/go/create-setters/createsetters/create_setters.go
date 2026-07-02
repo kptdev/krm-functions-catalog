@@ -15,8 +15,9 @@
 package createsetters
 
 import (
+	"cmp"
 	"fmt"
-	"sort"
+	"slices"
 	"strings"
 
 	"sigs.k8s.io/kustomize/kyaml/errors"
@@ -78,22 +79,6 @@ type Result struct {
 
 	// Comment is the line comment of the matching value
 	Comment string
-}
-
-// CompareSetters is to sort the setter values
-type CompareSetters []ScalarSetter
-
-func (a CompareSetters) Len() int {
-	return len(a)
-}
-
-// node with value of maximum length is placed first
-func (a CompareSetters) Less(i, j int) bool {
-	return len(a[i].Value) > len(a[j].Value)
-}
-
-func (a CompareSetters) Swap(i, j int) {
-	a[i], a[j] = a[j], a[i]
 }
 
 // Filter implements CreatSetters as a yaml.Filter
@@ -195,7 +180,7 @@ func (cs *CreateSetters) visitMapping(object *yaml.RNode, path string) error {
 		for _, values := range elements {
 			nodeValues = append(nodeValues, values.YNode().Value)
 		}
-		sort.Strings(nodeValues)
+		slices.Sort(nodeValues)
 
 		// checks if any of the values of node matches with ScalarSetters
 		// changes the node to FoldedStyle
@@ -316,7 +301,7 @@ func getArraySetter(input *yaml.RNode) []string {
 		output = append(output, as.YNode().Value)
 	}
 
-	sort.Strings(output)
+	slices.Sort(output)
 	return output
 }
 
@@ -406,8 +391,10 @@ func Decode(rn *yaml.RNode, fcd *CreateSetters) error {
 		}
 	}
 
-	// sorts all the Scalar Setters in lexicographically
-	// decreasing order of it's Value
-	sort.Sort(CompareSetters(fcd.ScalarSetters))
+	// sorts all the Scalar Setters in decreasing order of Value length
+	// (longest first) so that longer values are matched before shorter ones
+	slices.SortFunc(fcd.ScalarSetters, func(a, b ScalarSetter) int {
+		return cmp.Compare(len(b.Value), len(a.Value))
+	})
 	return nil
 }

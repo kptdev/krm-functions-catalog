@@ -15,9 +15,10 @@
 package createsetters
 
 import (
+	"cmp"
 	"fmt"
 	"os"
-	"sort"
+	"slices"
 	"strings"
 	"testing"
 
@@ -27,6 +28,7 @@ import (
 )
 
 func TestCreateSettersFilter(t *testing.T) {
+	t.Parallel()
 	var tests = []struct {
 		name              string
 		config            string
@@ -729,11 +731,14 @@ var inputSetters = []ScalarSetter{
 }
 
 func TestCurrentSetterValues(t *testing.T) {
+	t.Parallel()
 	for _, tests := range [][]lineCommentTest{resolveLineCommentCases} {
 		for i := range tests {
 			test := tests[i]
 			t.Run(test.name, func(t *testing.T) {
-				sort.Sort(CompareSetters(inputSetters))
+				slices.SortFunc(inputSetters, func(a, b ScalarSetter) int {
+					return cmp.Compare(len(b.Value), len(a.Value))
+				})
 				replacerArgs := []string{}
 				for _, setter := range inputSetters {
 					replacerArgs = append(replacerArgs, setter.Value)
