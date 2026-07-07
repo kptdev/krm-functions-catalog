@@ -2,7 +2,7 @@ module github.com/kptdev/krm-functions-catalog/functions/go/no-op
 
 go 1.26.3
 
-require github.com/kptdev/krm-functions-sdk/go/fn v1.0.3
+require github.com/kptdev/krm-functions-sdk/go/fn v1.0.4
 
 require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
