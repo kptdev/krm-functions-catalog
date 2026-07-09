@@ -3,7 +3,7 @@ module github.com/kptdev/krm-functions-catalog/functions/go/apply-setters
 go 1.26.3
 
 require (
-	github.com/kptdev/kpt/api v0.0.1
+	github.com/kptdev/kpt/api v0.0.2
 	github.com/stretchr/testify v1.11.1
 	sigs.k8s.io/kustomize/kyaml v0.21.1
 )
@@ -37,7 +37,6 @@ require (
 	golang.org/x/sys v0.44.0 // indirect
 	google.golang.org/protobuf v1.36.12-0.20260120151049-f2248ac996af // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	k8s.io/apimachinery v0.36.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20260520065146-aa012df4f4af // indirect
 	k8s.io/utils v0.0.0-20260210185600-b8788abfbbc2 // indirect
 	sigs.k8s.io/yaml v1.6.0 // indirect
