@@ -24,6 +24,7 @@ import (
 )
 
 func TestUpdateContainerImages(t *testing.T) {
+	t.Parallel()
 	const podYAML = `
 apiVersion: v1
 kind: Pod

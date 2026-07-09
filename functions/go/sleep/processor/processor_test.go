@@ -25,6 +25,7 @@ import (
 )
 
 func TestSleepProcessor(t *testing.T) {
+	t.Parallel()
 	const delta = float64(time.Second) / 2
 
 	testCases := map[string]struct {

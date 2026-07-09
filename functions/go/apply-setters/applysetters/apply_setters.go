@@ -27,6 +27,9 @@ import (
 
 const SetterCommentIdentifier = "# kpt-set: "
 
+// setterRefPattern matches setter references in the form ${name}.
+var setterRefPattern = regexp.MustCompile(`\$\{([^}]*)\}`)
+
 var _ kio.Filter = &ApplySetters{}
 
 // ApplySetters applies the setter values to the resource fields which are tagged
@@ -361,8 +364,7 @@ func validArraySetterPattern(pattern string) bool {
 // unresolvedSetters returns the list of values enclosed in ${} present within given
 // pattern e.g. pattern = foo-${image}:${tag}-bar return ["${image}", "${tag}"]
 func unresolvedSetters(pattern string) []string {
-	re := regexp.MustCompile(`\$\{([^}]*)\}`)
-	return re.FindAllString(pattern, -1)
+	return setterRefPattern.FindAllString(pattern, -1)
 }
 
 // clean extracts value enclosed in ${}

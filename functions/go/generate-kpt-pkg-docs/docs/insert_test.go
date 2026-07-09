@@ -22,6 +22,7 @@ import (
 )
 
 func TestInsertBetweenIdx(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		original []string
 		start    int
@@ -91,6 +92,7 @@ func TestInsertBetweenIdx(t *testing.T) {
 }
 
 func TestFindInsertPoint(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		doc            string
 		docMarkerStart string
@@ -155,6 +157,7 @@ dolor`,
 }
 
 func TestInsertIntoReadme(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		title     string
 		current   string

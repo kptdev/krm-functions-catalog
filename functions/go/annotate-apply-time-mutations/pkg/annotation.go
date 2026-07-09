@@ -1,4 +1,4 @@
-// Copyright 2021-2025 The kpt Authors
+// Copyright 2021-2026 The kpt Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ func WriteAnnotation(obj *yaml.RNode, atm mutation.ApplyTimeMutation) error {
 	// and sigs.k8s.io/kustomize/kyaml/yaml requires yaml field tags...
 	yamlBytes, err := k8syaml.Marshal(atm)
 	if err != nil {
-		return fmt.Errorf("failed to format apply-time-mutation annotation: %v", err)
+		return fmt.Errorf("failed to format apply-time-mutation annotation: %w", err)
 	}
 	a := obj.GetAnnotations()
 	if a == nil {
@@ -45,7 +45,7 @@ func WriteAnnotation(obj *yaml.RNode, atm mutation.ApplyTimeMutation) error {
 	a[mutation.Annotation] = string(yamlBytes)
 	err = obj.SetAnnotations(a)
 	if err != nil {
-		return fmt.Errorf("failed to update annotations: %v", err)
+		return fmt.Errorf("failed to update annotations: %w", err)
 	}
 	return nil
 }

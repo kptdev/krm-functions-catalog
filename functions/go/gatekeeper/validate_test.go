@@ -15,14 +15,15 @@
 package main
 
 import (
-	"reflect"
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
 func TestSortResults(t *testing.T) {
+	t.Parallel()
 	testcases := []struct {
 		name   string
 		input  framework.Results
@@ -270,8 +271,8 @@ func TestSortResults(t *testing.T) {
 
 	for _, tc := range testcases {
 		tc.input.Sort()
-		if !reflect.DeepEqual(tc.input, tc.output) {
-			t.Errorf("in testcase %q, expect: %#v, but got: %#v", tc.name, tc.output, tc.input)
+		if diff := cmp.Diff(tc.output, tc.input); diff != "" {
+			t.Errorf("testcase %q mismatch (-want +got):\n%s", tc.name, diff)
 		}
 	}
 }
