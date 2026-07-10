@@ -34,7 +34,7 @@ require (
 	github.com/google/go-containerregistry v0.21.6 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/klauspost/compress v1.18.6 // indirect
-	github.com/kptdev/kpt/api v0.0.2 // indirect
+	github.com/kptdev/kpt/api v0.0.1 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
