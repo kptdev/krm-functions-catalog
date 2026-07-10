@@ -1,6 +1,7 @@
 #! /bin/bash
 #
 # Copyright 2021 Google LLC
+# Modifications Copyright (C) 2026 The kpt Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,14 +66,10 @@ EXTRA_BUILD_ARGS="${EXTRA_BUILD_ARGS:-}"
 
 case "$1" in
   build)
-    for version in "${version_array[@]}"; do
-      docker_build "load" "${CURRENT_FUNCTION}" "${version}"
-    done
+    docker_build "load" "${CURRENT_FUNCTION}" "${version_array[@]}"
     ;;
   push)
-    for version in "${version_array[@]}"; do
-      docker_build "push" "${CURRENT_FUNCTION}" "${version}"
-    done
+    docker_build "push" "${CURRENT_FUNCTION}" "${version_array[@]}"
     ;;
   *)
     echo "Usage: $0 {build|push}"
