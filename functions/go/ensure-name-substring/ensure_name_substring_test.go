@@ -62,6 +62,7 @@ func runEnsureNameSubstringTransformer(t *testing.T, config, input string) strin
 }
 
 func TestEnsureNameSubstringDependsOn(t *testing.T) {
+	t.Parallel()
 	testCases := []struct {
 		TestName string
 		Config   string
@@ -209,6 +210,7 @@ metadata:
 }
 
 func TestSetDependsOnNameSubstring(t *testing.T) {
+	t.Parallel()
 	testCases := []struct {
 		TestName            string
 		EditMode            EditMode

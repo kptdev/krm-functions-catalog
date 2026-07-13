@@ -25,6 +25,7 @@ import (
 )
 
 func TestApplySettersFilter(t *testing.T) {
+	t.Parallel()
 	var tests = []struct {
 		name              string
 		config            string
@@ -608,6 +609,7 @@ var resolvePatternCases = []patternTest{
 }
 
 func TestCurrentSetterValues(t *testing.T) {
+	t.Parallel()
 	for _, tests := range [][]patternTest{resolvePatternCases} {
 		for i := range tests {
 			test := tests[i]

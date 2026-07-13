@@ -26,6 +26,7 @@ import (
 )
 
 func TestUpsertResourceFilter(t *testing.T) {
+	t.Parallel()
 	var tests = []struct {
 		name              string
 		fnconfig          string
@@ -610,6 +611,7 @@ spec:
 }
 
 func TestIsSameResource(t *testing.T) {
+	t.Parallel()
 	var tests = []struct {
 		name      string
 		resource1 string
@@ -768,6 +770,7 @@ metadata:
 }
 
 func TestCombineInputAndMatchedAnnotations(t *testing.T) {
+	t.Parallel()
 	var tests = []struct {
 		name                string
 		inputResourceAnno   map[string]string

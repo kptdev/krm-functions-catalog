@@ -1,4 +1,4 @@
-// Copyright (C) 2025 OpenInfra Foundation Europe
+// Copyright (C) 2025-2026 OpenInfra Foundation Europe
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
-	"reflect"
 	"testing"
 )
 
@@ -95,15 +94,11 @@ data:
 			if cfg.SchemaLocation != tt.expected.SchemaLocation {
 				t.Errorf("SchemaLocation: got %q, want %q", cfg.SchemaLocation, tt.expected.SchemaLocation)
 			}
-			if !reflect.DeepEqual(cfg.AdditionalSchemaLocations, tt.expected.AdditionalSchemaLocations) {
-				t.Errorf("AdditionalSchemaLocations: got %v, want %v", cfg.AdditionalSchemaLocations, tt.expected.AdditionalSchemaLocations)
-			}
+			assert.Equal(t, tt.expected.AdditionalSchemaLocations, cfg.AdditionalSchemaLocations, "AdditionalSchemaLocations mismatch")
 			if cfg.IgnoreMissingSchemas != tt.expected.IgnoreMissingSchemas {
 				t.Errorf("IgnoreMissingSchemas: got %v, want %v", cfg.IgnoreMissingSchemas, tt.expected.IgnoreMissingSchemas)
 			}
-			if !reflect.DeepEqual(cfg.SkipKinds, tt.expected.SkipKinds) {
-				t.Errorf("SkipKinds: got %v, want %v", cfg.SkipKinds, tt.expected.SkipKinds)
-			}
+			assert.Equal(t, tt.expected.SkipKinds, cfg.SkipKinds, "SkipKinds mismatch")
 			if cfg.Strict != tt.expected.Strict {
 				t.Errorf("Strict: got %v, want %v", cfg.Strict, tt.expected.Strict)
 			}
@@ -112,7 +107,6 @@ data:
 }
 
 func TestBuildKubeconformArgs(t *testing.T) {
-
 	tests := []struct {
 		name              string
 		schemaLocation    string

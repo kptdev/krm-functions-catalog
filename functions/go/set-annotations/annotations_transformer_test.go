@@ -18,8 +18,9 @@ package main
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 func runAnnotationTransformerE(config, input string) (string, error) {
@@ -262,12 +263,12 @@ spec:
 		}: {"app": "myApp"},
 	}
 	runAnnotationTransformer(t, config, input)
-	if !reflect.DeepEqual(KustomizePlugin.Results, expectedResults) {
+	if diff := cmp.Diff(expectedResults, KustomizePlugin.Results); diff != "" {
 		fmt.Println("Actual:")
 		fmt.Println(KustomizePlugin.Results)
 		fmt.Println("===")
 		fmt.Println("Expected:")
 		fmt.Println(expectedResults)
-		t.Fatalf("Actual doesn't equal to expected")
+		t.Fatalf("Results mismatch (-want +got):\n%s", diff)
 	}
 }

@@ -22,6 +22,7 @@ import (
 )
 
 func TestGenerateReadme(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name      string
 		r         string
@@ -374,6 +375,7 @@ spec:
 }
 
 func TestGenerateResourcesSection(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name      string
 		resources string
@@ -477,6 +479,7 @@ This package has no top-level resources. See sub-packages.
 }
 
 func TestGenerateSubPkgSection(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name string
 		pkgs string
@@ -579,6 +582,7 @@ This package has no sub-packages.
 }
 
 func TestGenerateResourceTableSection(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name string
 		r    string
@@ -634,6 +638,7 @@ spec:
 }
 
 func TestGenerateSetterTableSection(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name string
 		r    string
