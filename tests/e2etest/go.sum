@@ -75,8 +75,8 @@ github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnr
 github.com/json-iterator/go v1.1.12/go.mod h1:e30LSqwooZae/UwlEbR2852Gd8hjQvJoHmT4TnhNGBo=
 github.com/klauspost/compress v1.18.6 h1:2jupLlAwFm95+YDR+NwD2MEfFO9d4z4Prjl1XXDjuao=
 github.com/klauspost/compress v1.18.6/go.mod h1:cwPg85FWrGar70rWktvGQj8/hthj3wpl0PGDogxkrSQ=
-github.com/kptdev/kpt v1.0.0-beta.65 h1:Xkh1MdE02gepH3XxlrywiNtqdjq3N7rvhAxeA/U7E+o=
-github.com/kptdev/kpt v1.0.0-beta.65/go.mod h1:aHpEOCxSPuRSOl6CuGq9D1A+2BxaUZ0xTWJDE/osp5s=
+github.com/kptdev/kpt v1.0.0-beta.65.1 h1:SdhRByK3RqsXd1wqiz30Z+L+YcXp29X1d9Ce3Sik36w=
+github.com/kptdev/kpt v1.0.0-beta.65.1/go.mod h1:aHpEOCxSPuRSOl6CuGq9D1A+2BxaUZ0xTWJDE/osp5s=
 github.com/kptdev/kpt/api v0.0.1 h1:1PZ/lA0IuMYkgrSXCJqk3fcVok8tyuP6gOmHhrTETdM=
 github.com/kptdev/kpt/api v0.0.1/go.mod h1:JviL89EPiMTdxSSJL9sXnOuckflKVXZKKDCu9YJ5kM4=
 github.com/kptdev/krm-functions-sdk/go/fn v1.0.3 h1:Gmkqbc2cbwJxamVoRSs409TZinuNGZaMYmNmlQcF6Bs=
@@ -117,6 +117,7 @@ github.com/prep/wasmexec v0.0.0-20220807105708-6554945c1dec h1:Yz85KaIsPzF0YRrzn
 github.com/prep/wasmexec v0.0.0-20220807105708-6554945c1dec/go.mod h1:/AG7CoBOwtk42jdCTLbd280PA4h50oaFK88jee+BaVA=
 github.com/regclient/regclient v0.11.5 h1:OHRsXO0F3qHGfa4HEUv+EkMH9NXNcCTBKjNzyC/UhIA=
 github.com/regclient/regclient v0.11.5/go.mod h1:DZUOfIT14WFTK2Pj4vjd93avy9O4Fdpjrf9ir23TbRE=
+github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
 github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0tI/otEQ=
 github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7so1lCWt35ZSgc=
 github.com/sergi/go-diff v1.4.0 h1:n/SP9D5ad1fORl+llWyN+D6qoUETXNZARKjyY2/KVCw=
@@ -158,7 +159,6 @@ golang.org/x/sync v0.20.0 h1:e0PTpb7pjO8GAtTs2dQ6jYa5BWYlMuX047Dco/pItO4=
 golang.org/x/sync v0.20.0/go.mod h1:9xrNwdLfx4jkKbNva9FpL6vEN7evnE43NNNJQ2LF3+0=
 golang.org/x/sys v0.45.0 h1:dO4czNzziLiiXplLQgBCEpCvXQ3dnkn0SdaZSYdQ+FY=
 golang.org/x/sys v0.45.0/go.mod h1:4GL1E5IUh+htKOUEOaiffhrAeqysfVGipDYzABqnCmw=
-github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
 golang.org/x/text v0.37.0 h1:Cqjiwd9eSg8e0QAkyCaQTNHFIIzWtidPahFWR83rTrc=
 golang.org/x/text v0.37.0/go.mod h1:a5sjxXGs9hsn/AJVwuElvCAo9v8QYLzvavO5z2PiM38=
 google.golang.org/protobuf v1.36.12-0.20260120151049-f2248ac996af h1:+5/Sw3GsDNlEmu7TfklWKPdQ0Ykja5VEmq2i817+jbI=
@@ -189,8 +189,6 @@ k8s.io/utils v0.0.0-20260507154919-ff6756f316d2 h1:wU4tMEhLGgIbLvXQb1cfN+EcM0wf7
 k8s.io/utils v0.0.0-20260507154919-ff6756f316d2/go.mod h1:xDxuJ0whA3d0I4mf/C4ppKHxXynQ+fxnkmQH0vTHnuk=
 sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730 h1:IpInykpT6ceI+QxKBbEflcR5EXP7sU1kvOlxwZh5txg=
 sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730/go.mod h1:mdzfpAEoE6DHQEN0uh9ZbOCuHbLK5wOm7dK4ctXE9Tg=
-github.com/kptdev/kpt v1.0.0-beta.65.1 h1:SdhRByK3RqsXd1wqiz30Z+L+YcXp29X1d9Ce3Sik36w=
-github.com/kptdev/kpt v1.0.0-beta.65.1/go.mod h1:aHpEOCxSPuRSOl6CuGq9D1A+2BxaUZ0xTWJDE/osp5s=
 sigs.k8s.io/kustomize/kyaml v0.21.1 h1:IVlbmhC076nf6foyL6Taw4BkrLuEsXUXNpsE+ScX7fI=
 sigs.k8s.io/kustomize/kyaml v0.21.1/go.mod h1:hmxADesM3yUN2vbA5z1/YTBnzLJ1dajdqpQonwBL1FQ=
 sigs.k8s.io/randfill v1.0.0 h1:JfjMILfT8A6RbawdsK2JXGBR5AQVfd+9TbzrlneTyrU=
