@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/search-replace
 
-go 1.26.3
+go 1.26.5
 
 require (
 	github.com/bmatcuk/doublestar/v4 v4.10.0

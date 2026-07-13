@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/scripts/generate_docs
 
-go 1.26.3
+go 1.26.5
 
 require (
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2

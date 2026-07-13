@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/generate-kpt-pkg-docs
 
-go 1.26.3
+go 1.26.5
 
 require (
 	github.com/kptdev/kpt v1.0.0-beta.64
