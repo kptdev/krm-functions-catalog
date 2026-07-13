@@ -1,4 +1,4 @@
-// Copyright 2021-2025 The kpt Authors
+// Copyright 2021-2026 The kpt Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import (
 )
 
 func TestApplySettersReferenceParse(t *testing.T) {
+	t.Parallel()
 	testCases := map[string]struct {
 		s          string
 		wantStruct mutation.ResourceReference
@@ -72,6 +73,7 @@ func TestApplySettersReferenceParse(t *testing.T) {
 }
 
 func TestCommentToTokenField(t *testing.T) {
+	t.Parallel()
 	testCases := map[string]struct {
 		s          string
 		givenIndex int
@@ -106,6 +108,7 @@ func TestCommentToTokenField(t *testing.T) {
 }
 
 func TestCommentScan(t *testing.T) {
+	t.Parallel()
 	testCases := map[string]struct {
 		config        string
 		expectResults []ScanResult

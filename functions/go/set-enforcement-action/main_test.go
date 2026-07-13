@@ -141,6 +141,7 @@ data:
 }
 
 func TestPolicyResources(t *testing.T) {
+	t.Parallel()
 	for i := range tests {
 		test := tests[i]
 		t.Run(test.name, func(t *testing.T) {

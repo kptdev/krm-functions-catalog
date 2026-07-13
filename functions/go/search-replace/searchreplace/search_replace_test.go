@@ -35,6 +35,7 @@ type test struct {
 }
 
 func TestSearchCommand(t *testing.T) {
+	t.Parallel()
 	for _, tests := range [][]test{searchReplaceCases, putPatternCases} {
 		for i := range tests {
 			test := tests[i]
@@ -110,6 +111,7 @@ func TestSearchCommand(t *testing.T) {
 }
 
 func TestDecode(t *testing.T) {
+	t.Parallel()
 	rn, err := kyaml.Parse(`data:
   by-value: foo
   put-values: bar`)

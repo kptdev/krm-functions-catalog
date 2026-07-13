@@ -36,6 +36,9 @@ const (
 	PathDelimiter = "."
 )
 
+// unresolvedCaptureGroupPattern matches unresolved capture group references like ${0}, ${1}.
+var unresolvedCaptureGroupPattern = regexp.MustCompile(`\$\{([0-9]+)\}`)
+
 // matchers returns the list of supported matchers
 func matchers() []string {
 	return []string{ByValue, ByFilePath, ByValueRegex, ByPath, PutValue, PutComment}
@@ -369,8 +372,7 @@ func resolvePattern(fieldValue, valueRegex, patternRegex string) (string, error)
 	}
 
 	// make sure that all capture groups are resolved and throw error if they are not
-	re := regexp.MustCompile(`\$\{([0-9]+)\}`)
-	if re.Match([]byte(res)) {
+	if unresolvedCaptureGroupPattern.MatchString(res) {
 		return "", errors.Errorf("unable to resolve capture groups")
 	}
 

@@ -25,6 +25,7 @@ import (
 )
 
 func TestGetResourceDocsLink(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name string
 		r    resid.Gvk
@@ -60,6 +61,7 @@ func TestGetResourceDocsLink(t *testing.T) {
 }
 
 func TestShouldSkipResource(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name      string
 		r         string
@@ -159,6 +161,7 @@ func getRNodesFromStr(t *testing.T, res string) []*yaml.RNode {
 }
 
 func TestFindResourcePath(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name string
 		r    string

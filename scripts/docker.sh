@@ -1,7 +1,7 @@
 #! /bin/bash
 #
 # Copyright 2021 Google LLC
-# Modifications Copyright (C) 2025 OpenInfra Foundation Europe.
+# Modifications Copyright (C) 2025-2026 OpenInfra Foundation Europe.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,8 @@ function err {
 function docker_build {
   action=$1 # docker buildx operation, it should be either load or push.
   name=$2 # function name, e.g. apply-setters
-  tag=$3 # function tag, e.g. v1.2.3
+  shift 2
+  local tags=("$@") # one or more tags, e.g. v1.2.3 v1.2 v1
 
   build_args=()
 
@@ -53,7 +54,13 @@ function docker_build {
     echo "Setting build context to ${function_dir}"
   fi
 
-  echo "building ${CR_REGISTRY}/${name}:${tag}"
+  # Build tag arguments
+  local tag_args=()
+  for tag in "${tags[@]}"; do
+    tag_args+=(-t "${CR_REGISTRY}/${name}:${tag}")
+  done
+
+  echo "building ${CR_REGISTRY}/${name} with tags: ${tags[*]}"
 
   case "${action}" in
     load)
@@ -61,7 +68,7 @@ function docker_build {
 
       # Use + conditional parameter expansion to protect from unbound array variable
       docker buildx build --load \
-        -t "${CR_REGISTRY}/${name}:${tag}" \
+        "${tag_args[@]}" \
         -f "${dockerfile}" \
         "${build_args[@]+"${build_args[@]}"}" \
         "${extra_args_array[@]+"${extra_args_array[@]}"}" \
@@ -71,7 +78,7 @@ function docker_build {
       IFS=' ' read -r -a extra_args_array <<< "${EXTRA_BUILD_ARGS:-}"
       # build and push multi-arch image.
       docker buildx build --push \
-        -t "${CR_REGISTRY}/${name}:${tag}" \
+        "${tag_args[@]}" \
         -f "${dockerfile}" \
         --platform "linux/amd64,linux/arm64" \
         "${build_args[@]+"${build_args[@]}"}" \

@@ -22,6 +22,7 @@ import (
 )
 
 func TestStarlarkConfig(t *testing.T) {
+	t.Parallel()
 	testcases := []struct {
 		name         string
 		config       string
