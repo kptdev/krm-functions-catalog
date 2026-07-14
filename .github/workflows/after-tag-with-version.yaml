@@ -117,16 +117,3 @@ jobs:
             --notes-file "$NOTES_FILE"
 
           rm -f "$NOTES_FILE"
-
-      - name: Trigger documentation site rebuild
-        env:
-          NETLIFY_BUILD_HOOK_URL: ${{ secrets.NETLIFY_BUILD_HOOK_URL }}
-        run: |
-          if [[ -z "$NETLIFY_BUILD_HOOK_URL" ]]; then
-            echo "::error::NETLIFY_BUILD_HOOK_URL secret is not set"
-            exit 1
-          fi
-          curl -sS -f -X POST \
-            -H 'Content-Type: application/json' \
-            --data-raw '{"clear_cache": true}' \
-            "$NETLIFY_BUILD_HOOK_URL"

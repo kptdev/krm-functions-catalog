@@ -196,6 +196,14 @@ enable = false
   url = "https://porch.kpt.dev/"
   weight = 50
 
+# Disable caching for resources.GetRemote so that every build fetches fresh
+# data from the GitHub API. Without this, Hugo caches remote responses
+# indefinitely and the function catalog table shows stale release versions
+# until the cache is manually cleared.
+[caches]
+  [caches.getresource]
+    maxAge = -1
+
 [security]
   [security.funcs]
     getenv = ['^HUGO_', '^CI$', '^KRM_CATALOG_API_TOKEN$']
