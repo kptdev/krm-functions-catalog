@@ -19,6 +19,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"sigs.k8s.io/kustomize/kyaml/kio"
 	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 )
@@ -453,32 +454,21 @@ roles: # kpt-set: ${roles}
 		test := tests[i]
 		t.Run(test.name, func(t *testing.T) {
 			baseDir, err := os.MkdirTemp("", "")
-			if !assert.NoError(t, err) {
-				t.FailNow()
-			}
+			require.NoError(t, err)
 			//nolint:errcheck
 			defer os.RemoveAll(baseDir)
 
 			r, err := os.CreateTemp(baseDir, "k8s-cli-*.yaml")
-			if !assert.NoError(t, err) {
-				t.FailNow()
-			}
+			require.NoError(t, err)
 			//nolint:errcheck
 			defer os.Remove(r.Name())
 			err = os.WriteFile(r.Name(), []byte(test.input), 0600)
-			if !assert.NoError(t, err) {
-				t.FailNow()
-			}
+			require.NoError(t, err)
 
 			s := &ApplySetters{}
 			node, err := kyaml.Parse(test.config)
-			if !assert.NoError(t, err) {
-				t.FailNow()
-			}
+			require.NoError(t, err)
 			Decode(node, s)
-			if !assert.NoError(t, err) {
-				t.FailNow()
-			}
 			inout := &kio.LocalPackageReadWriter{
 				PackagePath:     baseDir,
 				NoDeleteFiles:   true,
@@ -490,29 +480,75 @@ roles: # kpt-set: ${roles}
 				Outputs: []kio.Writer{inout},
 			}.Execute()
 			if test.errMsg != "" {
-				if !assert.NotNil(t, err) {
-					t.FailNow()
-				}
-				if !assert.Contains(t, err.Error(), test.errMsg) {
-					t.FailNow()
-				}
-			}
-
-			if test.errMsg == "" && !assert.NoError(t, err) {
-				t.FailNow()
+				require.NotNil(t, err)
+				require.Contains(t, err.Error(), test.errMsg)
+			} else {
+				require.NoError(t, err)
 			}
 
 			actualResources, err := os.ReadFile(r.Name())
-			if !assert.NoError(t, err) {
-				t.FailNow()
-			}
-			if !assert.Equal(t,
-				test.expectedResources,
-				string(actualResources)) {
-				t.FailNow()
-			}
+			require.NoError(t, err)
+			assert.Equal(t, test.expectedResources, string(actualResources))
 		})
 	}
+}
+
+func TestRedaction(t *testing.T) {
+	config := `
+data:
+  db-password: super-secret-password
+`
+	input := `apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+stringData:
+  password: old-value # kpt-set: ${db-password}
+`
+	expectedResources := `apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+stringData:
+  password: super-secret-password # kpt-set: ${db-password}
+`
+
+	baseDir, err := os.MkdirTemp("", "")
+	require.NoError(t, err)
+	//nolint:errcheck
+	defer os.RemoveAll(baseDir)
+
+	r, err := os.CreateTemp(baseDir, "k8s-cli-*.yaml")
+	require.NoError(t, err)
+	//nolint:errcheck
+	defer os.Remove(r.Name())
+	err = os.WriteFile(r.Name(), []byte(input), 0600)
+	require.NoError(t, err)
+
+	s := &ApplySetters{}
+	node, err := kyaml.Parse(config)
+	require.NoError(t, err)
+	Decode(node, s)
+	inout := &kio.LocalPackageReadWriter{
+		PackagePath:     baseDir,
+		NoDeleteFiles:   true,
+		PackageFileName: "Kptfile",
+	}
+	err = kio.Pipeline{
+		Inputs:  []kio.Reader{inout},
+		Filters: []kio.Filter{s},
+		Outputs: []kio.Writer{inout},
+	}.Execute()
+	require.NoError(t, err)
+
+	actualResources, err := os.ReadFile(r.Name())
+	require.NoError(t, err)
+	require.Equal(t, expectedResources, string(actualResources))
+
+	require.Len(t, s.Results, 1)
+	assert.Equal(t, redactedPlaceholder, s.Results[0].Field.ProposedValue)
+	assert.Equal(t, redactedPlaceholder, s.Results[0].Field.CurrentValue)
+	assert.Contains(t, s.Results[0].Message, redactedPlaceholder)
 }
 
 type patternTest struct {
