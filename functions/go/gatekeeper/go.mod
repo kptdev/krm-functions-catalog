@@ -116,7 +116,11 @@ require (
 	k8s.io/klog/v2 v2.140.0 // indirect
 	k8s.io/kube-openapi v0.0.0-20260317180543-43fb72c5454a // indirect
 	k8s.io/utils v0.0.0-20260210185600-b8788abfbbc2 // indirect
-	oras.land/oras-go/v2 v2.6.0 // indirect
+	// CVE-2026-50151: credential forwarding via unvalidated Location header.
+	// Pulled in transitively by github.com/open-policy-agent/gatekeeper/v3 and
+	// github.com/open-policy-agent/opa. Remove this override once gatekeeper
+	// bumps to oras-go >= v2.6.1 in a future release.
+	oras.land/oras-go/v2 v2.6.1 // indirect
 	sigs.k8s.io/apiserver-network-proxy/konnectivity-client v0.31.2 // indirect
 	sigs.k8s.io/controller-runtime v0.23.3 // indirect
 	sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730 // indirect
