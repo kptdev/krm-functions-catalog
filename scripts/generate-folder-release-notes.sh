@@ -24,9 +24,7 @@
 # Example:
 #   scripts/generate-folder-release-notes.sh \
 #     --function upsert-resource \
-#     --previous-tag v0.2.3 \
-#     --new-tag v0.2.4 \
-#     --ref main
+#     --new-tag v0.2.4
 
 set -euo pipefail
 
@@ -41,7 +39,8 @@ output of the GitHub Release Notes API.
 
 Options:
   --function NAME         Function name under functions/go/ (required)
-  --previous-tag VERSION  Previous release version (required, e.g. v0.2.3)
+  --previous-tag VERSION  Previous release version (e.g. v0.2.3); default: latest
+                          semver tag for the function
   --new-tag VERSION       New release version (required, e.g. v0.2.4)
   --ref REF               Commitish for the new release (default: HEAD)
   -o, --output FILE       Write notes to FILE instead of stdout
@@ -53,6 +52,10 @@ EOF
 fail() {
   echo "generate-folder-release-notes.sh: $*" >&2
   exit 1
+}
+
+missing_value() {
+  fail "missing value for $1"
 }
 
 normalize_version() {
@@ -70,6 +73,13 @@ function_tag() {
   printf 'functions/go/%s/%s' "$function_name" "$version"
 }
 
+# Latest strict SemVer long tag for the function.
+latest_function_tag() {
+  git tag -l "functions/go/${function_name}/v*" --sort=v:refname |
+    grep -E -- '/v[0-9]+\.[0-9]+\.[0-9]+$' |
+    tail -n 1 || true
+}
+
 function_name=""
 previous_version=""
 new_version=""
@@ -79,27 +89,27 @@ output_file=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --function)
-      [[ $# -ge 2 ]] || fail "missing value for --function"
+      [[ $# -ge 2 ]] || missing_value "$1"
       function_name="$2"
       shift 2
       ;;
-    --previous-tag)
-      [[ $# -ge 2 ]] || fail "missing value for --previous-tag"
+    --previous-tag|--prev-tag|--prev)
+      [[ $# -ge 2 ]] || missing_value "$1"
       previous_version="$2"
       shift 2
       ;;
-    --new-tag)
-      [[ $# -ge 2 ]] || fail "missing value for --new-tag"
+    --new-tag|--new)
+      [[ $# -ge 2 ]] || missing_value "$1"
       new_version="$2"
       shift 2
       ;;
-    --ref)
-      [[ $# -ge 2 ]] || fail "missing value for --ref"
+    --ref|--target|--target-ref)
+      [[ $# -ge 2 ]] || missing_value "$1"
       ref="$2"
       shift 2
       ;;
     -o | --output)
-      [[ $# -ge 2 ]] || fail "missing value for $1"
+      [[ $# -ge 2 ]] || missing_value "$1"
       output_file="$2"
       shift 2
       ;;
@@ -116,11 +126,16 @@ done
 if [[ -z "$function_name" ]]; then
   fail "--function is required (try --help)"
 fi
-if [[ -z "$previous_version" ]]; then
-  fail "--previous-tag is required"
-fi
 if [[ -z "$new_version" ]]; then
   fail "--new-tag is required"
+fi
+
+if [[ -z "$previous_version" ]]; then
+  prev_long="$(latest_function_tag)"
+  if [[ -z "$prev_long" ]]; then
+    fail "no prior semver tag functions/go/${function_name}/vMAJOR.MINOR.PATCH; pass --previous-tag explicitly"
+  fi
+  previous_version="${prev_long##*/}"
 fi
 
 previous_tag="$(function_tag "$previous_version")"
