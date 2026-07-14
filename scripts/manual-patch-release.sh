@@ -148,7 +148,7 @@ for fn in "${functions[@]}"; do
   echo "Previous: ${prev_long} -> Next: ${long_tag}"
 
   if [[ "$dry_run" == "true" ]]; then
-    echo "(dry_run) would run: GITHUB_REPOSITORY=\"${repo}\" \"${scripts_dir}/generate-folder-release-notes.sh\" --function \"${fn}\" --previous-tag \"${ver}\" --new-tag \"${next_ver}\" --ref \"${sha}\" -o <notes-file>"
+    echo "(dry_run) would run: GITHUB_REPOSITORY=\"${repo}\" \"${scripts_dir}/generate-folder-release-notes.sh\" --function \"${fn}\" --previous-tag \"${ver}\" --new-tag \"${next_ver}\" --ref \"${sha}\" --attribution -o <notes-file>"
     echo "(dry_run) would run: gh release create \"${long_tag}\" --repo \"${repo}\" --target \"${sha}\" --title \"${release_title}\" --notes-file <notes-file>"
     continue
   fi
@@ -164,6 +164,7 @@ for fn in "${functions[@]}"; do
     --previous-tag "${ver}" \
     --new-tag "${next_ver}" \
     --ref "${sha}" \
+    --attribution \
     -o "${notes_file}"
 
   gh release create "${long_tag}" \
