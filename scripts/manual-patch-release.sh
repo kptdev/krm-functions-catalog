@@ -16,8 +16,9 @@
 
 # Manual patch release for functions/go KRM functions (used by GitHub Actions and runnable locally).
 #
-# Creates a GitHub Release (and the semver tag on the server at GITHUB_SHA) via `gh`. Image build,
-# short tag creation, and appending the container image to release notes are left to workflows
+# Creates a GitHub Release (and the semver tag on the server at GITHUB_SHA) via `gh`.
+# Release notes are scoped to functions/go/<name>/ via generate-folder-release-notes.sh.
+# Image build, short tag creation, and appending the container image to release notes are left to workflows
 # that run on tag push (e.g. after-tag-with-version.yaml, release.yaml). Use a GitHub App
 # installation access token or PAT for GH_TOKEN in CI so those workflows are triggered;
 # GITHUB_TOKEN-created tag/release events do not start them.
@@ -147,7 +148,8 @@ for fn in "${functions[@]}"; do
   echo "Previous: ${prev_long} -> Next: ${long_tag}"
 
   if [[ "$dry_run" == "true" ]]; then
-    echo "(dry_run) would run: gh release create \"${long_tag}\" --repo \"${repo}\" --target \"${sha}\" --title \"${release_title}\" --generate-notes --notes-start-tag \"${prev_long}\""
+    echo "(dry_run) would run: GITHUB_REPOSITORY=\"${repo}\" \"${scripts_dir}/generate-folder-release-notes.sh\" --function \"${fn}\" --previous-tag \"${ver}\" --new-tag \"${next_ver}\" --ref \"${sha}\" -o <notes-file>"
+    echo "(dry_run) would run: gh release create \"${long_tag}\" --repo \"${repo}\" --target \"${sha}\" --title \"${release_title}\" --notes-file <notes-file>"
     continue
   fi
 
@@ -156,10 +158,19 @@ for fn in "${functions[@]}"; do
     exit 1
   fi
 
+  notes_file="$(mktemp)"
+  GITHUB_REPOSITORY="${repo}" "${scripts_dir}/generate-folder-release-notes.sh" \
+    --function "${fn}" \
+    --previous-tag "${ver}" \
+    --new-tag "${next_ver}" \
+    --ref "${sha}" \
+    -o "${notes_file}"
+
   gh release create "${long_tag}" \
     --repo "${repo}" \
     --target "${sha}" \
     --title "${release_title}" \
-    --generate-notes \
-    --notes-start-tag "${prev_long}"
+    --notes-file "${notes_file}"
+
+  rm -f "${notes_file}"
 done
