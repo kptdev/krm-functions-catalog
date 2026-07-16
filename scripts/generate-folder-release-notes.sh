@@ -19,7 +19,7 @@
 # Calls the GitHub Release Notes API, then keeps only bullets whose linked PR
 # also appears in git history for the folder (e.g. functions/go/set-namespace/).
 #
-# Prerequisites: gh (authenticated), git.
+# Prerequisites: bash 3.2+, gh (authenticated), git.
 #
 # Example:
 #   scripts/generate-folder-release-notes.sh \
@@ -90,7 +90,7 @@ output_file=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --function)
+    --function|--func)
       [[ $# -ge 2 ]] || missing_value "$1"
       function_name="$2"
       shift 2
@@ -100,7 +100,7 @@ while [[ $# -gt 0 ]]; do
       previous_version="$2"
       shift 2
       ;;
-    --new-tag|--new)
+    --new-tag|--new|--next-tag|--next)
       [[ $# -ge 2 ]] || missing_value "$1"
       new_version="$2"
       shift 2
@@ -148,8 +148,6 @@ previous_tag="$(function_tag "$previous_version")"
 new_tag="$(function_tag "$new_version")"
 folder_path="functions/go/${function_name}"
 
-declare -A folder_pr_numbers=()
-
 extract_pr_number() {
   local line="$1"
   if [[ "$line" =~ pull/([0-9]+) ]]; then
@@ -161,22 +159,26 @@ extract_pr_number_from_subject() {
   local subject="$1"
   if [[ "$subject" =~ \(#([0-9]+)\)$ ]]; then
     printf '%s' "${BASH_REMATCH[1]}"
+  elif [[ "$subject" =~ ^Merge[[:space:]]pull[[:space:]]request[[:space:]]#([0-9]+) ]]; then
+    printf '%s' "${BASH_REMATCH[1]}"
   fi
 }
 
-# Discover PRs that touched the folder via git history.
-collect_folder_pr_numbers() {
-  local subject pr_number
-  while IFS= read -r subject; do
-    [[ -z "$subject" ]] && continue
-    pr_number="$(extract_pr_number_from_subject "$subject")"
-    [[ -n "$pr_number" ]] || continue
-    folder_pr_numbers["$pr_number"]=1
-  done < <(git log "${previous_tag}..${ref}" --format='%s' -- "${folder_path}/")
-}
+# Discover PRs that touched the folder via git history (newline-separated, sorted).
+folder_pr_numbers="$(
+  git log "${previous_tag}..${ref}" --format='%s' -- "${folder_path}/" |
+    while IFS= read -r subject; do
+      [[ -z "$subject" ]] && continue
+      pr_number="$(extract_pr_number_from_subject "$subject")"
+      [[ -n "$pr_number" ]] || continue
+      printf '%s\n' "$pr_number"
+    done | sort -nu
+)"
 
 pr_in_folder() {
-  [[ -n "${folder_pr_numbers[$1]:-}" ]]
+  local pr="$1"
+  [[ -n "$folder_pr_numbers" ]] || return 1
+  printf '%s\n' "$folder_pr_numbers" | grep -Fqx "$pr"
 }
 
 filter_bullet_line() {
@@ -187,8 +189,6 @@ filter_bullet_line() {
   [[ -n "$pr_number" ]] || return 1
   pr_in_folder "$pr_number"
 }
-
-collect_folder_pr_numbers
 
 parse_and_filter_notes() {
   local body="$1"
