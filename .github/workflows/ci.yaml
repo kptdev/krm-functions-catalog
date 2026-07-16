@@ -18,14 +18,10 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-    - 'documentation/**' 
   pull_request:
     branches:
       - main
       - "*/v[0-9]+.[0-9]+"
-    paths-ignore:
-    - 'documentation/**' 
   schedule:
     - cron: "0 17 * * *"
 
@@ -39,19 +35,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  shell-ci:
-    strategy:
-      matrix:
-        platform: [ubuntu-latest]
-    runs-on: ${{ matrix.platform }}
+  # Detect which path groups changed to conditionally skip expensive jobs.
+  # Do not use workflow-level paths-ignore for required checks.
+  # GitHub leaves skipped required workflows Pending forever.
+  # Instead, we always run the workflow and skip individual jobs conditionally.
+  changes:
+    name: detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
     steps:
       - uses: actions/checkout@v7
-      - name: Lint shell scripts, ignoring third-party files
-        run: |
-          find . -name "*.sh" > shell_files.out
-          shellcheck $(cat shell_files.out)
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            code:
+              - 'functions/**'
+              - 'examples/**'
+              - 'tests/**'
+              - 'build/**'
+              - 'scripts/**'
+              - 'Makefile'
+              - '.github/workflows/ci.yaml'
 
   validate-metadata:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -64,6 +74,8 @@ jobs:
         run: make validate-metadata
 
   go-unit-test-ci:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -78,6 +90,8 @@ jobs:
           make unit-test
 
   e2e-ci:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
@@ -109,3 +123,31 @@ jobs:
       - name: Run all tests
         run: |
           make e2e-test
+
+  ci-gate:
+    name: ci
+    needs: [changes, validate-metadata, go-unit-test-ci, e2e-ci]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check results
+        run: |
+          # If no code changes, this check is not applicable, pass.
+          if [ "${{ needs.changes.result }}" != "success" ]; then
+            echo "changes job did not succeed"
+            exit 1
+          fi
+          if [ "${{ needs.changes.outputs.code }}" = "false" ]; then
+            echo "No code changes, skipping CI checks"
+            exit 0
+          fi
+          
+          # If any required job failed, cancelled, or skipped, fail this check.
+          if [ "${{ needs.validate-metadata.result }}" != "success" ] || \
+             [ "${{ needs.go-unit-test-ci.result }}" != "success" ] || \
+             [ "${{ needs.e2e-ci.result }}" != "success" ]; then
+            echo "CI checks failed or did not complete"
+            exit 1
+          fi
+          
+          echo "CI checks passed"
