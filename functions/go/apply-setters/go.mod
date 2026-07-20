@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/apply-setters
 
-go 1.26.3
+go 1.26.5
 
 require (
 	github.com/kptdev/kpt/api v0.0.2

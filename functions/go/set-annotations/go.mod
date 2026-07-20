@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/set-annotations
 
-go 1.26.3
+go 1.26.5
 
 require (
 	github.com/google/go-cmp v0.7.0
