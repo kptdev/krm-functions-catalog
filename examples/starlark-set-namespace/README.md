@@ -14,7 +14,7 @@ to set namespaces to KRM resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-set-namespace
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-set-namespace
 ```
 
 We are going to use the following `Kptfile` and `fn-config.yaml` to configure

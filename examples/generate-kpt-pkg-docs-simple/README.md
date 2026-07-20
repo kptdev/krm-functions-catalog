@@ -16,7 +16,7 @@ Running `generate-kpt-pkg-docs` function on the example package will:
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/generate-kpt-pkg-docs-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/generate-kpt-pkg-docs-simple
 ```
 
 ### Function invocation

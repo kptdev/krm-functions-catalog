@@ -13,7 +13,7 @@ field on all resources by running [`set-image`] function imperatively.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-image-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-image-imperative
 ```
 
 ### Function invocation

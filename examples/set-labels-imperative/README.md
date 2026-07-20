@@ -13,7 +13,7 @@ all resources by running [`set-labels`] function imperatively.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-labels-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-labels-imperative
 ```
 
 ### Function invocation

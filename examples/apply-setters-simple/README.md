@@ -13,7 +13,7 @@ resource fields parameterized by `kpt-set` comments.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/apply-setters-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/apply-setters-simple
 ```
 
 We use `ConfigMap` to configure the `apply-setters` function. The desired

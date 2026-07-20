@@ -13,7 +13,7 @@ validate KRM resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/kubeconform-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/kubeconform-imperative
 ```
 
 We have a `ReplicationController` in `app.yaml` that has 2 schema violations:

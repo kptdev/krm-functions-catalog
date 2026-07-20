@@ -14,7 +14,7 @@ resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-image-digest
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-image-digest
 ```
 
 We use the following `Kptfile` to configure the function.

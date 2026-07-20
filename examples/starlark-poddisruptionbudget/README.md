@@ -15,7 +15,7 @@ the `functionConfig` and use it in the script.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-poddisruptionbudget
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-poddisruptionbudget
 ```
 
 We are going to use the following `Kptfile` and `fn-config.yaml` to configure

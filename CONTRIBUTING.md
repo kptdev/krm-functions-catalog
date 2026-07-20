@@ -278,11 +278,11 @@ Do you need a review or release of functions? We’d love to hear from you!
 
 [e2e test harness doc]: https://github.com/kptdev/kpt/blob/main/pkg/test/runner/README.md
 
-[golang-template]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/master/functions/go/_template/README.md
+[golang-template]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/main/functions/go/_template/README.md
 
-[docker-common]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/master/build/docker
+[docker-common]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/main/build/docker
 
-[example-template]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/master/examples/_template/README.md
+[example-template]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/main/examples/_template/README.md
 
 [Slack channel]: https://kubernetes.slack.com/channels/kpt/
 

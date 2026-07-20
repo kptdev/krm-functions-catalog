@@ -13,7 +13,7 @@ to upsert annotations to the `.metadata.annotations` field on all resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-annotations-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-annotations-simple
 ```
 
 We use the following `Kptfile` to configure the function.

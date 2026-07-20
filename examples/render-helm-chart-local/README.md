@@ -13,7 +13,7 @@ function to render a helm chart that lives in your local filesystem.
 Run the following command to fetch the example package:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/render-helm-chart-local
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/render-helm-chart-local
 ```
 
 ```shell

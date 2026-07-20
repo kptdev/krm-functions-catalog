@@ -19,7 +19,7 @@ portion of the annotation.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-namespace-depends-on
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-namespace-depends-on
 ```
 
 We use the following `set-namespace-depends-on/Kptfile` to configure the function.

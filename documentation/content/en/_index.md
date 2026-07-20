@@ -8,7 +8,7 @@ menu:
 ---
 
 {{< alert >}}
-Please see the [versioning](https://github.com/kptdev/krm-functions-catalog/blob/master/VERSIONING.md) 
+Please see the [versioning](https://github.com/kptdev/krm-functions-catalog/blob/main/VERSIONING.md) 
 document, which details the SemVer tagging strategy being used for the released KRM Functions. 
 {{< /alert >}}
 
