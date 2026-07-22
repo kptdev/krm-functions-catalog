@@ -17,6 +17,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"slices"
 
 	"github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring/generated"
 	nameref "github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring/third_party/sigs.k8s.io/kustomize/api/accumulator"
@@ -98,15 +99,15 @@ func (ensp *EnsureNameSubstringProcessor) Process(resourceList *framework.Resour
 
 // kptPackageAnnotations must be preserved so kpt can write resources back to
 // their original package paths (especially the literal "Kptfile" filename).
-var kptPackageAnnotations = map[string]bool{
-	kioutil.PathAnnotation:                                   true,
-	kioutil.IndexAnnotation:                                  true,
-	kioutil.SeqIndentAnnotation:                              true,
-	kioutil.IdAnnotation:                                     true,
-	kioutil.InternalAnnotationsMigrationResourceIDAnnotation: true,
-	kioutil.LegacyPathAnnotation:                             true, //nolint:staticcheck
-	kioutil.LegacyIndexAnnotation:                            true, //nolint:staticcheck
-	kioutil.LegacyIdAnnotation:                               true, //nolint:staticcheck
+var kptPackageAnnotations = []string{
+	kioutil.PathAnnotation,
+	kioutil.IndexAnnotation,
+	kioutil.SeqIndentAnnotation,
+	kioutil.IdAnnotation,
+	kioutil.InternalAnnotationsMigrationResourceIDAnnotation,
+	kioutil.LegacyPathAnnotation,  //nolint:staticcheck
+	kioutil.LegacyIndexAnnotation, //nolint:staticcheck
+	kioutil.LegacyIdAnnotation,    //nolint:staticcheck
 }
 
 func removeKustomizeTrackingAnnotations(m resmap.ResMap) error {
@@ -115,10 +116,10 @@ func removeKustomizeTrackingAnnotations(m resmap.ResMap) error {
 		if len(annotations) == 0 {
 			continue
 		}
-		for _, a := range resource.BuildAnnotations {
-			if kptPackageAnnotations[a] {
-				continue
-			}
+		annosToRemove := slices.DeleteFunc(resource.BuildAnnotations, func(s string) bool {
+			return slices.Contains(kptPackageAnnotations, s)
+		})
+		for _, a := range annosToRemove {
 			delete(annotations, a)
 		}
 		if err := r.SetAnnotations(annotations); err != nil {
