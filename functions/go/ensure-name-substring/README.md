@@ -42,6 +42,7 @@ This function does Not process the following resources:
 - `CustomResourceDefinition`
 - `Namespace`
 - `APIService`
+- `Kptfile`
 
 In addition to updating the `metadata.name` field for each resource, the
 function will also update the [fields][namereference] that references the name

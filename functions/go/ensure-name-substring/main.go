@@ -27,6 +27,7 @@ import (
 	"sigs.k8s.io/kustomize/api/types"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
+	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
 	"sigs.k8s.io/yaml"
 )
 
@@ -84,9 +85,46 @@ func (ensp *EnsureNameSubstringProcessor) Process(resourceList *framework.Resour
 		return fmt.Errorf("failed to fix name back reference: %w", err)
 	}
 
-	// remove kustomize build annotations
-	resMap.RemoveBuildAnnotations()
+	// Remove kustomize tracking annotations (previousNames, prefixes, etc.)
+	// without dropping kpt path/index annotations. RemoveBuildAnnotations()
+	// also clears those, which would rewrite files such as Kptfile to
+	// kind_name.yaml when the package is written back.
+	if err = removeKustomizeTrackingAnnotations(resMap); err != nil {
+		return fmt.Errorf("failed to remove kustomize tracking annotations: %w", err)
+	}
 	resourceList.Items = resMap.ToRNodeSlice()
+	return nil
+}
+
+// kptPackageAnnotations must be preserved so kpt can write resources back to
+// their original package paths (especially the literal "Kptfile" filename).
+var kptPackageAnnotations = map[string]bool{
+	kioutil.PathAnnotation:                                   true,
+	kioutil.IndexAnnotation:                                  true,
+	kioutil.SeqIndentAnnotation:                              true,
+	kioutil.IdAnnotation:                                     true,
+	kioutil.InternalAnnotationsMigrationResourceIDAnnotation: true,
+	kioutil.LegacyPathAnnotation:                             true, //nolint:staticcheck
+	kioutil.LegacyIndexAnnotation:                            true, //nolint:staticcheck
+	kioutil.LegacyIdAnnotation:                               true, //nolint:staticcheck
+}
+
+func removeKustomizeTrackingAnnotations(m resmap.ResMap) error {
+	for _, r := range m.Resources() {
+		annotations := r.GetAnnotations()
+		if len(annotations) == 0 {
+			continue
+		}
+		for _, a := range resource.BuildAnnotations {
+			if kptPackageAnnotations[a] {
+				continue
+			}
+			delete(annotations, a)
+		}
+		if err := r.SetAnnotations(annotations); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
