@@ -97,18 +97,24 @@ func (ensp *EnsureNameSubstringProcessor) Process(resourceList *framework.Resour
 	return nil
 }
 
-// kptPackageAnnotations must be preserved so kpt can write resources back to
-// their original package paths (especially the literal "Kptfile" filename).
-var kptPackageAnnotations = []string{
-	kioutil.PathAnnotation,
-	kioutil.IndexAnnotation,
-	kioutil.SeqIndentAnnotation,
-	kioutil.IdAnnotation,
-	kioutil.InternalAnnotationsMigrationResourceIDAnnotation,
-	kioutil.LegacyPathAnnotation,  //nolint:staticcheck
-	kioutil.LegacyIndexAnnotation, //nolint:staticcheck
-	kioutil.LegacyIdAnnotation,    //nolint:staticcheck
-}
+var kustomizeTrackingAnnos = func() []string {
+	// kptPackageAnnotations must be preserved so kpt can write resources back to
+	// their original package paths (especially the literal "Kptfile" filename).
+	kptPackageAnnotations := []string{
+		kioutil.PathAnnotation,
+		kioutil.IndexAnnotation,
+		kioutil.SeqIndentAnnotation,
+		kioutil.IdAnnotation,
+		kioutil.InternalAnnotationsMigrationResourceIDAnnotation,
+		kioutil.LegacyPathAnnotation,  //nolint:staticcheck
+		kioutil.LegacyIndexAnnotation, //nolint:staticcheck
+		kioutil.LegacyIdAnnotation,    //nolint:staticcheck
+	}
+
+	return slices.DeleteFunc(slices.Clone(resource.BuildAnnotations), func(s string) bool {
+		return slices.Contains(kptPackageAnnotations, s)
+	})
+}()
 
 func removeKustomizeTrackingAnnotations(m resmap.ResMap) error {
 	for _, r := range m.Resources() {
@@ -116,10 +122,7 @@ func removeKustomizeTrackingAnnotations(m resmap.ResMap) error {
 		if len(annotations) == 0 {
 			continue
 		}
-		annosToRemove := slices.DeleteFunc(resource.BuildAnnotations, func(s string) bool {
-			return slices.Contains(kptPackageAnnotations, s)
-		})
-		for _, a := range annosToRemove {
+		for _, a := range kustomizeTrackingAnnos {
 			delete(annotations, a)
 		}
 		if err := r.SetAnnotations(annotations); err != nil {

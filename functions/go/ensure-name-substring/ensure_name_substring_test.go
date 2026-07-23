@@ -457,6 +457,6 @@ data:
 	assert.Len(t, rl.Items, 1)
 	assert.Equal(t, "prod-the-map", rl.Items[0].GetName())
 	assert.Equal(t, "resources.yaml", rl.Items[0].GetAnnotations()[kioutil.PathAnnotation])
-	assert.Empty(t, rl.Items[0].GetAnnotations()["internal.config.kubernetes.io/previousNames"])
-	assert.Empty(t, rl.Items[0].GetAnnotations()["internal.config.kubernetes.io/prefixes"])
+	assert.NotContains(t, rl.Items[0].GetAnnotations(), "internal.config.kubernetes.io/previousNames")
+	assert.NotContains(t, rl.Items[0].GetAnnotations(), "internal.config.kubernetes.io/prefixes")
 }
