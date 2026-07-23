@@ -274,22 +274,14 @@ Do you need a review or release of functions? We’d love to hear from you!
 * Join our [discussions]
 
 
-[catalog website]: https://catalog.kpt.dev/
+## Useful links
 
-[e2e test harness doc]: https://github.com/kptdev/kpt/blob/main/pkg/test/runner/README.md
-
-[golang-template]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/master/functions/go/_template/README.md
-
-[docker-common]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/master/build/docker
-
-[example-template]: https://raw.githubusercontent.com/kptdev/krm-functions-catalog/master/examples/_template/README.md
-
-[Slack channel]: https://kubernetes.slack.com/channels/kpt/
-
-[error message style guide]: https://github.com/kptdev/kpt/blob/main/docs/style-guides/errors.md
-
-[documentation style guide]: https://github.com/kptdev/kpt/blob/main/docs/style-guides/docs.md
-
-[GitHub Help]: https://help.github.com/articles/about-pull-requests/
-
-[discussions]: https://github.com/kptdev/kpt/discussions
+- [catalog website](https://catalog.kpt.dev/)
+- [e2e test harness doc](https://github.com/kptdev/kpt/blob/main/pkg/test/runner/README.md)
+- [golang-template](https://raw.githubusercontent.com/kptdev/krm-functions-catalog/main/functions/go/_template/README.md)
+- [docker](https://github.com/kptdev/krm-functions-catalog/tree/main/build/docker/go)
+- [example-template](https://raw.githubusercontent.com/kptdev/krm-functions-catalog/main/examples/_template/README.md)
+- [Slack channel](https://kubernetes.slack.com/channels/kpt/)
+- [error message style guide](https://github.com/kptdev/kpt/blob/main/architecture/style-guides/errors.md)
+- [GitHub Help](https://help.github.com/articles/about-pull-requests/)
+- [discussions](https://github.com/kptdev/kpt/discussions)

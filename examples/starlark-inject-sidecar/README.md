@@ -14,7 +14,7 @@ to inject sidecar container to `Deployment`.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-inject-sidecar
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-inject-sidecar
 ```
 
 We are going to use the following `Kptfile` and `fn-config.yaml` to configure

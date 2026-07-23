@@ -13,7 +13,7 @@ enforce the policy `Containers must not run as root` on resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/gatekeeper-disallow-root-user
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/gatekeeper-disallow-root-user
 ```
 
 There are 3 resources: a `ConstraintTemplate`, a `DisallowRoot` and

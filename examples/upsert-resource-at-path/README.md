@@ -10,7 +10,7 @@ In this example, we will see how to add a resource at specified path using `upse
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/upsert-resource-at-path
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/upsert-resource-at-path
 ```
 
 The input resource is present at path `.expected/fn-config.yaml`. It has an annotation

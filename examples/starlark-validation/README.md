@@ -14,7 +14,7 @@ to validate a `ConfigMap`.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-validation
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-validation
 ```
 
 We are going to use the following `Kptfile` and `fn-config.yaml` to configure

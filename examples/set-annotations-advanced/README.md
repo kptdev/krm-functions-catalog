@@ -48,7 +48,7 @@ specify it in field `additionalAnnotationFields`.
 Invoke the function by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/set-annotations-advanced
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/set-annotations-advanced
 $ kpt fn render set-annotations-advanced
 ```
 

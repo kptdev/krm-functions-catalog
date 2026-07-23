@@ -13,7 +13,7 @@ resource fields using `create-setters` function.
 Get the example package by running the following command:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/create-setters-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/create-setters-simple
 ```
 
 We use `ConfigMap` to configure the `create-setters` function.

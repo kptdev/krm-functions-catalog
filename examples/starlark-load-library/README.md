@@ -13,7 +13,7 @@ In this example, we are going to demonstrate how to load a library in the
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/starlark-load-library
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/starlark-load-library
 ```
 
 We are going to use the following `Kptfile` and `fn-config.yaml` to configure

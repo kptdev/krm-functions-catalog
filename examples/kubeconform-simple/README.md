@@ -13,7 +13,7 @@ validate KRM resources.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/kubeconform-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/kubeconform-simple
 ```
 
 The following is the `Kptfile` in this example: 

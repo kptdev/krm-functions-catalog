@@ -13,7 +13,7 @@ on all resources by running `delete-annotations` function imperatively.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/delete-annotations-imperative
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/delete-annotations-imperative
 ```
 
 ### Function invocation

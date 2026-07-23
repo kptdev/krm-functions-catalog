@@ -18,7 +18,7 @@ the annotation.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/master/examples/ensure-name-substring-depends-on
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/ensure-name-substring-depends-on
 ```
 
 We use the following `Kptfile` to configure the function.
