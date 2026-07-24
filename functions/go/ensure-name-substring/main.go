@@ -17,6 +17,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"slices"
 
 	"github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring/generated"
 	nameref "github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring/third_party/sigs.k8s.io/kustomize/api/accumulator"
@@ -27,6 +28,7 @@ import (
 	"sigs.k8s.io/kustomize/api/types"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
+	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
 	"sigs.k8s.io/yaml"
 )
 
@@ -84,9 +86,49 @@ func (ensp *EnsureNameSubstringProcessor) Process(resourceList *framework.Resour
 		return fmt.Errorf("failed to fix name back reference: %w", err)
 	}
 
-	// remove kustomize build annotations
-	resMap.RemoveBuildAnnotations()
+	// Remove kustomize tracking annotations (previousNames, prefixes, etc.)
+	// without dropping kpt path/index annotations. RemoveBuildAnnotations()
+	// also clears those, which would rewrite files such as Kptfile to
+	// kind_name.yaml when the package is written back.
+	if err = removeKustomizeTrackingAnnotations(resMap); err != nil {
+		return fmt.Errorf("failed to remove kustomize tracking annotations: %w", err)
+	}
 	resourceList.Items = resMap.ToRNodeSlice()
+	return nil
+}
+
+var kustomizeTrackingAnnos = func() []string {
+	// kptPackageAnnotations must be preserved so kpt can write resources back to
+	// their original package paths (especially the literal "Kptfile" filename).
+	kptPackageAnnotations := []string{
+		kioutil.PathAnnotation,
+		kioutil.IndexAnnotation,
+		kioutil.SeqIndentAnnotation,
+		kioutil.IdAnnotation,
+		kioutil.InternalAnnotationsMigrationResourceIDAnnotation,
+		kioutil.LegacyPathAnnotation,  //nolint:staticcheck
+		kioutil.LegacyIndexAnnotation, //nolint:staticcheck
+		kioutil.LegacyIdAnnotation,    //nolint:staticcheck
+	}
+
+	return slices.DeleteFunc(slices.Clone(resource.BuildAnnotations), func(s string) bool {
+		return slices.Contains(kptPackageAnnotations, s)
+	})
+}()
+
+func removeKustomizeTrackingAnnotations(m resmap.ResMap) error {
+	for _, r := range m.Resources() {
+		annotations := r.GetAnnotations()
+		if len(annotations) == 0 {
+			continue
+		}
+		for _, a := range kustomizeTrackingAnnos {
+			delete(annotations, a)
+		}
+		if err := r.SetAnnotations(annotations); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

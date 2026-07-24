@@ -20,6 +20,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
+	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
@@ -45,7 +46,9 @@ func runEnsureNameSubstringTransformerE(config, input string) (string, error) {
 	if err = ens.Transform(resMap); err != nil {
 		return "", err
 	}
-	resMap.RemoveBuildAnnotations()
+	if err = removeKustomizeTrackingAnnotations(resMap); err != nil {
+		return "", err
+	}
 	y, err := resMap.AsYaml()
 	if err != nil {
 		return "", err
@@ -370,4 +373,90 @@ func TestSetDependsOnNameSubstring(t *testing.T) {
 			assert.Equal(t, tc.Expected, actual)
 		})
 	}
+}
+
+func TestProcessPreservesKptfilePathAnnotation(t *testing.T) {
+	t.Parallel()
+
+	// given
+	kptfile, err := yaml.Parse(`apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: test-ensure-name-substring
+  annotations:
+    config.kubernetes.io/local-config: "true"
+    internal.config.kubernetes.io/path: Kptfile
+    internal.config.kubernetes.io/index: "0"
+info:
+  description: Minimal package to reproduce ensure-name-substring Kptfile handling
+`)
+	assert.NoError(t, err)
+	config, err := yaml.Parse(`apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fn-config
+data:
+  append: "-test"
+`)
+	assert.NoError(t, err)
+	tc, err := getDefaultConfig()
+	assert.NoError(t, err)
+	ensp := EnsureNameSubstringProcessor{tc: &tc}
+	rl := &framework.ResourceList{
+		Items:          []*yaml.RNode{kptfile},
+		FunctionConfig: config,
+	}
+
+	// when
+	err = ensp.Process(rl)
+
+	// then
+	assert.NoError(t, err)
+	assert.Len(t, rl.Items, 1)
+	assert.Equal(t, "test-ensure-name-substring", rl.Items[0].GetName())
+	assert.Equal(t, "Kptfile", rl.Items[0].GetAnnotations()[kioutil.PathAnnotation])
+	assert.Equal(t, "0", rl.Items[0].GetAnnotations()[kioutil.IndexAnnotation])
+}
+
+func TestProcessPreservesPathAnnotationWhenRenaming(t *testing.T) {
+	t.Parallel()
+
+	// given
+	cm, err := yaml.Parse(`apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: the-map
+  annotations:
+    internal.config.kubernetes.io/path: resources.yaml
+    internal.config.kubernetes.io/index: "0"
+data:
+  some-key: some-value
+`)
+	assert.NoError(t, err)
+	config, err := yaml.Parse(`apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fn-config
+data:
+  prepend: prod-
+`)
+	assert.NoError(t, err)
+	tc, err := getDefaultConfig()
+	assert.NoError(t, err)
+	ensp := EnsureNameSubstringProcessor{tc: &tc}
+	rl := &framework.ResourceList{
+		Items:          []*yaml.RNode{cm},
+		FunctionConfig: config,
+	}
+
+	// when
+	err = ensp.Process(rl)
+
+	// then
+	assert.NoError(t, err)
+	assert.Len(t, rl.Items, 1)
+	assert.Equal(t, "prod-the-map", rl.Items[0].GetName())
+	assert.Equal(t, "resources.yaml", rl.Items[0].GetAnnotations()[kioutil.PathAnnotation])
+	assert.NotContains(t, rl.Items[0].GetAnnotations(), "internal.config.kubernetes.io/previousNames")
+	assert.NotContains(t, rl.Items[0].GetAnnotations(), "internal.config.kubernetes.io/prefixes")
 }
