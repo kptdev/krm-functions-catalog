@@ -142,7 +142,8 @@ For each function, its files spread in the follow places:
     - Source code (and unit tests).
     - A README.md file serving as the usage doc and will be shown in
       the [catalog website]. Functions should follow [this template][golang-template].
-    - A metadata.yaml file that follows the function metadata schema.
+    - A metadata.yaml file that follows the [function metadata schema](scripts/generate_docs/metadata-schema.json).
+      See the [schema reference](documentation/content/en/metadata-schema/_index.md) for field descriptions.
     - (Optional) A Dockerfile to build the docker container. If a Dockerfile is
       not defined, the [default Dockerfile for the language][docker-common] will
       be used.
