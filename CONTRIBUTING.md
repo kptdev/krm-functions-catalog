@@ -113,6 +113,62 @@ Contributions are required to follow these style guides:
 - [Error Message Style Guide]
 - [Documentation Style Guide]
 
+## Function Compatibility
+
+All functions in the catalog comply with the [function spec]. To learn more
+about the functions concept,
+see [here](https://kpt.dev/book/02-concepts/03-functions).
+
+There are 2 user-facing surfaces for a function:
+
+- The `functionConfig`
+- The function behavior
+
+### functionConfig Surface
+
+A `functionConfig` can be either a core resource (e.g. `ConfigMap`) or a custom
+resource. If the `functionConfig` is a CRD, it can be versioned independently as
+a normal CRD.
+
+### Function Behavior Surface
+
+#### What are NOT part of the function behavior surface
+
+- The formatting of serialization for output items and results. e.g. yaml
+  indentation and order of fields in a map.
+- The order of resources in the output items.
+- The order of result items in the results.
+- The content of the unstructured messages in the results.
+
+#### What are part of the function behavior surface
+
+- The supported `functionConfig`:
+    - If the function supports `ConfigMap` as `functionConfig`, the supported
+      fields in the `ConfigMap`.
+    - If the function supports a custom resource as `functionConfig`, the
+      supported versions of the custom resource.
+- How the function behaves given the input items and `functionConfig`:
+    - The remaining aspects of the output items that are not mentioned in the
+      previous section.
+    - The remaining aspects of the results that are not mentioned in the
+      previous section.
+
+For example, if the `kubeval` function stops supporting
+the `ignore_missing_schemas` option in the `ConfigMap`, it will be a breaking
+change.
+
+Another example, if the `set-namespace` function stops supporting custom
+resource of apiVersion `fn.kpt.dev/v1alpha1` and kind `SetNamespace`, it will be
+a breaking change.
+
+### Breaking Changes
+
+We define a breaking change as: For any given input (including `input items`,
+`functionConfig` and OpenAPI), the function produces a different output
+(including output items, results) that are part of the user-facing surface.
+
+[function spec]: https://github.com/kubernetes-sigs/kustomize/blob/master/cmd/config/docs/api-conventions/functions-spec.md
+
 ## How to Contribute
 
 ### Repo Layout

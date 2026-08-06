@@ -12,7 +12,7 @@ The KRM Functions Catalog documentation is published as part of the [kpt documen
 
 - [Contributing](CONTRIBUTING.md) — how to contribute functions, run tests, and follow the repo layout
 - [Releasing](RELEASING.md) — how to release functions and update docs
-- [Versioning](VERSIONING.md) — semver strategy for function images
+- [Versioning](https://github.com/kptdev/governance/blob/main/VERSIONING.md) — semver strategy for function images
 - [Documentation site](documentation/README.md) — running the docs site locally
 
 ## Issues
