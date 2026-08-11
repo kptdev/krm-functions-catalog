@@ -96,7 +96,8 @@ func (sr *SearchReplace) Filter(nodes []*yaml.RNode) ([]*yaml.RNode, error) {
 
 	// compile regex once so that it can be used everywhere
 	if sr.ByValueRegex != "" {
-		re, err := regexp.Compile(`\A` + sr.ByValueRegex + `\z`)
+		// using \A and \z since they always match the start and end of the text
+		re, err := regexp.Compile(`\A` + sr.ByValueRegex + `\z`) 
 		if err != nil {
 			return nodes, errors.Wrap(err)
 		}
