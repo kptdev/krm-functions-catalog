@@ -16,6 +16,28 @@ package searchreplace
 
 var putPatternCases = []test{
 	{
+		name: "ensure no match on partial values",
+		config: `
+data:
+  by-value-regex: example(.*)
+  put-value: something-new${1}
+`,
+		input: `
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-example-app
+`,
+		out: `Mutated 0 field(s)
+`,
+		expectedResources: `
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-example-app
+`,
+	},
+	{
 		name: "put comment single setter",
 		config: `
 data:
