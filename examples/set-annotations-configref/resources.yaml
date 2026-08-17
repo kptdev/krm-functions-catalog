@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: the-map
+data:
+  some-key: some-value
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns

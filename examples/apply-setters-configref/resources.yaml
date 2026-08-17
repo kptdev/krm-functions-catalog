@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx
+spec:
+  replicas: 4 # kpt-set: ${nginx-replicas}
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: "nginx:1.16.1" # kpt-set: nginx:${tag}
+          ports:
+            - protocol: TCP
+              containerPort: 80

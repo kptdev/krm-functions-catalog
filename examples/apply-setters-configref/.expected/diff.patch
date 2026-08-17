@@ -1,0 +1,50 @@
+diff --git a/Kptfile b/Kptfile
+index df57f34..4b0bf6e 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -11,3 +11,23 @@ pipeline:
+         apiVersion: v1
+         kind: ConfigMap
+         name: setters
++status:
++  conditions:
++    - type: Rendered
++      status: "True"
++      reason: RenderSuccess
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/apply-setters:latest
++        exitCode: 0
++        results:
++          - message: set field value to "3"
++            field:
++              path: spec.replicas
++            file:
++              path: resources.yaml
++          - message: set field value to "nginx:1.16.2"
++            field:
++              path: spec.template.spec.containers[0].image
++            file:
++              path: resources.yaml
+diff --git a/resources.yaml b/resources.yaml
+index eb09079..a3fcb38 100644
+--- a/resources.yaml
++++ b/resources.yaml
+@@ -3,7 +3,7 @@ kind: Deployment
+ metadata:
+   name: my-nginx
+ spec:
+-  replicas: 4 # kpt-set: ${nginx-replicas}
++  replicas: 3 # kpt-set: ${nginx-replicas}
+   selector:
+     matchLabels:
+       app: nginx
+@@ -14,7 +14,7 @@ spec:
+     spec:
+       containers:
+         - name: nginx
+-          image: "nginx:1.16.1" # kpt-set: nginx:${tag}
++          image: "nginx:1.16.2" # kpt-set: nginx:${tag}
+           ports:
+             - protocol: TCP
+               containerPort: 80

@@ -1,0 +1,13 @@
+apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: example
+  annotations:
+    config.kubernetes.io/local-config: "true"
+pipeline:
+  mutators:
+    - image: ghcr.io/kptdev/krm-functions-catalog/set-annotations:latest
+      configRef:
+        apiVersion: fn.kpt.dev/v1alpha1
+        kind: SetAnnotations
+        name: my-func-config
