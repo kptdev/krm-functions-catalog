@@ -232,10 +232,20 @@ func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin str
 			visitor(origin.Name, nsPtr, o.ShortString())
 			_ = o.SetName(*nsPtr)
 		case o.IsGVK("apiextensions.k8s.io", "v1", "CustomResourceDefinition"):
+			strategy, found, _ := o.NestedString("spec", "conversion", "strategy")
+			if !found || strategy != "Webhook" {
+				break
+			}
+			if _, found, _ := o.NestedString("spec", "conversion", "webhook", "clientConfig", "service", "name"); !found {
+				break
+			}
 			nsPtr := new(NestedStringOrDie(o, "spec", "conversion", "webhook", "clientConfig", "service", "namespace"))
 			visitor("", nsPtr)
 			SetNestedStringOrDie(&o.SubObject, *nsPtr, "spec", "conversion", "webhook", "clientConfig", "service", "namespace")
 		case o.IsGVK("apiregistration.k8s.io", "v1", "APIService"):
+			if _, found, _ := o.NestedString("spec", "service", "name"); !found {
+				break
+			}
 			nsPtr := new(NestedStringOrDie(o, "spec", "service", "namespace"))
 			visitor("", nsPtr)
 			SetNestedStringOrDie(&o.SubObject, *nsPtr, "spec", "service", "namespace")
