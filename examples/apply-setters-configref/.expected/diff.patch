@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index df57f34..4b0bf6e 100644
+index df57f34..4c068f8 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -11,3 +11,23 @@ pipeline:
+@@ -11,3 +11,37 @@ pipeline:
          apiVersion: v1
          kind: ConfigMap
          name: setters
@@ -17,13 +17,27 @@ index df57f34..4b0bf6e 100644
 +        exitCode: 0
 +        results:
 +          - message: set field value to "3"
++            severity: info
++            resourceRef:
++              apiVersion: apps/v1
++              kind: Deployment
++              name: my-nginx
 +            field:
 +              path: spec.replicas
++              currentValue: "4"
++              proposedValue: "3"
 +            file:
 +              path: resources.yaml
 +          - message: set field value to "nginx:1.16.2"
++            severity: info
++            resourceRef:
++              apiVersion: apps/v1
++              kind: Deployment
++              name: my-nginx
 +            field:
 +              path: spec.template.spec.containers[0].image
++              currentValue: nginx:1.16.1
++              proposedValue: nginx:1.16.2
 +            file:
 +              path: resources.yaml
 diff --git a/resources.yaml b/resources.yaml
