@@ -383,6 +383,131 @@ spec:
 `,
 		},
 		{
+			name: "escaped dollar-brace with nested real setter",
+			config: `
+data:
+  name: mopidy
+`,
+			input: `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  template:
+    spec:
+      containers:
+      - name: app
+        envFrom:
+        - secretRef:
+            name: ${APP_CONFIG_SECRET_NAME:=mopidy-defaults} # kpt-set: \${APP_CONFIG_SECRET_NAME:=${name}-defaults}
+`,
+			expectedResources: `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  template:
+    spec:
+      containers:
+      - name: app
+        envFrom:
+        - secretRef:
+            name: ${APP_CONFIG_SECRET_NAME:=mopidy-defaults} # kpt-set: \${APP_CONFIG_SECRET_NAME:=${name}-defaults}
+`,
+		},
+		{
+			name: "escaped dollar-brace only - no real setters - no modification",
+			config: `
+data:
+  unrelated: value
+`,
+			input: `apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test
+data:
+  key: ${SOME_VAR:=default} # kpt-set: \${SOME_VAR:=default}
+`,
+			expectedResources: `apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test
+data:
+  key: ${SOME_VAR:=default} # kpt-set: \${SOME_VAR:=default}
+`,
+		},
+		{
+			name: "escaped dollar-brace mixed with real setter",
+			config: `
+data:
+  tag: 2.0.0
+`,
+			input: `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  template:
+    spec:
+      containers:
+      - name: app
+        image: ${REGISTRY}/myimage:1.0.0 # kpt-set: \${REGISTRY}/myimage:${tag}
+`,
+			expectedResources: `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  template:
+    spec:
+      containers:
+      - name: app
+        image: ${REGISTRY}/myimage:2.0.0 # kpt-set: \${REGISTRY}/myimage:${tag}
+`,
+		},
+		{
+			name: "multiple escaped dollar-braces with real setter",
+			config: `
+data:
+  name: myapp
+`,
+			input: `apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+data:
+  url: ${HOST:=localhost}:${PORT:=8080}/old # kpt-set: \${HOST:=localhost}:\${PORT:=8080}/${name}
+`,
+			expectedResources: `apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+data:
+  url: ${HOST:=localhost}:${PORT:=8080}/myapp # kpt-set: \${HOST:=localhost}:\${PORT:=8080}/${name}
+`,
+		},
+		{
+			name: "escaped dollar-brace with value derivation",
+			config: `
+data:
+  domain: prod.example.com
+`,
+			input: `apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+data:
+  endpoint: ${SCHEME:=https}://dev.example.com/api # kpt-set: \${SCHEME:=https}://${domain}/api
+`,
+			expectedResources: `apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+data:
+  endpoint: ${SCHEME:=https}://prod.example.com/api # kpt-set: \${SCHEME:=https}://${domain}/api
+`,
+		},
+		{
 			name: "set empty values",
 			input: `apiVersion: v1
 kind: Service

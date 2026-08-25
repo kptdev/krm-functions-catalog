@@ -204,6 +204,17 @@ func (as *ApplySetters) visitScalar(object *yaml.RNode, path string) error {
 		return nil
 	}
 
+	// Escape handling: a backslash before ${ in the setter comment means "literal
+	// dollar-brace" in the output.
+	// Example: \${APP_SECRET:=${name}-defaults}
+	//   Step 1: replace \$ with placeholder null byte
+	//   Step 2: resolve real setters
+	//   Step 3: replace placeholder null byte with a $
+	//
+	// Go strings are length-prefixed (not null-terminated), so \x00 is safe.
+	const escapedDollarPlaceholder = "\x00"
+	setterPattern = strings.ReplaceAll(setterPattern, `\${`, escapedDollarPlaceholder+"{")
+
 	// replace the setter names in comment pattern with provided values
 	for _, setter := range as.Setters {
 		setterPattern = strings.ReplaceAll(
@@ -230,6 +241,9 @@ func (as *ApplySetters) visitScalar(object *yaml.RNode, path string) error {
 		return errors.Errorf("values for setters %v must be provided", urs)
 	}
 
+	// Restore escaped dollar signs
+	setterPattern = strings.ReplaceAll(setterPattern, escapedDollarPlaceholder, "$")
+
 	object.YNode().Value = setterPattern
 	if setterPattern == "" {
 		object.YNode().Style = yaml.DoubleQuotedStyle
@@ -243,8 +257,12 @@ func (as *ApplySetters) visitScalar(object *yaml.RNode, path string) error {
 // iff at least one of the setter names in the pattern match with the setter names
 // in input setterValues map
 func shouldSet(pattern string, setters []Setter) bool {
+	// Hide escaped \${ openers so they don't produce false matches.
+	// E.g. pattern \${APP_SECRET:=${name}} contains real setter ${name} — we need
+	// to find it, but not treat the outer \${ as a setter reference.
+	cleaned := strings.ReplaceAll(pattern, `\${`, "\x00{")
 	for _, s := range setters {
-		if strings.Contains(pattern, fmt.Sprintf("${%s}", s.Name)) {
+		if strings.Contains(cleaned, fmt.Sprintf("${%s}", s.Name)) {
 			return true
 		}
 	}
@@ -257,26 +275,36 @@ func shouldSet(pattern string, setters []Setter) bool {
 // returns {"stage":"dev", "domain":"example", "tld":"com"}
 func currentSetterValues(pattern, value string) map[string]string {
 	res := make(map[string]string)
+
+	// Replace escaped \${ with a placeholder that won't be matched by the
+	// setter regex, so only real setters are extracted as names.
+	const escapedDollarPlaceholder = "\x00"
+	cleaned := strings.ReplaceAll(pattern, `\${`, escapedDollarPlaceholder+"{")
+
 	// get all setter names enclosed in ${}
 	// e.g. value: my-app-layer.dev.example.com
 	// pattern: my-app-layer.${stage}.${domain}.${tld}
 	// urs: [${stage}, ${domain}, ${tld}]
-	urs := unresolvedSetters(pattern)
-	// and escape pattern
-	pattern = regexp.QuoteMeta(pattern)
-	// escaped pattern: my-app-layer\.\$\{stage\}\.\$\{domain\}\.\$\{tld\}
+	urs := unresolvedSetters(cleaned)
+
+	// For building the matching regex, convert the pattern to what the actual
+	// field value looks like: \${ in the comment corresponds to literal ${ in
+	// the value. So replace \${ → ${ before QuoteMeta.
+	regexPattern := strings.ReplaceAll(pattern, `\${`, "${")
+	// and escape pattern for use as a regex
+	regexPattern = regexp.QuoteMeta(regexPattern)
 
 	for _, setterName := range urs {
 		// escape setter name
 		// we need to escape the setterName as well to replace it in the escaped pattern string later
 		setterName = regexp.QuoteMeta(setterName)
-		pattern = strings.ReplaceAll(
-			pattern,
+		regexPattern = strings.ReplaceAll(
+			regexPattern,
 			setterName,
 			`(?P<x>.*)`) // x is just a place holder, it could be any alphanumeric string
 	}
 	// pattern: my-app-layer\.(?P<x>.*)\.(?P<x>.*)\.(?P<x>.*)
-	r, err := regexp.Compile(pattern)
+	r, err := regexp.Compile(regexPattern)
 	if err != nil {
 		// just return empty map if values can't be derived from pattern
 		return res
