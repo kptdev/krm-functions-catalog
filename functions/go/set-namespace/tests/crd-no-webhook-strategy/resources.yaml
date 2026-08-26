@@ -1,0 +1,112 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: the-service
+  namespace: example
+  annotations:
+    internal.kpt.dev/upstream-identifier: "|Service|example|the-service"
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crd-no-conversion
+  annotations:
+    internal.kpt.dev/upstream-identifier: apiextensions.k8s.io|CustomResourceDefinition|~C|crd-no-conversion
+spec:
+  group: example.com
+  names:
+    kind: MyResource
+    plural: myresources
+  scope: Namespaced
+  versions:
+    - name: v1
+      served: true
+      storage: true
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crd-strategy-none
+  annotations:
+    internal.kpt.dev/upstream-identifier: apiextensions.k8s.io|CustomResourceDefinition|~C|crd-strategy-none
+spec:
+  group: example.com
+  names:
+    kind: AnotherResource
+    plural: anotherresources
+  scope: Namespaced
+  conversion:
+    strategy: None
+  versions:
+    - name: v1
+      served: true
+      storage: true
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crd-with-webhook
+  annotations:
+    internal.kpt.dev/upstream-identifier: apiextensions.k8s.io|CustomResourceDefinition|~C|crd-with-webhook
+spec:
+  group: example.com
+  names:
+    kind: WebhookResource
+    plural: webhookresources
+  scope: Namespaced
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: webhook-svc
+          namespace: old-ns
+  versions:
+    - name: v1
+      served: true
+      storage: true
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crd-webhook-no-ns
+  annotations:
+    internal.kpt.dev/upstream-identifier: apiextensions.k8s.io|CustomResourceDefinition|~C|crd-webhook-no-ns
+spec:
+  group: example.com
+  names:
+    kind: WebhookNoNsResource
+    plural: webhooknonresources
+  scope: Namespaced
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        service:
+          name: webhook-svc
+  versions:
+    - name: v1
+      served: true
+      storage: true
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crd-webhook-url
+  annotations:
+    internal.kpt.dev/upstream-identifier: apiextensions.k8s.io|CustomResourceDefinition|~C|crd-webhook-url
+spec:
+  group: example.com
+  names:
+    kind: UrlWebhookResource
+    plural: urlwebhookresources
+  scope: Namespaced
+  conversion:
+    strategy: Webhook
+    webhook:
+      clientConfig:
+        url: https://webhook.example.com/convert
+  versions:
+    - name: v1
+      served: true
+      storage: true
