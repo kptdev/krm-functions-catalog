@@ -1,0 +1,31 @@
+apiVersion: fn.kpt.dev/v1alpha1
+kind: ApplyReplacements
+metadata:
+  name: inject-env
+  annotations:
+    config.kubernetes.io/local-config: "true"
+replacements:
+  - source:
+      kind: ConfigMap
+      name: cm-source
+      fieldPath: data.taxRate
+    targets:
+      - select:
+          kind: Deployment
+          name: my-app
+        fieldPaths:
+          - spec.template.spec.containers.[name=app].env.[name=TAX_RATE].value
+        options:
+          create: true
+  - source:
+      kind: ConfigMap
+      name: cm-source
+      fieldPath: data.port
+    targets:
+      - select:
+          kind: Deployment
+          name: my-app
+        fieldPaths:
+          - spec.template.spec.containers.[name=app].env.[name=PORT].value
+        options:
+          create: true

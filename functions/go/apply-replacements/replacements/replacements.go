@@ -20,6 +20,8 @@ import (
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"sigs.k8s.io/kustomize/api/filters/replacement"
 	"sigs.k8s.io/kustomize/api/types"
+	"sigs.k8s.io/kustomize/kyaml/resid"
+	kyaml_utils "sigs.k8s.io/kustomize/kyaml/utils"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
@@ -87,6 +89,12 @@ func (r *Replacements) Transform(items []*fn.KubeObject) ([]*fn.KubeObject, erro
 	if err != nil {
 		return nil, err
 	}
+
+	// Fix: kustomize's setFieldValue only copies .Value but not .Tag/.Style,
+	// causing string-typed sources like "18" to lose quoting at the target.
+	// Post-process to restore string typing from source to target fields.
+	preserveStringTyping(transformedNodes, nodes, r.Replacements)
+
 	for _, n := range transformedNodes {
 		obj, err := fn.ParseKubeObject([]byte(n.MustString()))
 		if err != nil {
@@ -95,4 +103,82 @@ func (r *Replacements) Transform(items []*fn.KubeObject) ([]*fn.KubeObject, erro
 		transformedItems = append(transformedItems, obj)
 	}
 	return transformedItems, nil
+}
+
+// preserveStringTyping finds replacement targets whose source is a string scalar
+// and ensures the target field retains the string tag and quoting style.
+func preserveStringTyping(nodes, originalNodes []*yaml.RNode, replacements []types.Replacement) {
+	for i := range replacements {
+		r := &replacements[i]
+		if r.Source == nil || r.Targets == nil {
+			continue
+		}
+
+		srcNode := findSourceNode(originalNodes, r.Source)
+		if srcNode == nil || srcNode.YNode().Kind != yaml.ScalarNode {
+			continue
+		}
+		if srcNode.YNode().Tag != yaml.NodeTagString &&
+			srcNode.YNode().Style != yaml.DoubleQuotedStyle &&
+			srcNode.YNode().Style != yaml.SingleQuotedStyle {
+			continue
+		}
+
+		for _, target := range r.Targets {
+			if target.Select == nil {
+				continue
+			}
+			for _, node := range nodes {
+				if !nodeMatchesSelector(node, target.Select) {
+					continue
+				}
+				for _, fp := range target.FieldPaths {
+					path := kyaml_utils.SmarterPathSplitter(fp, ".")
+					field, err := node.Pipe(yaml.Lookup(path...))
+					if err != nil || field == nil {
+						continue
+					}
+					if field.YNode().Kind == yaml.ScalarNode {
+						field.YNode().Tag = srcNode.YNode().Tag
+						field.YNode().Style = srcNode.YNode().Style
+					}
+				}
+			}
+		}
+	}
+}
+
+// findSourceNode locates the source resource and field for a replacement.
+func findSourceNode(nodes []*yaml.RNode, source *types.SourceSelector) *yaml.RNode {
+	for _, n := range nodes {
+		if !nodeMatchesResId(n, source.ResId) {
+			continue
+		}
+		fieldPath := source.FieldPath
+		if fieldPath == "" {
+			fieldPath = types.DefaultReplacementFieldPath
+		}
+		path := kyaml_utils.SmarterPathSplitter(fieldPath, ".")
+		rn, err := n.Pipe(yaml.Lookup(path...))
+		if err != nil || rn.IsNilOrEmpty() {
+			return nil
+		}
+		return rn
+	}
+	return nil
+}
+
+// nodeMatchesResId checks if a node matches a ResId by GVK, name, and namespace.
+func nodeMatchesResId(n *yaml.RNode, id resid.ResId) bool {
+	group, version := resid.ParseGroupVersion(n.GetApiVersion())
+	nodeId := resid.NewResIdWithNamespace(
+		resid.Gvk{Group: group, Version: version, Kind: n.GetKind()},
+		n.GetName(), n.GetNamespace(),
+	)
+	return nodeId.IsSelectedBy(id)
+}
+
+// nodeMatchesSelector checks if a node matches a target Selector.
+func nodeMatchesSelector(n *yaml.RNode, sel *types.Selector) bool {
+	return nodeMatchesResId(n, sel.ResId)
 }
