@@ -48,7 +48,7 @@ jobs:
       contents: read
     steps:
     - uses: actions/checkout@v7
-    - uses: kptdev/porch/.github/actions/setup-go-kpt@main
+    - uses: kptdev/kpt/.github/actions/setup-go-kpt@main
       with:
         go-version-file: documentation/go.mod
         install-kpt: 'false'
