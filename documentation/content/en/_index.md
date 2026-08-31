@@ -7,10 +7,10 @@ menu:
     weight: 30
 ---
 
-{{< alert >}}
-Please see the [versioning](https://github.com/kptdev/krm-functions-catalog/blob/main/VERSIONING.md) 
+{{% alert title="Note" color="primary" %}}
+Please see the [versioning](https://github.com/kptdev/governance/blob/main/VERSIONING.md) 
 document, which details the SemVer tagging strategy being used for the released KRM Functions. 
-{{< /alert >}}
+{{% /alert %}}
 
 
 {{< listfunctions >}}

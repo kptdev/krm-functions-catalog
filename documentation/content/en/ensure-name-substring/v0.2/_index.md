@@ -33,9 +33,11 @@ convention and avoid naming conflicting:
 
 You can learn more about names [here][names].
 
-Note: This is an alpha function, and we are actively seeking feedback on the
+{{% alert title="Note" color="primary" %}}
+This is an alpha function, and we are actively seeking feedback on the
 `functionConfig` syntax and behavior. If you have any suggestion or feedback,
 please file an [issue].
+{{% /alert %}}
 
 <!--mdtogo:Long-->
 
@@ -47,9 +49,11 @@ This function is **idempotent**. If the desired name substring is already part
 of the name, the function takes no actions. Otherwise, it prepends or appends
 the name substring depending on the `functionConfig`.
 
-Note: If the original name of a resource happens to contain the desired
+{{% alert title="Note" color="primary" %}}
+If the original name of a resource happens to contain the desired
 substring, the desired substring will not be added again. Users need to ensure
 the name collisions don't happen.
+{{% /alert %}}
 
 This function does Not process the following resources:
 
