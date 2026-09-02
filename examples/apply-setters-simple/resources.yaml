@@ -26,3 +26,11 @@ metadata:
 environments: # kpt-set: ${env}
   - dev
   - stage
+---
+apiVersion: v1
+kind: MyKind
+metadata:
+  name: bar
+environments: # kpt-set: ${nested-env}
+  - key: some-key
+    value: some-value
