@@ -17,15 +17,3 @@ index 280e700..42255a0 100644
 +  namespace: prod
  spec:
    featureA: true
-diff --git a/fn-config.yaml b/fn-config.yaml
-index 552a63f..1593bc2 100644
---- a/fn-config.yaml
-+++ b/fn-config.yaml
-@@ -2,6 +2,7 @@ apiVersion: fn.kpt.dev/v1alpha1
- kind: StarlarkRun
- metadata:
-   name: set-namespace-to-prod
-+  namespace: prod
- source: |
-   # set the namespace on all resources
-   def setnamespace(resources, namespace):
