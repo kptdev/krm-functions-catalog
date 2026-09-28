@@ -63,7 +63,11 @@ jobs:
           if [[ "${GITHUB_REF#refs/tags/}" == functions/* ]]; then
             echo "Detected functions release"
             cd functions/go
-            make func-push TAG=$VERSION CURRENT_FUNCTION=$IMAGE_NAME DEFAULT_CR=ghcr.io/${GITHUB_REPOSITORY}
+            STABLE_SUFFIX=""
+            if [[ "$VERSION" != *-pre* ]]; then
+              STABLE_SUFFIX=",stable"
+            fi
+            make func-push TAG=$VERSION$STABLE_SUFFIX CURRENT_FUNCTION=$IMAGE_NAME DEFAULT_CR=ghcr.io/${GITHUB_REPOSITORY}
           else
             echo "Tag does not match any known type, skipping."
             exit 0
