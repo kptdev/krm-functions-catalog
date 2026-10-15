@@ -1,5 +1,5 @@
 module github.com/krm-functions-catalog/docs
 
-go 1.26.5
+go 1.26.8
 
 require github.com/google/docsy v0.15.0 // indirect

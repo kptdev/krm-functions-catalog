@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/remove-local-config-resources
 
-go 1.26.5
+go 1.26.8
 
 require (
 	github.com/stretchr/testify v1.11.1

@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/no-op
 
-go 1.26.5
+go 1.26.8
 
 require github.com/kptdev/krm-functions-sdk/go/fn v1.0.4
 
