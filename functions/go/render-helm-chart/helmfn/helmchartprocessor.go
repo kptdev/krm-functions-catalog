@@ -17,8 +17,8 @@ package helmfn
 import (
 	"fmt"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/render-helm-chart/third_party/sigs.k8s.io/kustomize/api/builtins"
-	"github.com/kptdev/krm-functions-sdk/go/fn"
 	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
@@ -31,12 +31,12 @@ type HelmChartProcessor struct {
 	plugins []builtins.HelmChartInflationGeneratorPlugin
 }
 
-func RenderHelmChart(rl *fn.ResourceList) (bool, error) {
+func RenderHelmChart(rl *kubeobject.ResourceList) (bool, error) {
 	r := HelmChartProcessor{}
 	return r.Process(rl)
 }
 
-func (hcp *HelmChartProcessor) Process(rl *fn.ResourceList) (bool, error) {
+func (hcp *HelmChartProcessor) Process(rl *kubeobject.ResourceList) (bool, error) {
 	err := hcp.config(rl.FunctionConfig)
 	if err != nil {
 		return false, fmt.Errorf("failed to configure function: %w", err)
@@ -48,7 +48,7 @@ func (hcp *HelmChartProcessor) Process(rl *fn.ResourceList) (bool, error) {
 	return true, nil
 }
 
-func (f *HelmChartProcessor) config(o *fn.KubeObject) error {
+func (f *HelmChartProcessor) config(o *kubeobject.KubeObject) error {
 	var err error
 	switch o.GetKind() {
 	case fnConfigKind:
@@ -61,7 +61,7 @@ func (f *HelmChartProcessor) config(o *fn.KubeObject) error {
 	return err
 }
 
-func (hcp *HelmChartProcessor) run(objs []*fn.KubeObject) ([]*fn.KubeObject, error) {
+func (hcp *HelmChartProcessor) run(objs []*kubeobject.KubeObject) ([]*kubeobject.KubeObject, error) {
 	for _, p := range hcp.plugins {
 		err := p.ConfigureAuth(objs)
 		if err != nil {
@@ -90,7 +90,7 @@ func (hcp *HelmChartProcessor) run(objs []*fn.KubeObject) ([]*fn.KubeObject, err
 	return objs, nil
 }
 
-func (hcp *HelmChartProcessor) renderHelmChartArgs(o *fn.KubeObject) (err error) {
+func (hcp *HelmChartProcessor) renderHelmChartArgs(o *kubeobject.KubeObject) (err error) {
 	y := o.String()
 	c := []byte(y)
 	args := &builtins.HelmArgs{}
@@ -112,7 +112,7 @@ func (hcp *HelmChartProcessor) renderHelmChartArgs(o *fn.KubeObject) (err error)
 }
 
 func (hcp *HelmChartProcessor) configMapArgs(
-	m *fn.KubeObject) (err error) {
+	m *kubeobject.KubeObject) (err error) {
 	var p builtins.HelmChartInflationGeneratorPlugin
 	if val, found, _ := m.NestedString("data", "chartHome"); found {
 		p.ChartHome = val

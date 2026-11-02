@@ -18,6 +18,7 @@ import (
 	_ "embed"
 	"os"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
@@ -29,12 +30,12 @@ var readme []byte
 var metadata []byte
 
 func main() {
-	if err := fn.AsMain(fn.ResourceListProcessorFunc(processDropComments), fn.WithDocs(readme, metadata)); err != nil {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(processDropComments), fn.WithDocs(readme, metadata)); err != nil {
 		os.Exit(1)
 	}
 }
 
-func processDropComments(rl *fn.ResourceList) (bool, error) {
+func processDropComments(rl *kubeobject.ResourceList) (bool, error) {
 	for i, item := range rl.Items {
 		jsonBytes, err := item.CopyToResourceNode().MarshalJSON()
 		if err != nil {
@@ -44,7 +45,7 @@ func processDropComments(rl *fn.ResourceList) (bool, error) {
 		if err != nil {
 			return false, err
 		}
-		rl.Items[i] = fn.MoveToKubeObject(node)
+		rl.Items[i] = kubeobject.MoveToKubeObject(node)
 	}
 	return true, nil
 }

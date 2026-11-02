@@ -17,10 +17,11 @@
 package main
 
 import (
+	"github.com/kptdev/kpt/api/kubeobject"
 	transformer "github.com/kptdev/krm-functions-catalog/functions/go/set-namespace/transformer"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
 func run() error {
-	return fn.AsMain(fn.ResourceListProcessorFunc(transformer.Run))
+	return fn.AsMain(kubeobject.ResourceListProcessorFunc(transformer.Run))
 }

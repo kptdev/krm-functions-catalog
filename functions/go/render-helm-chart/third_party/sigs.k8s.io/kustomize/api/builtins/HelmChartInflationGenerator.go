@@ -33,8 +33,8 @@ import (
 	"strings"
 
 	"dario.cat/mergo"
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/render-helm-chart/third_party/sigs.k8s.io/kustomize/api/types"
-	"github.com/kptdev/krm-functions-sdk/go/fn"
 	corev1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/kustomize/kyaml/kio"
 	"sigs.k8s.io/yaml"
@@ -78,7 +78,7 @@ func (p *HelmChartInflationGeneratorPlugin) establishTmpDir() (err error) {
 	return err
 }
 
-func (p *HelmChartInflationGeneratorPlugin) ConfigureAuth(items []*fn.KubeObject) (err error) {
+func (p *HelmChartInflationGeneratorPlugin) ConfigureAuth(items []*kubeobject.KubeObject) (err error) {
 	if p.Auth == nil {
 		return nil
 	}
@@ -86,7 +86,7 @@ func (p *HelmChartInflationGeneratorPlugin) ConfigureAuth(items []*fn.KubeObject
 		return fmt.Errorf("auth `kind` must be `Secret`")
 	}
 
-	var targetSecret *fn.KubeObject
+	var targetSecret *kubeobject.KubeObject
 	for _, i := range items {
 		iNamespace := i.GetNamespace()
 		if iNamespace == "" {
@@ -275,7 +275,7 @@ func (p *HelmChartInflationGeneratorPlugin) cleanup() {
 	}
 }
 
-func (p *HelmChartInflationGeneratorPlugin) Generate() (objects fn.KubeObjects, err error) {
+func (p *HelmChartInflationGeneratorPlugin) Generate() (objects kubeobject.KubeObjects, err error) {
 	defer p.cleanup()
 	if err = p.checkHelmVersion(); err != nil {
 		return nil, err
@@ -314,7 +314,7 @@ func (p *HelmChartInflationGeneratorPlugin) Generate() (objects fn.KubeObjects, 
 	}
 
 	for i := range nodes {
-		o, err := fn.ParseKubeObject([]byte(nodes[i].MustString()))
+		o, err := kubeobject.ParseKubeObject([]byte(nodes[i].MustString()))
 		if err != nil {
 			if strings.Contains(err.Error(), "expected exactly one object, got 0") {
 				// sometimes helm produces some messages in between resources, we can safely
@@ -489,7 +489,7 @@ func (p *HelmChartInflationGeneratorPlugin) checkHelmVersion() error {
 	if v[0] == 'v' {
 		v = v[1:]
 	}
-	majorVersion := strings.Split(v, ".")[0]
+	majorVersion, _, _ := strings.Cut(v, ".")
 	if majorVersion != "3" {
 		return fmt.Errorf("this HelmChartInflationGeneratorPlugin requires helm V3 but got v%s", v)
 	}

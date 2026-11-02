@@ -17,6 +17,8 @@ package setlabels
 import (
 	"sort"
 
+	"github.com/kptdev/kpt/api/kubeobject"
+	schema "github.com/kptdev/kpt/api/schema/v1"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
@@ -41,7 +43,7 @@ type SetLabels struct {
 // EmptyfnConfig is a workaround since kpt creates a FunctionConfig placeholder if users don't provide the functionConfig.
 // `kpt fn eval` uses placeholder ConfigMap with name "function-input"
 // `kpt fn render` uses placeholder "{}"
-func EmptyfnConfig(o *fn.KubeObject) bool {
+func EmptyfnConfig(o *kubeobject.KubeObject) bool {
 	if o.GetKind() == "ConfigMap" && o.GetName() == "function-input" {
 		data, _, _ := o.NestedStringMap("data")
 		return len(data) == 0
@@ -53,8 +55,8 @@ func EmptyfnConfig(o *fn.KubeObject) bool {
 }
 
 // Transform updates the labels in the right path using GVK filter and other configurable fields
-func (p *SetLabels) Run(_ *fn.Context, fnConfig *fn.KubeObject, items fn.KubeObjects, results *fn.Results) bool {
-	objects := items.WhereNot(fn.IsLocalConfig)
+func (p *SetLabels) Run(_ *fn.Context, fnConfig *kubeobject.KubeObject, items kubeobject.KubeObjects, results *kubeobject.Results) bool {
+	objects := items.WhereNot(kubeobject.IsLocalConfig)
 	if objects.Len() == 0 || objects[0] == nil {
 		results.Infof("no input resources")
 		return true
@@ -114,16 +116,16 @@ func (p *SetLabels) Run(_ *fn.Context, fnConfig *fn.KubeObject, items fn.KubeObj
 }
 
 // setLabelsInMeta set ObjectMeta labels for all resources
-func (p *SetLabels) setLabelsInMeta(o *fn.SubObject) error {
+func (p *SetLabels) setLabelsInMeta(o *kubeobject.SubObject) error {
 	return p.updateLabels(o, metaLabelsPath, p.Labels, true)
 }
 
 // containJobSpec check if the object is CronJob, this kind might have JobTemplateSpec, which contains label fieldPath
-func containJobSpec(o *fn.KubeObject) bool {
-	return o.IsGVK("batch", "", "CronJob")
+func containJobSpec(o *kubeobject.KubeObject) bool {
+	return o.IsGroupKind(schema.GroupKind{Group: "batch", Kind: "CronJob"})
 }
 
-func (p *SetLabels) setLabelsInJob(job *fn.SubObject) error {
+func (p *SetLabels) setLabelsInJob(job *kubeobject.SubObject) error {
 	if job == nil {
 		return nil
 	}
@@ -139,12 +141,12 @@ func (p *SetLabels) setLabelsInJob(job *fn.SubObject) error {
 }
 
 // containNetworkPolicy checking if this kind is NetworkPolicy, it would contain struct NetworkPolicySpec
-func containNetworkPolicy(o *fn.KubeObject) bool {
-	return o.IsGVK("networking.k8s.io", "", "NetworkPolicy")
+func containNetworkPolicy(o *kubeobject.KubeObject) bool {
+	return o.IsGroupKind(schema.GroupKind{Group: "networking.k8s.io", Kind: "NetworkPolicy"})
 }
 
 // setNetworkPolicyRule set ingress and egress rules for kind NetworkPolicy
-func (p *SetLabels) setNetworkPolicyRule(o *fn.KubeObject) error {
+func (p *SetLabels) setNetworkPolicyRule(o *kubeobject.KubeObject) error {
 	spec := o.GetMap("spec")
 	if spec == nil {
 		return nil
@@ -169,12 +171,13 @@ func (p *SetLabels) setNetworkPolicyRule(o *fn.KubeObject) error {
 }
 
 // hasSpecSelector check if the resource contains struct SpecSelector, kind Service and ReplicationController has it
-func hasSpecSelector(o *fn.KubeObject) bool {
-	return o.IsGVK("", "v1", "Service") || o.IsGVK("", "v1", "ReplicationController")
+func hasSpecSelector(o *kubeobject.KubeObject) bool {
+	return o.IsGroupVersionKind(schema.GroupVersionKind{Group: "", Version: "v1", Kind: "Service"}) ||
+		o.IsGroupVersionKind(schema.GroupVersionKind{Group: "", Version: "v1", Kind: "ReplicationController"})
 }
 
 // setLabelsInSelector set labels for all selectors, including spec selector map, spec selector LabelSelector, LabelSelector in JobTemplate, and podSelector in NetworkPolicy, and
-func (p *SetLabels) setLabelsInSelector(o *fn.KubeObject) error {
+func (p *SetLabels) setLabelsInSelector(o *kubeobject.KubeObject) error {
 	if hasSpecSelector(o) {
 		fieldPath := FieldPath{"spec", "selector"}
 		if err := p.updateLabels(&o.SubObject, fieldPath, p.Labels, true); err != nil {
@@ -197,37 +200,41 @@ func (p *SetLabels) setLabelsInSelector(o *fn.KubeObject) error {
 }
 
 // hasLabelSelector check if the resource contains struct LabelSelector and whether labels should be created if not exist.
-func hasLabelSelector(o *fn.KubeObject) (bool, bool) {
-	if o.IsGVK("", "", "Deployment") || o.IsGVK("", "", "ReplicaSet") || o.IsGVK("", "", "DaemonSet") || o.IsGVK("apps", "", "StatefulSet") {
+func hasLabelSelector(o *kubeobject.KubeObject) (bool, bool) {
+	if o.IsGroupKind(schema.GroupKind{Group: "apps", Kind: "Deployment"}) ||
+		o.IsGroupKind(schema.GroupKind{Group: "apps", Kind: "ReplicaSet"}) ||
+		o.IsGroupKind(schema.GroupKind{Group: "apps", Kind: "DaemonSet"}) ||
+		o.IsGroupKind(schema.GroupKind{Group: "apps", Kind: "StatefulSet"}) {
 		return true, true
 	}
-	if o.IsGVK("batch", "", "Job") || o.IsGVK("policy", "", "PodDisruptionBudget") {
+	if o.IsGroupKind(schema.GroupKind{Group: "batch", Kind: "Job"}) ||
+		o.IsGroupKind(schema.GroupKind{Group: "policy", Kind: "PodDisruptionBudget"}) {
 		return true, false
 	}
 	return false, false
 }
 
 // hasPod check if the resource contains struct PodTemplateSpec, ReplicationController, Deployment, ReplicaSet, DaemonSet, StatefulSet, Job kind has it
-func containPodSpec(o *fn.KubeObject) bool {
+func containPodSpec(o *kubeobject.KubeObject) bool {
 	switch {
-	case o.IsGVK("", "v1", "ReplicationController"):
+	case o.IsGroupVersionKind(schema.GroupVersionKind{Group: "", Version: "v1", Kind: "ReplicationController"}):
 		return true
-	case o.IsGVK("", "", "Deployment"):
+	case o.IsGroupKind(schema.GroupKind{Group: "apps", Kind: "Deployment"}):
 		return true
-	case o.IsGVK("", "", "ReplicaSet"):
+	case o.IsGroupKind(schema.GroupKind{Group: "apps", Kind: "ReplicaSet"}):
 		return true
-	case o.IsGVK("", "", "DaemonSet"):
+	case o.IsGroupKind(schema.GroupKind{Group: "apps", Kind: "DaemonSet"}):
 		return true
-	case o.IsGVK("apps", "", "StatefulSet"):
+	case o.IsGroupKind(schema.GroupKind{Group: "apps", Kind: "StatefulSet"}):
 		return true
-	case o.IsGVK("batch", "", "Job"):
+	case o.IsGroupKind(schema.GroupKind{Group: "batch", Kind: "Job"}):
 		return true
 	default:
 		return false
 	}
 }
 
-func (p *SetLabels) setLabelsInPod(pod *fn.SubObject) error {
+func (p *SetLabels) setLabelsInPod(pod *kubeobject.SubObject) error {
 	if pod == nil {
 		return nil
 	}
@@ -243,12 +250,12 @@ func (p *SetLabels) setLabelsInPod(pod *fn.SubObject) error {
 }
 
 // containVolume check if the resource contains struct VolumeClaimTemplates, kind StatefulSet has it
-func containVolume(o *fn.KubeObject) bool {
-	return o.IsGVK("apps", "", "StatefulSet")
+func containVolume(o *kubeobject.KubeObject) bool {
+	return o.IsGroupKind(schema.GroupKind{Group: "apps", Kind: "StatefulSet"})
 }
 
 // setLabelsInVolume set VolumeClaimTemplates label path
-func (p *SetLabels) setLabelsInVolumes(volumes fn.SliceSubObjects) error {
+func (p *SetLabels) setLabelsInVolumes(volumes kubeobject.SliceSubObjects) error {
 	if len(volumes) == 0 {
 		return nil
 	}
@@ -260,7 +267,7 @@ func (p *SetLabels) setLabelsInVolumes(volumes fn.SliceSubObjects) error {
 	return nil
 }
 
-func (p *SetLabels) setLabelsInVolume(volume *fn.SubObject) error {
+func (p *SetLabels) setLabelsInVolume(volume *kubeobject.SubObject) error {
 	if volume == nil {
 		return nil
 	}
@@ -271,7 +278,7 @@ func (p *SetLabels) setLabelsInVolume(volume *fn.SubObject) error {
 }
 
 // setLabelsInPodSpec set label path in PodSpec, that include path under topologySpreadConstraints and affinity
-func (p *SetLabels) setLabelsInPodSpec(podSpec *fn.SubObject) error {
+func (p *SetLabels) setLabelsInPodSpec(podSpec *kubeobject.SubObject) error {
 	_, exist, _ := podSpec.NestedSlice("topologySpreadConstraints")
 	if exist {
 		for _, obj := range podSpec.GetSlice("topologySpreadConstraints") {
@@ -310,7 +317,7 @@ func (p *SetLabels) setLabelsInPodSpec(podSpec *fn.SubObject) error {
 }
 
 // updateLabels the update process for each label, sort the keys to preserve sequence, return if the update was performed and potential error
-func (p *SetLabels) updateLabels(o *fn.SubObject, labelPath FieldPath, labels map[string]string, create bool) error {
+func (p *SetLabels) updateLabels(o *kubeobject.SubObject, labelPath FieldPath, labels map[string]string, create bool) error {
 	if o == nil {
 		return nil
 	}

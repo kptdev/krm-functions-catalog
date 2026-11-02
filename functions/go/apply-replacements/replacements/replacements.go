@@ -17,7 +17,7 @@ package replacements
 import (
 	"fmt"
 
-	"github.com/kptdev/krm-functions-sdk/go/fn"
+	"github.com/kptdev/kpt/api/kubeobject"
 	"sigs.k8s.io/kustomize/api/filters/replacement"
 	"sigs.k8s.io/kustomize/api/types"
 	"sigs.k8s.io/kustomize/kyaml/resid"
@@ -28,7 +28,7 @@ import (
 const fnConfigKind = "ApplyReplacements"
 const fnConfigApiVersion = "fn.kpt.dev/v1alpha1"
 
-func ApplyReplacements(rl *fn.ResourceList) (bool, error) {
+func ApplyReplacements(rl *kubeobject.ResourceList) (bool, error) {
 	r := Replacements{}
 	return r.Process(rl)
 }
@@ -37,8 +37,8 @@ type Replacements struct {
 	Replacements []types.Replacement `json:"replacements,omitempty" yaml:"replacements,omitempty"`
 }
 
-// Config initializes Replacements from a functionConfig fn.KubeObject
-func (r *Replacements) Config(functionConfig *fn.KubeObject) error {
+// Config initializes Replacements from a functionConfig kubeobject.KubeObject
+func (r *Replacements) Config(functionConfig *kubeobject.KubeObject) error {
 	if functionConfig.IsEmpty() {
 		return fmt.Errorf("FunctionConfig is missing. Expect `ApplyReplacements`")
 	}
@@ -56,7 +56,7 @@ func (r *Replacements) Config(functionConfig *fn.KubeObject) error {
 }
 
 // Process configures the replacements and transformers them.
-func (r *Replacements) Process(rl *fn.ResourceList) (bool, error) {
+func (r *Replacements) Process(rl *kubeobject.ResourceList) (bool, error) {
 	if err := r.Config(rl.FunctionConfig); err != nil {
 		rl.LogResult(err)
 		return false, nil
@@ -72,8 +72,8 @@ func (r *Replacements) Process(rl *fn.ResourceList) (bool, error) {
 
 // Transform runs the replacement filter in order to apply the replacements - this
 // does the actual work.
-func (r *Replacements) Transform(items []*fn.KubeObject) ([]*fn.KubeObject, error) {
-	var transformedItems []*fn.KubeObject
+func (r *Replacements) Transform(items []*kubeobject.KubeObject) ([]*kubeobject.KubeObject, error) {
+	var transformedItems []*kubeobject.KubeObject
 	var nodes []*yaml.RNode
 
 	for _, obj := range items {
@@ -96,7 +96,7 @@ func (r *Replacements) Transform(items []*fn.KubeObject) ([]*fn.KubeObject, erro
 	preserveStringTyping(transformedNodes, nodes, r.Replacements)
 
 	for _, n := range transformedNodes {
-		obj, err := fn.ParseKubeObject([]byte(n.MustString()))
+		obj, err := kubeobject.ParseKubeObject([]byte(n.MustString()))
 		if err != nil {
 			return nil, err
 		}

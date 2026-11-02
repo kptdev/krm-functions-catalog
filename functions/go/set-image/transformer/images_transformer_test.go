@@ -17,7 +17,7 @@ package transformer
 import (
 	"testing"
 
-	"github.com/kptdev/krm-functions-sdk/go/fn"
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"sigs.k8s.io/kustomize/api/types"
@@ -72,7 +72,7 @@ spec:
 			Image: types.Image{Name: "nginx", NewTag: "1.29.0"},
 		}
 
-		podKO, err := fn.ParseKubeObject([]byte(podYAML))
+		podKO, err := kubeobject.ParseKubeObject([]byte(podYAML))
 		require.NoError(t, err)
 
 		err = setImage.updateContainerImages(podKO)
@@ -87,7 +87,7 @@ spec:
 			Image: types.Image{Name: "busybox", NewTag: "1.37.0"},
 		}
 
-		podKO, err := fn.ParseKubeObject([]byte(podYAML))
+		podKO, err := kubeobject.ParseKubeObject([]byte(podYAML))
 		require.NoError(t, err)
 
 		err = setImage.updateContainerImages(podKO)
@@ -102,7 +102,7 @@ spec:
 			Image: types.Image{Name: "alpine", NewTag: "3.24"},
 		}
 
-		podKO, err := fn.ParseKubeObject([]byte(podYAML))
+		podKO, err := kubeobject.ParseKubeObject([]byte(podYAML))
 		require.NoError(t, err)
 
 		err = setImage.updateContainerImages(podKO)
@@ -118,7 +118,7 @@ spec:
 			Image: types.Image{Name: "alpine", NewName: "my.docker.mirror.com/alpine"},
 		}
 
-		podKO, err := fn.ParseKubeObject([]byte(podYAML))
+		podKO, err := kubeobject.ParseKubeObject([]byte(podYAML))
 		require.NoError(t, err)
 
 		err = setImage.updateContainerImages(podKO)
@@ -134,7 +134,7 @@ spec:
 			Image: types.Image{Name: "alpine", NewName: "debian", NewTag: "bookworm"},
 		}
 
-		podKO, err := fn.ParseKubeObject([]byte(podYAML))
+		podKO, err := kubeobject.ParseKubeObject([]byte(podYAML))
 		require.NoError(t, err)
 
 		err = setImage.updateContainerImages(podKO)
@@ -150,7 +150,7 @@ spec:
 			Image: types.Image{Name: "alpine:3.22", NewName: "debian", NewTag: "bookworm"},
 		}
 
-		podKO, err := fn.ParseKubeObject([]byte(podYAML))
+		podKO, err := kubeobject.ParseKubeObject([]byte(podYAML))
 		require.NoError(t, err)
 
 		err = setImage.updateContainerImages(podKO)
@@ -167,7 +167,7 @@ spec:
 			Image: types.Image{Name: "alpine", NewTag: "3.22"},
 		}
 
-		podKO, err := fn.ParseKubeObject([]byte(podYAML))
+		podKO, err := kubeobject.ParseKubeObject([]byte(podYAML))
 		require.NoError(t, err)
 
 		err = setImage.updateContainerImages(podKO)
@@ -183,7 +183,7 @@ spec:
 			Image: types.Image{Name: "alpine", NewTag: "3.24"},
 		}
 
-		deploymentKO, err := fn.ParseKubeObject([]byte(deploymentYAML))
+		deploymentKO, err := kubeobject.ParseKubeObject([]byte(deploymentYAML))
 		require.NoError(t, err)
 
 		err = setImage.updateContainerImages(deploymentKO)

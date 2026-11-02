@@ -17,12 +17,13 @@ package main
 import (
 	"os"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/render-helm-chart/helmfn"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
 func main() {
-	if err := fn.AsMain(fn.ResourceListProcessorFunc(helmfn.RenderHelmChart)); err != nil {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(helmfn.RenderHelmChart)); err != nil {
 		os.Exit(1)
 	}
 }

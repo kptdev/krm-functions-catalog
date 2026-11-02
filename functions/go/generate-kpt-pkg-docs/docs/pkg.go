@@ -16,10 +16,9 @@ package docs
 
 import (
 	"fmt"
-	"strings"
 
-	kptfilev1 "github.com/kptdev/kpt/pkg/api/kptfile/v1"
-	"github.com/kptdev/kpt/pkg/kptfile/kptfileutil"
+	kptfilev1 "github.com/kptdev/kpt/api/kptfile/v1"
+	kptfileko "github.com/kptdev/kpt/api/kubeobject/kptfile"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
@@ -34,7 +33,7 @@ func findPkgs(nodes []*yaml.RNode) (map[string]*kptfilev1.KptFile, error) {
 			if err != nil {
 				return nil, err
 			}
-			kf, err := kptfileutil.DecodeKptfile(strings.NewReader(s))
+			kf, err := kptfileko.DecodeKptfile(s)
 			if err != nil {
 				return nil, fmt.Errorf("failed to decode Kptfile: %w", err)
 			}

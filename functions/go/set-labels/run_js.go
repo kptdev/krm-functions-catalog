@@ -20,6 +20,7 @@ import (
 	"context"
 	"syscall/js"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-labels/setlabels"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
@@ -64,7 +65,7 @@ func resourceListProcessorWrapper(resourceList *[]byte) js.Func {
 
 func resourceListProcessorErrors(resourceList *[]byte) js.Func {
 	jsonFunc := js.FuncOf(func(this js.Value, args []js.Value) any {
-		rl, err := fn.ParseResourceList(*resourceList)
+		rl, err := kubeobject.ParseResourceList(*resourceList)
 		if err != nil {
 			return ""
 		}

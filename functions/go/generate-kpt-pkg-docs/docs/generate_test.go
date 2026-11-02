@@ -318,7 +318,7 @@ spec:
     name: name.of.folder # kpt-set: ${folder-name}
     namespace: hierarchy # kpt-set: ${folder-namespace}
 `,
-			err: "failed to decode Kptfile: yaml: unmarshal errors:\n  line 3: field annotations not found in type v1.KptFile",
+			err: "failed to decode Kptfile: invalid 'v1' Kptfile: yaml: unmarshal errors:\n  line 3: field annotations not found in type v1.KptFile",
 		},
 		{
 			name: "missing path",

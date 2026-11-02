@@ -15,10 +15,12 @@
 package main
 
 import (
+	"os"
+
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/kubeconform/generated"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 func main() {
@@ -26,7 +28,7 @@ func main() {
 		Short: generated.KubeconformShort,
 		Long:  generated.KubeconformLong,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return fn.AsMain(fn.ResourceListProcessorFunc(Run))
+			return fn.AsMain(kubeobject.ResourceListProcessorFunc(Run))
 		},
 		SilenceUsage:  true,
 		SilenceErrors: true,

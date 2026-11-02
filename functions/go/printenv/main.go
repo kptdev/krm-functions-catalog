@@ -21,6 +21,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
@@ -31,12 +32,12 @@ var readme []byte
 var metadata []byte
 
 func main() {
-	if err := fn.AsMain(fn.ResourceListProcessorFunc(processPrintenv), fn.WithDocs(readme, metadata)); err != nil {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(processPrintenv), fn.WithDocs(readme, metadata)); err != nil {
 		os.Exit(1)
 	}
 }
 
-func processPrintenv(_ *fn.ResourceList) (bool, error) {
+func processPrintenv(_ *kubeobject.ResourceList) (bool, error) {
 	envs := os.Environ()
 	sort.Strings(envs)
 	fn.Logf("%s\n", strings.Join(envs, "\n"))

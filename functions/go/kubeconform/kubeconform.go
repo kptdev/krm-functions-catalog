@@ -22,7 +22,10 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/kptdev/krm-functions-sdk/go/fn"
+	fnresult "github.com/kptdev/kpt/api/fnresult/v1"
+	"github.com/kptdev/kpt/api/kubeobject"
+	"sigs.k8s.io/kustomize/kyaml/fn/framework"
+	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
 const (
@@ -67,7 +70,7 @@ type ValidationError struct {
 	Msg  string `json:"msg"`
 }
 
-func Run(rl *fn.ResourceList) (bool, error) {
+func Run(rl *kubeobject.ResourceList) (bool, error) {
 	cfg := extractConfig(rl.FunctionConfig)
 	args := buildKubeconformArgs(
 		cfg.SchemaLocation,
@@ -77,7 +80,7 @@ func Run(rl *fn.ResourceList) (bool, error) {
 		cfg.Strict,
 	)
 
-	var results fn.Results
+	var results []*fnresult.ResultItem
 	hasValidationErrors := false
 	for _, obj := range rl.Items {
 		objResults, err := runKubeconformForObject(obj, args)
@@ -94,7 +97,7 @@ func Run(rl *fn.ResourceList) (bool, error) {
 	return !hasValidationErrors, nil
 }
 
-func runKubeconformForObject(obj *fn.KubeObject, args []string) (fn.Results, error) {
+func runKubeconformForObject(obj *kubeobject.KubeObject, args []string) ([]*fnresult.ResultItem, error) {
 	cmd := exec.Command("kubeconform", args...)
 
 	data, err := marshalKubeObject(obj)
@@ -115,8 +118,8 @@ func runKubeconformForObject(obj *fn.KubeObject, args []string) (fn.Results, err
 
 	raw := stdout.Bytes()
 	if bytes.Contains(raw, []byte("Failed initializing schema file")) {
-		return fn.Results{
-			fn.ErrorConfigObjectResult(
+		return []*fnresult.ResultItem{
+			kubeobject.ErrorConfigObjectResult(
 				fmt.Errorf("%s", fmt.Sprintf("Validating arbitrary CRDs not supported. Consider setting %s or %s in FunctionConfig:\n%s",
 					IgnoreMissingSchemasKey, SkipKindsKey, string(raw))),
 				obj,
@@ -126,19 +129,19 @@ func runKubeconformForObject(obj *fn.KubeObject, args []string) (fn.Results, err
 
 	var kubeConf Kubeconform
 	if err := json.Unmarshal(raw, &kubeConf); err != nil {
-		return fn.Results{
-			fn.ErrorConfigObjectResult(
+		return []*fnresult.ResultItem{
+			kubeobject.ErrorConfigObjectResult(
 				fmt.Errorf("%s", fmt.Sprintf("Failed to parse kubeconform output:\n%s\n%s", err, string(raw))),
 				obj,
 			),
 		}, nil
 	}
 
-	var results fn.Results
+	var results []*fnresult.ResultItem
 	for _, res := range kubeConf.Resources {
 		if res.Status != "statusValid" {
 			for _, e := range res.ValidationErrors {
-				results = append(results, ConfigObjectResult(e.Msg, e.Path, obj, fn.Error))
+				results = append(results, ConfigObjectResult(e.Msg, e.Path, obj, framework.Error))
 			}
 		}
 	}
@@ -146,27 +149,31 @@ func runKubeconformForObject(obj *fn.KubeObject, args []string) (fn.Results, err
 	return results, nil
 }
 
-func ConfigObjectResult(msg string, path string, obj *fn.KubeObject, severity fn.Severity) *fn.Result {
-	return &fn.Result{
+func ConfigObjectResult(msg string, path string, obj *kubeobject.KubeObject, severity framework.Severity) *fnresult.ResultItem {
+	return &fnresult.ResultItem{
 		Message:  msg,
 		Severity: severity,
-		ResourceRef: &fn.ResourceRef{
-			APIVersion: obj.GetAPIVersion(),
-			Kind:       obj.GetKind(),
-			Name:       obj.GetName(),
-			Namespace:  obj.GetNamespace(),
+		ResourceRef: &yaml.ResourceIdentifier{
+			TypeMeta: yaml.TypeMeta{
+				APIVersion: obj.GetAPIVersion(),
+				Kind:       obj.GetKind(),
+			},
+			NameMeta: yaml.NameMeta{
+				Name:      obj.GetName(),
+				Namespace: obj.GetNamespace(),
+			},
 		},
-		Field: &fn.Field{
+		Field: &fnresult.Field{
 			Path: strings.TrimPrefix(strings.ReplaceAll(path, "/", "."), "."),
 		},
-		File: &fn.File{
+		File: &framework.File{
 			Path:  obj.PathAnnotation(),
 			Index: obj.IndexAnnotation(),
 		},
 	}
 }
 
-func extractConfig(fc *fn.KubeObject) KubeconformConfig {
+func extractConfig(fc *kubeobject.KubeObject) KubeconformConfig {
 	getString := func(key string) string {
 		val := fc.GetString(key)
 		if val == "" {
@@ -234,7 +241,7 @@ func buildKubeconformArgs(schemaLocation string, additional []string, ignoreMiss
 	return args
 }
 
-func marshalKubeObject(obj *fn.KubeObject) ([]byte, error) {
+func marshalKubeObject(obj *kubeobject.KubeObject) ([]byte, error) {
 	// Convert KubeObject to a typed object (e.g., map[string]interface{})
 	var typed map[string]any
 	if err := obj.As(&typed); err != nil {

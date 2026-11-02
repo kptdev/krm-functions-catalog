@@ -19,6 +19,7 @@ package main
 import (
 	"syscall/js"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/starlark/starlark"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
@@ -39,7 +40,7 @@ func run() error {
 }
 
 func executeStarlark(input []byte) ([]byte, error) {
-	return fn.Run(fn.ResourceListProcessorFunc(starlark.Process), []byte(input))
+	return fn.Run(kubeobject.ResourceListProcessorFunc(starlark.Process), []byte(input))
 }
 
 func resourceListProcessorWrapper(resourceList *[]byte) js.Func {
@@ -64,7 +65,7 @@ func resourceListProcessorWrapper(resourceList *[]byte) js.Func {
 // meaning unrelated errors may also be included.
 func resourceListProcessorErrors(resourceList *[]byte) js.Func {
 	jsonFunc := js.FuncOf(func(this js.Value, args []js.Value) any {
-		rl, err := fn.ParseResourceList(*resourceList)
+		rl, err := kubeobject.ParseResourceList(*resourceList)
 		if err != nil {
 			return ""
 		}

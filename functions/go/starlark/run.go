@@ -17,10 +17,11 @@
 package main
 
 import (
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/starlark/starlark"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
 func run() error {
-	return fn.AsMain(fn.ResourceListProcessorFunc(starlark.Process))
+	return fn.AsMain(kubeobject.ResourceListProcessorFunc(starlark.Process))
 }

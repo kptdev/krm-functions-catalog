@@ -16,11 +16,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/kptdev/krm-functions-sdk/go/fn"
-	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/kptdev/kpt/api/kubeobject"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestExtractConfig(t *testing.T) {
@@ -84,7 +85,7 @@ data:
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			obj, err := fn.ParseKubeObject([]byte(tt.yamlData))
+			obj, err := kubeobject.ParseKubeObject([]byte(tt.yamlData))
 			if err != nil {
 				t.Fatalf("failed to parse YAML: %v", err)
 			}
@@ -156,7 +157,7 @@ func TestBuildKubeconformArgs(t *testing.T) {
 }
 
 func TestMarshalKubeObject(t *testing.T) {
-	obj := fn.NewEmptyKubeObject()
+	obj := kubeobject.NewEmptyKubeObject()
 	err := obj.SetAPIVersion("v1")
 	assert.NoError(t, err)
 	err = obj.SetKind("Pod")
@@ -227,7 +228,7 @@ spec:
           ports:
             - containerPort: 80
 `
-	obj, err := fn.ParseKubeObject([]byte(yamlStr))
+	obj, err := kubeobject.ParseKubeObject([]byte(yamlStr))
 	if err != nil {
 		panic(fmt.Errorf("failed to parse object: %w", err))
 	}
@@ -250,18 +251,18 @@ func TestRunWithFakeFunctionConfig(t *testing.T) {
 	// nolint
 	defer os.Setenv("PATH", oldPath)
 
-	pod := fn.NewEmptyKubeObject()
+	pod := kubeobject.NewEmptyKubeObject()
 	_ = pod.SetAPIVersion("v1")
 	_ = pod.SetKind("Pod")
 	_ = pod.SetName("mypod")
 
-	fc := fn.NewEmptyKubeObject()
+	fc := kubeobject.NewEmptyKubeObject()
 	_ = fc.SetAnnotation(SchemaLocationKey, "/jsonschema")
 	_ = fc.SetAnnotation(StrictKey, "true")
 
-	rl := &fn.ResourceList{
+	rl := &kubeobject.ResourceList{
 		FunctionConfig: fc,
-		Items:          []*fn.KubeObject{pod},
+		Items:          []*kubeobject.KubeObject{pod},
 	}
 
 	isValid, err := Run(rl)

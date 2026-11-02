@@ -17,6 +17,7 @@ package transformer
 import (
 	"fmt"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-image/custom"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"sigs.k8s.io/kustomize/api/filters/imagetag"
@@ -105,7 +106,7 @@ type SetImage struct {
 }
 
 // Run implements the Runner interface that transforms the resource and log the results
-func (t *SetImage) Run(_ *fn.Context, fnConfig *fn.KubeObject, items fn.KubeObjects, res *fn.Results) bool {
+func (t *SetImage) Run(_ *fn.Context, fnConfig *kubeobject.KubeObject, items kubeobject.KubeObjects, res *kubeobject.Results) bool {
 	err := t.configDefaultData()
 	if err != nil {
 		res.Errorf(err.Error(), nil)
@@ -162,7 +163,7 @@ func (t *SetImage) validateInput() error {
 }
 
 // updateContainerImages updates the images inside containers, return potential error
-func (t *SetImage) updateContainerImages(obj *fn.KubeObject) error {
+func (t *SetImage) updateContainerImages(obj *kubeobject.KubeObject) error {
 	filter := imagetag.Filter{
 		ImageTag: t.Image,
 		FsSlice:  containersFsSlice,
@@ -178,7 +179,7 @@ func (t *SetImage) updateContainerImages(obj *fn.KubeObject) error {
 		return err
 	}
 
-	newObj, err := fn.ParseKubeObject([]byte(objRN.MustString()))
+	newObj, err := kubeobject.ParseKubeObject([]byte(objRN.MustString()))
 	if err != nil {
 		return err
 	}

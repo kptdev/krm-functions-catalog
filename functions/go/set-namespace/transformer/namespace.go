@@ -18,18 +18,21 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kptdev/krm-functions-sdk/go/fn"
+	fnresult "github.com/kptdev/kpt/api/fnresult/v1"
+	"github.com/kptdev/kpt/api/kubeobject"
+	schema "github.com/kptdev/kpt/api/schema/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
+	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 )
 
 // Run provides the main workflow to update the ResourceList.Items "namespace" value.
-func Run(rl *fn.ResourceList) (bool, error) {
+func Run(rl *kubeobject.ResourceList) (bool, error) {
 	tc := SetNamespace{}
 	// Get "namespace" arguments from FunctionConfig
 	err := tc.Config(rl.FunctionConfig)
 	if err != nil {
-		rl.Results = append(rl.Results, fn.ErrorConfigObjectResult(err, rl.FunctionConfig))
+		rl.Results = append(rl.Results, kubeobject.ErrorConfigObjectResult(err, rl.FunctionConfig))
 		return false, nil
 	}
 	// Update "namespace" to the proper resources.
@@ -71,12 +74,12 @@ type SetNamespace struct {
 // 1. A ConfigMap object's .data.namespace
 // 2. A ConfigMap named "kptfile.kpt.dev" object's .data.name
 // 3. A SetNamespace object's .namespace
-func (p *SetNamespace) Config(o *fn.KubeObject) error {
+func (p *SetNamespace) Config(o *kubeobject.KubeObject) error {
 	switch {
 	case o.IsEmpty():
 		return fmt.Errorf("FunctionConfig is missing. Expect `ConfigMap.v1` or `%s.%s.%s`",
 			fnConfigKind, fnConfigVersion, fnConfigGroup)
-	case o.IsGVK("", "v1", "ConfigMap"):
+	case o.IsGroupVersionKind(schema.GroupVersionKind{Group: "", Version: "v1", Kind: "ConfigMap"}):
 		var cm corev1.ConfigMap
 		if o.As(&cm) != nil {
 			return fmt.Errorf("failed to parse FunctionConfig as ConfigMap")
@@ -94,7 +97,9 @@ func (p *SetNamespace) Config(o *fn.KubeObject) error {
 			return fmt.Errorf("`data.name` should not be empty")
 		}
 		return fmt.Errorf("`data.namespace` should not be empty")
-	case o.IsGVK(fnConfigGroup, fnConfigVersion, fnConfigKind):
+	case o.IsGroupVersionKind(schema.GroupVersionKind{
+		Group: fnConfigGroup, Version: fnConfigVersion, Kind: fnConfigKind,
+	}):
 		if o.As(&p) != nil {
 			return fmt.Errorf("failed to parse FunctionConfig as %s.%s.%s", fnConfigGroup, fnConfigVersion, fnConfigKind)
 		}
@@ -111,11 +116,11 @@ func (p *SetNamespace) Config(o *fn.KubeObject) error {
 // Transform contains two workflows to replace the "namespace" fields
 // 1. replace a matching namespace via "namespaceMatcher" config
 // 2. replace all namespaces with origin constraints.
-func (p *SetNamespace) Transform(objects fn.KubeObjects) fn.Results {
-	var results fn.Results
+func (p *SetNamespace) Transform(objects kubeobject.KubeObjects) []*fnresult.ResultItem {
+	var results []*fnresult.ResultItem
 
 	// Skip local resource which `kpt live apply` skips.
-	objects = objects.WhereNot(func(o *fn.KubeObject) bool { return o.IsLocalConfig() })
+	objects = objects.WhereNot(func(o *kubeobject.KubeObject) bool { return o.IsLocalConfig() })
 
 	// Store resources' GKNN before the namespace change. This map will be used to determine whether a resource which other
 	// resources depends on has its namespace changes.
@@ -133,7 +138,7 @@ func (p *SetNamespace) Transform(objects fn.KubeObjects) fn.Results {
 
 // ReplaceNamespace provides the actual workflow to replace the namespace, update depends-on anntations and
 // add the result messages.
-func ReplaceNamespace(objects fn.KubeObjects, newNs string, dependsOnMap map[string]struct{}, nsMatcher ...string) fn.Results {
+func ReplaceNamespace(objects kubeobject.KubeObjects, newNs string, dependsOnMap map[string]struct{}, nsMatcher ...string) []*fnresult.ResultItem {
 	results, count, oldNss := WalkAndReplace(objects, newNs, nsMatcher...)
 	results = AddSummaryResult(results, count, newNs, oldNss...)
 
@@ -145,8 +150,8 @@ func ReplaceNamespace(objects fn.KubeObjects, newNs string, dependsOnMap map[str
 
 // ListAllOrigins adds the constraints for general replacement.
 // If a resource does not have upstream origin, it gives warnings (the resource will still be updated).
-func ListAllOrigins(objects fn.KubeObjects) ([]string, fn.Results, error) {
-	var results fn.Results
+func ListAllOrigins(objects kubeobject.KubeObjects) ([]string, []*fnresult.ResultItem, error) {
+	var results []*fnresult.ResultItem
 	originNss := sets.NewString()
 	for _, o := range objects {
 		if o.HasUpstreamOrigin() {
@@ -157,32 +162,32 @@ func ListAllOrigins(objects fn.KubeObjects) ([]string, fn.Results, error) {
 			if o.IsClusterScoped() {
 				continue
 			}
-			if origin.Namespace == fn.UnknownNamespace {
+			if origin.Namespace == kubeobject.UnknownNamespace {
 				// This should rarely happen.
 				return nil, nil, fmt.Errorf("%v is namespace-scoped, but has cluster-scoped or unknown scoped origin %v",
 					o.ShortString(), origin.String())
 			}
 			originNss.Insert(origin.Namespace)
 		} else {
-			results = append(results, fn.GeneralResult(fmt.Sprintf(
-				"%v does not have upstream origin.", o.ShortString()), fn.Warning))
+			results = append(results, kubeobject.GeneralResult(fmt.Sprintf(
+				"%v does not have upstream origin.", o.ShortString()), framework.Warning))
 		}
 	}
 	return originNss.List(), results, nil
 }
 
 // WalkAndReplace iterate each KRM resource and updates the "namespace" fields.
-func WalkAndReplace(objects fn.KubeObjects, newNs string, matchers ...string) (fn.Results, int, []string) {
+func WalkAndReplace(objects kubeobject.KubeObjects, newNs string, matchers ...string) ([]*fnresult.ResultItem, int, []string) {
 	count := 0
 	oldnss := sets.NewString()
-	var results fn.Results
+	var results []*fnresult.ResultItem
 	VisitAll(objects, func(origin string, currentPtr *string, idStr ...string) {
 		// Skip if the resource is a cluster scoped or unknown scoped resource.
-		if origin == fn.UnknownNamespace {
+		if origin == kubeobject.UnknownNamespace {
 			return
 		}
 		if *currentPtr == "" {
-			*currentPtr = fn.DefaultNamespace
+			*currentPtr = kubeobject.DefaultNamespace
 		}
 		if *currentPtr == newNs {
 			return
@@ -195,7 +200,7 @@ func WalkAndReplace(objects fn.KubeObjects, newNs string, matchers ...string) (f
 			for i := range matchers {
 				if matchers[i] == origin {
 					results = append(
-						results, fn.GeneralResult(fmt.Sprintf("%s has matching origin %s", idStr, origin), fn.Info))
+						results, kubeobject.GeneralResult(fmt.Sprintf("%s has matching origin %s", idStr, origin), framework.Info))
 				}
 				if matchers[i] == *currentPtr || matchers[i] == origin {
 					change = true
@@ -212,18 +217,18 @@ func WalkAndReplace(objects fn.KubeObjects, newNs string, matchers ...string) (f
 }
 
 // VisitAll applies "visitor" function to both namespace scoped and cluster scoped resource.
-func VisitAll(objects fn.KubeObjects, visitor func(origin string, currentPtr *string, idStr ...string)) {
+func VisitAll(objects kubeobject.KubeObjects, visitor func(origin string, currentPtr *string, idStr ...string)) {
 	VisitSpecialClusterResource(objects, visitor)
 	VisitNamespaceResource(objects, visitor)
 }
 
 // VisitSpecialClusterResource applies "visitor" function to some special cluster-scoped resource that
 // have sub fields meaning "namespace".
-func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin string, currentPtr *string, idStr ...string)) {
-	clusterScoped := objects.Where(func(o *fn.KubeObject) bool { return o.IsClusterScoped() })
+func VisitSpecialClusterResource(objects kubeobject.KubeObjects, visitor func(origin string, currentPtr *string, idStr ...string)) {
+	clusterScoped := objects.Where(func(o *kubeobject.KubeObject) bool { return o.IsClusterScoped() })
 	for _, o := range clusterScoped {
 		switch {
-		case o.IsGVK("", "v1", "Namespace"):
+		case o.IsGroupVersionKind(schema.GroupVersionKind{Group: "", Version: "v1", Kind: "Namespace"}):
 			nsPtr := new(o.GetName())
 			origin, err := o.GetOriginID()
 			if err != nil {
@@ -231,7 +236,9 @@ func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin str
 			}
 			visitor(origin.Name, nsPtr, o.ShortString())
 			_ = o.SetName(*nsPtr)
-		case o.IsGVK("apiextensions.k8s.io", "v1", "CustomResourceDefinition"):
+		case o.IsGroupVersionKind(schema.GroupVersionKind{
+			Group: "apiextensions.k8s.io", Version: "v1", Kind: "CustomResourceDefinition",
+		}):
 			strategy, found, _ := o.NestedString("spec", "conversion", "strategy")
 			if !found || strategy != "Webhook" {
 				break
@@ -242,7 +249,9 @@ func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin str
 			nsPtr := new(NestedStringOrDie(o, "spec", "conversion", "webhook", "clientConfig", "service", "namespace"))
 			visitor("", nsPtr)
 			SetNestedStringOrDie(&o.SubObject, *nsPtr, "spec", "conversion", "webhook", "clientConfig", "service", "namespace")
-		case o.IsGVK("apiregistration.k8s.io", "v1", "APIService"):
+		case o.IsGroupVersionKind(schema.GroupVersionKind{
+			Group: "apiregistration.k8s.io", Version: "v1", Kind: "APIService",
+		}):
 			if _, found, _ := o.NestedString("spec", "service", "name"); !found {
 				break
 			}
@@ -267,13 +276,13 @@ func VisitSpecialClusterResource(objects fn.KubeObjects, visitor func(origin str
 // VisitNamespaceResource applies "visitor" to namespace-scoped resource.
 // We made a hypothesis here that if a unknown scoped resource has a non-empty metadata.namespace, the resource will be
 // treated as namespace scoped.
-func VisitNamespaceResource(objects fn.KubeObjects, visitor func(origin string, currentPtr *string, idStr ...string)) {
-	namespaceScoped := objects.Where(func(o *fn.KubeObject) bool { return o.IsNamespaceScoped() })
+func VisitNamespaceResource(objects kubeobject.KubeObjects, visitor func(origin string, currentPtr *string, idStr ...string)) {
+	namespaceScoped := objects.Where(func(o *kubeobject.KubeObject) bool { return o.IsNamespaceScoped() })
 	for _, o := range namespaceScoped {
 		nsPtr := new(o.GetNamespace())
 		origin, err := o.GetOriginID()
 		if err != nil {
-			origin.Namespace = fn.UnknownNamespace
+			origin.Namespace = kubeobject.UnknownNamespace
 		}
 		visitor(origin.Namespace, nsPtr, o.ShortString())
 		_ = o.SetNamespace(*nsPtr)
@@ -282,11 +291,11 @@ func VisitNamespaceResource(objects fn.KubeObjects, visitor func(origin string, 
 
 // MapGKNNBeforeChange stores each namespace-scoped resource's Group, Kind, Namespace and Name.
 // This map will be used later to align the depends-on annotation.
-func MapGKNNBeforeChange(objects fn.KubeObjects) map[string]struct{} {
+func MapGKNNBeforeChange(objects kubeobject.KubeObjects) map[string]struct{} {
 	dependsOnMap := map[string]struct{}{}
 	for _, o := range objects {
 		id := o.GetID()
-		if id.Namespace == fn.UnknownNamespace {
+		if id.Namespace == kubeobject.UnknownNamespace {
 			continue
 		}
 		dependsOnMap[nsScopedDependsOnFromId(id)] = struct{}{}
@@ -295,13 +304,13 @@ func MapGKNNBeforeChange(objects fn.KubeObjects) map[string]struct{} {
 }
 
 // hasDependsOnAnnotation checks whether a resource has namespace-scoped depends-on annotation.
-func hasNamespaceScopedDependsOnAnnotation(o *fn.KubeObject) bool {
+func hasNamespaceScopedDependsOnAnnotation(o *kubeobject.KubeObject) bool {
 	return o.GetAnnotations()[dependsOnAnnotation] != "" && namespacedResourcePattern.MatchString(
 		o.GetAnnotations()[dependsOnAnnotation])
 }
 
 // UpdateAnnotation updates the depends-on annotations whose referred resources are updated.
-func UpdateAnnotation(objects fn.KubeObjects, dependsOnMap map[string]struct{}, newNs string, matchers ...string) (int, []string) {
+func UpdateAnnotation(objects kubeobject.KubeObjects, dependsOnMap map[string]struct{}, newNs string, matchers ...string) (int, []string) {
 	count := 0
 	oldNss := sets.NewString()
 	for _, o := range objects.Where(hasNamespaceScopedDependsOnAnnotation) {
@@ -333,21 +342,21 @@ func UpdateAnnotation(objects fn.KubeObjects, dependsOnMap map[string]struct{}, 
 }
 
 // AddSummaryResult provides a user friendly message to summarize the namespace change.
-func AddSummaryResult(results fn.Results, count int, newNs string, oldNss ...string) fn.Results {
+func AddSummaryResult(results []*fnresult.ResultItem, count int, newNs string, oldNss ...string) []*fnresult.ResultItem {
 	if count == 0 {
-		return append(results, fn.GeneralResult(
-			fmt.Sprintf("all matching namespaces are already %q. no value changed", newNs), fn.Info))
+		return append(results, kubeobject.GeneralResult(
+			fmt.Sprintf("all matching namespaces are already %q. no value changed", newNs), framework.Info))
 	}
-	return append(results, fn.GeneralResult(fmt.Sprintf("namespace %v updated to %q, %d value(s) changed",
-		oldNss, newNs, count), fn.Info))
+	return append(results, kubeobject.GeneralResult(fmt.Sprintf("namespace %v updated to %q, %d value(s) changed",
+		oldNss, newNs, count), framework.Info))
 }
 
 // AddAnnotationResult provides a user friendly message to summarize the depends-on annotation change.
-func AddAnnotationResult(results fn.Results, count int, newNs string, oldNss ...string) fn.Results {
+func AddAnnotationResult(results []*fnresult.ResultItem, count int, newNs string, oldNss ...string) []*fnresult.ResultItem {
 	if count == 0 {
-		return append(results, fn.GeneralResult(
-			"all `depends-on` annotations are up-to-date. no `namespace` changed", fn.Info))
+		return append(results, kubeobject.GeneralResult(
+			"all `depends-on` annotations are up-to-date. no `namespace` changed", framework.Info))
 	}
-	return append(results, fn.GeneralResult(fmt.Sprintf("`depends-on` annotation namespace %v updated to %q, %d value(s) changed",
-		oldNss, newNs, count), fn.Info))
+	return append(results, kubeobject.GeneralResult(fmt.Sprintf("`depends-on` annotation namespace %v updated to %q, %d value(s) changed",
+		oldNss, newNs, count), framework.Info))
 }

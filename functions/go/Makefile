@@ -66,6 +66,7 @@ FUNCTION_GENERATE_DOCS := $(patsubst %,%-GENERATE,$(FUNCTIONS))
 
 # Targets to build functions
 FUNCTION_BUILDS := $(patsubst %,%-BUILD,$(FUNCTIONS))
+FUNCTION_BUILDS_NO_VERIFY := $(patsubst %,%-BUILD-NO-VERIFY,$(FUNCTIONS))
 
 FUNCTION_FORMATS := $(patsubst %,%-FORMAT,$(FUNCTIONS))
 # Targets to push images
@@ -104,9 +105,16 @@ $(FUNCTION_GENERATE_DOCS): | install-mdtogo
 .PHONY: build
 build: generate $(FUNCTION_BUILDS) ## Build all function images. 'TAG' env is used to specify tag. 'dev' will be used if not set.
 
+.PHONY: build-no-verify
+build-no-verify: generate $(FUNCTION_BUILDS_NO_VERIFY)
+
 .PHONY: $(FUNCTION_BUILDS)
 $(FUNCTION_BUILDS): | generate
 	$(MAKE) CURRENT_FUNCTION=$(subst -BUILD,,$@) TAG=$(TAG) DEFAULT_CR=$(DEFAULT_CR) func-build
+
+.PHONY: $(FUNCTION_BUILDS_NO_VERIFY)
+$(FUNCTION_BUILDS_NO_VERIFY): | generate
+	$(MAKE) CURRENT_FUNCTION=$(subst -BUILD-NO-VERIFY,,$@) TAG=$(TAG) DEFAULT_CR=$(DEFAULT_CR) func-build-no-verify
 
 .PHONY: format
 format: generate $(FUNCTION_FORMATS)
@@ -152,6 +160,11 @@ func-vet:
 	cd $(CURRENT_FUNCTION) && go vet ./...
 
 func-build: func-verify
+	@echo Building image for $(CURRENT_FUNCTION)...
+	../../scripts/go-function-release.sh build
+
+.PHONY: func-build-no-verify
+func-build-no-verify:
 	@echo Building image for $(CURRENT_FUNCTION)...
 	../../scripts/go-function-release.sh build
 

@@ -30,11 +30,12 @@ package main
 import (
 	"context"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-image/transformer"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
-func NewTransformer() fn.ResourceListProcessor {
+func NewTransformer() kubeobject.ResourceListProcessor {
 	return fn.WithContext(fn.Context{Context: context.Background()}, &transformer.SetImage{})
 }
 

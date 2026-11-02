@@ -17,7 +17,7 @@ package starlark
 import (
 	"testing"
 
-	"github.com/kptdev/krm-functions-sdk/go/fn"
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -89,7 +89,7 @@ data:
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
 			sr := &StarlarkRun{}
-			ko, err := fn.ParseKubeObject([]byte(tc.config))
+			ko, err := kubeobject.ParseKubeObject([]byte(tc.config))
 			assert.NoError(t, err)
 			err = sr.Config(ko)
 			if tc.expectErrMsg == "" {

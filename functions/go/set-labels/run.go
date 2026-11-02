@@ -20,6 +20,7 @@ import (
 	"context"
 	_ "embed"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-labels/setlabels"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
@@ -30,7 +31,7 @@ var readme []byte
 //go:embed metadata.yaml
 var metadata []byte
 
-func NewTransformer() fn.ResourceListProcessor {
+func NewTransformer() kubeobject.ResourceListProcessor {
 	return fn.WithContext(context.Background(), &setlabels.SetLabels{})
 }
 

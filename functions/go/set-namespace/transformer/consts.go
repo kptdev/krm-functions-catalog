@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/kptdev/krm-functions-sdk/go/fn"
+	"github.com/kptdev/kpt/api/kubeobject"
 )
 
 const (
@@ -35,7 +35,7 @@ const (
 var (
 	// <group>/namespaces/<namespace>/<kind>/<name>
 	namespacedResourcePattern = regexp.MustCompile(`\A([-.\w]*)/namespaces/([-.\w]*)/([-.\w]*)/([-.\w]*)\z`)
-	nsScopedDependsOnFromId   = func(id *fn.ResourceIdentifier) string {
+	nsScopedDependsOnFromId   = func(id *kubeobject.ResourceIdentifier) string {
 		return fmt.Sprintf("%v/namespaces/%v/%v/%v", id.Group, id.Namespace, id.Kind, id.Name)
 	}
 )

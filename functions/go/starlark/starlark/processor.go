@@ -15,10 +15,12 @@
 package starlark
 
 import (
-	"github.com/kptdev/krm-functions-sdk/go/fn"
+	fnresult "github.com/kptdev/kpt/api/fnresult/v1"
+	"github.com/kptdev/kpt/api/kubeobject"
+	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 )
 
-func Process(resourceList *fn.ResourceList) (bool, error) {
+func Process(resourceList *kubeobject.ResourceList) (bool, error) {
 	err := func() error {
 		sr := &StarlarkRun{}
 		if err := sr.Config(resourceList.FunctionConfig); err != nil {
@@ -27,10 +29,10 @@ func Process(resourceList *fn.ResourceList) (bool, error) {
 		return sr.Transform(resourceList)
 	}()
 	if err != nil {
-		resourceList.Results = []*fn.Result{
+		resourceList.Results = []*fnresult.ResultItem{
 			{
 				Message:  err.Error(),
-				Severity: fn.Error,
+				Severity: framework.Error,
 			},
 		}
 		return false, nil

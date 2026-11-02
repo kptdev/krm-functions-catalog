@@ -14,9 +14,11 @@
 
 package set_namespace
 
-import "github.com/kptdev/krm-functions-sdk/go/fn"
+import (
+	"github.com/kptdev/kpt/api/kubeobject"
+)
 
-func NestedStringOrDie(o *fn.KubeObject, fields ...string) string {
+func NestedStringOrDie(o *kubeobject.KubeObject, fields ...string) string {
 	val, _, err := o.NestedString(fields...)
 	if err != nil {
 		panic(err)
@@ -24,7 +26,7 @@ func NestedStringOrDie(o *fn.KubeObject, fields ...string) string {
 	return val
 }
 
-func SetNestedStringOrDie(o *fn.SubObject, value string, fields ...string) {
+func SetNestedStringOrDie(o *kubeobject.SubObject, value string, fields ...string) {
 	err := o.SetNestedString(value, fields...)
 	if err != nil {
 		panic(err)

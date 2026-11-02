@@ -15,11 +15,10 @@
 package docs
 
 import (
-	"strings"
 	"testing"
 
-	kptfilev1 "github.com/kptdev/kpt/pkg/api/kptfile/v1"
-	"github.com/kptdev/kpt/pkg/kptfile/kptfileutil"
+	kptfilev1 "github.com/kptdev/kpt/api/kptfile/v1"
+	kptfileko "github.com/kptdev/kpt/api/kubeobject/kptfile"
 	"github.com/stretchr/testify/require"
 )
 
@@ -105,7 +104,7 @@ pipeline:
 func getKfFromStr(t *testing.T, k string) *kptfilev1.KptFile {
 	t.Helper()
 	require := require.New(t)
-	kf, err := kptfileutil.DecodeKptfile(strings.NewReader(k))
+	kf, err := kptfileko.DecodeKptfile(k)
 	require.NoError(err)
 	return kf
 }

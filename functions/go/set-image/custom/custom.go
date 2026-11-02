@@ -15,7 +15,7 @@
 package custom
 
 import (
-	"github.com/kptdev/krm-functions-sdk/go/fn"
+	"github.com/kptdev/kpt/api/kubeobject"
 	"sigs.k8s.io/kustomize/api/filters/imagetag"
 	"sigs.k8s.io/kustomize/api/types"
 	"sigs.k8s.io/kustomize/kyaml/filtersutil"
@@ -23,7 +23,7 @@ import (
 )
 
 // SetAdditionalFieldSpec updates the image in user given fieldPaths. To be deprecated in around a year, to avoid possible invalid fieldPaths.
-func SetAdditionalFieldSpec(img *fn.SubObject, objects fn.KubeObjects, addImgFields fn.SliceSubObjects, res *fn.Results, count *int) {
+func SetAdditionalFieldSpec(img *kubeobject.SubObject, objects kubeobject.KubeObjects, addImgFields kubeobject.SliceSubObjects, res *kubeobject.Results, count *int) {
 	image := NewImageAdaptor(img)
 	additionalImageFields := NewFieldSpecSliceAdaptor(addImgFields)
 
@@ -41,7 +41,7 @@ func SetAdditionalFieldSpec(img *fn.SubObject, objects fn.KubeObjects, addImgFie
 		if err != nil {
 			res.Errorf(err.Error(), obj)
 		}
-		newObj, err := fn.ParseKubeObject([]byte(objRN.MustString()))
+		newObj, err := kubeobject.ParseKubeObject([]byte(objRN.MustString()))
 		if err != nil {
 			res.Errorf(err.Error(), obj)
 		}
@@ -56,7 +56,7 @@ func LogResultCallback(count *int) func(key, value, tag string, node *yaml.RNode
 }
 
 // NewImageAdaptor transforms the image struct inside transformer to the struct inside kustomize
-func NewImageAdaptor(imgObj *fn.SubObject) types.Image {
+func NewImageAdaptor(imgObj *kubeobject.SubObject) types.Image {
 	imgPtr := &types.Image{}
 	// nolint
 	imgObj.As(imgPtr)
@@ -64,7 +64,7 @@ func NewImageAdaptor(imgObj *fn.SubObject) types.Image {
 }
 
 // NewFieldSpecSliceAdaptor transforms the additionalImageFields struct inside transformer to the struct inside kustomize
-func NewFieldSpecSliceAdaptor(addImgFields fn.SliceSubObjects) types.FsSlice {
+func NewFieldSpecSliceAdaptor(addImgFields kubeobject.SliceSubObjects) types.FsSlice {
 	additionalImageFields := types.FsSlice{}
 	for _, v := range addImgFields {
 		fieldPtr := &types.FieldSpec{}

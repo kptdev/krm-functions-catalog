@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	"github.com/kptdev/krm-functions-sdk/go/fn"
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -101,7 +101,7 @@ func TestPolicyResources(t *testing.T) {
 		test := tests[i]
 		t.Run(test.name, func(t *testing.T) {
 
-			fcNode, err := fn.ParseKubeObject([]byte(test.config))
+			fcNode, err := kubeobject.ParseKubeObject([]byte(test.config))
 			if !assert.NoError(t, err) {
 				t.FailNow()
 			}
@@ -111,12 +111,12 @@ func TestPolicyResources(t *testing.T) {
 				return
 			}
 
-			resource, err := fn.ParseKubeObject([]byte(test.input))
+			resource, err := kubeobject.ParseKubeObject([]byte(test.input))
 			if !assert.NoError(t, err) {
 				t.FailNow()
 			}
 
-			resources := append([]*fn.KubeObject{}, resource)
+			resources := append([]*kubeobject.KubeObject{}, resource)
 			items, err := processResources(resources, annotationKeys)
 			if err != nil {
 				t.Errorf("Error when calling processResources %s", err.Error())

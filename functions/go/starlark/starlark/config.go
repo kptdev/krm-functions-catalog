@@ -17,10 +17,10 @@ package starlark
 import (
 	"fmt"
 
+	"github.com/kptdev/kpt/api/kubeobject"
+	schema "github.com/kptdev/kpt/api/schema/v1"
 	"github.com/kptdev/krm-functions-catalog/functions/go/starlark/third_party/sigs.k8s.io/kustomize/kyaml/fn/runtime/starlark"
-	"github.com/kptdev/krm-functions-sdk/go/fn"
 	corev1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
@@ -46,11 +46,13 @@ type StarlarkRun struct {
 	Params map[string]any `json:"params,omitempty" yaml:"params,omitempty"`
 }
 
-func (sr *StarlarkRun) Config(fnCfg *fn.KubeObject) error {
+func (sr *StarlarkRun) Config(fnCfg *kubeobject.KubeObject) error {
 	switch {
 	case fnCfg.IsEmpty():
 		return fmt.Errorf("FunctionConfig is missing. Expect `ConfigMap` or `StarlarkRun`")
-	case fnCfg.IsGVK("", configMapApiVersion, configMapKind):
+	case fnCfg.IsGroupVersionKind(schema.GroupVersionKind{
+		Group: "", Version: configMapApiVersion, Kind: configMapKind,
+	}):
 		cm := &corev1.ConfigMap{}
 		if err := fnCfg.As(cm); err != nil {
 			return err
@@ -65,7 +67,9 @@ func (sr *StarlarkRun) Config(fnCfg *fn.KubeObject) error {
 			}
 			sr.Params[k] = v
 		}
-	case fnCfg.IsGVK(starlarkRunGroup, starlarkRunVersion, starlarkRunKind):
+	case fnCfg.IsGroupVersionKind(schema.GroupVersionKind{
+		Group: starlarkRunGroup, Version: starlarkRunVersion, Kind: starlarkRunKind,
+	}):
 		if err := fnCfg.As(sr); err != nil {
 			return err
 		}
@@ -87,8 +91,8 @@ func (sr *StarlarkRun) Config(fnCfg *fn.KubeObject) error {
 	return nil
 }
 
-func (sr *StarlarkRun) Transform(rl *fn.ResourceList) error {
-	var transformedObjects []*fn.KubeObject
+func (sr *StarlarkRun) Transform(rl *kubeobject.ResourceList) error {
+	var transformedObjects []*kubeobject.KubeObject
 	var nodes []*yaml.RNode
 
 	fcRN, err := yaml.Parse(rl.FunctionConfig.String())
@@ -114,7 +118,7 @@ func (sr *StarlarkRun) Transform(rl *fn.ResourceList) error {
 	}
 
 	for _, n := range transformedNodes {
-		obj, err := fn.ParseKubeObject([]byte(n.MustString()))
+		obj, err := kubeobject.ParseKubeObject([]byte(n.MustString()))
 		if err != nil {
 			return err
 		}

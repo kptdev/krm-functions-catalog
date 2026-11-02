@@ -48,6 +48,10 @@ tidy:
 build: ## Build all function images.
 	cd functions/go && $(MAKE) build -j$(NPROC)
 
+.PHONY: build-no-verify
+build-no-verify: ## Build all function images without formatting and tests.
+	cd functions/go && $(MAKE) build-no-verify -j$(NPROC)
+
 .PHONY: format
 format: ## Run go fix, vet, fmt, lint and generate docs for all functions
 	cd functions/go && $(MAKE) format -j$(NPROC)
