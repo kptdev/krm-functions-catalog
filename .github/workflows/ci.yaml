@@ -113,7 +113,7 @@ jobs:
           key: golangci-lint-${{ hashFiles('functions/go/*/go.sum') }}
           restore-keys: golangci-lint-
       - name: Install kustomize
-        uses: syntaqx/setup-kustomize@v1
+        uses: syntaqx/setup-kustomize@v2
         with:
           kustomize-version: 4.2.0
       - run: kustomize version
