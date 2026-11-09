@@ -2,7 +2,7 @@ module github.com/kptdev/krm-functions-catalog/tests/e2etest
 
 go 1.26.8
 
-require github.com/kptdev/kpt v1.0.0-beta.68
+require github.com/kptdev/kpt v1.0.2-pre.4
 
 require (
 	cloud.google.com/go/compute/metadata v0.9.0 // indirect
@@ -32,18 +32,17 @@ require (
 	github.com/google/gnostic-models v0.7.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/go-containerregistry v0.21.6 // indirect
-	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/klauspost/compress v1.18.7 // indirect
-	github.com/kptdev/kpt/api v0.0.4 // indirect
+	github.com/kptdev/kpt/api v1.1.1-pre.2 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.1 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prep/wasmexec v0.0.0-20220807105708-6554945c1dec // indirect
 	github.com/regclient/regclient v0.11.5 // indirect
 	github.com/sergi/go-diff v1.4.0 // indirect
 	github.com/sirupsen/logrus v1.9.4 // indirect
-	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/ulikunitz/xz v0.5.15 // indirect
 	github.com/xlab/treeprint v1.2.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect

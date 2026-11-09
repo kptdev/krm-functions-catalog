@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kptdev/kpt/pkg/test/runner"
+	"github.com/kptdev/kpt/e2e/framework/runner"
 )
 
 const includeArchivedEnv = "KPT_E2E_INCLUDE_ARCHIVED"
