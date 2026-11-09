@@ -15,26 +15,21 @@
 package main
 
 import (
+	_ "embed"
 	"os"
 
 	"github.com/kptdev/kpt/api/kubeobject"
-	"github.com/kptdev/krm-functions-catalog/functions/go/kubeconform/generated"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
-	"github.com/spf13/cobra"
 )
 
-func main() {
-	cmd := &cobra.Command{
-		Short: generated.KubeconformShort,
-		Long:  generated.KubeconformLong,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return fn.AsMain(kubeobject.ResourceListProcessorFunc(Run))
-		},
-		SilenceUsage:  true,
-		SilenceErrors: true,
-	}
+//go:embed README.md
+var readme []byte
 
-	if err := cmd.Execute(); err != nil {
+//go:embed metadata.yaml
+var metadata []byte
+
+func main() {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(Run), fn.WithDocs(readme, metadata)); err != nil {
 		os.Exit(1)
 	}
 }

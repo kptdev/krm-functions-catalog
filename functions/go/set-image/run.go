@@ -29,16 +29,23 @@ package main
 
 import (
 	"context"
+	_ "embed"
 
 	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/set-image/transformer"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
+
 func NewTransformer() kubeobject.ResourceListProcessor {
-	return fn.WithContext(fn.Context{Context: context.Background()}, &transformer.SetImage{})
+	return fn.WithContext(context.Background(), &transformer.SetImage{})
 }
 
 func run() error {
-	return fn.AsMain(NewTransformer())
+	return fn.AsMain(NewTransformer(), fn.WithDocs(readme, metadata))
 }

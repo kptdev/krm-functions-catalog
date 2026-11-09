@@ -1,4 +1,4 @@
-// Copyright 2022 The kpt Authors
+// Copyright 2022, 2026 The kpt Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,11 +17,19 @@
 package main
 
 import (
+	_ "embed"
+
 	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/apply-replacements/replacements"
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
+
 func run() error {
-	return fn.AsMain(kubeobject.ResourceListProcessorFunc(replacements.ApplyReplacements))
+	return fn.AsMain(kubeobject.ResourceListProcessorFunc(replacements.ApplyReplacements), fn.WithDocs(readme, metadata))
 }
