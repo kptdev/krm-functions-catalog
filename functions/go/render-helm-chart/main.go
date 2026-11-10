@@ -1,4 +1,4 @@
-// Copyright 2021 The kpt Authors
+// Copyright 2021, 2026 The kpt Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
 package main
 
 import (
+	_ "embed"
 	"os"
 
 	"github.com/kptdev/kpt/api/kubeobject"
@@ -22,8 +23,14 @@ import (
 	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
+
 func main() {
-	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(helmfn.RenderHelmChart)); err != nil {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(helmfn.RenderHelmChart), fn.WithDocs(readme, metadata)); err != nil {
 		os.Exit(1)
 	}
 }
