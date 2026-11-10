@@ -3,11 +3,13 @@ module github.com/kptdev/krm-functions-catalog/functions/go/remove-local-config-
 go 1.26.8
 
 require (
+	github.com/kptdev/kpt/api v1.1.0
+	github.com/kptdev/krm-functions-sdk/go/fn v1.2.0
 	github.com/stretchr/testify v1.12.1
-	sigs.k8s.io/kustomize/kyaml v0.21.2
 )
 
 require (
+	github.com/distribution/reference v0.6.0 // indirect
 	github.com/go-errors/errors v1.5.1 // indirect
 	github.com/go-openapi/jsonpointer v1.0.0 // indirect
 	github.com/go-openapi/jsonreference v1.0.0 // indirect
@@ -24,10 +26,8 @@ require (
 	github.com/go-openapi/swag/typeutils v0.27.1 // indirect
 	github.com/go-openapi/swag/yamlutils v0.27.1 // indirect
 	github.com/google/gnostic-models v0.7.1 // indirect
-	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
-	github.com/spf13/cobra v1.10.2 // indirect
-	github.com/spf13/pflag v1.0.10 // indirect
+	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/xlab/treeprint v1.2.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
@@ -35,5 +35,6 @@ require (
 	google.golang.org/protobuf v1.36.12 // indirect
 	k8s.io/kube-openapi v0.0.0-20260721132016-d427ff9ee9ad // indirect
 	k8s.io/utils v0.0.0-20260626114624-be93311217bd // indirect
+	sigs.k8s.io/kustomize/kyaml v0.21.2 // indirect
 	sigs.k8s.io/yaml v1.6.0 // indirect
 )

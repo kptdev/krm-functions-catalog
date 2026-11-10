@@ -15,44 +15,45 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
-	"strings"
 
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
-	"sigs.k8s.io/kustomize/kyaml/kio/filters"
-	"sigs.k8s.io/kustomize/kyaml/yaml"
+	"github.com/kptdev/kpt/api/kubeobject"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
+
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
 
 // nolint
 func main() {
-	fp := RemoveLocalConfigResourcesConfigProcessor{}
-	cmd := command.Build(&fp, command.StandaloneEnabled, false)
-	if err := cmd.Execute(); err != nil {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(Process), fn.WithDocs(readme, metadata)); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
-func (fp *RemoveLocalConfigResourcesConfigProcessor) Process(resourceList *framework.ResourceList) error {
+func Process(resourceList *kubeobject.ResourceList) (bool, error) {
 	results, err := processResources(resourceList)
 	if err != nil {
 		resourceList.Results = getErrorResult(err.Error())
-		return err
+		return false, err
 	}
 	resourceList.Results = results
-	return nil
+	return true, nil
 }
 
-func processResources(resourceList *framework.ResourceList) (framework.Results, error) {
-	var resultItems framework.Results
-	var res []*yaml.RNode
+func processResources(resourceList *kubeobject.ResourceList) (kubeobject.Results, error) {
+	var resultItems kubeobject.Results
+	var res []*kubeobject.KubeObject
 	for _, node := range resourceList.Items {
-		if node.IsNilOrEmpty() {
+		if node == nil || node.IsEmpty() {
 			continue
 		}
-		// only add the resources which are not local configs
-		if strings.ToLower(node.GetAnnotations()[filters.LocalConfigAnnotation]) != "true" {
+		if !node.IsLocalConfig() {
 			res = append(res, node)
 		} else {
 			itemFilePath := node.GetAnnotations()["internal.config.kubernetes.io/path"]
@@ -60,12 +61,12 @@ func processResources(resourceList *framework.ResourceList) (framework.Results, 
 				itemFilePath = node.GetAnnotations()["config.kubernetes.io/path"]
 			}
 
-			resultItems = append(resultItems, &framework.Result{
+			resultItems = append(resultItems, &kubeobject.Result{
 				Message: fmt.Sprintf("Resource name: [%s]", node.GetName()),
-				File: &framework.File{
+				File: &kubeobject.File{
 					Path: itemFilePath,
 				},
-				Severity: framework.Info,
+				Severity: kubeobject.Info,
 			})
 		}
 	}
@@ -73,18 +74,18 @@ func processResources(resourceList *framework.ResourceList) (framework.Results, 
 	resourceList.Items = res
 
 	if len(resultItems) > 0 {
-		infoResultSlice := framework.Results{
-			&framework.Result{
-				Severity: framework.Info,
+		infoResultSlice := kubeobject.Results{
+			&kubeobject.Result{
+				Severity: kubeobject.Info,
 				Message:  fmt.Sprintf("Number of resources pruned: %d", len(resultItems)),
 			},
 		}
 
 		resultItems = append(infoResultSlice, resultItems...)
 	} else if len(resultItems) == 0 {
-		resultItems = append(resultItems, &framework.Result{
+		resultItems = append(resultItems, &kubeobject.Result{
 			Message:  "Found no resources to prune with the local config annotation",
-			Severity: framework.Warning,
+			Severity: kubeobject.Warning,
 		})
 	}
 
@@ -92,13 +93,11 @@ func processResources(resourceList *framework.ResourceList) (framework.Results, 
 }
 
 // getErrorResult returns the result for an error message
-func getErrorResult(errMsg string) framework.Results {
-	return framework.Results{
-		&framework.Result{
+func getErrorResult(errMsg string) kubeobject.Results {
+	return kubeobject.Results{
+		&kubeobject.Result{
 			Message:  fmt.Sprintf("failed to remove local configs: %s", errMsg),
-			Severity: framework.Error,
+			Severity: kubeobject.Error,
 		},
 	}
 }
-
-type RemoveLocalConfigResourcesConfigProcessor struct{}

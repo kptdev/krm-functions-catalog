@@ -21,20 +21,18 @@ import (
 	"strings"
 	"time"
 
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
+	"github.com/kptdev/kpt/api/kubeobject"
 )
 
 const DefaultDuration = 10 * time.Second
 
-type SleepProcessor struct{}
-
-func (p *SleepProcessor) Process(rl *framework.ResourceList) error {
+func Process(rl *kubeobject.ResourceList) (bool, error) {
 	duration := DefaultDuration
 	fnConfig := rl.FunctionConfig
 	if fnConfig != nil && fnConfig.GetKind() == "ConfigMap" {
-		data := fnConfig.GetDataMap()
-		if data == nil {
-			return fmt.Errorf("couldn't parse FunctionConfig's data field")
+		data, found, err := fnConfig.NestedStringMap("data")
+		if err != nil || !found || data == nil {
+			return false, fmt.Errorf("couldn't parse FunctionConfig's data field")
 		}
 
 		if raw, ok := data["duration"]; ok {
@@ -42,17 +40,17 @@ func (p *SleepProcessor) Process(rl *framework.ResourceList) error {
 			if parsed, err := time.ParseDuration(raw); err == nil {
 				duration = parsed
 			} else {
-				return fmt.Errorf("couldn't parse `duration` field of functionConfig: %w", err)
+				return false, fmt.Errorf("couldn't parse `duration` field of functionConfig: %w", err)
 			}
 		} else /* for BC */ if raw, ok = data["sleepSeconds"]; ok {
 			raw = strings.TrimSpace(raw)
 			if parsed, err := strconv.Atoi(raw); err == nil {
 				duration = time.Duration(parsed) * time.Second
 			} else {
-				return fmt.Errorf("couldn't parse `sleepSeconds` field of functionConfig: %w", err)
+				return false, fmt.Errorf("couldn't parse `sleepSeconds` field of functionConfig: %w", err)
 			}
 		} else {
-			return fmt.Errorf("FunctionConfig's data field contains neither `duration` nor `sleepSeconds`")
+			return false, fmt.Errorf("FunctionConfig's data field contains neither `duration` nor `sleepSeconds`")
 		}
 	}
 
@@ -61,5 +59,5 @@ func (p *SleepProcessor) Process(rl *framework.ResourceList) error {
 	fmt.Fprintf(os.Stderr, "Sleeping for %s...\n", duration)
 	time.Sleep(duration)
 	fmt.Fprintln(os.Stderr, "Sleep completed.")
-	return nil
+	return true, nil
 }

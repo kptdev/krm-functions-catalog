@@ -17,9 +17,9 @@ package main
 import (
 	"testing"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
 var tests = []struct {
@@ -27,6 +27,7 @@ var tests = []struct {
 	config         string
 	input          string
 	expectedResult []string
+	expectedAction string
 	errMsg         string
 }{
 	{
@@ -58,6 +59,7 @@ spec:
 			"Number of policies set to [dryrun]: 1",
 			"Policy name: [restrict-clusteradmin-rolebindings]",
 		},
+		expectedAction: "dryrun",
 	},
 	{
 		name: "set policy as deny",
@@ -88,6 +90,7 @@ spec:
 			"Number of policies set to [deny]: 1",
 			"Policy name: [restrict-clusteradmin-rolebindings]",
 		},
+		expectedAction: "deny",
 	},
 	{
 		name: "no policy found",
@@ -147,7 +150,7 @@ func TestPolicyResources(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 
 			var acn string
-			fcNode, err := yaml.Parse(test.config)
+			fcNode, err := kubeobject.ParseKubeObject([]byte(test.config))
 			if !assert.NoError(t, err) {
 				t.FailNow()
 			}
@@ -157,12 +160,12 @@ func TestPolicyResources(t *testing.T) {
 				return
 			}
 
-			policy, err := yaml.Parse(test.input)
+			policy, err := kubeobject.ParseKubeObject([]byte(test.input))
 			if !assert.NoError(t, err) {
 				t.FailNow()
 			}
 
-			policies := append([]*yaml.RNode{}, policy)
+			policies := append([]*kubeobject.KubeObject{}, policy)
 			items, err := processPolicies(policies, acn)
 			if err != nil {
 				t.Errorf("Error when calling processPolicies %s", err.Error())
@@ -170,6 +173,15 @@ func TestPolicyResources(t *testing.T) {
 
 			for j := range items {
 				require.Equal(t, test.expectedResult[j], items[j].Message)
+			}
+
+			// Verify the mutation actually happened: spec.enforcementAction
+			// should be updated to the configured value on the policy object.
+			if test.expectedAction != "" {
+				got, found, err := policy.NestedString("spec", "enforcementAction")
+				require.NoError(t, err)
+				require.True(t, found, "spec.enforcementAction should be set")
+				require.Equal(t, test.expectedAction, got)
 			}
 		})
 	}
