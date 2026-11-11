@@ -18,10 +18,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
 func TestSleepProcessor(t *testing.T) {
@@ -77,27 +76,26 @@ metadata:
   name: test-config
 data: "duration:2kk"
 `,
-			expectedErr: "data field contains neither",
+			expectedErr: "couldn't parse",
 		},
 	}
 
 	for name, tc := range testCases {
 		t.Run(name, func(t *testing.T) {
-			var node *yaml.RNode
+			var fnConfig *kubeobject.KubeObject
 			var err error
 
 			if tc.yaml != "" {
-				node, err = yaml.Parse(tc.yaml)
+				fnConfig, err = kubeobject.ParseKubeObject([]byte(tc.yaml))
 				require.NoError(t, err, "failed to parse yaml")
 			}
 
-			p := &SleepProcessor{}
-			rl := &framework.ResourceList{
-				FunctionConfig: node,
+			rl := &kubeobject.ResourceList{
+				FunctionConfig: fnConfig,
 			}
 
 			start := time.Now()
-			err = p.Process(rl)
+			_, err = Process(rl)
 
 			if tc.expectedErr == "" {
 				require.NoError(t, err)

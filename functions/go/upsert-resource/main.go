@@ -15,40 +15,49 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 
-	"github.com/kptdev/krm-functions-catalog/functions/go/upsert-resource/generated"
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/upsert-resource/upsertresource"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
+	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
+
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
 
 // nolint
 func main() {
-	asp := UpsertResourceProcessor{}
-	cmd := command.Build(&asp, command.StandaloneEnabled, false)
-
-	cmd.Short = generated.UpsertResourceShort
-	cmd.Long = generated.UpsertResourceLong
-	cmd.Example = generated.UpsertResourceExamples
-
-	if err := cmd.Execute(); err != nil {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(Process), fn.WithDocs(readme, metadata)); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
 
-type UpsertResourceProcessor struct{}
+// Process bridges the kubeobject ResourceList to the kyaml-based upsertresource
+// filter, which still operates on *yaml.RNode. Items and the functionConfig are
+// converted to RNodes, filtered, then moved back into KubeObjects.
+func Process(resourceList *kubeobject.ResourceList) (bool, error) {
+	var fnConfig *yaml.RNode
+	if resourceList.FunctionConfig != nil {
+		fnConfig = resourceList.FunctionConfig.CopyToResourceNode()
+	}
 
-func (urp *UpsertResourceProcessor) Process(resourceList *framework.ResourceList) error {
 	ur := &upsertresource.UpsertResource{
-		List: resourceList.FunctionConfig,
+		List: fnConfig,
 	}
-	var err error
-	resourceList.Items, err = ur.Filter(resourceList.Items)
+
+	items := resourceList.Items.CopyToResourceNodes()
+	filtered, err := ur.Filter(items)
 	if err != nil {
-		return fmt.Errorf("failed to upsert resource: %w", err)
+		return false, fmt.Errorf("failed to upsert resource: %w", err)
 	}
-	return nil
+
+	resourceList.Items = kubeobject.MoveToKubeObjects(filtered)
+	return true, nil
 }

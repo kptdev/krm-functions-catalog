@@ -15,14 +15,20 @@
 package main
 
 import (
+	_ "embed"
 	"errors"
 	"fmt"
 	"os"
 
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
-	"sigs.k8s.io/kustomize/kyaml/yaml"
+	"github.com/kptdev/kpt/api/kubeobject"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
+
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
 
 const (
 	policyAPIVersion     = "constraints.gatekeeper.sh/v1beta1"
@@ -34,52 +40,43 @@ const (
 
 // nolint
 func main() {
-	fp := SetEnforcementActionProcessor{}
-	cmd := command.Build(&fp, command.StandaloneEnabled, false)
-	if err := cmd.Execute(); err != nil {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(Process), fn.WithDocs(readme, metadata)); err != nil {
 		os.Exit(1)
 	}
 }
-func (fp *SetEnforcementActionProcessor) Process(resourceList *framework.ResourceList) error {
+
+func Process(resourceList *kubeobject.ResourceList) (bool, error) {
 	// get the enforcementAction value from functionConfig
 	var acn string
 	err := getEnforcementAction(resourceList.FunctionConfig, &acn)
 	if err != nil {
 		resourceList.Results = getErrorItem(err.Error())
-		return err
+		return false, err
 	}
 
 	// process policies in the package and display results
 	items, err := processPolicies(resourceList.Items, acn)
 	if err != nil {
 		resourceList.Results = getErrorItem(err.Error())
-		return err
+		return false, err
 	}
 	resourceList.Results = items
-	return nil
+	return true, nil
 }
 
-func processPolicies(resourceList []*yaml.RNode, acn string) ([]*framework.Result, error) {
-	var resultItems []*framework.Result
+func processPolicies(resourceList []*kubeobject.KubeObject, acn string) (kubeobject.Results, error) {
+	var resultItems kubeobject.Results
 	for _, node := range resourceList {
-		if node.IsNilOrEmpty() {
+		if node == nil || node.IsEmpty() {
 			continue
 		}
 
 		//check for resources of type policy
-		metadata, err := node.GetMeta()
-		if err != nil {
-			return nil, err
-		}
-
-		if metadata.Name == "" || metadata.Kind == "" || metadata.APIVersion != policyAPIVersion {
+		if node.GetName() == "" || node.GetKind() == "" || node.GetAPIVersion() != policyAPIVersion {
 			continue
 		}
 
-		err = node.PipeE(
-			yaml.LookupCreate(yaml.ScalarNode, "spec"),
-			yaml.SetField("enforcementAction", yaml.NewScalarRNode(acn)))
-		if err != nil {
+		if err := node.SetNestedField(acn, "spec", "enforcementAction"); err != nil {
 			return nil, err
 		}
 
@@ -88,28 +85,28 @@ func processPolicies(resourceList []*yaml.RNode, acn string) ([]*framework.Resul
 			itemFilePath = node.GetAnnotations()["config.kubernetes.io/path"]
 		}
 
-		resultItems = append(resultItems, &framework.Result{
+		resultItems = append(resultItems, &kubeobject.Result{
 			Message: fmt.Sprintf("Policy name: [%s]", node.GetName()),
-			File: &framework.File{
+			File: &kubeobject.File{
 				Path: itemFilePath,
 			},
-			Severity: framework.Info,
+			Severity: kubeobject.Info,
 		})
 	}
 
 	if len(resultItems) > 0 {
-		infoResultSlice := []*framework.Result{
+		infoResultSlice := kubeobject.Results{
 			{
-				Severity: framework.Info,
+				Severity: kubeobject.Info,
 				Message:  fmt.Sprintf("Number of policies set to [%s]: %d", acn, len(resultItems)),
 			},
 		}
 
 		resultItems = append(infoResultSlice, resultItems...)
 	} else if len(resultItems) == 0 {
-		resultItems = append(resultItems, &framework.Result{
+		resultItems = append(resultItems, &kubeobject.Result{
 			Message:  fmt.Sprintf("Found no policy to set to [%s]", acn),
-			Severity: framework.Warning,
+			Severity: kubeobject.Warning,
 		})
 	}
 
@@ -117,12 +114,13 @@ func processPolicies(resourceList []*yaml.RNode, acn string) ([]*framework.Resul
 }
 
 // getEnforcementAction gets the value to set for enforcementAction from the functionConfig
-func getEnforcementAction(fc *yaml.RNode, acn *string) error {
-	if len(fc.GetDataMap()) != 1 {
+func getEnforcementAction(fc *kubeobject.KubeObject, acn *string) error {
+	data, _, _ := fc.NestedStringMap("data")
+	if len(data) != 1 {
 		return errors.New("expecting exactly 1 enforcementAction as part of the ConfigMap")
 	}
 
-	*acn = fc.GetDataMap()[enforcementActionKey]
+	*acn = data[enforcementActionKey]
 	if *acn != denyActionValue && *acn != warnActionValue && *acn != dryRunActionValue {
 		return fmt.Errorf("expected values for enforcementAction are [%s] or [%s] or [%s]", denyActionValue, warnActionValue, dryRunActionValue)
 	}
@@ -131,13 +129,11 @@ func getEnforcementAction(fc *yaml.RNode, acn *string) error {
 }
 
 // getErrorItem returns the item for an error message
-func getErrorItem(errMsg string) []*framework.Result {
-	return []*framework.Result{
+func getErrorItem(errMsg string) kubeobject.Results {
+	return kubeobject.Results{
 		{
 			Message:  fmt.Sprintf("failed to process policies: %s", errMsg),
-			Severity: framework.Error,
+			Severity: kubeobject.Error,
 		},
 	}
 }
-
-type SetEnforcementActionProcessor struct{}

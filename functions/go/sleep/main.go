@@ -15,21 +15,23 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 
-	"github.com/kptdev/krm-functions-catalog/functions/go/sleep/generated"
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/sleep/processor"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
-func main() {
-	cmd := command.Build(&processor.SleepProcessor{}, command.StandaloneEnabled, false)
-	cmd.Short = generated.SleepShort
-	cmd.Long = generated.SleepLong
-	cmd.Example = generated.SleepExamples
+//go:embed README.md
+var readme []byte
 
-	if err := cmd.Execute(); err != nil {
+//go:embed metadata.yaml
+var metadata []byte
+
+func main() {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(processor.Process), fn.WithDocs(readme, metadata)); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "ERROR: %s\n", err)
 		os.Exit(1)
 	}

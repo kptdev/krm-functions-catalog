@@ -16,11 +16,11 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/stretchr/testify/require"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
 const testDir = "testdata"
@@ -64,7 +64,7 @@ func TestPrunedResources(t *testing.T) {
 	for i := range Tests {
 		test := Tests[i]
 		t.Run(test.Name, func(t *testing.T) {
-			rl := &framework.ResourceList{}
+			rl := &kubeobject.ResourceList{}
 
 			err := loadYAMLs(rl, test.ResFiles...)
 			if err != nil {
@@ -84,15 +84,17 @@ func TestPrunedResources(t *testing.T) {
 	}
 }
 
-func loadYAMLs(rl *framework.ResourceList, filenames ...string) error {
-
+func loadYAMLs(rl *kubeobject.ResourceList, filenames ...string) error {
 	for _, filename := range filenames {
-		node, err := yaml.ReadFile(fmt.Sprintf("%s/%s", testDir, filename))
+		b, err := os.ReadFile(fmt.Sprintf("%s/%s", testDir, filename))
+		if err != nil {
+			return err
+		}
+		node, err := kubeobject.ParseKubeObject(b)
 		if err != nil {
 			return err
 		}
 		rl.Items = append(rl.Items, node)
 	}
-
 	return nil
 }
