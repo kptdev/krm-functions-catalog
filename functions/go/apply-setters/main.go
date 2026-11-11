@@ -15,52 +15,53 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/apply-setters/applysetters"
-	"github.com/kptdev/krm-functions-catalog/functions/go/apply-setters/generated"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
+
 // nolint
 func main() {
-	asp := ApplySettersProcessor{}
-	cmd := command.Build(&asp, command.StandaloneEnabled, false)
-
-	cmd.Short = generated.ApplySettersShort
-	cmd.Long = generated.ApplySettersLong
-	cmd.Example = generated.ApplySettersExamples
-
-	if err := cmd.Execute(); err != nil {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(Process), fn.WithDocs(readme, metadata)); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
 
-type ApplySettersProcessor struct{}
-
-func (asp *ApplySettersProcessor) Process(resourceList *framework.ResourceList) error {
+func Process(resourceList *kubeobject.ResourceList) (bool, error) {
 	items, err := run(resourceList)
 	if err != nil {
 		resourceList.Results = getErrorItem(err.Error())
-		return err
+		return false, err
 	}
 	resourceList.Results = items
-	return nil
+	return true, nil
 }
 
-func run(resourceList *framework.ResourceList) ([]*framework.Result, error) {
-	s, err := getSetters(resourceList.FunctionConfig)
+func run(resourceList *kubeobject.ResourceList) ([]*kubeobject.Result, error) {
+	s, err := getSetters(resourceList.FunctionConfig.CopyToResourceNode())
 	if err != nil {
 		return nil, err
 	}
-	_, err = s.Filter(resourceList.Items)
+	// ApplySetters.Filter mutates the RNodes in place, so capture the filtered
+	// nodes and move them back into the ResourceList to persist the applied
+	// setter values (the Items here are copies and are not mutated otherwise).
+	filtered, err := s.Filter(resourceList.Items.CopyToResourceNodes())
 	if err != nil {
 		return nil, err
 	}
+	resourceList.Items = kubeobject.MoveToKubeObjects(filtered)
 	resultItems, err := resultsToItems(s)
 	if err != nil {
 		return nil, err
@@ -76,19 +77,19 @@ func getSetters(fc *kyaml.RNode) (applysetters.ApplySetters, error) {
 }
 
 // resultsToItems converts the Search and Replace results to
-// equivalent items([]*framework.Result)
-func resultsToItems(sr applysetters.ApplySetters) ([]*framework.Result, error) {
-	var items []*framework.Result
+// equivalent items([]*kubeobject.Result)
+func resultsToItems(sr applysetters.ApplySetters) ([]*kubeobject.Result, error) {
+	var items []*kubeobject.Result
 	if len(sr.Results) == 0 {
-		return []*framework.Result{{Message: "no matches for input setter(s)"}}, nil
+		return []*kubeobject.Result{{Message: "no matches for input setter(s)"}}, nil
 	}
 	for _, res := range sr.Results {
-		items = append(items, &framework.Result{
+		items = append(items, &kubeobject.Result{
 			Message:     res.Message,
 			Severity:    res.Severity,
 			File:        res.File,
 			ResourceRef: res.ResourceRef,
-			Field: &framework.Field{
+			Field: &kubeobject.Field{
 				Path:          res.Field.Path,
 				CurrentValue:  res.Field.CurrentValue,
 				ProposedValue: res.Field.ProposedValue,
@@ -99,11 +100,11 @@ func resultsToItems(sr applysetters.ApplySetters) ([]*framework.Result, error) {
 }
 
 // getErrorItem returns the item for input error message
-func getErrorItem(errMsg string) []*framework.Result {
-	return []*framework.Result{
+func getErrorItem(errMsg string) []*kubeobject.Result {
+	return []*kubeobject.Result{
 		{
 			Message:  fmt.Sprintf("failed to apply setters: %s", errMsg),
-			Severity: framework.Error,
+			Severity: kubeobject.Error,
 		},
 	}
 }

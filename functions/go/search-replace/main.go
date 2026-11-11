@@ -15,54 +15,57 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 
-	"github.com/kptdev/krm-functions-catalog/functions/go/search-replace/generated"
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/search-replace/searchreplace"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
+
 // nolint
 func main() {
-	srp := SearchReplaceProcessor{}
-	cmd := command.Build(&srp, command.StandaloneEnabled, false)
-
-	cmd.Short = generated.SearchReplaceShort
-	cmd.Long = generated.SearchReplaceLong
-	cmd.Example = generated.SearchReplaceExamples
-
-	if err := cmd.Execute(); err != nil {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(Process), fn.WithDocs(readme, metadata)); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
 
-type SearchReplaceProcessor struct{}
-
-func (srp *SearchReplaceProcessor) Process(resourceList *framework.ResourceList) error {
+func Process(resourceList *kubeobject.ResourceList) (bool, error) {
 	results, err := run(resourceList)
 	if err != nil {
 		resourceList.Results = getErrorResult(err.Error())
-		return err
+		return false, err
 	}
 	resourceList.Results = results
-	return nil
+	return true, nil
 }
 
 // run resolves the function params from input ResourceList and runs the function on resources
-func run(resourceList *framework.ResourceList) (framework.Results, error) {
-	sr, err := getSearchReplaceParams(resourceList.FunctionConfig)
+func run(resourceList *kubeobject.ResourceList) ([]*kubeobject.Result, error) {
+	sr, err := getSearchReplaceParams(resourceList.FunctionConfig.CopyToResourceNode())
 	if err != nil {
 		return nil, err
 	}
 
-	_, err = sr.Filter(resourceList.Items)
+	// SearchReplace.Filter mutates the RNodes in place when a put-* parameter is
+	// set (replace mode), so capture the filtered nodes and move them back into
+	// the ResourceList to persist the replacements (the Items here are copies
+	// and are not mutated otherwise). In search-only mode the nodes are
+	// unchanged, so moving them back is a harmless round-trip.
+	filtered, err := sr.Filter(resourceList.Items.CopyToResourceNodes())
 	if err != nil {
 		return nil, err
 	}
+	resourceList.Items = kubeobject.MoveToKubeObjects(filtered)
 
 	return searchResultsToItems(sr), nil
 }
@@ -77,11 +80,11 @@ func getSearchReplaceParams(fc *kyaml.RNode) (searchreplace.SearchReplace, error
 }
 
 // searchResultsToItems converts the Search and Replace results to
-// equivalent items(framework.Results)
-func searchResultsToItems(sr searchreplace.SearchReplace) framework.Results {
-	var results framework.Results
+// equivalent items([]*kubeobject.Result)
+func searchResultsToItems(sr searchreplace.SearchReplace) []*kubeobject.Result {
+	var results []*kubeobject.Result
 	if len(sr.Results) == 0 {
-		results = append(results, &framework.Result{
+		results = append(results, &kubeobject.Result{
 			Message: "no matches",
 		})
 		return results
@@ -94,21 +97,21 @@ func searchResultsToItems(sr searchreplace.SearchReplace) framework.Results {
 			message = fmt.Sprintf("Matched field value %q", res.Value)
 		}
 
-		results = append(results, &framework.Result{
+		results = append(results, &kubeobject.Result{
 			Message: message,
-			Field:   &framework.Field{Path: res.FieldPath},
-			File:    &framework.File{Path: res.FilePath},
+			Field:   &kubeobject.Field{Path: res.FieldPath},
+			File:    &kubeobject.File{Path: res.FilePath},
 		})
 	}
 	return results
 }
 
 // getErrorResult returns the result for input error message
-func getErrorResult(errMsg string) framework.Results {
-	return framework.Results{
-		&framework.Result{
+func getErrorResult(errMsg string) []*kubeobject.Result {
+	return []*kubeobject.Result{
+		{
 			Message:  fmt.Sprintf("failed to perform search-replace operation: %q", errMsg),
-			Severity: framework.Error,
+			Severity: kubeobject.Error,
 		},
 	}
 }
