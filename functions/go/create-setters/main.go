@@ -15,52 +15,50 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/create-setters/createsetters"
-	"github.com/kptdev/krm-functions-catalog/functions/go/create-setters/generated"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
+
 // nolint
 func main() {
-	csp := CreateSettersProcessor{}
-	cmd := command.Build(&csp, command.StandaloneEnabled, false)
-
-	cmd.Short = generated.CreateSettersShort
-	cmd.Long = generated.CreateSettersLong
-	cmd.Example = generated.CreateSettersExamples
-
-	if err := cmd.Execute(); err != nil {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(Process), fn.WithDocs(readme, metadata)); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
 
-type CreateSettersProcessor struct{}
-
-func (csp *CreateSettersProcessor) Process(resourceList *framework.ResourceList) error {
+func Process(resourceList *kubeobject.ResourceList) (bool, error) {
 	items, err := run(resourceList)
 	if err != nil {
 		resourceList.Results = getErrorItem(err.Error())
-		return err
+		return false, err
 	}
 	resourceList.Results = items
-	return nil
+	return true, nil
 }
 
-func run(resourceList *framework.ResourceList) ([]*framework.Result, error) {
-	s, err := getSetters(resourceList.FunctionConfig)
+func run(resourceList *kubeobject.ResourceList) ([]*kubeobject.Result, error) {
+	s, err := getSetters(resourceList.FunctionConfig.CopyToResourceNode())
 	if err != nil {
 		return nil, err
 	}
-	_, err = s.Filter(resourceList.Items)
+	filtered, err := s.Filter(resourceList.Items.CopyToResourceNodes())
 	if err != nil {
 		return nil, err
 	}
+	resourceList.Items = kubeobject.MoveToKubeObjects(filtered)
 	resultItems, err := resultsToItems(s)
 	if err != nil {
 		return nil, err
@@ -76,28 +74,28 @@ func getSetters(fc *kyaml.RNode) (createsetters.CreateSetters, error) {
 }
 
 // resultsToItems converts the create-setters results to
-// equivalent items([]framework.Item)
-func resultsToItems(sr createsetters.CreateSetters) ([]*framework.Result, error) {
-	var items []*framework.Result
+// equivalent items([]*kubeobject.Result)
+func resultsToItems(sr createsetters.CreateSetters) ([]*kubeobject.Result, error) {
+	var items []*kubeobject.Result
 	if len(sr.Results) == 0 {
 		return nil, fmt.Errorf("no matches for the input list of setters")
 	}
 	for _, res := range sr.Results {
-		items = append(items, &framework.Result{
+		items = append(items, &kubeobject.Result{
 			Message: fmt.Sprintf("Added line comment %q for field with value %q", res.Comment, res.Value),
-			Field:   &framework.Field{Path: res.FieldPath},
-			File:    &framework.File{Path: res.FilePath},
+			Field:   &kubeobject.Field{Path: res.FieldPath},
+			File:    &kubeobject.File{Path: res.FilePath},
 		})
 	}
 	return items, nil
 }
 
 // getErrorItem returns the item for input error message
-func getErrorItem(errMsg string) []*framework.Result {
-	return []*framework.Result{
+func getErrorItem(errMsg string) []*kubeobject.Result {
+	return []*kubeobject.Result{
 		{
 			Message:  fmt.Sprintf("failed to create setters: %s", errMsg),
-			Severity: framework.Error,
+			Severity: kubeobject.Error,
 		},
 	}
 }

@@ -15,50 +15,44 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 
-	"github.com/kptdev/krm-functions-catalog/functions/go/list-setters/generated"
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/list-setters/listsetters"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
+
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
 
 // nolint
 func main() {
-	lsp := ListSettersProcessor{}
-	cmd := command.Build(&lsp, command.StandaloneEnabled, false)
-
-	cmd.Short = generated.ListSettersShort
-	cmd.Long = generated.ListSettersLong
-	cmd.Example = generated.ListSettersExamples
-
-	if err := cmd.Execute(); err != nil {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(Process), fn.WithDocs(readme, metadata)); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
 
-type ListSettersProcessor struct{}
-
-func (lsp *ListSettersProcessor) Process(resourceList *framework.ResourceList) error {
-	resourceList.Results = framework.Results{
-		&framework.Result{
-			Message: "list-setters",
-		},
-	}
+func Process(resourceList *kubeobject.ResourceList) (bool, error) {
 	results, err := run(resourceList)
 	if err != nil {
-		resourceList.Results = getErrorItem(fmt.Sprintf("failed to list setters: %s", err.Error()), framework.Error)
-		return err
+		resourceList.Results = getErrorItem(fmt.Sprintf("failed to list setters: %s", err.Error()), kubeobject.Error)
+		return false, err
 	}
 	resourceList.Results = results
-	return nil
+	return true, nil
 }
 
-func run(resourceList *framework.ResourceList) (framework.Results, error) {
+func run(resourceList *kubeobject.ResourceList) ([]*kubeobject.Result, error) {
 	ls := listsetters.New()
-	_, err := ls.Filter(resourceList.Items)
+	// list-setters only discovers and reports setters; Filter does not mutate
+	// the nodes, so the filtered result is intentionally discarded.
+	_, err := ls.Filter(resourceList.Items.CopyToResourceNodes())
 	if err != nil {
 		return nil, err
 	}
@@ -70,15 +64,15 @@ func run(resourceList *framework.ResourceList) (framework.Results, error) {
 }
 
 // resultsToItems converts the listsetters results to
-// equivalent items([]framework.Item)
-func resultsToItems(sr listsetters.ListSetters) (framework.Results, error) {
-	var results framework.Results
+// equivalent items([]*kubeobject.Result)
+func resultsToItems(sr listsetters.ListSetters) ([]*kubeobject.Result, error) {
+	var results []*kubeobject.Result
 	rs := sr.GetResults()
 	if len(rs) == 0 {
-		return getErrorItem("no setters found", framework.Warning), nil
+		return getErrorItem("no setters found", kubeobject.Warning), nil
 	}
 	for _, r := range rs {
-		results = append(results, &framework.Result{
+		results = append(results, &kubeobject.Result{
 			Message: r.String(),
 		})
 	}
@@ -86,9 +80,9 @@ func resultsToItems(sr listsetters.ListSetters) (framework.Results, error) {
 }
 
 // getErrorItem returns the item for an error message
-func getErrorItem(errMsg string, severity framework.Severity) framework.Results {
-	return framework.Results{
-		&framework.Result{
+func getErrorItem(errMsg string, severity kubeobject.Severity) []*kubeobject.Result {
+	return []*kubeobject.Result{
+		{
 			Message:  errMsg,
 			Severity: severity,
 		},
