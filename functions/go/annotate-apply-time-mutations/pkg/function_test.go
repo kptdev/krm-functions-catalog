@@ -20,9 +20,9 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/stretchr/testify/assert"
 	"sigs.k8s.io/cli-utils/pkg/testutil"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
@@ -35,7 +35,7 @@ func TestFunctionProcess(t *testing.T) {
 	testCases := map[string]struct {
 		configs         [][]string
 		expectedConfigs [][]string
-		expectedResults framework.Results
+		expectedResults kubeobject.Results
 	}{
 		"apply-time-mutation comment": {
 			configs: [][]string{
@@ -71,8 +71,8 @@ spec:
 `,
 				},
 			},
-			expectedResults: framework.Results{
-				&framework.Result{
+			expectedResults: kubeobject.Results{
+				&kubeobject.Result{
 					Message:  "Found valid apply-time-mutation comment (item: 0): # apply-time-mutation: ${foo.bar/v0/namespaces/example-namespace/OtherKind/example-name2:$.status.count}",
 					Severity: "info",
 					ResourceRef: &yaml.ResourceIdentifier{
@@ -85,10 +85,10 @@ spec:
 							Namespace: "test-namespace",
 						},
 					},
-					Field: &framework.Field{Path: "$.spec.a", CurrentValue: 0, ProposedValue: nil},
-					File:  &framework.File{Path: "file-0.yaml", Index: 0},
+					Field: &kubeobject.Field{Path: "$.spec.a", CurrentValue: "0", ProposedValue: ""},
+					File:  &kubeobject.File{Path: "file-0.yaml", Index: 0},
 				},
-				&framework.Result{
+				&kubeobject.Result{
 					Message:  "Wrote apply-time-mutation annotation (item: 0)",
 					Severity: "info",
 					ResourceRef: &yaml.ResourceIdentifier{
@@ -101,7 +101,7 @@ spec:
 							Namespace: "test-namespace",
 						},
 					},
-					File: &framework.File{Path: "file-0.yaml", Index: 0},
+					File: &kubeobject.File{Path: "file-0.yaml", Index: 0},
 				},
 			},
 		},
@@ -196,8 +196,8 @@ spec:
 `,
 				},
 			},
-			expectedResults: framework.Results{
-				&framework.Result{
+			expectedResults: kubeobject.Results{
+				&kubeobject.Result{
 					Message:  "Found valid ApplyTimeMutation object (item: 0)",
 					Severity: "info",
 					ResourceRef: &yaml.ResourceIdentifier{
@@ -209,9 +209,9 @@ spec:
 							Name: "example",
 						},
 					},
-					File: &framework.File{Path: "file-0.yaml", Index: 0},
+					File: &kubeobject.File{Path: "file-0.yaml", Index: 0},
 				},
-				&framework.Result{
+				&kubeobject.Result{
 					Message:  "Wrote apply-time-mutation annotation (item: 2)",
 					Severity: "info",
 					ResourceRef: &yaml.ResourceIdentifier{
@@ -224,7 +224,7 @@ spec:
 							Namespace: "test-namespace",
 						},
 					},
-					File: &framework.File{Path: "file-1.yaml", Index: 1},
+					File: &kubeobject.File{Path: "file-1.yaml", Index: 1},
 				},
 			},
 		},
@@ -235,17 +235,16 @@ spec:
 			items, err := stringsToItems(tc.configs)
 			assert.NoError(t, err)
 
-			resourceList := &framework.ResourceList{
-				Items: items,
+			resourceList := &kubeobject.ResourceList{
+				Items: kubeobject.MoveToKubeObjects(items),
 			}
 
-			fn := Function{}
-			err = fn.Process(resourceList)
+			_, err = Process(resourceList)
 			assert.NoError(t, err)
 
 			assert.Equal(t, tc.expectedResults, resourceList.Results)
 
-			configs, err := itemsToStrings(resourceList.Items)
+			configs, err := itemsToStrings(resourceList.Items.CopyToResourceNodes())
 			assert.NoError(t, err)
 			testutil.AssertEqual(t, tc.expectedConfigs, configs)
 		})

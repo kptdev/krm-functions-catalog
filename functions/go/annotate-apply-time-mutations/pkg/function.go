@@ -1,4 +1,4 @@
-// Copyright 2021-2025 The kpt Authors
+// Copyright 2021-2026 The kpt Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,62 +19,57 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/cli-utils/pkg/object/mutation"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
-type Function struct{}
-
-// Ensure Function satisfies the ResourceListProcessor interface.
-var _ framework.ResourceListProcessor = &Function{}
-
-func (rp *Function) Process(resourceList *framework.ResourceList) error {
+func Process(resourceList *kubeobject.ResourceList) (bool, error) {
 	targetMutations := map[mutation.ResourceReference]mutation.ApplyTimeMutation{}
 
 	// scan all the items for ApplyTimeMutation objects
 	fmt.Fprintln(os.Stderr, "Scanning items for ApplyTimeMutation objects")
-	err := visitItems(resourceList, func(itemIndex int, objMeta yaml.ResourceIdentifier, objFile framework.File, obj *yaml.RNode) (framework.Results, error) {
+	err := visitItems(resourceList, func(itemIndex int, objMeta yaml.ResourceIdentifier, objFile kubeobject.File, obj *yaml.RNode) (kubeobject.Results, bool, error) {
 		fmt.Fprintf(os.Stderr, "Scanning (Item: %d, Object: %+v, File: %+v)\n", itemIndex, objMeta, objFile)
-		var fnResults framework.Results
+		var fnResults kubeobject.Results
 		scanner := ObjectScanner{}
 		atm, err := scanner.Scan(obj)
 		if err != nil {
-			fnResults = append(fnResults, &framework.Result{
-				Severity:    framework.Error,
+			fnResults = append(fnResults, &kubeobject.Result{
+				Severity:    kubeobject.Error,
 				Message:     fmt.Sprintf("Error scanning object (item: %d): %v", itemIndex, err),
 				ResourceRef: &objMeta,
 				File:        &objFile,
 			})
 			// not fatal, do not return error
-			return fnResults, nil
+			return fnResults, false, nil
 		}
 		if atm == nil {
 			// no ApplyTimeMutation object found
-			return fnResults, nil
+			return fnResults, false, nil
 		}
 		fmt.Fprintf(os.Stderr, "Found valid ApplyTimeMutation object (item: %d)\n", itemIndex)
-		fnResults = append(fnResults, &framework.Result{
-			Severity:    framework.Info,
+		fnResults = append(fnResults, &kubeobject.Result{
+			Severity:    kubeobject.Info,
 			Message:     fmt.Sprintf("Found valid ApplyTimeMutation object (item: %d)", itemIndex),
 			ResourceRef: &objMeta,
 			File:        &objFile,
 		})
 		targetMutations[atm.Spec.TargetRef] = atm.Spec.Substitutions
-		return fnResults, nil
+		return fnResults, false, nil
 	})
 	if err != nil {
 		// fatal error
-		return err
+		return false, err
 	}
 
 	// Scan for objects targetted by ApplyTimeMutation objects
 	fmt.Fprintln(os.Stderr, "Scanning items for mutation targets")
-	err = visitItems(resourceList, func(itemIndex int, objMeta yaml.ResourceIdentifier, objFile framework.File, obj *yaml.RNode) (framework.Results, error) {
+	err = visitItems(resourceList, func(itemIndex int, objMeta yaml.ResourceIdentifier, objFile kubeobject.File, obj *yaml.RNode) (kubeobject.Results, bool, error) {
 		fmt.Fprintf(os.Stderr, "Scanning (Item: %d, Object: %+v, File: %+v)\n", itemIndex, objMeta, objFile)
-		var fnResults framework.Results
+		var fnResults kubeobject.Results
 
 		atm, found := targetMutations[refWithVersion(objMeta)]
 		if !found {
@@ -82,104 +77,105 @@ func (rp *Function) Process(resourceList *framework.ResourceList) error {
 			if !found {
 				// no match found
 				// not fatal, do not return error
-				return fnResults, nil
+				return fnResults, false, nil
 			}
 		}
 
 		fmt.Fprintf(os.Stderr, "Writing annotation (Item: %d, Object: %+v, File: %+v)\n", itemIndex, objMeta, objFile)
 		err = WriteAnnotation(obj, atm)
 		if err != nil {
-			fnResults = append(fnResults, &framework.Result{
-				Severity:    framework.Error,
+			fnResults = append(fnResults, &kubeobject.Result{
+				Severity:    kubeobject.Error,
 				Message:     fmt.Sprintf("Error writing annotation (item: %d): %v", itemIndex, err),
 				ResourceRef: &objMeta,
 				File:        &objFile,
 			})
 			// not fatal, do not return error
-			return fnResults, nil
+			return fnResults, false, nil
 		}
-		fnResults = append(fnResults, &framework.Result{
-			Severity:    framework.Info,
+		fnResults = append(fnResults, &kubeobject.Result{
+			Severity:    kubeobject.Info,
 			Message:     fmt.Sprintf("Wrote apply-time-mutation annotation (item: %d)", itemIndex),
 			ResourceRef: &objMeta,
 			File:        &objFile,
 		})
-		return fnResults, nil
+		return fnResults, true, nil
 	})
 	if err != nil {
 		// fatal error
-		return err
+		return false, err
 	}
 
 	// Scan all the items for apply-time-mutation comments
 	fmt.Fprintln(os.Stderr, "Scanning items for apply-time-mutation comments")
-	err = visitItems(resourceList, func(itemIndex int, objMeta yaml.ResourceIdentifier, objFile framework.File, obj *yaml.RNode) (framework.Results, error) {
+	err = visitItems(resourceList, func(itemIndex int, objMeta yaml.ResourceIdentifier, objFile kubeobject.File, obj *yaml.RNode) (kubeobject.Results, bool, error) {
 		fmt.Fprintf(os.Stderr, "Scanning (Item: %d, Object: %+v, File: %+v)\n", itemIndex, objMeta, objFile)
-		var fnResults framework.Results
+		var fnResults kubeobject.Results
 		scanner := CommentScanner{
 			ObjMeta: objMeta,
 			ObjFile: objFile,
 		}
 		scanResults, err := scanner.Scan(obj)
 		if err != nil {
-			fnResults = append(fnResults, &framework.Result{
-				Severity:    framework.Error,
+			fnResults = append(fnResults, &kubeobject.Result{
+				Severity:    kubeobject.Error,
 				Message:     fmt.Sprintf("Error scanning object (item: %d): %v", itemIndex, err),
 				ResourceRef: &objMeta,
 				File:        &objFile,
 			})
 			// not fatal, do not return error
-			return fnResults, nil
+			return fnResults, false, nil
 		}
 		if len(scanResults) == 0 {
 			// no apply-time-mutation comment found
-			return fnResults, nil
+			return fnResults, false, nil
 		}
 		subs := make(mutation.ApplyTimeMutation, 0, len(fnResults))
 		for _, scanResult := range scanResults {
 			fmt.Fprintf(os.Stderr, "Found valid apply-time-mutation comment (item: %d, field: %q): %s\n", itemIndex, scanResult.Path, scanResult.Comment)
 			subs = append(subs, scanResult.Substitution)
-			fnResults = append(fnResults, &framework.Result{
-				Severity:    framework.Info,
+			fnResults = append(fnResults, &kubeobject.Result{
+				Severity:    kubeobject.Info,
 				Message:     fmt.Sprintf("Found valid apply-time-mutation comment (item: %d): %s", itemIndex, scanResult.Comment),
 				ResourceRef: &objMeta,
 				File:        &objFile,
-				Field: &framework.Field{
+				Field: &kubeobject.Field{
 					Path:         scanResult.Path,
-					CurrentValue: scanResult.Value,
+					CurrentValue: fmt.Sprintf("%v", scanResult.Value),
 				},
 			})
 		}
 		fmt.Fprintf(os.Stderr, "Writing annotation (Item: %d, Object: %+v, File: %+v)\n", itemIndex, objMeta, objFile)
 		err = WriteAnnotation(obj, subs)
 		if err != nil {
-			fnResults = append(fnResults, &framework.Result{
-				Severity:    framework.Error,
+			fnResults = append(fnResults, &kubeobject.Result{
+				Severity:    kubeobject.Error,
 				Message:     fmt.Sprintf("Error writing annotation (item: %d): %v", itemIndex, err),
 				ResourceRef: &objMeta,
 				File:        &objFile,
 			})
 			// not fatal, do not return error
-			return fnResults, nil
+			return fnResults, false, nil
 		}
-		fnResults = append(fnResults, &framework.Result{
-			Severity:    framework.Info,
+		fnResults = append(fnResults, &kubeobject.Result{
+			Severity:    kubeobject.Info,
 			Message:     fmt.Sprintf("Wrote apply-time-mutation annotation (item: %d)", itemIndex),
 			ResourceRef: &objMeta,
 			File:        &objFile,
 		})
-		return fnResults, nil
+		return fnResults, true, nil
 	})
 	if err != nil {
 		// fatal error
-		return err
+		return false, err
 	}
 
-	return nil
+	return true, nil
 }
 
-func visitItems(resourceList *framework.ResourceList, fn func(int, yaml.ResourceIdentifier, framework.File, *yaml.RNode) (framework.Results, error)) error {
-	for i, node := range resourceList.Items {
+func visitItems(resourceList *kubeobject.ResourceList, fn func(int, yaml.ResourceIdentifier, kubeobject.File, *yaml.RNode) (kubeobject.Results, bool, error)) error {
+	for i, nodeObj := range resourceList.Items {
+		node := nodeObj.CopyToResourceNode()
 		filePath, fileIndexStr, err := kioutil.GetFileAnnotations(node)
 		if err != nil {
 			return fmt.Errorf("item %d has invalid file annotations: %w", i, err)
@@ -193,15 +189,18 @@ func visitItems(resourceList *framework.ResourceList, fn func(int, yaml.Resource
 			return fmt.Errorf("item %d has invalid file index: %q", i, fileIndexStr)
 		}
 		objMeta := meta.GetIdentifier()
-		objFile := framework.File{
+		objFile := kubeobject.File{
 			Path:  filePath,
 			Index: fileIndex,
 		}
-		itemResults, err := fn(i, objMeta, objFile, node)
+		itemResults, modified, err := fn(i, objMeta, objFile, node)
 		resourceList.Results = append(resourceList.Results, itemResults...)
 		if err != nil {
 			// fatal error
 			return err
+		}
+		if modified {
+			resourceList.Items[i] = kubeobject.NewKubeObjectFromResourceNode(node)
 		}
 	}
 	return nil
