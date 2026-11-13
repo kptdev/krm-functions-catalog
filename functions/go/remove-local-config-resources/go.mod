@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/remove-local-config-resources
 
-go 1.26.8
+go 1.26.9
 
 require (
 	github.com/kptdev/kpt/api v1.1.0

@@ -1,6 +1,6 @@
 module github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring
 
-go 1.26.8
+go 1.26.9
 
 require (
 	github.com/stretchr/testify v1.12.1
