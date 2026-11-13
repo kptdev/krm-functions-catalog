@@ -1,4 +1,4 @@
-// Copyright 2021-2025 The kpt Authors
+// Copyright 2021-2026 The kpt Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,18 +15,23 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/annotate-apply-time-mutations/pkg"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 )
 
-func main() {
-	fn := pkg.Function{}
-	cmd := command.Build(&fn, command.StandaloneEnabled, false)
+//go:embed README.md
+var readme []byte
 
-	if err := cmd.Execute(); err != nil {
+//go:embed metadata.yaml
+var metadata []byte
+
+func main() {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(pkg.Process), fn.WithDocs(readme, metadata)); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
