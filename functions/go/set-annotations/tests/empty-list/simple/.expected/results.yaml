@@ -5,7 +5,7 @@ metadata:
 exitCode: 1
 items:
   - image: ghcr.io/kptdev/krm-functions-catalog/set-annotations:latest
-    stderr: '[error]: failed to configure function: `functionConfig` must be a `ConfigMap` or `SetAnnotations`'
+    stderr: 'failed to evaluate function: [error]: failed to configure function: `functionConfig` must be a `ConfigMap` or `SetAnnotations`'
     exitCode: 1
     results:
       - message: 'failed to configure function: `functionConfig` must be a `ConfigMap` or `SetAnnotations`'

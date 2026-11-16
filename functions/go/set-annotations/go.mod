@@ -4,12 +4,15 @@ go 1.26.9
 
 require (
 	github.com/google/go-cmp v0.7.0
+	github.com/kptdev/kpt/api v1.1.0
+	github.com/kptdev/krm-functions-sdk/go/fn v1.2.0
 	sigs.k8s.io/kustomize/api v0.21.2
 	sigs.k8s.io/kustomize/kyaml v0.21.2
 	sigs.k8s.io/yaml v1.6.0
 )
 
 require (
+	github.com/distribution/reference v0.6.0 // indirect
 	github.com/go-errors/errors v1.5.1 // indirect
 	github.com/go-openapi/jsonpointer v1.0.0 // indirect
 	github.com/go-openapi/jsonreference v1.0.0 // indirect
@@ -26,10 +29,8 @@ require (
 	github.com/go-openapi/swag/typeutils v0.27.1 // indirect
 	github.com/go-openapi/swag/yamlutils v0.27.1 // indirect
 	github.com/google/gnostic-models v0.7.1 // indirect
-	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
-	github.com/spf13/cobra v1.10.2 // indirect
-	github.com/spf13/pflag v1.0.10 // indirect
+	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/xlab/treeprint v1.2.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect

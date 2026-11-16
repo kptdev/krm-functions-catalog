@@ -1,5 +1,5 @@
 diff --git a/Kptfile b/Kptfile
-index 1fe74c1..52ede48 100644
+index 1fe74c1..8cd3145 100644
 --- a/Kptfile
 +++ b/Kptfile
 @@ -5,4 +5,23 @@ metadata:
@@ -18,7 +18,7 @@ index 1fe74c1..52ede48 100644
 +  renderStatus:
 +    mutationSteps:
 +      - image: ghcr.io/kptdev/krm-functions-catalog/set-annotations:latest
-+        stderr: '[error]: failed to configure function: `functionConfig` must be a `ConfigMap` or `SetAnnotations`'
++        stderr: 'failed to evaluate function: [error]: failed to configure function: `functionConfig` must be a `ConfigMap` or `SetAnnotations`'
 +        exitCode: 1
 +        results:
 +          - message: 'failed to configure function: `functionConfig` must be a `ConfigMap` or `SetAnnotations`'

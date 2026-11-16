@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/stretchr/testify/assert"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
@@ -402,16 +403,17 @@ data:
 	tc, err := getDefaultConfig()
 	assert.NoError(t, err)
 	ensp := EnsureNameSubstringProcessor{tc: &tc}
-	rl := &framework.ResourceList{
-		Items:          []*yaml.RNode{kptfile},
-		FunctionConfig: config,
+	rl := &kubeobject.ResourceList{
+		Items:          kubeobject.MoveToKubeObjects([]*yaml.RNode{kptfile}),
+		FunctionConfig: kubeobject.MoveToKubeObject(config),
 	}
 
 	// when
-	err = ensp.Process(rl)
+	ok, err := ensp.Process(rl)
 
 	// then
 	assert.NoError(t, err)
+	assert.True(t, ok)
 	assert.Len(t, rl.Items, 1)
 	assert.Equal(t, "test-ensure-name-substring", rl.Items[0].GetName())
 	assert.Equal(t, "Kptfile", rl.Items[0].GetAnnotations()[kioutil.PathAnnotation])
@@ -444,16 +446,17 @@ data:
 	tc, err := getDefaultConfig()
 	assert.NoError(t, err)
 	ensp := EnsureNameSubstringProcessor{tc: &tc}
-	rl := &framework.ResourceList{
-		Items:          []*yaml.RNode{cm},
-		FunctionConfig: config,
+	rl := &kubeobject.ResourceList{
+		Items:          kubeobject.MoveToKubeObjects([]*yaml.RNode{cm}),
+		FunctionConfig: kubeobject.MoveToKubeObject(config),
 	}
 
 	// when
-	err = ensp.Process(rl)
+	ok, err := ensp.Process(rl)
 
 	// then
 	assert.NoError(t, err)
+	assert.True(t, ok)
 	assert.Len(t, rl.Items, 1)
 	assert.Equal(t, "prod-the-map", rl.Items[0].GetName())
 	assert.Equal(t, "resources.yaml", rl.Items[0].GetAnnotations()[kioutil.PathAnnotation])
