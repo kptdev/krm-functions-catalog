@@ -112,7 +112,7 @@ This package has no sub-packages.
 
 1.  Clone the package:
     ¬¬¬shell
-    kpt pkg get https://github.com/GoogleCloudPlatform/blueprints.git/catalog/project@${VERSION}
+    kpt pkg get https://github.com/kptdev/kpt-samples.git/project@${VERSION}
     ¬¬¬
     Replace ¬${VERSION}¬ with the desired repo branch or tag
     (for example, ¬main¬).
@@ -230,7 +230,7 @@ This package has no sub-packages.
 
 1.  Clone the package:
     ¬¬¬shell
-    kpt pkg get https://github.com/GoogleCloudPlatform/blueprints.git/catalog/foopkg@${VERSION}
+    kpt pkg get https://github.com/kptdev/kpt-samples.git/foopkg@${VERSION}
     ¬¬¬
     Replace ¬${VERSION}¬ with the desired repo branch or tag
     (for example, ¬main¬).
@@ -360,7 +360,7 @@ spec:
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			res := getRNodesFromStr(t, tt.r)
-			gotTitle, gotDoc, err := GenerateBlueprintReadme(res, "https://github.com/GoogleCloudPlatform/blueprints.git/catalog/", tt.pkgName)
+			gotTitle, gotDoc, err := GenerateBlueprintReadme(res, "https://github.com/kptdev/kpt-samples.git/", tt.pkgName)
 			require := require.New(t)
 			if tt.err != "" {
 				require.EqualError(err, tt.err)

@@ -27,7 +27,7 @@ This function supports `ConfigMap` `functionConfig`.
 
 - A `readme-path` can be provided to write to a specific file. If a `readme-path` is not provided, it defaults to `/tmp/README.md`. If the file specified via `readme-path` does not exist, readme generation is skipped with a warning.
 
-- A `repo-path` can be provided to include in usage section. This will generate a usage section with sample commands like `kpt pkg get ${repo-path}/{pkg-name}@version`. If a `repo-path` is not provided, it defaults to `https://github.com/GoogleCloudPlatform/blueprints.git/catalog`.
+- A `repo-path` can be provided to include in usage section. This will generate a usage section with sample commands like `kpt pkg get ${repo-path}/{pkg-name}@version`. If a `repo-path` is not provided, it defaults to `https://github.com/kptdev/kpt-samples.git`.
 
 - A `pkg-name` can be provided to include in usage section. This will generate a usage section with sample commands like `kpt pkg get ${repo-path}/{pkg-name}@version`. If a `pkg-name` is not provided, it defaults to the name specified in the Kptfile.
 
@@ -154,7 +154,7 @@ This package has no sub-packages.
 
 1.  Clone the package:
     ```shell
-    kpt pkg get https://github.com/GoogleCloudPlatform/blueprints.git/catalog/bucket@${VERSION}
+    kpt pkg get https://github.com/kptdev/kpt-samples.git/bucket@${VERSION}
     ```
     Replace `${VERSION}` with the desired repo branch or tag
     (for example, `main`).

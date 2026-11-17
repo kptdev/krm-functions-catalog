@@ -15,57 +15,55 @@
 package main
 
 import (
+	_ "embed"
 	"errors"
 	"fmt"
 	"os"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	"github.com/kptdev/krm-functions-catalog/functions/go/generate-kpt-pkg-docs/docs"
-	"github.com/kptdev/krm-functions-catalog/functions/go/generate-kpt-pkg-docs/generated"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
 const defaultReadmePath = "/tmp/README.md"
-const defaultRepoPath = "https://github.com/GoogleCloudPlatform/blueprints.git/catalog/"
+const defaultRepoPath = "https://github.com/kptdev/kpt-samples.git/"
+
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
 
 // nolint
 func main() {
-	rp := ReadmeProcessor{}
-	cmd := command.Build(&rp, command.StandaloneEnabled, false)
-
-	cmd.Short = generated.GenerateKptPkgDocsShort
-	cmd.Long = generated.GenerateKptPkgDocsLong
-	cmd.Example = generated.GenerateKptPkgDocsExamples
-	if err := cmd.Execute(); err != nil {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(Process), fn.WithDocs(readme, metadata)); err != nil {
 		os.Exit(1)
 	}
 }
 
-type ReadmeProcessor struct{}
-
-func (rp *ReadmeProcessor) Process(resourceList *framework.ResourceList) error {
-	readmePath, repoPath, pkgName := parseFnCfg(resourceList.FunctionConfig)
+func Process(resourceList *kubeobject.ResourceList) (bool, error) {
+	readmePath, repoPath, pkgName := parseFnCfg(resourceList.FunctionConfig.CopyToResourceNode())
 
 	currentDoc, err := os.ReadFile(readmePath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			resourceList.Results = getResults(fmt.Sprintf("Skipping readme generation: %s", err), framework.Warning)
-			return nil
+			resourceList.Results = getResults(fmt.Sprintf("Skipping readme generation: %s", err), kubeobject.Warning)
+			return true, nil
 		} else {
-			resourceList.Results = getResults(err.Error(), framework.Error)
+			resourceList.Results = getResults(err.Error(), kubeobject.Error)
 		}
 	}
 	err = generateReadme(repoPath, readmePath, pkgName, string(currentDoc), resourceList)
 	if err != nil {
-		resourceList.Results = getResults(err.Error(), framework.Error)
-		return err
+		resourceList.Results = getResults(err.Error(), kubeobject.Error)
+		return false, err
 	}
-	return nil
+	return true, nil
 }
 
-func generateReadme(repoPath, readmePath, pkgName, currentDoc string, resourceList *framework.ResourceList) error {
-	title, generatedDoc, err := docs.GenerateBlueprintReadme(resourceList.Items, repoPath, pkgName)
+func generateReadme(repoPath, readmePath, pkgName, currentDoc string, resourceList *kubeobject.ResourceList) error {
+	title, generatedDoc, err := docs.GenerateBlueprintReadme(resourceList.Items.CopyToResourceNodes(), repoPath, pkgName)
 	if err != nil {
 		return err
 	}
@@ -96,8 +94,8 @@ func parseFnCfg(r *yaml.RNode) (string, string, string) {
 }
 
 // getResults returns the item for input error message
-func getResults(msg string, severity framework.Severity) []*framework.Result {
-	return []*framework.Result{
+func getResults(msg string, severity kubeobject.Severity) []*kubeobject.Result {
+	return []*kubeobject.Result{
 		{
 			Message:  fmt.Sprintf("failed to generate doc: %s", msg),
 			Severity: severity,
