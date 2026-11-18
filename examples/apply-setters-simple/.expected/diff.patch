@@ -1,8 +1,8 @@
 diff --git a/Kptfile b/Kptfile
-index 152ea13..d2c2af5 100644
+index 152ea13..578ab3f 100644
 --- a/Kptfile
 +++ b/Kptfile
-@@ -8,3 +8,53 @@ pipeline:
+@@ -8,3 +8,69 @@ pipeline:
    mutators:
      - image: ghcr.io/kptdev/krm-functions-catalog/apply-setters:latest
        configPath: setters.yaml
@@ -56,8 +56,24 @@ index 152ea13..d2c2af5 100644
 +                - dev
 +            file:
 +              path: resources.yaml
++          - message: 'set field value to "- key: some-other-key\n  value: some-other-value"'
++            severity: info
++            resourceRef:
++              apiVersion: v1
++              kind: MyKind
++              name: bar
++            field:
++              path: environments
++              currentValue: |-
++                - key: some-key
++                  value: some-value
++              proposedValue: |-
++                - key: some-other-key
++                  value: some-other-value
++            file:
++              path: resources.yaml
 diff --git a/resources.yaml b/resources.yaml
-index b521905..0d10662 100644
+index 3dde2b6..47b7163 100644
 --- a/resources.yaml
 +++ b/resources.yaml
 @@ -3,7 +3,7 @@ kind: Deployment
@@ -78,10 +94,20 @@ index b521905..0d10662 100644
            ports:
              - protocol: TCP
                containerPort: 80
-@@ -24,5 +24,5 @@ kind: MyKind
+@@ -24,13 +24,13 @@ kind: MyKind
  metadata:
    name: foo
  environments: # kpt-set: ${env}
 +  - prod
    - dev
 -  - stage
+ ---
+ apiVersion: v1
+ kind: MyKind
+ metadata:
+   name: bar
+ environments: # kpt-set: ${nested-env}
+-  - key: some-key
+-    value: some-value
++  - key: some-other-key
++    value: some-other-value
