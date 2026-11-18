@@ -1,3 +1,6 @@
+---
+parent_function: "apply-setters"
+---
 # apply-setters: Simple Example
 
 ### Overview
@@ -10,7 +13,7 @@ resource fields parameterized by `kpt-set` comments.
 Get the example package by running the following commands:
 
 ```shell
-$ kpt pkg get https://github.com/GoogleContainerTools/kpt-functions-catalog.git/examples/apply-setters-simple
+$ kpt pkg get https://github.com/kptdev/krm-functions-catalog/tree/main/examples/apply-setters-simple
 ```
 
 We use `ConfigMap` to configure the `apply-setters` function. The desired
@@ -46,7 +49,7 @@ $ kpt fn render apply-setters-simple
 
 1. Check the value of field `replicas` is set to `3` in `Deployment` resource.
 2. Check the value of field `image` is set to value `nginx:1.16.2` in `Deployment` resource.
-3. Check the value of field `environments` is set to value `[dev, prod]` in `MyKind` resource with the name of `foo`.
+3. Check the value of field `environments` is set to value `[prod, dev]` in `MyKind` resource with the name of `foo`.
 4. Check the value of field `environments` is set to value:
 ```
 - key: some-other-key
