@@ -39,7 +39,7 @@ type Image struct {
 	NewTag string `json:"newTag,omitempty" yaml:"newTag,omitempty"`
 
 	// Digest is the value used to replace the original image tag.
-	// If digest is present NewTag value is ignored.
+	// Only one of Digest or NewTag may be set.
 	Digest string `json:"digest,omitempty" yaml:"digest,omitempty"`
 }
 
@@ -158,6 +158,9 @@ func (t *SetImage) validateInput() error {
 	}
 	if t.Image.NewName == "" && t.Image.NewTag == "" && t.Image.Digest == "" {
 		return fmt.Errorf("must specify one of `newName`, `newTag`, or `digest`")
+	}
+	if t.Image.NewTag != "" && t.Image.Digest != "" {
+		return fmt.Errorf("image `newTag` and `digest` both set, set only one")
 	}
 	return nil
 }
