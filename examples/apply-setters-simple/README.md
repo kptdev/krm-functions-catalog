@@ -25,15 +25,18 @@ desired value for the tagged field.
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: setters
+  name: apply-setters-fn-config
 data:
-  env: |-
-    - prod
+  replicas: "3"
+  role: |
     - dev
+    - prod
+  env: |-
+    - dev
+    - prod
   nested-env: |-
     - key: some-other-key
       value: some-other-value
-  nginx-replicas: "3"
   tag: 1.16.2
 ```
 
@@ -59,4 +62,4 @@ in `MyKind` resource with the name of `bar`.
 
 #### Note:
 
-Refer to the `create-setters` function documentation for information about creating setters.
+Refer to the [`create-setters`]({{< relref "create-setters/v0.1/" >}}) function documentation for information about creating setters.
