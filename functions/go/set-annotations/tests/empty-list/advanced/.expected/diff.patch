@@ -1,5 +1,5 @@
 diff --git a/Kptfile b/Kptfile
-index 28af78d..4ab6694 100644
+index 28af78d..f0090d4 100644
 --- a/Kptfile
 +++ b/Kptfile
 @@ -6,3 +6,23 @@ pipeline:
@@ -17,7 +17,7 @@ index 28af78d..4ab6694 100644
 +  renderStatus:
 +    mutationSteps:
 +      - image: ghcr.io/kptdev/krm-functions-catalog/set-annotations:latest
-+        stderr: '[error]: failed to configure function: input annotation list cannot be empty'
++        stderr: 'failed to evaluate function: [error]: failed to configure function: input annotation list cannot be empty'
 +        exitCode: 1
 +        results:
 +          - message: 'failed to configure function: input annotation list cannot be empty'

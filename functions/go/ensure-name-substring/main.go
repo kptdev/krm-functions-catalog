@@ -15,22 +15,29 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 	"slices"
 
-	"github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring/generated"
+	"github.com/kptdev/kpt/api/kubeobject"
 	nameref "github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring/third_party/sigs.k8s.io/kustomize/api/accumulator"
 	consts "github.com/kptdev/krm-functions-catalog/functions/go/ensure-name-substring/third_party/sigs.k8s.io/kustomize/api/konfig/builtinpluginconsts"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"sigs.k8s.io/kustomize/api/hasher"
 	"sigs.k8s.io/kustomize/api/resmap"
 	"sigs.k8s.io/kustomize/api/resource"
 	"sigs.k8s.io/kustomize/api/types"
 	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
 	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
 	"sigs.k8s.io/yaml"
 )
+
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
 
 func main() {
 	if err := run(); err != nil {
@@ -47,43 +54,39 @@ func run() error {
 	ensp := EnsureNameSubstringProcessor{
 		tc: &tc,
 	}
-	cmd := command.Build(&ensp, command.StandaloneEnabled, false)
-
-	cmd.Short = generated.EnsureNameSubstringShort
-	cmd.Long = generated.EnsureNameSubstringLong
-	return cmd.Execute()
+	return fn.AsMain(kubeobject.ResourceListProcessorFunc(ensp.Process), fn.WithDocs(readme, metadata))
 }
 
 type EnsureNameSubstringProcessor struct {
 	tc *transformerConfig
 }
 
-func (ensp *EnsureNameSubstringProcessor) Process(resourceList *framework.ResourceList) error {
+func (ensp *EnsureNameSubstringProcessor) Process(resourceList *kubeobject.ResourceList) (bool, error) {
 	var ens EnsureNameSubstring
-	if err := framework.LoadFunctionConfig(resourceList.FunctionConfig, &ens); err != nil {
-		return fmt.Errorf("failed to load the `functionConfig`: %w", err)
+	if err := framework.LoadFunctionConfig(resourceList.FunctionConfig.CopyToResourceNode(), &ens); err != nil {
+		return false, fmt.Errorf("failed to load the `functionConfig`: %w", err)
 	}
 
 	if ensp.tc == nil {
-		return fmt.Errorf("failed to load the default configuration")
+		return false, fmt.Errorf("failed to load the default configuration")
 	}
 
 	ens.AdditionalNameFields = append(ensp.tc.FieldSpecs, ens.AdditionalNameFields...)
 
 	resmapFactory := newResMapFactory()
 
-	resMap, err := resmapFactory.NewResMapFromRNodeSlice(resourceList.Items)
+	resMap, err := resmapFactory.NewResMapFromRNodeSlice(resourceList.Items.CopyToResourceNodes())
 	if err != nil {
-		return fmt.Errorf("failed to convert items to resource map: %w", err)
+		return false, fmt.Errorf("failed to convert items to resource map: %w", err)
 	}
 
 	if err = ens.Transform(resMap); err != nil {
-		return fmt.Errorf("failed to transform name substring: %w", err)
+		return false, fmt.Errorf("failed to transform name substring: %w", err)
 	}
 	// update name back reference
 	err = nameref.FixNameBackReference(resMap)
 	if err != nil {
-		return fmt.Errorf("failed to fix name back reference: %w", err)
+		return false, fmt.Errorf("failed to fix name back reference: %w", err)
 	}
 
 	// Remove kustomize tracking annotations (previousNames, prefixes, etc.)
@@ -91,10 +94,19 @@ func (ensp *EnsureNameSubstringProcessor) Process(resourceList *framework.Resour
 	// also clears those, which would rewrite files such as Kptfile to
 	// kind_name.yaml when the package is written back.
 	if err = removeKustomizeTrackingAnnotations(resMap); err != nil {
-		return fmt.Errorf("failed to remove kustomize tracking annotations: %w", err)
+		return false, fmt.Errorf("failed to remove kustomize tracking annotations: %w", err)
 	}
-	resourceList.Items = resMap.ToRNodeSlice()
-	return nil
+
+	out, err := resMap.AsYaml()
+	if err != nil {
+		return false, fmt.Errorf("failed to serialize resource map: %w", err)
+	}
+	items, err := kubeobject.ParseKubeObjects(out)
+	if err != nil {
+		return false, fmt.Errorf("failed to parse resource map: %w", err)
+	}
+	resourceList.Items = items
+	return true, nil
 }
 
 var kustomizeTrackingAnnos = func() []string {

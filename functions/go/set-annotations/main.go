@@ -16,19 +16,19 @@
 package main
 
 import (
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
 
-	"github.com/kptdev/krm-functions-catalog/functions/go/set-annotations/generated"
+	"github.com/kptdev/kpt/api/kubeobject"
 	consts "github.com/kptdev/krm-functions-catalog/functions/go/set-annotations/third_party/sigs.k8s.io/kustomize/api/konfig/builtinpluginconsts"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"sigs.k8s.io/kustomize/api/hasher"
 	"sigs.k8s.io/kustomize/api/resmap"
 	"sigs.k8s.io/kustomize/api/resource"
 	"sigs.k8s.io/kustomize/api/types"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework/command"
 	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 	"sigs.k8s.io/yaml"
 )
@@ -41,21 +41,25 @@ const (
 	fnConfigKind       = "SetAnnotations"
 )
 
-type SetAnnotationsProcessor struct{}
+//go:embed README.md
+var readme []byte
 
-func (sap *SetAnnotationsProcessor) Process(resourceList *framework.ResourceList) error {
+//go:embed metadata.yaml
+var metadata []byte
+
+func Process(resourceList *kubeobject.ResourceList) (bool, error) {
 	results, err := run(resourceList)
 	if err != nil {
-		resourceList.Results = framework.Results{
-			&framework.Result{
+		resourceList.Results = kubeobject.Results{
+			&kubeobject.Result{
 				Message:  err.Error(),
-				Severity: framework.Error,
+				Severity: kubeobject.Error,
 			},
 		}
-		return resourceList.Results
+		return false, resourceList.Results
 	}
 	resourceList.Results = results
-	return nil
+	return true, nil
 }
 
 type transformerConfig struct {
@@ -124,11 +128,11 @@ func (f *setAnnotationFunction) validGVK(rn *kyaml.RNode, apiVersion, kind strin
 }
 
 // resultsToItems converts the set annotation results to
-// equivalent framework.Results
-func (f *setAnnotationFunction) resultsToItems() (framework.Results, error) {
-	var results framework.Results
+// equivalent kubeobject.Results
+func (f *setAnnotationFunction) resultsToItems() (kubeobject.Results, error) {
+	var results kubeobject.Results
 	if len(f.Results) == 0 {
-		results = append(results, &framework.Result{
+		results = append(results, &kubeobject.Result{
 			Message: "no annotations applied",
 		})
 		return results, nil
@@ -139,10 +143,10 @@ func (f *setAnnotationFunction) resultsToItems() (framework.Results, error) {
 		if err != nil {
 			return nil, err
 		}
-		results = append(results, &framework.Result{
+		results = append(results, &kubeobject.Result{
 			Message: fmt.Sprintf("set annotations: %s", annotationJson),
-			Field:   &framework.Field{Path: resKey.FieldPath},
-			File:    &framework.File{Path: resKey.FilePath, Index: fileIndex},
+			Field:   &kubeobject.Field{Path: resKey.FieldPath},
+			File:    &kubeobject.File{Path: resKey.FilePath, Index: fileIndex},
 		})
 	}
 	results.Sort()
@@ -163,26 +167,22 @@ func newResMapFactory() *resmap.Factory {
 
 // nolint
 func main() {
-	asp := SetAnnotationsProcessor{}
-	cmd := command.Build(&asp, command.StandaloneEnabled, false)
-
-	cmd.Short = generated.SetAnnotationsShort
-	cmd.Long = generated.SetAnnotationsLong
-	if err := cmd.Execute(); err != nil {
+	if err := fn.AsMain(kubeobject.ResourceListProcessorFunc(Process), fn.WithDocs(readme, metadata)); err != nil {
 		os.Exit(1)
 	}
 }
 
-func run(resourceList *framework.ResourceList) (framework.Results, error) {
+func run(resourceList *kubeobject.ResourceList) (kubeobject.Results, error) {
 	var fn setAnnotationFunction
-	err := fn.Config(resourceList.FunctionConfig)
+	err := fn.Config(resourceList.FunctionConfig.CopyToResourceNode())
 	if err != nil {
 		return nil, fmt.Errorf("failed to configure function: %w", err)
 	}
 
-	resourceList.Items, err = fn.Run(resourceList.Items)
+	items, err := fn.Run(resourceList.Items.CopyToResourceNodes())
 	if err != nil {
 		return nil, fmt.Errorf("failed to run function: %w", err)
 	}
+	resourceList.Items = kubeobject.MoveToKubeObjects(items)
 	return fn.resultsToItems()
 }
