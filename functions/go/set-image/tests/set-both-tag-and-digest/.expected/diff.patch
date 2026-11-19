@@ -1,0 +1,35 @@
+diff --git a/Kptfile b/Kptfile
+index f1f8250..31a33de 100644
+--- a/Kptfile
++++ b/Kptfile
+@@ -6,7 +6,29 @@ pipeline:
+   mutators:
+     - image: ghcr.io/kptdev/krm-functions-catalog/set-image:latest
+       configMap:
++        digest: "12345"
+         name: foo
+         newName: bar
+         newTag: v1.0
+-        digest: 12345
++status:
++  conditions:
++    - type: Rendered
++      status: "False"
++      reason: RenderFailed
++      message: |-
++        pkg.render: pkg .:
++        	pipeline.run: already handled error
++  renderStatus:
++    mutationSteps:
++      - image: ghcr.io/kptdev/krm-functions-catalog/set-image:latest
++        stderr: 'failed to evaluate function: error: function failure'
++        exitCode: 1
++        results:
++          - message: 'invalid FunctionConfig: image `newTag` and `digest` both set, set only one'
++            severity: error
++          - message: 'summary: updated a total of 0 image(s)'
++            severity: info
++        errorResults:
++          - message: 'invalid FunctionConfig: image `newTag` and `digest` both set, set only one'
++            severity: error
++    errorSummary: 'ghcr.io/kptdev/krm-functions-catalog/set-image:latest: exit code 1'
