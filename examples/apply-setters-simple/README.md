@@ -47,10 +47,9 @@ $ kpt fn render apply-setters-simple
 
 ### Expected result
 
-1. Check the value of field `replicas` is set to `3` in `Deployment` resource.
-2. Check the value of field `image` is set to value `nginx:1.16.2` in `Deployment` resource.
-3. Check the value of field `environments` is set to value `[prod, dev]` in `MyKind` resource with the name of `foo`.
-4. Check the value of field `environments` is set to value:
+1. Check that the value of field `replicas` is set to `3` in the `Deployment` resource.
+2. Check that the value of field `image` is set to value `nginx:1.16.2` in the `Deployment` resource.
+3. Check that the value of field `environments` is set to value `[prod, dev]` in the `MyKind` resource with the name of `foo`.
 ```
 - key: some-other-key
   value: some-other-value
