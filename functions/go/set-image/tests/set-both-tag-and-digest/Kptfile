@@ -1,0 +1,12 @@
+apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: example
+pipeline:
+  mutators:
+    - image: ghcr.io/kptdev/krm-functions-catalog/set-image:latest
+      configMap:
+        name: foo
+        newName: bar
+        newTag: v1.0
+        digest: 12345

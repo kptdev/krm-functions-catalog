@@ -1,0 +1,14 @@
+apiVersion: kpt.dev/v1
+kind: FunctionResultList
+metadata:
+  name: fnresults
+exitCode: 1
+items:
+  - image: ghcr.io/kptdev/krm-functions-catalog/set-image:latest
+    stderr: 'failed to evaluate function: error: function failure'
+    exitCode: 1
+    results:
+      - message: 'invalid FunctionConfig: image `newTag` and `digest` both set, set only one'
+        severity: error
+      - message: 'summary: updated a total of 0 image(s)'
+        severity: info
