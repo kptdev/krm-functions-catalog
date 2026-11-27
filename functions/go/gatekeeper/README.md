@@ -91,6 +91,21 @@ spec:
           - Deployment
 ```
 
+### Options
+
+By default the function reads a `ResourceList` from STDIN and writes the result to STDOUT, which is how `kpt fn render`
+and `kpt fn eval` run it. To run the function standalone, for example in a container with mounted volumes, it
+also accepts the following flags:
+
+| Flag             | Default       | Description                                               |
+| ---------------- | ------------- | --------------------------------------------------------- |
+| `-i`, `--input`  | `/dev/stdin`  | Path to the input file.                                   |
+| `-o`, `--output` | `/dev/stdout` | Path to the output file.                                  |
+| `--json`         | `false`       | The input and the output are JSON instead of YAML.        |
+
+The input and output paths can be the same file, in which case the file is updated in place. If the input is JSON and
+`--json` is not set, the function fails with the error `tried to parse JSON as YAML. Use --json flag`.
+
 <!--mdtogo-->
 
 [`Gatekeeper`]: https://open-policy-agent.github.io/gatekeeper/website/docs/

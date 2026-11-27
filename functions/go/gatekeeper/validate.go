@@ -18,19 +18,19 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/kptdev/kpt/api/kubeobject"
 	// The gatekeeper/v3/pkg/gator/test package is the underlying libraries for
 	// the `gator test` subcommand, not a library for testing golang code.
 	gatortest "github.com/open-policy-agent/gatekeeper/v3/pkg/gator/test"
 	opautil "github.com/open-policy-agent/gatekeeper/v3/pkg/util"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
 	"sigs.k8s.io/kustomize/kyaml/kio/kioutil"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
 // Validate makes sure the configs passed to it comply with any Constraints and
 // Constraint Templates present in the list of configs
-func Validate(objects []*unstructured.Unstructured) (framework.Results, error) {
+func Validate(objects []*unstructured.Unstructured) (kubeobject.Results, error) {
 	resps, err := gatortest.Test(objects)
 	if err != nil {
 		return nil, err
@@ -43,8 +43,8 @@ func Validate(objects []*unstructured.Unstructured) (framework.Results, error) {
 	return nil, nil
 }
 
-func parseResults(results []*gatortest.GatorResult) (framework.Results, error) {
-	var items framework.Results
+func parseResults(results []*gatortest.GatorResult) (kubeobject.Results, error) {
+	var items kubeobject.Results
 
 	for _, r := range results {
 		u := r.ViolatingObject
@@ -52,7 +52,7 @@ func parseResults(results []*gatortest.GatorResult) (framework.Results, error) {
 			continue
 		}
 
-		item := &framework.Result{
+		item := &kubeobject.Result{
 			Message: fmt.Sprintf("%s\nviolatedConstraint: %s", r.Msg, r.Constraint.GetName()),
 			ResourceRef: &yaml.ResourceIdentifier{
 				TypeMeta: yaml.TypeMeta{
@@ -68,17 +68,17 @@ func parseResults(results []*gatortest.GatorResult) (framework.Results, error) {
 
 		switch r.EnforcementAction {
 		case string(opautil.Dryrun):
-			item.Severity = framework.Info
+			item.Severity = kubeobject.Info
 		case string(opautil.Warn):
-			item.Severity = framework.Warning
+			item.Severity = kubeobject.Warning
 		default:
-			item.Severity = framework.Error
+			item.Severity = kubeobject.Error
 		}
 
 		path, foundPath := u.GetAnnotations()[kioutil.PathAnnotation]
 		index, foundIndex := u.GetAnnotations()[kioutil.IndexAnnotation]
 		if foundPath {
-			item.File = &framework.File{
+			item.File = &kubeobject.File{
 				Path: path,
 			}
 			if foundIndex {
