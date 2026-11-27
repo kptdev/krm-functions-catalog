@@ -15,15 +15,14 @@
 package main
 
 import (
-	"bytes"
+	_ "embed"
+	"flag"
 	"fmt"
 	"os"
 
-	"github.com/kptdev/krm-functions-catalog/functions/go/gatekeeper/generated"
-	"github.com/spf13/cobra"
+	"github.com/kptdev/kpt/api/kubeobject"
+	"github.com/kptdev/krm-functions-sdk/go/fn"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
-	"sigs.k8s.io/kustomize/kyaml/kio"
 	k8syaml "sigs.k8s.io/yaml"
 )
 
@@ -32,27 +31,28 @@ const (
 	stdout = "/dev/stdout"
 )
 
+//go:embed README.md
+var readme []byte
+
+//go:embed metadata.yaml
+var metadata []byte
+
+// GatekeeperProcessor validates the resources with the Gatekeeper policies
+// found in the same ResourceList. It also holds the values of the command line
+// flags for reading the input from and writing the output to files and for
+// using JSON instead of YAML.
 type GatekeeperProcessor struct {
 	input   string
 	output  string
 	useJSON bool
-
-	inputBuf  *bytes.Buffer
-	outputBuf *bytes.Buffer
 }
 
-func (gkp *GatekeeperProcessor) Process(resourceList *framework.ResourceList) error {
+func (gkp *GatekeeperProcessor) Process(resourceList *kubeobject.ResourceList) (bool, error) {
 	var objects []*unstructured.Unstructured
 	for _, item := range resourceList.Items {
-		s, err := item.String()
-		if err != nil {
-			return err
-		}
-
 		un := &unstructured.Unstructured{}
-		err = k8syaml.Unmarshal([]byte(s), un)
-		if err != nil {
-			return err
+		if err := k8syaml.Unmarshal([]byte(item.String()), un); err != nil {
+			return false, err
 		}
 
 		objects = append(objects, un)
@@ -61,48 +61,57 @@ func (gkp *GatekeeperProcessor) Process(resourceList *framework.ResourceList) er
 	results, err := Validate(objects)
 	// When err is not nil, results should be nil.
 	if err != nil {
-		results = framework.Results{
+		results = kubeobject.Results{
 			{
 				Message:  err.Error(),
-				Severity: framework.Error,
+				Severity: kubeobject.Error,
 			},
 		}
 	}
 	resourceList.Results = results
-	if resultsContainError(results) {
-		return results
+	if results.ExitCode() != 0 {
+		return false, results
 	}
-	return nil
+	return true, nil
 }
 
-func (gkp *GatekeeperProcessor) ProcessInput() error {
+// addFlags registers the command line flags of the function.
+func (gkp *GatekeeperProcessor) addFlags(fs *flag.FlagSet) {
+	const (
+		inputUsage  = "path to the input file"
+		outputUsage = "path to the output file"
+	)
+	fs.StringVar(&gkp.input, "input", stdin, inputUsage)
+	fs.StringVar(&gkp.input, "i", stdin, inputUsage)
+	fs.StringVar(&gkp.output, "output", stdout, outputUsage)
+	fs.StringVar(&gkp.output, "o", stdout, outputUsage)
+	fs.BoolVar(&gkp.useJSON, "json", false, "input and output is JSON instead of YAML")
+}
+
+// readInput reads the function input from the file given with --input.
+func (gkp *GatekeeperProcessor) readInput() ([]byte, error) {
 	content, err := os.ReadFile(gkp.input)
 	if err != nil {
-		return fmt.Errorf("unable to process input: %w", err)
+		return nil, fmt.Errorf("unable to process input: %w", err)
 	}
 	if gkp.useJSON {
 		content, err = k8syaml.JSONToYAML(content)
 		if err != nil {
-			return fmt.Errorf("unable to process input: %w", err)
+			return nil, fmt.Errorf("unable to process input: %w", err)
 		}
 	}
 
 	if len(content) > 0 && content[0] == '{' {
 		// yaml.Unmarshal doesn't fail on trying to parse JSON, and will happily
 		// return something. This safeguards against that.
-		return fmt.Errorf("tried to parse JSON as YAML. Use --json flag")
+		return nil, fmt.Errorf("tried to parse JSON as YAML. Use --json flag")
 	}
-
-	gkp.inputBuf = bytes.NewBuffer(content)
-	return nil
+	return content, nil
 }
 
-func (gkp *GatekeeperProcessor) ProcessOutput() error {
+// writeOutput writes the function output to the file given with --output.
+func (gkp *GatekeeperProcessor) writeOutput(content []byte) error {
 	var err error
-	if gkp.outputBuf == nil {
-		return fmt.Errorf("the output buffer must not be nil")
-	}
-	content := gkp.outputBuf.Bytes()
 	if gkp.useJSON {
 		content, err = k8syaml.YAMLToJSON(content)
 		if err != nil {
@@ -110,85 +119,21 @@ func (gkp *GatekeeperProcessor) ProcessOutput() error {
 		}
 	}
 
-	err = os.WriteFile(gkp.output, content, 0644)
-	if err != nil {
+	if err := os.WriteFile(gkp.output, content, 0644); err != nil {
 		return fmt.Errorf("unable to process output: %w", err)
 	}
 	return nil
 }
 
-func (gkp *GatekeeperProcessor) Read(p []byte) (n int, err error) {
-	if gkp.inputBuf == nil {
-		return 0, nil
-	}
-	return gkp.inputBuf.Read(p)
-}
-
-func (gkp *GatekeeperProcessor) Write(p []byte) (n int, err error) {
-	if gkp.outputBuf == nil {
-		gkp.outputBuf = &bytes.Buffer{}
-	}
-	return gkp.outputBuf.Write(p)
-}
-
-func (gkp *GatekeeperProcessor) addFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&gkp.input, "input", "i", stdin,
-		`path to the input file`)
-	cmd.Flags().StringVarP(&gkp.output, "output", "o", stdout,
-		`path to the output file`)
-	cmd.Flags().BoolVar(&gkp.useJSON, "json", false,
-		`input and output is JSON instead of YAML`)
-}
-
-func (gkp *GatekeeperProcessor) runGatekeeper() error {
-	if err := gkp.ProcessInput(); err != nil {
-		return err
-	}
-	// Process the error only after processing the output.
-	err := framework.Execute(gkp, &kio.ByteReadWriter{
-		Reader: gkp,
-		Writer: gkp,
-		// We should not set the id annotation in the function, since we should not
-		// overwrite what the orchestrator set.
-		OmitReaderAnnotations: true,
-		// We should not remove the id annotations in the function, since the
-		// orchestrator (e.g. kpt) may need them.
-		KeepReaderAnnotations: true,
-	})
-	err2 := gkp.ProcessOutput()
-	if err != nil {
-		return err
-	}
-	return err2
-}
-
 func main() {
 	gkp := &GatekeeperProcessor{}
-	cmd := &cobra.Command{
-		Short: generated.GatekeeperShort,
-		Long:  generated.GatekeeperLong,
-		Run: func(cmd *cobra.Command, args []string) {
-			if err := gkp.runGatekeeper(); err != nil {
-				fmt.Fprintln(os.Stderr, err)
-				os.Exit(1)
-			}
-		},
-	}
-	gkp.addFlags(cmd)
-	if err := cmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+	err := fn.AsMain(gkp,
+		fn.WithDocs(readme, metadata),
+		fn.WithFlags(gkp.addFlags),
+		fn.WithInput(gkp.readInput),
+		fn.WithOutput(gkp.writeOutput),
+	)
+	if err != nil {
 		os.Exit(1)
 	}
-}
-
-func resultsContainError(results framework.Results) bool {
-	if results == nil {
-		return false
-	}
-	for _, item := range results {
-		if item.Severity == framework.Error {
-			return true
-		}
-	}
-	return false
 }

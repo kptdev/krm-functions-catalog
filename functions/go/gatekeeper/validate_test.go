@@ -18,7 +18,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"sigs.k8s.io/kustomize/kyaml/fn/framework"
+	"github.com/kptdev/kpt/api/kubeobject"
 	"sigs.k8s.io/kustomize/kyaml/yaml"
 )
 
@@ -26,97 +26,97 @@ func TestSortResults(t *testing.T) {
 	t.Parallel()
 	testcases := []struct {
 		name   string
-		input  framework.Results
-		output framework.Results
+		input  kubeobject.Results
+		output kubeobject.Results
 	}{
 		{
 			name: "sort based on severity",
-			input: framework.Results{
+			input: kubeobject.Results{
 				{
 					Message:  "Error message 1",
-					Severity: framework.Info,
+					Severity: kubeobject.Info,
 				},
 				{
 					Message:  "Error message 2",
-					Severity: framework.Error,
+					Severity: kubeobject.Error,
 				},
 			},
-			output: framework.Results{
+			output: kubeobject.Results{
 				{
 					Message:  "Error message 2",
-					Severity: framework.Error,
+					Severity: kubeobject.Error,
 				},
 				{
 					Message:  "Error message 1",
-					Severity: framework.Info,
+					Severity: kubeobject.Info,
 				},
 			},
 		},
 		{
 			name: "sort based on file",
-			input: framework.Results{
+			input: kubeobject.Results{
 				{
 					Message:  "Error message",
-					Severity: framework.Error,
-					File: &framework.File{
+					Severity: kubeobject.Error,
+					File: &kubeobject.File{
 						Path:  "resource.yaml",
 						Index: 1,
 					},
 				},
 				{
 					Message:  "Error message",
-					Severity: framework.Info,
-					File: &framework.File{
+					Severity: kubeobject.Info,
+					File: &kubeobject.File{
 						Path:  "resource.yaml",
 						Index: 0,
 					},
 				},
 				{
 					Message:  "Error message",
-					Severity: framework.Info,
-					File: &framework.File{
+					Severity: kubeobject.Info,
+					File: &kubeobject.File{
 						Path:  "other-resource.yaml",
 						Index: 0,
 					},
 				},
 				{
 					Message:  "Error message",
-					Severity: framework.Warning,
-					File: &framework.File{
+					Severity: kubeobject.Warning,
+					File: &kubeobject.File{
 						Path:  "resource.yaml",
 						Index: 2,
 					},
 				},
 			},
-			output: framework.Results{
+			output: kubeobject.Results{
 				{
 					Message:  "Error message",
-					Severity: framework.Info,
-					File: &framework.File{
+					Severity: kubeobject.Info,
+					File: &kubeobject.File{
 						Path:  "other-resource.yaml",
 						Index: 0,
 					},
 				},
 				{
 					Message:  "Error message",
-					Severity: framework.Info,
-					File: &framework.File{
+					Severity: kubeobject.Info,
+					File: &kubeobject.File{
 						Path:  "resource.yaml",
 						Index: 0,
 					},
 				},
 				{
 					Message:  "Error message",
-					Severity: framework.Error,
-					File: &framework.File{
+					Severity: kubeobject.Error,
+					File: &kubeobject.File{
 						Path:  "resource.yaml",
 						Index: 1,
 					},
 				},
 				{
 					Message:  "Error message",
-					Severity: framework.Warning,
-					File: &framework.File{
+					Severity: kubeobject.Warning,
+					File: &kubeobject.File{
 						Path:  "resource.yaml",
 						Index: 2,
 					},
@@ -126,10 +126,10 @@ func TestSortResults(t *testing.T) {
 
 		{
 			name: "sort based on other fields",
-			input: framework.Results{
+			input: kubeobject.Results{
 				{
 					Message:  "Error message",
-					Severity: framework.Error,
+					Severity: kubeobject.Error,
 					ResourceRef: &yaml.ResourceIdentifier{
 						TypeMeta: yaml.TypeMeta{
 							APIVersion: "v1",
@@ -140,13 +140,13 @@ func TestSortResults(t *testing.T) {
 							Name:      "bar",
 						},
 					},
-					Field: &framework.Field{
+					Field: &kubeobject.Field{
 						Path: "spec",
 					},
 				},
 				{
 					Message:  "Error message",
-					Severity: framework.Error,
+					Severity: kubeobject.Error,
 					ResourceRef: &yaml.ResourceIdentifier{
 						TypeMeta: yaml.TypeMeta{
 							APIVersion: "v1",
@@ -157,13 +157,13 @@ func TestSortResults(t *testing.T) {
 							Name:      "bar",
 						},
 					},
-					Field: &framework.Field{
+					Field: &kubeobject.Field{
 						Path: "metadata.name",
 					},
 				},
 				{
 					Message:  "Another error message",
-					Severity: framework.Error,
+					Severity: kubeobject.Error,
 					ResourceRef: &yaml.ResourceIdentifier{
 						TypeMeta: yaml.TypeMeta{
 							APIVersion: "v1",
@@ -174,13 +174,13 @@ func TestSortResults(t *testing.T) {
 							Name:      "bar",
 						},
 					},
-					Field: &framework.Field{
+					Field: &kubeobject.Field{
 						Path: "metadata.name",
 					},
 				},
 				{
 					Message:  "Another error message",
-					Severity: framework.Error,
+					Severity: kubeobject.Error,
 					ResourceRef: &yaml.ResourceIdentifier{
 						TypeMeta: yaml.TypeMeta{
 							APIVersion: "v1",
@@ -191,15 +191,15 @@ func TestSortResults(t *testing.T) {
 							Name:      "bar",
 						},
 					},
-					Field: &framework.Field{
+					Field: &kubeobject.Field{
 						Path: "metadata.name",
 					},
 				},
 			},
-			output: framework.Results{
+			output: kubeobject.Results{
 				{
 					Message:  "Another error message",
-					Severity: framework.Error,
+					Severity: kubeobject.Error,
 					ResourceRef: &yaml.ResourceIdentifier{
 						TypeMeta: yaml.TypeMeta{
 							APIVersion: "v1",
@@ -210,13 +210,13 @@ func TestSortResults(t *testing.T) {
 							Name:      "bar",
 						},
 					},
-					Field: &framework.Field{
+					Field: &kubeobject.Field{
 						Path: "metadata.name",
 					},
 				},
 				{
 					Message:  "Another error message",
-					Severity: framework.Error,
+					Severity: kubeobject.Error,
 					ResourceRef: &yaml.ResourceIdentifier{
 						TypeMeta: yaml.TypeMeta{
 							APIVersion: "v1",
@@ -227,13 +227,13 @@ func TestSortResults(t *testing.T) {
 							Name:      "bar",
 						},
 					},
-					Field: &framework.Field{
+					Field: &kubeobject.Field{
 						Path: "metadata.name",
 					},
 				},
 				{
 					Message:  "Error message",
-					Severity: framework.Error,
+					Severity: kubeobject.Error,
 					ResourceRef: &yaml.ResourceIdentifier{
 						TypeMeta: yaml.TypeMeta{
 							APIVersion: "v1",
@@ -244,13 +244,13 @@ func TestSortResults(t *testing.T) {
 							Name:      "bar",
 						},
 					},
-					Field: &framework.Field{
+					Field: &kubeobject.Field{
 						Path: "metadata.name",
 					},
 				},
 				{
 					Message:  "Error message",
-					Severity: framework.Error,
+					Severity: kubeobject.Error,
 					ResourceRef: &yaml.ResourceIdentifier{
 						TypeMeta: yaml.TypeMeta{
 							APIVersion: "v1",
@@ -261,7 +261,7 @@ func TestSortResults(t *testing.T) {
 							Name:      "bar",
 						},
 					},
-					Field: &framework.Field{
+					Field: &kubeobject.Field{
 						Path: "spec",
 					},
 				},
